@@ -15,6 +15,7 @@ import SVGIconTarget from '@/shared/images/icons/target.svg'
 
 import { useNavStore } from '@/shared/model/navStore'
 import { useTimeStore } from '@/shared/model/timeStore'
+import { styleVars } from '@/shared/styles/common'
 
 type NavPanelProps = BottomTabBarProps & {
 	isDrawerShown: SharedValue<boolean>
@@ -101,7 +102,8 @@ export default function NavPanel({
 			style={[
 				styles.navPanelContainer,
 				{
-					paddingBottom: insets.bottom === 0 ? 22 : insets.bottom
+					paddingBottom:
+						insets.bottom > 0 ? insets.bottom + styleVars.insetPlus : 22
 				}
 			]}
 		>
@@ -138,7 +140,6 @@ export default function NavPanel({
 const styles = StyleSheet.create((theme, rt) => ({
 	navPanelContainer: {
 		height: 70,
-		paddingBottom: rt.insets.bottom === 0 ? 22 : rt.insets.bottom,
 		paddingHorizontal: 18,
 		zIndex: 10,
 		boxSizing: 'content-box',

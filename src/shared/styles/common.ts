@@ -1,7 +1,8 @@
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styleVars = {
-	sidePadding: 24
+	sidePadding: 24,
+	insetPlus: 6
 }
 
 export const commonStyles = StyleSheet.create((theme, rt) => ({
