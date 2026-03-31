@@ -37,6 +37,10 @@ export const textStyles = StyleSheet.create((theme, rt) => ({
 	textMuted: {
 		fontSize: rt.fontScale * 14
 		// color: theme.colors.textSecondary
+	},
+
+	link: {
+		color: theme.colors.primary
 	}
 }))
 
