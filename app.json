@@ -11,6 +11,7 @@
 			"icon": "./assets/expo.icon"
 		},
 		"android": {
+			"package": "com.okwebowski.mogyosh",
 			"adaptiveIcon": {
 				"backgroundColor": "#E6F4FE",
 				"foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -20,7 +21,7 @@
 			"predictiveBackGestureEnabled": false
 		},
 		"web": {
-			"output": "static",
+			"output": "single",
 			"favicon": "./assets/images/favicon.png"
 		},
 		"plugins": [
@@ -34,7 +35,9 @@
 						"imageWidth": 76
 					}
 				}
-			]
+			],
+			"expo-sqlite",
+			"expo-localization"
 		],
 		"experiments": {
 			"typedRoutes": true,
