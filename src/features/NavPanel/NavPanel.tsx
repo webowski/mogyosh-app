@@ -146,8 +146,8 @@ const styles = StyleSheet.create((theme, rt) => ({
 		alignItems: 'center',
 		justifyContent: 'space-between',
 		backgroundColor: theme.colors.background,
-		borderStartStartRadius: 32,
-		borderStartEndRadius: 32,
+		borderTopLeftRadius: 32,
+		borderTopRightRadius: 32,
 		borderCurve: 'continuous',
 
 		// ios shadow
