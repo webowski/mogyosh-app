@@ -1,0 +1,89 @@
+# Project Rules and Guidelines
+
+## Project Overview
+
+This is a React Native mobile application built with Expo and TypeScript. The project follows a structured architecture with:
+
+- File-based routing using Expo Router
+- Component-based UI with shared components
+- Theme management system
+- Navigation with bottom tabs, SwitchSwiper and custom Drawer
+
+## Technology Stack
+
+- Framework: React Native with Expo (react-native 0.83.4, expo 55.0.9)
+- Language: TypeScript
+- Build Tool: Bun
+- Routing: Expo Router
+- State Management: Zustand
+- Backend State Management: Tanstack Query
+- Data: Supabase
+- Authentication: Supabase
+- Styling: CSS-in-JS with Unistyles
+- Navigation: React Navigation
+
+## React Native Expo разработка
+
+- Код должен быть совеременным для latest React Native Expo на март 2026
+- использовать современный Pressable, вместо устаревшего TouchableOpacity
+- строго обязательно!: для react-native-reanimated НЕ использовать runOnJS, т.к. runOnJS is deprecated для latest версии react-native-reanimated
+- код писать на языке TypeScript
+- но без избыточного типирования TypeScript, типы и интерфейсы только по необходимости
+- код должен удовлетворять eslint
+
+## Folder Structure
+
+The project uses the Evolution Design architecture (https://ed.evocomm.space/guide/), but keeping the original Expo routing in the folder `src/app`
+
+```
+src/
+├── app/                 # Page components and routes
+├── features/            # Feature modules
+├── services/            #
+├── shared/              # Shared components and utilities
+```
+
+## Common coding rules
+
+- Don't make changes I haven't asked for. For example, don't do visual styling for other interface elements if I only asked for an element and the required structural styles.
+- Use Dependency Inversion programming principle
+- Keep SOLID programming principles
+
+## Coding Standards
+
+1. **TypeScript**: Strict typing enforced with `tsconfig.json`
+2. **Naming Conventions**:
+   - By default files are named in kebab-case format.
+   - Functional Component files must be named in PascalCase format
+   - Local Variables: camelCase (e.g., `taskList`)
+   - constants - UPPER_CASE
+3. **Component Structure**:
+   - All React components should be functional with export
+   - Use TypeScript interfaces for props
+4. **File Organization**:
+   - Place ui-components in appropriate folders (`src/shared/ui/`)
+   - Use relative imports with `@/` alias for src folder
+   - Keep related components together
+
+## Development Workflow
+
+1. Start development server: `bun start`
+2. Lint code: `bun lint`
+
+## Code Quality
+
+- Enforced by ESLint with Expo configuration
+- Strict TypeScript compilation
+- No unused imports or variables
+- Consistent code style throughout
+
+## Testing
+
+- Unit tests for components and logic
+- Integration tests for navigation flows
+- Manual testing on devices/emulators
+
+## Deployment
+
+- Preview builds: `bun build:preview`
+- Production builds: `bun build:production`
