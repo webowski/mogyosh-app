@@ -3,13 +3,13 @@
 	"main": "index.ts",
 	"version": "1.0.0",
 	"scripts": {
-		"start": "expo start",
-		"reset-project": "node ./package-scripts/reset-project.js",
-		"android": "expo start --android",
-		"ios": "expo start --ios",
-		"web": "expo start --web",
-		"lint": "expo lint",
-		"add": "npx expo install"
+		"start": "bunx expo start",
+		"reset-project": "bun ./package-scripts/reset-project.js",
+		"android": "bunx expo start --android",
+		"ios": "bunx expo start --ios",
+		"web": "bunx expo start --web",
+		"lint": "bunx expo lint",
+		"add": "bunx expo install"
 	},
 	"dependencies": {
 		"@expo/vector-icons": "^15.0.2",
