@@ -1,3 +1,6 @@
+- строго обязательно!: для react-native-reanimated НЕ использовать runOnJS, т.к. runOnJS is deprecated для latest версии react-native-reanimated
+- вместо withSpring использовать withTiming
+
 # Project Rules and Guidelines
 
 ## Project Overview
@@ -27,6 +30,7 @@ This is a React Native mobile application built with Expo and TypeScript. The pr
 - Код должен быть совеременным для latest React Native Expo на март 2026
 - использовать современный Pressable, вместо устаревшего TouchableOpacity
 - строго обязательно!: для react-native-reanimated НЕ использовать runOnJS, т.к. runOnJS is deprecated для latest версии react-native-reanimated
+- react-native-reanimated: вместо withSpring использовать withTiming
 - код писать на языке TypeScript
 - но без избыточного типирования TypeScript, типы и интерфейсы только по необходимости
 - код должен удовлетворять eslint
