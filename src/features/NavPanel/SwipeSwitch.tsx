@@ -1,13 +1,12 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { Text, View, ViewStyle } from 'react-native'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import Animated, {
 	Extrapolation,
 	interpolate,
-	useAnimatedReaction,
 	useAnimatedStyle,
 	useSharedValue,
-	withSpring,
+	withTiming,
 	type SharedValue
 } from 'react-native-reanimated'
 import { StyleSheet } from 'react-native-unistyles'
@@ -29,12 +28,6 @@ const TOTAL_H = ROWS * SLIDE_HEIGHT // 104
 const H_SWIPE_THRESHOLD = SLIDE_WIDTH * 0.25
 const V_SWIPE_THRESHOLD = SLIDE_HEIGHT * 0.4
 const VELOCITY_THRESHOLD = 400
-
-const SPRING_CONFIG = {
-	damping: 22,
-	stiffness: 220,
-	mass: 0.8
-}
 
 // ─── Helpers (run on UI thread) ───────────────────────────────────────────────
 
@@ -158,7 +151,7 @@ interface SwipeSwitchProps {
 	currentRoute?: string
 	onIndexChange?: (row: number, col: number) => void
 	onPress?: (row: number, col: number) => void
-	isActive?: (currentRow: number, currentCol: number) => boolean
+	isActive?: boolean
 	getSlideLabel?: (row: number, col: number, defaultLabel: string) => string
 }
 
@@ -190,33 +183,7 @@ const SwipeSwitch: React.FC<SwipeSwitchProps> = ({
 	const colIndex = useSharedValue(initialIndices.col)
 	const rowIndex = useSharedValue(initialIndices.row)
 
-	const [isSwitchActive, setIsSwitchActive] = useState(
-		typeof isActive === 'function'
-			? isActive(0, 0) // Pass initial values instead of shared values
-			: (isActive ?? true)
-	)
-
-	// Track the current index values to use in useEffect dependencies
-	const [currentIndex, setCurrentIndex] = useState({ row: 0, col: 0 })
-
-	// Update current index when shared values change
-	useAnimatedReaction(
-		() => ({ row: rowIndex.value, col: colIndex.value }),
-		(result) => {
-			setCurrentIndex(result)
-		},
-		[rowIndex, colIndex]
-	)
-
-	// Update isSwitchActive when isActive prop changes or when row/col indices change
-	useEffect(() => {
-		if (typeof isActive === 'function') {
-			// Use the tracked state values instead of accessing shared values directly
-			setIsSwitchActive(isActive(currentIndex.row, currentIndex.col))
-		} else {
-			setIsSwitchActive(isActive ?? true)
-		}
-	}, [isActive, currentIndex])
+	const isSwitchActive = isActive
 
 	// Pixel positions — at rest: posX = col * SLIDE_WIDTH, posY = row * SLIDE_HEIGHT.
 	// These can drift beyond [0, (COLS-1)*W] intentionally to keep the spring
@@ -276,8 +243,10 @@ const SwipeSwitch: React.FC<SwipeSwitchProps> = ({
 						: colIndex.value * SLIDE_WIDTH
 
 				colIndex.value = newCol
-				posX.value = withSpring(targetPosX, SPRING_CONFIG)
-				posY.value = withSpring(rowIndex.value * SLIDE_HEIGHT, SPRING_CONFIG)
+				posX.value = withTiming(targetPosX, { duration: 200 })
+				posY.value = withTiming(rowIndex.value * SLIDE_HEIGHT, {
+					duration: 200
+				})
 
 				// Call onIndexChange callback on JS thread
 				if (onIndexChange) {
@@ -306,8 +275,8 @@ const SwipeSwitch: React.FC<SwipeSwitchProps> = ({
 						: rowIndex.value * SLIDE_HEIGHT
 
 				rowIndex.value = newRow
-				posY.value = withSpring(targetPosY, SPRING_CONFIG)
-				posX.value = withSpring(colIndex.value * SLIDE_WIDTH, SPRING_CONFIG)
+				posY.value = withTiming(targetPosY, { duration: 200 })
+				posX.value = withTiming(colIndex.value * SLIDE_WIDTH, { duration: 200 })
 
 				// Call onIndexChange callback on JS thread
 				if (onIndexChange) {
@@ -315,8 +284,10 @@ const SwipeSwitch: React.FC<SwipeSwitchProps> = ({
 				}
 			} else {
 				// No axis locked — snap back
-				posX.value = withSpring(colIndex.value * SLIDE_WIDTH, SPRING_CONFIG)
-				posY.value = withSpring(rowIndex.value * SLIDE_HEIGHT, SPRING_CONFIG)
+				posX.value = withTiming(colIndex.value * SLIDE_WIDTH, { duration: 200 })
+				posY.value = withTiming(rowIndex.value * SLIDE_HEIGHT, {
+					duration: 200
+				})
 			}
 
 			gestureAxis.value = 0

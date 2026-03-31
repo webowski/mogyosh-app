@@ -58,6 +58,21 @@ export default function NavPanel({
 		return defaultLabel
 	}
 
+	// Проверяет если currentRoute соответствует ЛЮБОЙ точке SwipeSwitch
+	const isAnySwipeRouteActive = (
+		routeName: string,
+		items: Record<string, string | undefined>[][]
+	): boolean => {
+		for (const row of items) {
+			for (const item of row) {
+				if (Object.keys(item)[0] === routeName) {
+					return true
+				}
+			}
+		}
+		return false
+	}
+
 	// Handle SwipeSwitch navigation with animated transitions
 	const handleSwipeSwitchChange = (row: number, col: number) => {
 		const routeItem = swipeSwitchItems[row]?.[col]
@@ -107,12 +122,7 @@ export default function NavPanel({
 				currentRoute={currentRoute}
 				onIndexChange={handleSwipeSwitchChange}
 				onPress={handleSwipeSwitchPress}
-				isActive={(currentRow, currentCol) => {
-					return (
-						currentRoute ===
-						Object.keys(swipeSwitchItems[currentRow][currentCol])[0]
-					)
-				}}
+				isActive={isAnySwipeRouteActive(currentRoute, swipeSwitchItems)}
 				getSlideLabel={getSlideLabel}
 			/>
 
