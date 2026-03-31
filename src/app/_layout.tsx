@@ -1,7 +1,6 @@
 import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { useEffect, useState } from 'react'
-import { ActivityIndicator, Text } from 'react-native'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
@@ -33,8 +32,8 @@ export default function RootLayout() {
 			.catch((err) => setLoginError(err.message))
 	}, [])
 
-	if (loginError) return <Text>Ошибка логина: {loginError}</Text>
-	if (!isLoggedIn) return <ActivityIndicator />
+	// if (loginError) return <Text>Ошибка логина: {loginError}</Text>
+	// if (!isLoggedIn) return <ActivityIndicator />
 
 	return (
 		<QueryClientProvider client={queryClient}>
