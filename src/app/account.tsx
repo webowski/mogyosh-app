@@ -1,0 +1,36 @@
+import { MaterialIcons } from '@expo/vector-icons'
+import { router } from 'expo-router'
+import { Text, View } from 'react-native'
+import { useUnistyles } from 'react-native-unistyles'
+
+import { ActionsPanel } from '@/features/ActionsPanel/ActionsPanel'
+import { SettingsItem } from '@/features/Settings/SettingsItem'
+import { textStyles } from '@/shared/styles/text'
+import { Button } from '@/shared/ui/Button'
+import ScrollBox from '@/shared/ui/ScrollBox'
+
+export default function AccountScreen() {
+	const { theme } = useUnistyles()
+
+	return (
+		<>
+			<ScrollBox scrollIndent>
+				<View>
+					<Text style={textStyles.heading5}>Account</Text>
+				</View>
+
+				<SettingsItem label='Logout' control={<View>...</View>} />
+			</ScrollBox>
+
+			<ActionsPanel>
+				<Button size='round' onPress={() => router.back()}>
+					<MaterialIcons
+						name='arrow-back'
+						size={28}
+						color={theme.colors.buttonText}
+					/>
+				</Button>
+			</ActionsPanel>
+		</>
+	)
+}
