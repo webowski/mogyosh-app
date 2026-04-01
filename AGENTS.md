@@ -1,5 +1,13 @@
 # Project Rules and Guidelines
 
+## Common coding rules
+
+- Комментарии в коде писать только на английском языке
+- не делай задачи о которых я не просил
+- Don't make changes I haven't asked for. For example, don't do visual styling for other interface elements if I only asked for an element and the required structural styles.
+- Use Dependency Inversion programming principle
+- Keep SOLID programming principles
+
 ## Project Overview
 
 This is a React Native mobile application built with Expo and TypeScript. The project follows a structured architecture with:
@@ -45,13 +53,6 @@ src/
 ├── services/            #
 ├── shared/              # Shared components and utilities
 ```
-
-## Common coding rules
-
-- не делай задачи о которых я не просил
-- Don't make changes I haven't asked for. For example, don't do visual styling for other interface elements if I only asked for an element and the required structural styles.
-- Use Dependency Inversion programming principle
-- Keep SOLID programming principles
 
 ## Coding Standards
 
