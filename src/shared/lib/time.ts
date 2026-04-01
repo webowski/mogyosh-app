@@ -18,7 +18,7 @@ export function formatTitleDate(date: Date): string {
 		return format(date, t('datePattern'), { locale: getDateFnsLocale() })
 	}
 
-	return format(date, t('datePatternWYear'))
+	return format(date, t('datePatternWYear'), { locale: getDateFnsLocale() })
 }
 
 export function formatNavDate(date: Date): string {
@@ -30,5 +30,7 @@ export function formatNavDate(date: Date): string {
 		return format(date, t('dateShortPattern'), { locale: getDateFnsLocale() })
 	}
 
-	return format(date, t('dateShortPatternWYear'))
+	return format(date, t('dateShortPatternWYear'), {
+		locale: getDateFnsLocale()
+	})
 }
