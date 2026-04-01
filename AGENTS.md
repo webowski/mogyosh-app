@@ -1,16 +1,19 @@
 # Project Rules and Guidelines
 
-## Common coding rules
+## Общие правила написания кода
 
 - Комментарии в коде писать только на английском языке
 - не делай задачи о которых я не просил
 - Don't make changes I haven't asked for. For example, don't do visual styling for other interface elements if I only asked for an element and the required structural styles.
 - Use Dependency Inversion programming principle
 - Keep SOLID programming principles
+- Не удаляй закомментированные куски кода
+- Не удаляй комментарии в коде
+- никогда не вноси изменения в папке src_bkp, это бекап, не трогай его
 
 ## Project Overview
 
-This is a React Native mobile application built with Expo and TypeScript. The project follows a structured architecture with:
+This is a React Native mobile application built with Expo 55 and TypeScript. The project follows a structured architecture with:
 
 - File-based routing using Expo Router
 - Component-based UI with shared components
