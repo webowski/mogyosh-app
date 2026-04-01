@@ -175,6 +175,32 @@ export default function WeekCalendar({
 		setWeekDataList(buildInitialList())
 	})
 
+	const updateWeekList = (targetDelta: number, today: Date) => {
+		setWeekDataList((currentList) => {
+			const newList = [...currentList]
+
+			if (targetDelta === -1) {
+				newList.shift()
+				const lastStart = currentList[4].weekStartDate
+				const newStart = addDaysToDate(lastStart, 7)
+				newList.push({
+					weekStartDate: newStart,
+					daysList: getWeekDays(newStart, today)
+				})
+			} else {
+				newList.pop()
+				const firstStart = currentList[0].weekStartDate
+				const newStart = addDaysToDate(firstStart, -7)
+				newList.unshift({
+					weekStartDate: newStart,
+					daysList: getWeekDays(newStart, today)
+				})
+			}
+
+			return newList
+		})
+	}
+
 	const panGesture = Gesture.Pan()
 		.onUpdate((event) => {
 			swipeTranslationValue.value = event.translationX
@@ -199,33 +225,7 @@ export default function WeekCalendar({
 				(finished) => {
 					if (!finished || targetDelta === 0) return
 
-					// if (finished && targetDelta !== 0) {
-					scheduleOnRN(() => {
-						setWeekDataList((currentList) => {
-							const newList = [...currentList]
-
-							if (targetDelta === -1) {
-								newList.shift()
-								const lastStart = currentList[4].weekStartDate
-								const newStart = addDaysToDate(lastStart, 7)
-								newList.push({
-									weekStartDate: newStart,
-									daysList: getWeekDays(newStart, today)
-								})
-							} else {
-								newList.pop()
-								const firstStart = currentList[0].weekStartDate
-								const newStart = addDaysToDate(firstStart, -7)
-								newList.unshift({
-									weekStartDate: newStart,
-									daysList: getWeekDays(newStart, today)
-								})
-							}
-
-							return newList
-						})
-					})
-					// }
+					scheduleOnRN(updateWeekList, targetDelta, today)
 				}
 			)
 		})
