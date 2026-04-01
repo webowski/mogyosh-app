@@ -1,6 +1,3 @@
-- строго обязательно!: для react-native-reanimated НЕ использовать runOnJS, т.к. runOnJS is deprecated для latest версии react-native-reanimated
-- вместо withSpring использовать withTiming
-
 # Project Rules and Guidelines
 
 ## Project Overview
@@ -27,13 +24,15 @@ This is a React Native mobile application built with Expo and TypeScript. The pr
 
 ## React Native Expo разработка
 
+- нигода не применяй runOnJS. для react-native-reanimated НЕ использовать runOnJS, т.к. runOnJS is deprecated для latest версии react-native-reanimated
+- вместо withSpring использовать withTiming
 - Код должен быть совеременным для latest React Native Expo на март 2026
 - использовать современный Pressable, вместо устаревшего TouchableOpacity
-- строго обязательно!: для react-native-reanimated НЕ использовать runOnJS, т.к. runOnJS is deprecated для latest версии react-native-reanimated
 - react-native-reanimated: вместо withSpring использовать withTiming
 - код писать на языке TypeScript
 - но без избыточного типирования TypeScript, типы и интерфейсы только по необходимости
 - код должен удовлетворять eslint
+- если пишешь стили, то используй Unistyles. названия стилей должны быть в `camelCase`, например `someElement`. А дочерние элементы в стилях должны быть в `camelCase__camelCase`, например `someElement__childElement`
 
 ## Folder Structure
 
