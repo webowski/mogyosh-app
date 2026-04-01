@@ -1,14 +1,18 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { changeLanguage, t } from 'i18next'
 import { create } from 'zustand'
-import { persist, subscribeWithSelector } from 'zustand/middleware'
+import {
+	createJSONStorage,
+	persist,
+	subscribeWithSelector
+} from 'zustand/middleware'
 
-export type Language = 'en' | 'ru'
+type Language = 'en' | 'ru'
 
 interface LangStore {
 	language: Language
 	t: (key: string) => string
-	setLanguage: (language: Language) => void
+	setLanguage: (lang: Language) => void
 }
 
 export const useLangStore = create<LangStore>()(
@@ -24,22 +28,9 @@ export const useLangStore = create<LangStore>()(
 			}),
 			{
 				name: 'lang-storage',
-				storage: {
-					getItem: async (name) => {
-						const value = await AsyncStorage.getItem(name)
-						return value ? JSON.parse(value) : null
-					},
-					setItem: async (name, value) => {
-						await AsyncStorage.setItem(name, JSON.stringify(value))
-					},
-					removeItem: async (name) => {
-						await AsyncStorage.removeItem(name)
-					}
-				},
+				storage: createJSONStorage(() => AsyncStorage),
 				onRehydrateStorage: () => (state) => {
-					if (state) {
-						changeLanguage(state.language)
-					}
+					if (state) changeLanguage(state.language)
 				}
 			}
 		)
