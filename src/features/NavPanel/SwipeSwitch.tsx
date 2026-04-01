@@ -13,6 +13,7 @@ import { StyleSheet } from 'react-native-unistyles'
 
 import SVGSwipeSwitchBg from '@/shared/images/swipe-switch-bg.svg'
 import { useNavStore } from '@/shared/model/navStore'
+import { scheduleOnRN } from 'react-native-worklets'
 
 // ─── Imports ───────────────────────────────────────────────────────────────
 
@@ -91,8 +92,13 @@ const SlideItem: React.FC<SlideItemProps> = ({
 		}
 	})
 
-	const gesture = Gesture.Tap().onEnd(() => {
+	const handlePress = (row: number, col: number) => {
 		onPress?.(row, col)
+	}
+
+	const gesture = Gesture.Tap().onEnd(() => {
+		'worklet'
+		scheduleOnRN(handlePress, row, col)
 	})
 
 	return (
@@ -197,6 +203,19 @@ const SwipeSwitch: React.FC<SwipeSwitchProps> = ({
 	// Track if initial onIndexChange has been called
 	const hasCalledInitial = useRef(false)
 
+	// useEffect(
+	// 	function effectOnIndexChange() {
+	// 		if (onIndexChange) {
+	// 			onIndexChange(rowIndex.value, colIndex.value)
+	// 		}
+	// 	},
+	// 	[rowIndex.value, colIndex.value]
+	// )
+
+	const handleIndexChange = (row: number, col: number) => {
+		onIndexChange?.(row, col)
+	}
+
 	const pan = Gesture.Pan()
 		.minDistance(6)
 		.onBegin(() => {
@@ -248,9 +267,9 @@ const SwipeSwitch: React.FC<SwipeSwitchProps> = ({
 					duration: 200
 				})
 
-				// Call onIndexChange callback on JS thread
+				// // Call onIndexChange callback on JS thread
 				if (onIndexChange) {
-					onIndexChange(rowIndex.value, newCol)
+					scheduleOnRN(handleIndexChange, rowIndex.value, newCol)
 				}
 			} else if (gestureAxis.value === 2) {
 				// ── Vertical — determine direction delta ────────────────────
@@ -278,9 +297,9 @@ const SwipeSwitch: React.FC<SwipeSwitchProps> = ({
 				posY.value = withTiming(targetPosY, { duration: 200 })
 				posX.value = withTiming(colIndex.value * SLIDE_WIDTH, { duration: 200 })
 
-				// Call onIndexChange callback on JS thread
+				// // Call onIndexChange callback on JS thread
 				if (onIndexChange) {
-					onIndexChange(newRow, colIndex.value)
+					scheduleOnRN(handleIndexChange, newRow, colIndex.value)
 				}
 			} else {
 				// No axis locked — snap back
