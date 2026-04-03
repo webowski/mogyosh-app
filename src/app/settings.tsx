@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 
 export default function SettingsScreen() {
 	const { theme } = useUnistyles()
-	const { t, i18n } = useTranslation()
+	const { t } = useTranslation()
 
 	return (
 		<>
@@ -28,7 +28,7 @@ export default function SettingsScreen() {
 									color: theme.colors.minor
 								}}
 							>
-								{i18n.language === 'en' ? 'English' : 'Русский'}
+								{t('languageName')}
 							</Text>
 						</Pressable>
 					}

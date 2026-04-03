@@ -5,32 +5,32 @@ import { t } from 'i18next'
 
 export function formatTitleDate(date: Date): string {
 	if (isToday(date)) {
-		return t('Today')
+		return t('date.Today')
 	}
 	if (isYesterday(date)) {
-		return t('Yesterday')
+		return t('date.Yesterday')
 	}
 	if (isTomorrow(date)) {
-		return t('Tomorrow')
+		return t('date.Tomorrow')
 	}
 
 	if (isThisYear(date)) {
-		return format(date, t('datePattern'), { locale: getDateFnsLocale() })
+		return format(date, t('date.pattern'), { locale: getDateFnsLocale() })
 	}
 
-	return format(date, t('datePatternWYear'), { locale: getDateFnsLocale() })
+	return format(date, t('date.patternWYear'), { locale: getDateFnsLocale() })
 }
 
 export function formatNavDate(date: Date): string {
 	if (isToday(date)) {
-		return t('Today')
+		return t('date.Today')
 	}
 
 	if (isThisYear(date)) {
-		return format(date, t('dateShortPattern'), { locale: getDateFnsLocale() })
+		return format(date, t('date.shortPattern'), { locale: getDateFnsLocale() })
 	}
 
-	return format(date, t('dateShortPatternWYear'), {
+	return format(date, t('date.shortPatternWYear'), {
 		locale: getDateFnsLocale()
 	})
 }

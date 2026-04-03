@@ -65,7 +65,7 @@ export default function NavPanelLayout() {
 				<Tabs.Screen
 					name='index'
 					options={{
-						title: t('Today'),
+						title: t('data.Today'),
 						href: null,
 						headerShown: true,
 						header: (props) => <HeaderDay {...props} />

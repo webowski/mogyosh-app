@@ -3,6 +3,7 @@ import { default as i18n } from 'i18next'
 import { initReactI18next } from 'react-i18next'
 
 import en from './locales/en.json'
+import es from './locales/es.json'
 import ru from './locales/ru.json'
 
 const deviceLanguage = getLocales()[0]?.languageCode ?? 'en'
@@ -10,11 +11,12 @@ const deviceLanguage = getLocales()[0]?.languageCode ?? 'en'
 i18n.use(initReactI18next).init({
 	resources: {
 		en: { translation: en },
-		ru: { translation: ru }
+		ru: { translation: ru },
+		es: { translation: es }
 	},
 	lng: deviceLanguage,
 	fallbackLng: 'en',
-	supportedLngs: ['en', 'ru'],
+	supportedLngs: ['en', 'ru', 'es'],
 	interpolation: {
 		escapeValue: false
 	}

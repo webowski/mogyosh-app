@@ -129,7 +129,7 @@ export default function Drawer({ isShown, width, translateX }: DrawerProps) {
 							<View style={styles.brandFigure__logo}>
 								<SVGAppLogoBig width={rt.screen.width * 0.5} />
 							</View>
-							<Text style={styles.brandFigure__subtitle}>you can</Text>
+							<Text style={styles.brandFigure__subtitle}>{t('slogan')}</Text>
 						</View>
 
 						<View style={styles.menu}>

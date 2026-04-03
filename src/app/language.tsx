@@ -11,7 +11,8 @@ import ScrollBox from '@/shared/ui/ScrollBox'
 
 const languages = [
 	{ code: 'en' as const, name: 'English' },
-	{ code: 'ru' as const, name: 'Русский' }
+	{ code: 'ru' as const, name: 'Русский' },
+	{ code: 'es' as const, name: 'Español' }
 ]
 
 export default function LanguageScreen() {

@@ -1,4 +1,6 @@
 {
+	"languageName": "Русский",
+	"slogan": "",
 	"All Tasks": "Все задачи",
 	"Roadmap": "План",
 	"Calendar": "Календарь",
@@ -13,13 +15,15 @@
 	"Create Task": "Создать задачу",
 	"Edit Task": "Редактировать задачу",
 	"Delete Task": "Удалить задачу",
-	"Today": "Сегодня",
-	"Yesterday": "Вчера",
-	"Tomorrow": "Завтра",
 	"Language": "Язык",
 	"Done": "Готово",
-	"datePattern": "d MMMM",
-	"datePatternWYear": "d MMMM yyyy",
-	"dateShortPattern": "d MMM",
-	"dateShortPatternWYear": "d MMM ''yy"
+	"date": {
+		"Today": "Сегодня",
+		"Yesterday": "Вчера",
+		"Tomorrow": "Завтра",
+		"pattern": "d MMMM",
+		"patternWYear": "d MMMM yyyy",
+		"shortPattern": "d MMM",
+		"shortPatternWYear": "d MMM ''yy"
+	}
 }

@@ -1,4 +1,6 @@
 {
+	"languageName": "English",
+	"slogan": "you got this",
 	"All Tasks": "All Tasks",
 	"Roadmap": "Roadmap",
 	"Calendar": "Calendar",
@@ -13,13 +15,15 @@
 	"Create Task": "Create Task",
 	"Edit Task": "Edit Task",
 	"Delete Task": "Delete Task",
-	"Today": "Today",
-	"Yesterday": "Yesterday",
-	"Tomorrow": "Tomorrow",
 	"Language": "Language",
 	"Done": "Done",
-	"datePattern": "MMMM d",
-	"datePatternWYear": "MMMM d, yyyy",
-	"dateShortPattern": "MMM d",
-	"dateShortPatternWYear": "MMM d ''yy"
+	"date": {
+		"Today": "Today",
+		"Yesterday": "Yesterday",
+		"Tomorrow": "Tomorrow",
+		"pattern": "MMMM d",
+		"patternWYear": "MMMM d, yyyy",
+		"shortPattern": "MMM d",
+		"shortPatternWYear": "MMM d ''yy"
+	}
 }

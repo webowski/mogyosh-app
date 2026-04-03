@@ -1,0 +1,29 @@
+{
+	"languageName": "Español",
+	"slogan": "¡Tú puedes!",
+	"All Tasks": "Tareas",
+	"Roadmap": "Plan",
+	"Calendar": "Calendario",
+	"Settings": "Configuración",
+	"Statistics": "Estadísticas",
+	"Motivation": "Motivación",
+	"About": "Acerca de",
+	"Account": "Cuenta",
+	"Task": "Tarea",
+	"Tasks": "Tareas",
+	"Add Task": "Agregar tarea",
+	"Create Task": "Crear tarea",
+	"Edit Task": "Editar tarea",
+	"Delete Task": "Eliminar tarea",
+	"Language": "Idioma",
+	"Done": "Hecho",
+	"date": {
+		"Today": "Hoy",
+		"Yesterday": "Ayer",
+		"Tomorrow": "Mañana",
+		"pattern": "d MMMM",
+		"patternWYear": "d MMMM ''yyyy",
+		"shortPattern": "d MMM",
+		"shortPatternWYear": "d MMM ''yy"
+	}
+}

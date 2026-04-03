@@ -7,7 +7,7 @@ import {
 	subscribeWithSelector
 } from 'zustand/middleware'
 
-type Language = 'en' | 'ru'
+type Language = 'en' | 'ru' | 'es'
 
 interface LangStore {
 	language: Language
