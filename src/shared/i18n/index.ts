@@ -4,6 +4,7 @@ import { initReactI18next } from 'react-i18next'
 
 import en from './locales/en.json'
 import es from './locales/es.json'
+import ja from './locales/ja.json'
 import ru from './locales/ru.json'
 
 const deviceLanguage = getLocales()[0]?.languageCode ?? 'en'
@@ -11,12 +12,13 @@ const deviceLanguage = getLocales()[0]?.languageCode ?? 'en'
 i18n.use(initReactI18next).init({
 	resources: {
 		en: { translation: en },
-		ru: { translation: ru },
-		es: { translation: es }
+		es: { translation: es },
+		ja: { translation: ja },
+		ru: { translation: ru }
 	},
 	lng: deviceLanguage,
 	fallbackLng: 'en',
-	supportedLngs: ['en', 'ru', 'es'],
+	supportedLngs: ['en', 'ru', 'es', 'ja'],
 	interpolation: {
 		escapeValue: false
 	}

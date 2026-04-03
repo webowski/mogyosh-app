@@ -7,12 +7,10 @@ import {
 	subscribeWithSelector
 } from 'zustand/middleware'
 
-type Language = 'en' | 'ru' | 'es'
-
 interface LangStore {
-	language: Language
+	language: string
 	t: (key: string) => string
-	setLanguage: (lang: Language) => void
+	setLanguage: (lang: string) => void
 }
 
 export const useLangStore = create<LangStore>()(

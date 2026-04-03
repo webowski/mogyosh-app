@@ -1,0 +1,29 @@
+{
+	"languageName": "日本語",
+	"slogan": "あなたならできる",
+	"All Tasks": "すべてのタスク",
+	"Roadmap": "ロードマップ",
+	"Calendar": "カレンダー",
+	"Settings": "設定",
+	"Statistics": "統計",
+	"Motivation": "モチベーション",
+	"About": "アプリについて",
+	"Account": "アカウント",
+	"Task": "タスク",
+	"Tasks": "タスク",
+	"Add Task": "タスクを追加",
+	"Create Task": "タスクを作成",
+	"Edit Task": "タスクを編集",
+	"Delete Task": "タスクを削除",
+	"Language": "言語",
+	"Done": "完了",
+	"date": {
+		"Today": "今日",
+		"Yesterday": "昨日",
+		"Tomorrow": "明日",
+		"pattern": "MMMM/d",
+		"patternWYear": "yyyy/MMMM/d",
+		"shortPattern": "MMM/d",
+		"shortPatternWYear": "yy/MMM/d"
+	}
+}
