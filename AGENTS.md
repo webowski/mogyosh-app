@@ -5,8 +5,7 @@
 ## Общие правила написания кода
 
 - Комментарии в коде писать только на английском языке
-- не делай задачи о которых я не просил
-- Don't make changes I haven't asked for. For example, don't do visual styling for other interface elements if I only asked for an element and the required structural styles.
+- Don't do tasks I haven't asked for. For example, don't do visual styling for other interface elements if I only asked for aditional function or an element and the required structural styles.
 - Use Dependency Inversion programming principle
 - Keep SOLID programming principles
 - Не удаляй закомментированные куски кода
