@@ -15,9 +15,9 @@ import { scheduleOnRN } from 'react-native-worklets'
 import { format, isSameDay, isToday } from 'date-fns'
 
 import { getDateFnsLocale } from '@/shared/i18n/dateFnsLocale'
+import { useLanguageChange } from '@/shared/i18n/useLanguageChange'
 import { capitalize } from '@/shared/lib/string'
 import { Squircle } from '@/shared/ui/Squircle'
-import { useLanguageChange } from '../i18n/useLanguageChange'
 
 const SCREEN_WIDTH = Dimensions.get('window').width
 const WEEK_WIDTH = SCREEN_WIDTH - 48
@@ -140,9 +140,31 @@ const Week = ({
 	)
 }
 
+type WeekData = {
+	weekStartDate: Date
+	daysList: ReturnType<typeof getWeekDays>
+}
+
+const isTodayWeek = (weekData: WeekData): boolean => {
+	const mondayOfToday = getMondayOfWeek(new Date())
+	return isSameDay(weekData.weekStartDate, mondayOfToday)
+}
+
+function buildInitialList(): WeekData[] {
+	const today = new Date()
+	const currentWeekStart = getMondayOfWeek(today)
+	return [-2, -1, 0, 1, 2].map((offset) => {
+		const start = addDaysToDate(currentWeekStart, offset * 7)
+		return {
+			weekStartDate: start,
+			daysList: getWeekDays(start, today)
+		}
+	})
+}
+
 type WeekCalendarProps = {
 	selectedDate?: Date
-	onSelectDate?: (date: Date) => void
+	onSelectDate: (date: Date) => void
 }
 
 export default function WeekCalendar({
@@ -151,25 +173,28 @@ export default function WeekCalendar({
 }: WeekCalendarProps) {
 	const today = new Date()
 	const currentSelectedDate = selectedDate ?? today
-	const currentWeekStart = getMondayOfWeek(today)
-
-	const buildInitialList = () =>
-		[-2, -1, 0, 1, 2].map((offset) => {
-			const start = addDaysToDate(currentWeekStart, offset * 7)
-			return {
-				weekStartDate: start,
-				daysList: getWeekDays(start, today)
-			}
-		})
 
 	const [weekDataList, setWeekDataList] = useState(buildInitialList())
 
 	const swipeTranslationValue = useSharedValue(0)
 
-	useEffect(() => {
-		swipeTranslationValue.value = 0
+	useEffect(
+		function effectOnWeekChange() {
+			// сбрасываем смещение свайпа при смене недели
+			swipeTranslationValue.value = 0
+
+			// выбираем первый день текущей недели при смене недели
+			const selectedWeek = weekDataList[2]
+			// если неделя текущая
+			if (isTodayWeek(selectedWeek)) {
+				onSelectDate(today)
+			} else {
+				onSelectDate(selectedWeek.weekStartDate)
+			}
+		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [weekDataList])
+		[weekDataList]
+	)
 
 	useLanguageChange(() => {
 		setWeekDataList(buildInitialList())
