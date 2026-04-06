@@ -76,23 +76,10 @@ src/
 
 ## Development Workflow
 
-1. Start development server: `bun start`
-2. Lint code: `bun lint`
+- используется пакетный менеджер bun
 
 ## Code Quality
 
 - Enforced by ESLint with Expo configuration
 - Strict TypeScript compilation
-- No unused imports or variables
 - Consistent code style throughout
-
-## Testing
-
-- Unit tests for components and logic
-- Integration tests for navigation flows
-- Manual testing on devices/emulators
-
-## Deployment
-
-- Preview builds: `bun build:preview`
-- Production builds: `bun build:production`
