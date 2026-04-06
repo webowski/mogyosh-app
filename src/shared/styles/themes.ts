@@ -1,5 +1,5 @@
 import { Platform } from 'react-native'
-import { StyleSheet } from 'react-native-unistyles'
+import { StyleSheet, UnistylesRuntime as rt } from 'react-native-unistyles'
 
 export const Fonts = Platform.select({
 	ios: {
@@ -47,6 +47,8 @@ export const lightTheme = {
 		success: 'hsl(148, 100%, 66%)',
 		danger: 'hsl(355, 100%, 75%)',
 		border: 'hsl(240, 5%, 79%)',
+		border600: 'hsl(240, 5%, 87%)',
+		border700: 'hsl(240, 5%, 92%)',
 		// gradient: {
 		// 	primary: ['', ''],
 		// 	surface: ['', '']
@@ -58,6 +60,14 @@ export const lightTheme = {
 		sm: 8,
 		md: 16,
 		lg: 24
+	},
+	fontSize: {
+		xxs: rt.fontScale * 12,
+		xs: rt.fontScale * 13,
+		sm: rt.fontScale * 14,
+		md: rt.fontScale * 15,
+		lg: rt.fontScale * 16,
+		xl: rt.fontScale * 18
 	},
 	statusBarColor: 'dark'
 } as const
@@ -72,6 +82,7 @@ export const darkTheme = {
 		textSecondary: '#8E8E93',
 		border: '#38383A'
 	},
+	fontSize: lightTheme.fontSize,
 	spacing: lightTheme.spacing
 } as const
 
@@ -86,6 +97,7 @@ export const sunnyTheme = {
 		textSecondary: '#8E8E93',
 		border: '#38383A'
 	},
+	fontSize: lightTheme.fontSize,
 	spacing: lightTheme.spacing
 } as const
 
