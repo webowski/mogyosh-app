@@ -44,7 +44,7 @@ export default function SettingsScreen() {
 						}
 					/>
 					<SettingsItem
-						label={t('Week start')}
+						label={t('date.Week start')}
 						control={
 							<ToggleGroup
 								value={weekStartDay}

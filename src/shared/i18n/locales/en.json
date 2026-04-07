@@ -24,6 +24,7 @@
 		"pattern": "MMMM d",
 		"patternWYear": "MMMM d, yyyy",
 		"shortPattern": "MMM d",
-		"shortPatternWYear": "MMM d ''yy"
+		"shortPatternWYear": "MMM d ''yy",
+		"Week start": "Week start"
 	}
 }

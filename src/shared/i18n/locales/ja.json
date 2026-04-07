@@ -24,6 +24,7 @@
 		"pattern": "MMMM/d",
 		"patternWYear": "yyyy/MMMM/d",
 		"shortPattern": "MMM/d",
-		"shortPatternWYear": "yy/MMM/d"
+		"shortPatternWYear": "yy/MMM/d",
+		"Week start": "週の初日"
 	}
 }
