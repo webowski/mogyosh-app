@@ -19,6 +19,7 @@ import { getDateFnsLocale } from '@/shared/i18n/dateFnsLocale'
 import { useLanguageChange } from '@/shared/i18n/useLanguageChange'
 import { capitalize } from '@/shared/lib/string'
 import { getWeekStartDate } from '@/shared/lib/time'
+import { useCalendarStore } from '@/shared/model/calendarStore'
 import { Squircle } from '@/shared/ui/Squircle'
 
 const SCREEN_WIDTH = Dimensions.get('window').width
@@ -50,11 +51,12 @@ const getWeekDays = (weekStart: Date, today: Date) => {
 
 type DayProps = {
 	day: ReturnType<typeof getWeekDays>[number]
-	selectedDate: Date
 	onSelectDate?: (d: Date) => void
 }
 
-function Day({ day, selectedDate, onSelectDate }: DayProps) {
+function Day({ day, onSelectDate }: DayProps) {
+	const selectedDate = useCalendarStore((state) => state.selectedDate)
+
 	const isDaySelected = isSameDay(selectedDate, day.date)
 	const isDayToday = isToday(day.date)
 
@@ -66,7 +68,6 @@ function Day({ day, selectedDate, onSelectDate }: DayProps) {
 			}}
 		>
 			<Squircle
-				// style={styles.day}
 				style={[
 					styles.day,
 					isDaySelected && styles.day_selected,
@@ -105,7 +106,6 @@ type WeekProps = {
 	}
 	index: number
 	swipeTranslationValue: SharedValue<number>
-	selectedDate: Date
 	onSelectDate?: (d: Date) => void
 }
 
@@ -113,7 +113,6 @@ const Week = ({
 	weekData,
 	index,
 	swipeTranslationValue,
-	selectedDate,
 	onSelectDate
 }: WeekProps) => {
 	const weekAnimatedStyle = useAnimatedStyle(() => ({
@@ -125,12 +124,7 @@ const Week = ({
 	return (
 		<Animated.View style={[styles.week, weekAnimatedStyle]}>
 			{weekData.daysList.map((day) => (
-				<Day
-					key={day.date.getTime()}
-					day={day}
-					selectedDate={selectedDate}
-					onSelectDate={onSelectDate}
-				/>
+				<Day key={day.date.getTime()} day={day} onSelectDate={onSelectDate} />
 			))}
 		</Animated.View>
 	)
@@ -143,13 +137,16 @@ type WeekData = {
 
 const isTodayWeek = (weekData: WeekData): boolean => {
 	const weekStartDayIndex = useSettingsStore.getState().weekStartDayIndex
-	const currentWeekStartDate = getWeekStartDate(new Date(), weekStartDayIndex)
+	const today = useCalendarStore.getState().today
+
+	const currentWeekStartDate = getWeekStartDate(today, weekStartDayIndex)
 	return isSameDay(weekData.weekStartDate, currentWeekStartDate)
 }
 
 function makeWeeksDataArray(): WeekData[] {
-	const today = new Date()
+	const today = useCalendarStore.getState().today
 	const weekStartDayIndex = useSettingsStore.getState().weekStartDayIndex
+
 	const currentWeekStartDate = getWeekStartDate(today, weekStartDayIndex)
 
 	return [-2, -1, 0, 1, 2].map((offset) => {
@@ -162,16 +159,11 @@ function makeWeeksDataArray(): WeekData[] {
 }
 
 type WeekCalendarProps = {
-	selectedDate?: Date
 	onSelectDate: (date: Date) => void
 }
 
-export default function WeekCalendar({
-	selectedDate,
-	onSelectDate
-}: WeekCalendarProps) {
-	const today = new Date()
-	const currentSelectedDate = selectedDate ?? today
+export default function WeekCalendar({ onSelectDate }: WeekCalendarProps) {
+	const today = useCalendarStore((state) => state.today)
 
 	const weekStartDayIndex = useSettingsStore((state) => state.weekStartDayIndex)
 	const [weeksDataArray, setWeeksDataArray] = useState(makeWeeksDataArray())
@@ -271,7 +263,6 @@ export default function WeekCalendar({
 						weekData={weekData}
 						index={index}
 						swipeTranslationValue={swipeTranslationValue}
-						selectedDate={currentSelectedDate}
 						onSelectDate={onSelectDate}
 					/>
 				))}
@@ -284,7 +275,6 @@ const styles = StyleSheet.create((theme) => ({
 	container: {
 		position: 'relative',
 		width: WEEK_WIDTH,
-		// height: 68,
 		height: 44,
 		marginTop: 12,
 		overflow: 'hidden'

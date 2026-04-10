@@ -46,7 +46,6 @@ export default function HeaderDay({ options, navigation, route }: HeaderProps) {
 			</Text>
 
 			<WeekCalendar
-				selectedDate={selectedDate}
 				onSelectDate={(date: Date) => {
 					useCalendarStore.getState().setSelectedDate(date)
 					useNavStore.getState().updateSwitchItems()
