@@ -43,7 +43,6 @@ This is a React Native mobile application built with Expo 55 and TypeScript. The
 - react-native-reanimated: вместо withSpring использовать withTiming
 - код писать на языке TypeScript
 - но без избыточного типирования TypeScript, типы и интерфейсы только по необходимости
-- код должен удовлетворять eslint
 - если пишешь стили, то используй Unistyles. названия стилей должны быть в `camelCase`, например `someElement`. А дочерние элементы в стилях должны быть в `camelCase__camelCase`, например `someElement__childElement`
 
 ## Folder Structure
