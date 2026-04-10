@@ -49,6 +49,8 @@ export const lightTheme = {
 		border: 'hsl(240, 5%, 79%)',
 		border600: 'hsl(240, 5%, 87%)',
 		border700: 'hsl(240, 5%, 92%)',
+		shadow100: 'hsla(225, 74%, 40%, .09)',
+		shadow150: 'hsla(225, 74%, 40%, .12)',
 		shadow: 'hsla(225, 74%, 40%, .55)',
 		// gradient: {
 		// 	primary: ['', ''],

@@ -28,13 +28,7 @@ export const commonStyles = StyleSheet.create((theme, rt) => ({
 		paddingHorizontal: styleVars.sidePadding,
 		paddingVertical: 8,
 		paddingBottom: 8,
-		shadowColor: 'hsl(225, 74%, 40%)',
-		shadowOffset: {
-			width: 0,
-			height: -1
-		},
-		shadowRadius: 6,
-		shadowOpacity: 0.2
+		boxShadow: '0 0px 6px ' + theme.colors.shadow100
 	},
 	headerTitle: {
 		fontSize: 16,

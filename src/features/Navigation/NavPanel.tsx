@@ -153,19 +153,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		borderTopLeftRadius: 32,
 		borderTopRightRadius: 32,
 		borderCurve: 'continuous',
-
-		// ios shadow
-		// shadowColor: theme.colors.primary,
-		shadowColor: 'hsl(225, 74%, 40%)',
-		shadowOffset: {
-			width: 0,
-			height: 4
-		},
-		shadowOpacity: 0.2,
-		shadowRadius: 40,
-
-		// Android shadow
-		elevation: 8
+		boxShadow: '0 0px 40px ' + theme.colors.shadow150
 	}
 }))
 
