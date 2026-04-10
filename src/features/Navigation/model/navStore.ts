@@ -25,6 +25,9 @@ const buildSwipeSwitchItems = (selectedDate: Date) => {
 interface NavStore {
 	swipeSwitchItems: Record<string, string | undefined>[][]
 	updateSwitchItems: (selectedDate?: Date) => void
+
+	isDrawerShown: boolean
+	setIsDrawerShown: (isShown: boolean) => void
 }
 
 export const useNavStore = create<NavStore>((set) => ({
@@ -32,6 +35,11 @@ export const useNavStore = create<NavStore>((set) => ({
 	updateSwitchItems: (selectedDate?: Date) => {
 		const date = selectedDate ?? new Date()
 		set({ swipeSwitchItems: buildSwipeSwitchItems(date) })
+	},
+
+	isDrawerShown: false,
+	setIsDrawerShown: (isShown: boolean) => {
+		set({ isDrawerShown: isShown })
 	}
 }))
 

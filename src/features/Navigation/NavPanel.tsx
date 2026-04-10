@@ -2,7 +2,6 @@ import { BottomTabBarProps } from '@react-navigation/bottom-tabs'
 import { View } from 'react-native'
 
 import { ParamListBase, TabNavigationState } from '@react-navigation/native'
-import { SharedValue } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { StyleSheet } from 'react-native-unistyles'
 
@@ -17,9 +16,7 @@ import { useCalendarStore } from '@/shared/model/calendarStore'
 import { styleVars } from '@/shared/styles/common'
 import { useNavStore } from './model/navStore'
 
-type NavPanelProps = BottomTabBarProps & {
-	isDrawerShown: SharedValue<boolean>
-}
+type NavPanelProps = BottomTabBarProps
 
 // Helper function to format date as DD.MM.YY
 function formatDate(date: Date): string {
@@ -32,12 +29,12 @@ function formatDate(date: Date): string {
 export default function NavPanel({
 	state,
 	descriptors,
-	navigation,
-	isDrawerShown
+	navigation
 }: NavPanelProps) {
 	// const { buildHref } = useLinkBuilder()
 	const insets = useSafeAreaInsets()
-	// const { theme } = useUnistyles()
+
+	const setIsDrawerShown = useNavStore((store) => store.setIsDrawerShown)
 
 	// Get selected date and swipe switch items from store
 	const selectedDate = useCalendarStore((state) => state.selectedDate)
@@ -111,9 +108,7 @@ export default function NavPanel({
 			]}
 		>
 			<NavButton
-				onPress={() => {
-					isDrawerShown.value = true
-				}}
+				onPress={() => setIsDrawerShown(true)}
 				icon={<SVGIconBurger width={32} height={32} />}
 			/>
 

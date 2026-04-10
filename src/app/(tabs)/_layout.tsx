@@ -1,6 +1,5 @@
 import { Tabs } from 'expo-router'
 import { useTranslation } from 'react-i18next'
-import { useSharedValue } from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
 
 import Drawer from '@/features/Drawer/Drawer'
@@ -13,21 +12,11 @@ export default function NavPanelLayout() {
 	const { theme } = useUnistyles()
 	const { t } = useTranslation()
 
-	const isDrawerShown = useSharedValue(false)
-	const drawerWidth = useSharedValue(1000)
-	const drawerTranslateX = useSharedValue(-1000)
-
 	return (
 		<>
-			<Drawer
-				isShown={isDrawerShown}
-				width={drawerWidth}
-				translateX={drawerTranslateX}
-			/>
+			<Drawer />
 			<Tabs
-				tabBar={(props) => (
-					<NavPanel {...props} isDrawerShown={isDrawerShown} />
-				)}
+				tabBar={(props) => <NavPanel {...props} />}
 				screenOptions={{
 					tabBarShowLabel: false,
 					tabBarActiveTintColor: theme.colors.primary,

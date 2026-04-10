@@ -5,28 +5,39 @@ import Animated, {
 	Extrapolation,
 	interpolate,
 	ReduceMotion,
-	SharedValue,
 	useAnimatedReaction,
 	useAnimatedStyle,
+	useSharedValue,
 	withTiming
 } from 'react-native-reanimated'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
+import { useNavStore } from '@/features/Navigation/model/navStore'
 import SVGAppLogoBig from '@/shared/images/mogyosh-logo-big.svg'
 import { MaterialIcons } from '@expo/vector-icons'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { scheduleOnRN } from 'react-native-worklets'
 
-type DrawerProps = {
-	isShown: SharedValue<boolean>
-	width: SharedValue<number>
-	translateX: SharedValue<number>
-}
-
-export default function Drawer({ isShown, width, translateX }: DrawerProps) {
+export default function Drawer() {
 	const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 	const { theme, rt } = useUnistyles()
 	const router = useRouter()
 	const { t } = useTranslation()
+
+	const isDrawerShown = useNavStore((store) => store.isDrawerShown)
+	const setIsDrawerShown = useNavStore((store) => store.setIsDrawerShown)
+	const isShown = useSharedValue(false)
+	const width = useSharedValue(1000)
+	const translateX = useSharedValue(-1000)
+
+	useEffect(
+		() => {
+			isShown.value = isDrawerShown
+		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[isDrawerShown]
+	)
 
 	useAnimatedReaction(
 		() => isShown.value,
@@ -49,7 +60,7 @@ export default function Drawer({ isShown, width, translateX }: DrawerProps) {
 		() => width.value,
 		() => {
 			if (isShown.value) {
-				isShown.value = false
+				scheduleOnRN(setIsDrawerShown, false)
 			}
 		}
 	)
@@ -90,17 +101,16 @@ export default function Drawer({ isShown, width, translateX }: DrawerProps) {
 			}
 		})
 		.onEnd((e) => {
-			if (e.velocityX < -1000) {
-				translateX.value = withTiming(-width.value, { duration: 140 }, () => {
-					isShown.value = false
-				})
-			}
-			if (e.translationX < -width.value * 0.33) {
-				translateX.value = withTiming(-width.value, { duration: 140 }, () => {
-					isShown.value = false
-				})
+			const shouldClose =
+				e.velocityX < -1000 || e.translationX < -width.value * 0.33
+
+			if (shouldClose) {
+				scheduleOnRN(setIsDrawerShown, false)
 			} else {
-				translateX.value = withTiming(0)
+				translateX.value = withTiming(0, {
+					duration: 140,
+					reduceMotion: ReduceMotion.Never
+				})
 			}
 		})
 
@@ -175,7 +185,7 @@ export default function Drawer({ isShown, width, translateX }: DrawerProps) {
 			<AnimatedPressable
 				style={[styles.backdrop, backdropAnimatedStyle]}
 				onPress={() => {
-					isShown.value = false
+					setIsDrawerShown(false)
 				}}
 			/>
 		</>
