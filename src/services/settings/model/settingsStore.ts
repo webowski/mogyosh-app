@@ -1,22 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { format } from 'date-fns'
+import { enUS, es, ja, ru } from 'date-fns/locale'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
 import i18n from '@/shared/i18n'
 import { capitalize } from '@/shared/lib/string'
-import { format } from 'date-fns'
-import { enUS, es, ja, ru } from 'date-fns/locale'
-import { WeekStartDayIndex } from '../domain'
-
-type WeekStartDaysData = { value: 1 | 0; label: string }[]
-
-interface SettingsStore {
-	weekStartDayIndex: WeekStartDayIndex
-	setWeekStartDayIndex: (value: WeekStartDayIndex) => void
-
-	weekStartDaysData: WeekStartDaysData
-	updateWeekStartDaysData: () => void
-}
+import { SettingsStore, WeekStartDaysData } from '../domain'
 
 const getLocale = () => {
 	switch (i18n.language) {
