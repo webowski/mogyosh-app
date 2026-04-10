@@ -7,8 +7,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useNavStore } from '@/shared/model/navStore'
 import { useTimeStore } from '@/shared/model/timeStore'
 
+import WeekCalendar from '@/features/Calendar/WeekCalendar'
 import { formatTitleDate } from '@/shared/lib/time'
-import WeekCalendar from '@/shared/ui/WeekCalendar'
 
 import { useLanguageChange } from '@/shared/i18n/useLanguageChange'
 import { commonStyles, styleVars } from '@/shared/styles/common'
