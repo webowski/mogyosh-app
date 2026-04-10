@@ -173,9 +173,17 @@ export default function WeekCalendar({
 	const today = new Date()
 	const currentSelectedDate = selectedDate ?? today
 
+	const weekStartDayIndex = useSettingsStore((state) => state.weekStartDayIndex)
 	const [weeksDataArray, setWeeksDataArray] = useState(makeWeeksDataArray())
 
 	const swipeTranslationValue = useSharedValue(0)
+
+	useEffect(
+		function effectOnWeekStartChange() {
+			setWeeksDataArray(makeWeeksDataArray())
+		},
+		[weekStartDayIndex]
+	)
 
 	useEffect(
 		function effectOnWeekChange() {
