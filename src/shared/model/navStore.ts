@@ -2,17 +2,11 @@ import { create } from 'zustand'
 
 import i18n from '@/shared/i18n'
 import { formatNavDate } from '@/shared/lib/time'
-import { useCalendarStore } from '@/shared/model/calendarStore'
 import { useLangStore } from '@/shared/model/langStore'
+import { useCalendarStore } from './calendarStore'
 
-interface NavStore {
-	swipeSwitchItems: Record<string, string | undefined>[][]
-	updateSwitchItems: () => void
-}
-
-const buildSwipeSwitchItems = () => {
+const buildSwipeSwitchItems = (selectedDate: Date) => {
 	const { t } = useLangStore.getState()
-	const selectedDate = useCalendarStore.getState().selectedDate
 
 	return [
 		[
@@ -28,13 +22,28 @@ const buildSwipeSwitchItems = () => {
 	]
 }
 
+interface NavStore {
+	swipeSwitchItems: Record<string, string | undefined>[][]
+	updateSwitchItems: (selectedDate?: Date) => void
+}
+
 export const useNavStore = create<NavStore>((set) => ({
-	swipeSwitchItems: buildSwipeSwitchItems(),
-	updateSwitchItems: () => {
-		set({ swipeSwitchItems: buildSwipeSwitchItems() })
+	swipeSwitchItems: buildSwipeSwitchItems(new Date()),
+	updateSwitchItems: (selectedDate?: Date) => {
+		const date = selectedDate ?? new Date()
+		set({ swipeSwitchItems: buildSwipeSwitchItems(date) })
 	}
 }))
 
 i18n.on('languageChanged', () => {
-	useNavStore.getState().updateSwitchItems()
+	const selectedDate = useCalendarStore.getState().selectedDate
+	useNavStore.getState().updateSwitchItems(selectedDate)
 })
+
+useCalendarStore.subscribe(
+	(state) => state.selectedDate,
+	(selectedDate) => {
+		console.log('subscription on selectedDate')
+		useNavStore.getState().updateSwitchItems(selectedDate)
+	}
+)

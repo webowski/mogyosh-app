@@ -1,6 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { create } from 'zustand'
-import { createJSONStorage, persist } from 'zustand/middleware'
+import {
+	createJSONStorage,
+	persist,
+	subscribeWithSelector
+} from 'zustand/middleware'
 
 interface CalendarStore {
 	today: Date
@@ -9,18 +13,20 @@ interface CalendarStore {
 }
 
 export const useCalendarStore = create<CalendarStore>()(
-	persist(
-		(set) => ({
-			today: new Date(),
+	subscribeWithSelector(
+		persist(
+			(set) => ({
+				today: new Date(),
 
-			selectedDate: new Date(),
-			setSelectedDate: (date: Date) => {
-				set({ selectedDate: date })
+				selectedDate: new Date(),
+				setSelectedDate: (date: Date) => {
+					set({ selectedDate: date })
+				}
+			}),
+			{
+				name: 'calendar-storage',
+				storage: createJSONStorage(() => AsyncStorage)
 			}
-		}),
-		{
-			name: 'calendar-storage',
-			storage: createJSONStorage(() => AsyncStorage)
-		}
+		)
 	)
 )

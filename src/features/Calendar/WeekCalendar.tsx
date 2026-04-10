@@ -51,10 +51,9 @@ const getWeekDays = (weekStart: Date, today: Date) => {
 
 type DayProps = {
 	day: ReturnType<typeof getWeekDays>[number]
-	onSelectDate?: (d: Date) => void
 }
 
-function Day({ day, onSelectDate }: DayProps) {
+function Day({ day }: DayProps) {
 	const selectedDate = useCalendarStore((state) => state.selectedDate)
 
 	const isDaySelected = isSameDay(selectedDate, day.date)
@@ -64,7 +63,7 @@ function Day({ day, onSelectDate }: DayProps) {
 		<Pressable
 			key={day.date.getTime()}
 			onPress={() => {
-				onSelectDate?.(day.date)
+				useCalendarStore.getState().setSelectedDate(day.date)
 			}}
 		>
 			<Squircle
@@ -106,15 +105,9 @@ type WeekProps = {
 	}
 	index: number
 	swipeTranslationValue: SharedValue<number>
-	onSelectDate?: (d: Date) => void
 }
 
-const Week = ({
-	weekData,
-	index,
-	swipeTranslationValue,
-	onSelectDate
-}: WeekProps) => {
+const Week = ({ weekData, index, swipeTranslationValue }: WeekProps) => {
 	const weekAnimatedStyle = useAnimatedStyle(() => ({
 		transform: [
 			{ translateX: (index - 2) * WEEK_WIDTH + swipeTranslationValue.value }
@@ -124,7 +117,7 @@ const Week = ({
 	return (
 		<Animated.View style={[styles.week, weekAnimatedStyle]}>
 			{weekData.daysList.map((day) => (
-				<Day key={day.date.getTime()} day={day} onSelectDate={onSelectDate} />
+				<Day key={day.date.getTime()} day={day} />
 			))}
 		</Animated.View>
 	)
@@ -158,11 +151,7 @@ function makeWeeksDataArray(): WeekData[] {
 	})
 }
 
-type WeekCalendarProps = {
-	onSelectDate: (date: Date) => void
-}
-
-export default function WeekCalendar({ onSelectDate }: WeekCalendarProps) {
+export default function WeekCalendar() {
 	const today = useCalendarStore((state) => state.today)
 
 	const weekStartDayIndex = useSettingsStore((state) => state.weekStartDayIndex)
@@ -186,9 +175,9 @@ export default function WeekCalendar({ onSelectDate }: WeekCalendarProps) {
 			const selectedWeek = weeksDataArray[2]
 			// если неделя текущая
 			if (isTodayWeek(selectedWeek)) {
-				onSelectDate(today)
+				useCalendarStore.getState().setSelectedDate(today)
 			} else {
-				onSelectDate(selectedWeek.weekStartDate)
+				useCalendarStore.getState().setSelectedDate(selectedWeek.weekStartDate)
 			}
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -263,7 +252,6 @@ export default function WeekCalendar({ onSelectDate }: WeekCalendarProps) {
 						weekData={weekData}
 						index={index}
 						swipeTranslationValue={swipeTranslationValue}
-						onSelectDate={onSelectDate}
 					/>
 				))}
 			</View>

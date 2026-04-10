@@ -5,7 +5,6 @@ import { Text, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { useCalendarStore } from '@/shared/model/calendarStore'
-import { useNavStore } from '@/shared/model/navStore'
 
 import WeekCalendar from '@/features/Calendar/WeekCalendar'
 import { formatTitleDate } from '@/shared/lib/time'
@@ -45,12 +44,7 @@ export default function HeaderDay({ options, navigation, route }: HeaderProps) {
 				{titleDate}
 			</Text>
 
-			<WeekCalendar
-				onSelectDate={(date: Date) => {
-					useCalendarStore.getState().setSelectedDate(date)
-					useNavStore.getState().updateSwitchItems()
-				}}
-			/>
+			<WeekCalendar />
 		</View>
 	)
 }
