@@ -13,8 +13,8 @@ import SVGIconBurger from '@/shared/images/icons/burger.svg'
 import SVGIconPlus from '@/shared/images/icons/plus.svg'
 import SVGIconTarget from '@/shared/images/icons/target.svg'
 
+import { useNavStore } from '@/features/NavPanel/model/navStore'
 import { useCalendarStore } from '@/shared/model/calendarStore'
-import { useNavStore } from '@/shared/model/navStore'
 import { styleVars } from '@/shared/styles/common'
 
 type NavPanelProps = BottomTabBarProps & {

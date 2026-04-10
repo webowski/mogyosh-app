@@ -2,8 +2,8 @@ import { create } from 'zustand'
 
 import i18n from '@/shared/i18n'
 import { formatNavDate } from '@/shared/lib/time'
+import { useCalendarStore } from '@/shared/model/calendarStore'
 import { useLangStore } from '@/shared/model/langStore'
-import { useCalendarStore } from './calendarStore'
 
 const buildSwipeSwitchItems = (selectedDate: Date) => {
 	const { t } = useLangStore.getState()

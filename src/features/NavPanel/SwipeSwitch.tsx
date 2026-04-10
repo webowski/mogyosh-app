@@ -11,8 +11,8 @@ import Animated, {
 } from 'react-native-reanimated'
 import { StyleSheet } from 'react-native-unistyles'
 
+import { useNavStore } from '@/features/NavPanel/model/navStore'
 import SVGSwipeSwitchBg from '@/shared/images/swipe-switch-bg.svg'
-import { useNavStore } from '@/shared/model/navStore'
 import { scheduleOnRN } from 'react-native-worklets'
 
 // ─── Imports ───────────────────────────────────────────────────────────────
