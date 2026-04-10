@@ -6,7 +6,7 @@ import { useUnistyles } from 'react-native-unistyles'
 import { ActionsPanel } from '@/features/ActionsPanel/ActionsPanel'
 import { SettingsItem } from '@/features/Settings/SettingsItem'
 
-import { WeekStartDay } from '@/shared/domain/time'
+import { WeekStartDayIndex } from '@/shared/domain/time'
 import { useTimeStore } from '@/shared/model/timeStore'
 import { Button } from '@/shared/ui/Button'
 import ScrollBox from '@/shared/ui/ScrollBox'
@@ -18,11 +18,13 @@ export default function SettingsScreen() {
 	const { theme } = useUnistyles()
 	const { t } = useTranslation()
 
-	const weekStartDay = useTimeStore((state) => state.weekStartDay)
-	const setWeekStartDay = useTimeStore((state) => state.setWeekStartDay)
-	const weekStartDays = useTimeStore((state) => state.weekStartDays)
+	const weekStartDayIndex = useTimeStore((state) => state.weekStartDayIndex)
+	const setWeekStartDayIndex = useTimeStore(
+		(state) => state.setWeekStartDayIndex
+	)
+	const weekStartDaysData = useTimeStore((state) => state.weekStartDaysData)
 
-	// const monday = startOfWeek(new Date(), { weekStartsOn: weekStartDay })
+	// const monday = startOfWeek(new Date(), { weekStartsOn: weekStartDayIndex })
 
 	return (
 		<>
@@ -47,11 +49,11 @@ export default function SettingsScreen() {
 						label={t('date.Week start')}
 						control={
 							<ToggleGroup
-								value={weekStartDay}
+								value={weekStartDayIndex}
 								onChange={(value) => {
-									setWeekStartDay(Number(value) as WeekStartDay)
+									setWeekStartDayIndex(Number(value) as WeekStartDayIndex)
 								}}
-								buttons={weekStartDays}
+								buttons={weekStartDaysData}
 							/>
 						}
 					/>

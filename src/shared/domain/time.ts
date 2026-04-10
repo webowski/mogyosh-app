@@ -1,2 +1,2 @@
 // 1 - monday, 0 - sunday
-export type WeekStartDay = 1 | 0
+export type WeekStartDayIndex = 1 | 0

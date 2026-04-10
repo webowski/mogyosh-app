@@ -17,7 +17,9 @@ import { format, isSameDay, isToday } from 'date-fns'
 import { getDateFnsLocale } from '@/shared/i18n/dateFnsLocale'
 import { useLanguageChange } from '@/shared/i18n/useLanguageChange'
 import { capitalize } from '@/shared/lib/string'
+import { getWeekStartDate } from '@/shared/lib/time'
 import { Squircle } from '@/shared/ui/Squircle'
+import { useTimeStore } from '../model/timeStore'
 
 const SCREEN_WIDTH = Dimensions.get('window').width
 const WEEK_WIDTH = SCREEN_WIDTH - 48
@@ -25,12 +27,6 @@ const DAY_WIDTH = WEEK_WIDTH / 7 - 8
 const SWIPE_THRESHOLD = DAY_WIDTH // WEEK_WIDTH * 0.25
 const VELOCITY_THRESHOLD = 800
 const SWIPE_END_DURATION = 240
-
-const getMondayOfWeek = (date: Date): Date => {
-	const result = new Date(date)
-	result.setDate(result.getDate() - ((result.getDay() + 6) % 7))
-	return result
-}
 
 const addDaysToDate = (date: Date, days: number): Date => {
 	const result = new Date(date)
@@ -146,15 +142,18 @@ type WeekData = {
 }
 
 const isTodayWeek = (weekData: WeekData): boolean => {
-	const mondayOfToday = getMondayOfWeek(new Date())
-	return isSameDay(weekData.weekStartDate, mondayOfToday)
+	const weekStartDayIndex = useTimeStore.getState().weekStartDayIndex
+	const currentWeekStartDate = getWeekStartDate(new Date(), weekStartDayIndex)
+	return isSameDay(weekData.weekStartDate, currentWeekStartDate)
 }
 
-function buildInitialList(): WeekData[] {
+function makeWeeksDataArray(): WeekData[] {
 	const today = new Date()
-	const currentWeekStart = getMondayOfWeek(today)
+	const weekStartDayIndex = useTimeStore.getState().weekStartDayIndex
+	const currentWeekStartDate = getWeekStartDate(today, weekStartDayIndex)
+
 	return [-2, -1, 0, 1, 2].map((offset) => {
-		const start = addDaysToDate(currentWeekStart, offset * 7)
+		const start = addDaysToDate(currentWeekStartDate, offset * 7)
 		return {
 			weekStartDate: start,
 			daysList: getWeekDays(start, today)
@@ -174,7 +173,7 @@ export default function WeekCalendar({
 	const today = new Date()
 	const currentSelectedDate = selectedDate ?? today
 
-	const [weekDataList, setWeekDataList] = useState(buildInitialList())
+	const [weeksDataArray, setWeeksDataArray] = useState(makeWeeksDataArray())
 
 	const swipeTranslationValue = useSharedValue(0)
 
@@ -184,7 +183,7 @@ export default function WeekCalendar({
 			swipeTranslationValue.value = 0
 
 			// выбираем первый день текущей недели при смене недели
-			const selectedWeek = weekDataList[2]
+			const selectedWeek = weeksDataArray[2]
 			// если неделя текущая
 			if (isTodayWeek(selectedWeek)) {
 				onSelectDate(today)
@@ -193,15 +192,15 @@ export default function WeekCalendar({
 			}
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[weekDataList]
+		[weeksDataArray]
 	)
 
 	useLanguageChange(() => {
-		setWeekDataList(buildInitialList())
+		setWeeksDataArray(makeWeeksDataArray())
 	})
 
 	const updateWeekList = (targetDelta: number, today: Date) => {
-		setWeekDataList((currentList) => {
+		setWeeksDataArray((currentList) => {
 			const newList = [...currentList]
 
 			if (targetDelta === -1) {
@@ -258,7 +257,7 @@ export default function WeekCalendar({
 	return (
 		<GestureDetector gesture={panGesture}>
 			<View style={styles.container}>
-				{weekDataList.map((weekData, index) => (
+				{weeksDataArray.map((weekData, index) => (
 					<Week
 						key={weekData.weekStartDate.getTime()}
 						weekData={weekData}

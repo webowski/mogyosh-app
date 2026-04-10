@@ -3,6 +3,20 @@ import { format, isThisYear, isToday, isTomorrow, isYesterday } from 'date-fns'
 import { getDateFnsLocale } from '@/shared/i18n/dateFnsLocale'
 import { t } from 'i18next'
 
+import { WeekStartDayIndex } from '@/shared/domain/time'
+
+export const getWeekStartDate = (
+	date: Date,
+	weekStartDayIndex: WeekStartDayIndex
+): Date => {
+	const resultDate = new Date(date)
+	const currentDay = resultDate.getDay()
+	const shiftToWeekStart = (currentDay - weekStartDayIndex + 7) % 7
+
+	resultDate.setDate(resultDate.getDate() - shiftToWeekStart)
+	return resultDate
+}
+
 export function formatTitleDate(date: Date): string {
 	if (isToday(date)) {
 		return t('date.Today')
