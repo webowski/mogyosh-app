@@ -14,12 +14,12 @@ import { scheduleOnRN } from 'react-native-worklets'
 
 import { format, isSameDay, isToday } from 'date-fns'
 
+import { useSettingsStore } from '@/services/settings/model/store'
 import { getDateFnsLocale } from '@/shared/i18n/dateFnsLocale'
 import { useLanguageChange } from '@/shared/i18n/useLanguageChange'
 import { capitalize } from '@/shared/lib/string'
 import { getWeekStartDate } from '@/shared/lib/time'
 import { Squircle } from '@/shared/ui/Squircle'
-import { useTimeStore } from '../model/timeStore'
 
 const SCREEN_WIDTH = Dimensions.get('window').width
 const WEEK_WIDTH = SCREEN_WIDTH - 48
@@ -142,14 +142,14 @@ type WeekData = {
 }
 
 const isTodayWeek = (weekData: WeekData): boolean => {
-	const weekStartDayIndex = useTimeStore.getState().weekStartDayIndex
+	const weekStartDayIndex = useSettingsStore.getState().weekStartDayIndex
 	const currentWeekStartDate = getWeekStartDate(new Date(), weekStartDayIndex)
 	return isSameDay(weekData.weekStartDate, currentWeekStartDate)
 }
 
 function makeWeeksDataArray(): WeekData[] {
 	const today = new Date()
-	const weekStartDayIndex = useTimeStore.getState().weekStartDayIndex
+	const weekStartDayIndex = useSettingsStore.getState().weekStartDayIndex
 	const currentWeekStartDate = getWeekStartDate(today, weekStartDayIndex)
 
 	return [-2, -1, 0, 1, 2].map((offset) => {

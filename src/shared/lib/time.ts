@@ -3,7 +3,7 @@ import { format, isThisYear, isToday, isTomorrow, isYesterday } from 'date-fns'
 import { getDateFnsLocale } from '@/shared/i18n/dateFnsLocale'
 import { t } from 'i18next'
 
-import { WeekStartDayIndex } from '@/shared/domain/time'
+import { WeekStartDayIndex } from '@/services/settings/domain'
 
 export const getWeekStartDate = (
 	date: Date,

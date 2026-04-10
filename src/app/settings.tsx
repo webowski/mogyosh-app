@@ -6,8 +6,8 @@ import { useUnistyles } from 'react-native-unistyles'
 import { ActionsPanel } from '@/features/ActionsPanel/ActionsPanel'
 import { SettingsItem } from '@/features/Settings/SettingsItem'
 
-import { WeekStartDayIndex } from '@/shared/domain/time'
-import { useTimeStore } from '@/shared/model/timeStore'
+import { WeekStartDayIndex } from '@/services/settings/domain'
+import { useSettingsStore } from '@/services/settings/model/store'
 import { Button } from '@/shared/ui/Button'
 import ScrollBox from '@/shared/ui/ScrollBox'
 import { Toggle } from '@/shared/ui/Toggle'
@@ -18,13 +18,11 @@ export default function SettingsScreen() {
 	const { theme } = useUnistyles()
 	const { t } = useTranslation()
 
-	const weekStartDayIndex = useTimeStore((state) => state.weekStartDayIndex)
-	const setWeekStartDayIndex = useTimeStore(
+	const weekStartDayIndex = useSettingsStore((state) => state.weekStartDayIndex)
+	const setWeekStartDayIndex = useSettingsStore(
 		(state) => state.setWeekStartDayIndex
 	)
-	const weekStartDaysData = useTimeStore((state) => state.weekStartDaysData)
-
-	// const monday = startOfWeek(new Date(), { weekStartsOn: weekStartDayIndex })
+	const weekStartDaysData = useSettingsStore((state) => state.weekStartDaysData)
 
 	return (
 		<>
