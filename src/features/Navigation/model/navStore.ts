@@ -43,7 +43,6 @@ i18n.on('languageChanged', () => {
 useCalendarStore.subscribe(
 	(state) => state.selectedDate,
 	(selectedDate) => {
-		console.log('subscription on selectedDate')
 		useNavStore.getState().updateSwitchItems(selectedDate)
 	}
 )

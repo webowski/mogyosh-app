@@ -1,13 +1,13 @@
+import { Tabs } from 'expo-router'
+import { useTranslation } from 'react-i18next'
+import { useSharedValue } from 'react-native-reanimated'
+import { useUnistyles } from 'react-native-unistyles'
+
 import Drawer from '@/features/Drawer/Drawer'
 import Header from '@/features/Header/Header'
 import { default as HeaderDay } from '@/features/Header/HeaderDay'
 import HeaderTask from '@/features/Header/HeaderTask'
-import NavPanel from '@/features/NavPanel/NavPanel'
-import { Tabs } from 'expo-router'
-import { useTranslation } from 'react-i18next'
-import { useSharedValue } from 'react-native-reanimated'
-
-import { useUnistyles } from 'react-native-unistyles'
+import NavPanel from '@/features/Navigation/NavPanel'
 
 export default function NavPanelLayout() {
 	const { theme } = useUnistyles()
