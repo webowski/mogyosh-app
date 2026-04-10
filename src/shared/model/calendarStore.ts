@@ -2,12 +2,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
-interface TimeStore {
+interface CalendarStore {
 	selectedDate: Date
 	setSelectedDate: (date: Date) => void
 }
 
-export const useTimeStore = create<TimeStore>()(
+export const useCalendarStore = create<CalendarStore>()(
 	persist(
 		(set) => ({
 			selectedDate: new Date(),
@@ -16,7 +16,7 @@ export const useTimeStore = create<TimeStore>()(
 			}
 		}),
 		{
-			name: 'time-storage',
+			name: 'calendar-storage',
 			storage: createJSONStorage(() => AsyncStorage)
 		}
 	)

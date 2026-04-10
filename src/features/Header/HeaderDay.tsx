@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react'
 import { Text, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
+import { useCalendarStore } from '@/shared/model/calendarStore'
 import { useNavStore } from '@/shared/model/navStore'
-import { useTimeStore } from '@/shared/model/timeStore'
 
 import WeekCalendar from '@/features/Calendar/WeekCalendar'
 import { formatTitleDate } from '@/shared/lib/time'
@@ -17,7 +17,7 @@ type HeaderProps = BottomTabHeaderProps | NativeStackHeaderProps
 
 export default function HeaderDay({ options, navigation, route }: HeaderProps) {
 	const insets = useSafeAreaInsets()
-	const selectedDate = useTimeStore((state) => state.selectedDate)
+	const selectedDate = useCalendarStore((state) => state.selectedDate)
 
 	const [titleDate, setTitleDate] = useState(formatTitleDate(selectedDate))
 
@@ -48,7 +48,7 @@ export default function HeaderDay({ options, navigation, route }: HeaderProps) {
 			<WeekCalendar
 				selectedDate={selectedDate}
 				onSelectDate={(date: Date) => {
-					useTimeStore.getState().setSelectedDate(date)
+					useCalendarStore.getState().setSelectedDate(date)
 					useNavStore.getState().updateSwitchItems()
 				}}
 			/>

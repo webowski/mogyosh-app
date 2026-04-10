@@ -13,8 +13,8 @@ import SVGIconBurger from '@/shared/images/icons/burger.svg'
 import SVGIconPlus from '@/shared/images/icons/plus.svg'
 import SVGIconTarget from '@/shared/images/icons/target.svg'
 
+import { useCalendarStore } from '@/shared/model/calendarStore'
 import { useNavStore } from '@/shared/model/navStore'
-import { useTimeStore } from '@/shared/model/timeStore'
 import { styleVars } from '@/shared/styles/common'
 
 type NavPanelProps = BottomTabBarProps & {
@@ -40,7 +40,7 @@ export default function NavPanel({
 	// const { theme } = useUnistyles()
 
 	// Get selected date and swipe switch items from store
-	const selectedDate = useTimeStore((state) => state.selectedDate)
+	const selectedDate = useCalendarStore((state) => state.selectedDate)
 	const swipeSwitchItems = useNavStore((state) => state.swipeSwitchItems)
 
 	// Track current route for transition effects - ensure correct initialization
