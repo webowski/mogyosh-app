@@ -225,7 +225,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		display: 'flex',
 		flexDirection: 'row',
 		alignItems: 'center',
-		gap: 6
+		gap: 8
 	},
 	menuItemText: {
 		fontSize: 18,
