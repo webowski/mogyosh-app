@@ -244,7 +244,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		...StyleSheet.absoluteFillObject,
 		flex: 1,
 		backgroundColor: 'black',
-		zIndex: 1
+		zIndex: 51
 	},
 	containerShadow: {
 		...StyleSheet.absoluteFillObject,
@@ -259,6 +259,6 @@ const styles = StyleSheet.create((theme, rt) => ({
 		left: 0,
 		width: '80%',
 		backgroundColor: theme.colors.surface,
-		zIndex: 2
+		zIndex: 52
 	}
 }))
