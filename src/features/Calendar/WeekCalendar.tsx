@@ -14,7 +14,7 @@ import { scheduleOnRN } from 'react-native-worklets'
 
 import { format, isSameDay, isToday } from 'date-fns'
 
-import { useSettingsStore } from '@/services/settings/model/store'
+import { useSettingsStore } from '@/services/settings/model/settingsStore'
 import { getDateFnsLocale } from '@/shared/i18n/dateFnsLocale'
 import { useLanguageChange } from '@/shared/i18n/useLanguageChange'
 import { capitalize } from '@/shared/lib/string'

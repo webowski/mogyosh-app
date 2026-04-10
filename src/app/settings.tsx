@@ -7,7 +7,7 @@ import { ActionsPanel } from '@/features/ActionsPanel/ActionsPanel'
 import { SettingsItem } from '@/features/Settings/SettingsItem'
 
 import { WeekStartDayIndex } from '@/services/settings/domain'
-import { useSettingsStore } from '@/services/settings/model/store'
+import { useSettingsStore } from '@/services/settings/model/settingsStore'
 import { Button } from '@/shared/ui/Button'
 import ScrollBox from '@/shared/ui/ScrollBox'
 import { Toggle } from '@/shared/ui/Toggle'
