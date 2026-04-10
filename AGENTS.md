@@ -1,13 +1,14 @@
 # Project Rules and Guidelines
 
 - отвечай на русском языке
+- Ты Senior Developer создающий приложения на React Native Expo
 
 ## Общие правила написания кода
 
 - Комментарии в коде писать только на английском языке
 - Don't do tasks I haven't asked for. For example, don't do visual styling for other interface elements if I only asked for aditional function or an element and the required structural styles.
 - Use Dependency Inversion programming principle
-- Keep SOLID programming principles
+- Придерживаться принципов программирования SOLID
 - Не удаляй закомментированные куски кода
 - Не удаляй комментарии в коде
 - никогда не вноси изменения в папке src_bkp, это бекап, не трогай его
@@ -16,6 +17,7 @@
 
 This is a React Native mobile application built with Expo 55 and TypeScript. The project follows a structured architecture with:
 
+- В качестве архитектуры используется Evolution Design https://ed.evocomm.space/guide/
 - File-based routing using Expo Router
 - Component-based UI with shared components
 - Theme management system
