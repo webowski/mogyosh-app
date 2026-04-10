@@ -19,7 +19,7 @@ export default function AccountScreen() {
 					<Text style={textStyles.heading5}>Account</Text>
 				</View>
 
-				<SettingsItem label='Logout' control={<View>...</View>} />
+				<SettingsItem label='Logout' control={<Text>...</Text>} />
 			</ScrollBox>
 
 			<ActionsPanel>
