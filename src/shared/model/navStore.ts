@@ -10,8 +10,9 @@ interface NavStore {
 	updateSwitchItems: () => void
 }
 
-const buildSwipeSwitchItems = (selectedDate: Date) => {
+const buildSwipeSwitchItems = () => {
 	const { t } = useLangStore.getState()
+	const selectedDate = useCalendarStore.getState().selectedDate
 
 	return [
 		[
@@ -28,11 +29,9 @@ const buildSwipeSwitchItems = (selectedDate: Date) => {
 }
 
 export const useNavStore = create<NavStore>((set) => ({
-	swipeSwitchItems: buildSwipeSwitchItems(new Date()),
+	swipeSwitchItems: buildSwipeSwitchItems(),
 	updateSwitchItems: () => {
-		const selectedDate = useCalendarStore.getState().selectedDate
-		const swipeSwitchItems = buildSwipeSwitchItems(selectedDate)
-		set({ swipeSwitchItems: swipeSwitchItems })
+		set({ swipeSwitchItems: buildSwipeSwitchItems() })
 	}
 }))
 
