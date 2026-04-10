@@ -248,9 +248,8 @@ const styles = StyleSheet.create((theme, rt) => ({
 	},
 	containerShadow: {
 		...StyleSheet.absoluteFillObject,
-		shadowColor: '#1b40b1',
-		shadowOffset: { width: 0, height: 0 },
-		shadowRadius: 40
+		boxShadow: '0 0px 40px ' + theme.colors.shadow,
+		backgroundColor: theme.colors.background
 	},
 	container: {
 		position: 'absolute',
