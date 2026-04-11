@@ -60,7 +60,7 @@ export default function RootLayout() {
 						<Stack.Screen
 							name='createTask'
 							options={{
-								title: t('Create Task'),
+								title: t('screen.Create Task'),
 								// headerShown: false,
 								presentation: 'modal',
 								animation: 'slide_from_bottom'
@@ -69,7 +69,7 @@ export default function RootLayout() {
 						<Stack.Screen
 							name='about'
 							options={{
-								title: t('About'),
+								title: t('screen.About'),
 								headerShown: true,
 								header: (props) => <Header {...props} />
 							}}
@@ -77,7 +77,7 @@ export default function RootLayout() {
 						<Stack.Screen
 							name='account'
 							options={{
-								title: t('Account'),
+								title: t('screen.Account'),
 								headerShown: true,
 								header: (props) => <Header {...props} />
 							}}
@@ -85,7 +85,7 @@ export default function RootLayout() {
 						<Stack.Screen
 							name='settings'
 							options={{
-								title: t('Settings'),
+								title: t('screen.Settings'),
 								headerShown: true,
 								header: (props) => <Header {...props} />
 							}}
@@ -93,7 +93,7 @@ export default function RootLayout() {
 						<Stack.Screen
 							name='language'
 							options={{
-								title: t('Language'),
+								title: t('screen.Language'),
 								headerShown: true,
 								header: (props) => <Header {...props} />
 							}}

@@ -155,7 +155,7 @@ export default function Drawer() {
 									size={26}
 									color={theme.colors.minor}
 								/>
-								<Text style={styles.menuItemText}>{t('About')}</Text>
+								<Text style={styles.menuItemText}>{t('screen.About')}</Text>
 							</Pressable>
 							<Pressable
 								style={styles.menuItem}
@@ -169,7 +169,7 @@ export default function Drawer() {
 									size={26}
 									color={theme.colors.minor}
 								/>
-								<Text style={styles.menuItemText}>{t('Account')}</Text>
+								<Text style={styles.menuItemText}>{t('screen.Account')}</Text>
 							</Pressable>
 							<Pressable
 								style={styles.menuItem}
@@ -183,7 +183,7 @@ export default function Drawer() {
 									size={26}
 									color={theme.colors.minor}
 								/>
-								<Text style={styles.menuItemText}>{t('Settings')}</Text>
+								<Text style={styles.menuItemText}>{t('screen.Settings')}</Text>
 							</Pressable>
 
 							{/* <Text style={styles.copyright}>2026 © v1.0.0</Text> */}

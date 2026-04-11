@@ -10,14 +10,14 @@ const buildSwipeSwitchItems = (selectedDate: Date) => {
 
 	return [
 		[
-			{ allTasks: t('All Tasks') },
+			{ allTasks: t('screen.All Tasks') },
 			{ index: formatNavDate(selectedDate) },
-			{ task: t('Task') }
+			{ task: t('screen.Task') }
 		],
 		[
-			{ roadmap: t('Roadmap') },
-			{ calendar: t('Calendar') },
-			{ progress: t('Progress') }
+			{ roadmap: t('screen.Roadmap') },
+			{ calendar: t('screen.Calendar') },
+			{ progress: t('screen.Progress') }
 		]
 	]
 }

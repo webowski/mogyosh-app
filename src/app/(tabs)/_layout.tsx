@@ -27,7 +27,7 @@ export default function NavPanelLayout() {
 				<Tabs.Screen
 					name='motivation'
 					options={{
-						title: t('Motivation'),
+						title: t('screen.Motivation'),
 						href: null,
 						headerShown: true,
 						header: (props) => <Header {...props} />
@@ -36,7 +36,7 @@ export default function NavPanelLayout() {
 				<Tabs.Screen
 					name='allTasks'
 					options={{
-						title: t('All Tasks'),
+						title: t('screen.All Tasks'),
 						href: null,
 						headerShown: true,
 						header: (props) => <Header {...props} />
@@ -45,7 +45,7 @@ export default function NavPanelLayout() {
 				<Tabs.Screen
 					name='roadmap'
 					options={{
-						title: t('Roadmap'),
+						title: t('screen.Roadmap'),
 						href: null,
 						headerShown: true,
 						header: (props) => <Header {...props} />
@@ -54,7 +54,7 @@ export default function NavPanelLayout() {
 				<Tabs.Screen
 					name='index'
 					options={{
-						title: t('data.Today'),
+						title: t('screen.Today'),
 						href: null,
 						headerShown: true,
 						header: (props) => <HeaderDay {...props} />
@@ -63,7 +63,7 @@ export default function NavPanelLayout() {
 				<Tabs.Screen
 					name='calendar'
 					options={{
-						title: t('Calendar'),
+						title: t('screen.Calendar'),
 						href: null,
 						headerShown: true,
 						header: (props) => <Header {...props} />
@@ -72,7 +72,7 @@ export default function NavPanelLayout() {
 				<Tabs.Screen
 					name='task'
 					options={{
-						title: t('Task'),
+						title: t('screen.Task'),
 						href: null,
 						headerShown: true,
 						header: (props) => <HeaderTask {...props} />
@@ -81,7 +81,7 @@ export default function NavPanelLayout() {
 				<Tabs.Screen
 					name='progress'
 					options={{
-						title: t('Progress'),
+						title: t('screen.Progress'),
 						href: null,
 						headerShown: true,
 						header: (props) => <HeaderTask {...props} />
