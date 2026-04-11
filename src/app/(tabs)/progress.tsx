@@ -1,7 +1,7 @@
 import TaskStatistics from '@/features/Statistics/TaskStatistics'
 import ScrollBox from '@/shared/ui/ScrollBox'
 
-export default function StatisticsScreen() {
+export default function ProgressScreen() {
 	return (
 		<ScrollBox>
 			<TaskStatistics />

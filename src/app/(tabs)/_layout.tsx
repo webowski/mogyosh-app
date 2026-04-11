@@ -79,9 +79,9 @@ export default function NavPanelLayout() {
 					}}
 				/>
 				<Tabs.Screen
-					name='statistics'
+					name='progress'
 					options={{
-						title: t('Statistics'),
+						title: t('Progress'),
 						href: null,
 						headerShown: true,
 						header: (props) => <HeaderTask {...props} />

@@ -17,7 +17,7 @@ const buildSwipeSwitchItems = (selectedDate: Date) => {
 		[
 			{ roadmap: t('Roadmap') },
 			{ calendar: t('Calendar') },
-			{ statistics: t('Statistics') }
+			{ progress: t('Progress') }
 		]
 	]
 }
