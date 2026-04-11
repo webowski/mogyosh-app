@@ -145,7 +145,10 @@ export default function Drawer() {
 						<View style={styles.menu}>
 							<Pressable
 								style={styles.menuItem}
-								onPress={() => router.push('/about')}
+								onPress={() => {
+									router.push('/about')
+									setTimeout(() => setIsDrawerShown(false), 200)
+								}}
 							>
 								<MaterialIcons
 									name='info-outline'
@@ -156,7 +159,10 @@ export default function Drawer() {
 							</Pressable>
 							<Pressable
 								style={styles.menuItem}
-								onPress={() => router.push('/account')}
+								onPress={() => {
+									router.push('/account')
+									setTimeout(() => setIsDrawerShown(false), 200)
+								}}
 							>
 								<MaterialIcons
 									name='alternate-email'
@@ -167,7 +173,10 @@ export default function Drawer() {
 							</Pressable>
 							<Pressable
 								style={styles.menuItem}
-								onPress={() => router.push('/settings')}
+								onPress={() => {
+									router.push('/settings')
+									setTimeout(() => setIsDrawerShown(false), 200)
+								}}
 							>
 								<MaterialIcons
 									name='settings'
