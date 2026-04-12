@@ -17,34 +17,6 @@ const zustandStorage: StateStorage = {
 	removeItem: (name) => storage.remove(name)
 }
 
-export const useSettingsStore = create<SettingsStore>()(
-	persist(
-		(set) => ({
-			weekStartDayIndex: 1,
-			setWeekStartDayIndex: (value) => set({ weekStartDayIndex: value }),
-
-			weekStartDaysData: makeWeekStartDaysData(),
-			updateWeekStartDaysData: () =>
-				set({ weekStartDaysData: makeWeekStartDaysData() }),
-
-			currentTheme: 'light',
-			setCurrentTheme: (theme: string) => {
-				UnistylesRuntime.setTheme(theme as 'light' | 'dark')
-				set({ currentTheme: theme })
-			}
-		}),
-		{
-			name: 'settings-storage',
-			storage: createJSONStorage(() => zustandStorage),
-			onRehydrateStorage: () => (state) => {
-				if (state?.currentTheme) {
-					UnistylesRuntime.setTheme(state.currentTheme as 'light' | 'dark')
-				}
-			}
-		}
-	)
-)
-
 const getLocale = () => {
 	switch (i18n.language) {
 		case 'ru':
@@ -69,6 +41,34 @@ const makeWeekStartDaysData = (): WeekStartDaysData => {
 		{ value: 0, label: capitalize(sun) }
 	]
 }
+
+export const useSettingsStore = create<SettingsStore>()(
+	persist(
+		(set) => ({
+			weekStartDayIndex: 1,
+			setWeekStartDayIndex: (value) => set({ weekStartDayIndex: value }),
+
+			weekStartDaysData: makeWeekStartDaysData(),
+			updateWeekStartDaysData: () =>
+				set({ weekStartDaysData: makeWeekStartDaysData() }),
+
+			currentTheme: 'light',
+			setCurrentTheme: (theme) => {
+				UnistylesRuntime.setTheme(theme)
+				set({ currentTheme: theme })
+			}
+		}),
+		{
+			name: 'settings-storage',
+			storage: createJSONStorage(() => zustandStorage),
+			onRehydrateStorage: () => (state) => {
+				if (state?.currentTheme) {
+					UnistylesRuntime.setTheme(state.currentTheme)
+				}
+			}
+		}
+	)
+)
 
 i18n.on('languageChanged', () => {
 	useSettingsStore.getState().updateWeekStartDaysData()

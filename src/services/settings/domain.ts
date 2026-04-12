@@ -1,3 +1,5 @@
+import { UnistylesThemes } from 'react-native-unistyles'
+
 export type WeekStartDayIndex = 1 | 0
 
 export type WeekStartDaysData = {
@@ -12,6 +14,6 @@ export interface SettingsStore {
 	weekStartDaysData: WeekStartDaysData
 	updateWeekStartDaysData: () => void
 
-	currentTheme: string
-	setCurrentTheme: (theme: string) => void
+	currentTheme: keyof UnistylesThemes
+	setCurrentTheme: (theme: keyof UnistylesThemes) => void
 }
