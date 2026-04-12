@@ -1,5 +1,5 @@
-import { useSettingsStore } from '@/services/settings/model/settingsStore'
 import { Platform } from 'react-native'
+import { createMMKV } from 'react-native-mmkv'
 import {
 	StyleSheet,
 	UnistylesThemes,
@@ -175,9 +175,10 @@ declare module 'react-native-unistyles' {
 StyleSheet.configure({
 	settings: {
 		initialTheme: () => {
-			// get preferred theme from user's preferences/MMKV/SQL/StanJS etc.
-			// return storage.getString('preferredTheme') ?? 'light'
-			return useSettingsStore.getState().currentTheme as keyof UnistylesThemes
+			const storage = createMMKV({ id: 'settings-storage' })
+			return (
+				(storage.getString('currentTheme') as keyof UnistylesThemes) ?? 'light'
+			)
 		}
 	},
 	// breakpoints,
