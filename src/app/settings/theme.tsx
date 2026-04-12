@@ -2,7 +2,11 @@ import { MaterialIcons } from '@expo/vector-icons'
 import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
-import { StyleSheet, useUnistyles } from 'react-native-unistyles'
+import {
+	StyleSheet,
+	UnistylesThemes,
+	useUnistyles
+} from 'react-native-unistyles'
 
 import { ActionsPanel } from '@/features/ActionsPanel/ActionsPanel'
 import { useSettingsStore } from '@/services/settings/model/settingsStore'
@@ -19,11 +23,17 @@ export default function ThemeScreen() {
 		<>
 			<ScrollBox scrollIndent>
 				<View style={{ gap: 12 }}>
-					{Object.entries(themes).map(([key, theme]) => (
+					{Object.entries(themes).map(([key]) => (
 						<Pressable
 							key={key}
-							style={[styles.radioItem]}
-							onPress={() => setCurrentTheme(key)}
+							style={[
+								styles.radioItem,
+								{
+									borderColor:
+										key === currentTheme ? theme.colors.primary : 'transparent'
+								}
+							]}
+							onPress={() => setCurrentTheme(key as keyof UnistylesThemes)}
 						>
 							<Text style={styles.radioItem__text}>{t(`theme.${key}`)}</Text>
 							{currentTheme === key && (
