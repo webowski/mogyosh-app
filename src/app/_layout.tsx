@@ -85,25 +85,7 @@ export default function RootLayout() {
 						<Stack.Screen
 							name='settings'
 							options={{
-								title: t('screen.Settings'),
-								headerShown: true,
-								header: (props) => <Header {...props} />
-							}}
-						/>
-						<Stack.Screen
-							name='language'
-							options={{
-								title: t('screen.Language'),
-								headerShown: true,
-								header: (props) => <Header {...props} />
-							}}
-						/>
-						<Stack.Screen
-							name='theme'
-							options={{
-								title: t('screen.Color theme'),
-								headerShown: true,
-								header: (props) => <Header {...props} />
+								headerShown: false
 							}}
 						/>
 					</Stack>

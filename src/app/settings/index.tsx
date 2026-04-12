@@ -32,7 +32,7 @@ export default function SettingsScreen() {
 					<SettingsItem
 						label={t('Language')}
 						control={
-							<Pressable onPress={() => router.push('/language')}>
+							<Pressable onPress={() => router.push('/settings/language')}>
 								<Text
 									style={{
 										fontSize: 16,
@@ -59,7 +59,7 @@ export default function SettingsScreen() {
 					<SettingsItem
 						label='Color theme'
 						control={
-							<Pressable onPress={() => router.push('/theme')}>
+							<Pressable onPress={() => router.push('/settings/theme')}>
 								<Text
 									style={{
 										fontSize: 16,
