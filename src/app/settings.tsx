@@ -23,6 +23,7 @@ export default function SettingsScreen() {
 		(state) => state.setWeekStartDayIndex
 	)
 	const weekStartDaysData = useSettingsStore((state) => state.weekStartDaysData)
+	const currentTheme = useSettingsStore((state) => state.currentTheme)
 
 	return (
 		<>
@@ -55,7 +56,21 @@ export default function SettingsScreen() {
 							/>
 						}
 					/>
-					<SettingsItem label='Color theme' control={<Toggle />} />
+					<SettingsItem
+						label='Color theme'
+						control={
+							<Pressable onPress={() => router.push('/theme')}>
+								<Text
+									style={{
+										fontSize: 16,
+										color: theme.colors.minor
+									}}
+								>
+									{t(`theme.${currentTheme}`)}
+								</Text>
+							</Pressable>
+						}
+					/>
 					<SettingsItem label='Notifications' control={<Text>...</Text>} />
 					<SettingsItem label='Privacy Policy' control={<Text>...</Text>} />
 					<SettingsItem label='Apple Health' control={<Text>...</Text>} />

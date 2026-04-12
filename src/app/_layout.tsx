@@ -98,6 +98,14 @@ export default function RootLayout() {
 								header: (props) => <Header {...props} />
 							}}
 						/>
+						<Stack.Screen
+							name='theme'
+							options={{
+								title: t('screen.Color theme'),
+								headerShown: true,
+								header: (props) => <Header {...props} />
+							}}
+						/>
 					</Stack>
 				</SafeAreaProvider>
 			</GestureHandlerRootView>

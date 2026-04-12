@@ -31,5 +31,9 @@
 		"shortPattern": "d MMM",
 		"shortPatternWYear": "d MMM ''yy",
 		"Week start": "Начало недели"
+	},
+	"theme": {
+		"light": "Светлая",
+		"dark": "Тёмная"
 	}
 }

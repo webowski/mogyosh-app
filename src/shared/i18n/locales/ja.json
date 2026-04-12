@@ -31,5 +31,9 @@
 		"shortPattern": "MMM/d",
 		"shortPatternWYear": "yy/MMM/d",
 		"Week start": "週の初日"
+	},
+	"theme": {
+		"light": "ライト",
+		"dark": "ダーク"
 	}
 }

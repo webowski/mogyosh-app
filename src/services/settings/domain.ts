@@ -11,4 +11,7 @@ export interface SettingsStore {
 
 	weekStartDaysData: WeekStartDaysData
 	updateWeekStartDaysData: () => void
+
+	currentTheme: string
+	setCurrentTheme: (theme: string) => void
 }

@@ -6,6 +6,7 @@ import { createJSONStorage, persist } from 'zustand/middleware'
 
 import i18n from '@/shared/i18n'
 import { capitalize } from '@/shared/lib/string'
+import { UnistylesRuntime } from 'react-native-unistyles'
 import { SettingsStore, WeekStartDaysData } from '../domain'
 
 const getLocale = () => {
@@ -43,11 +44,22 @@ export const useSettingsStore = create<SettingsStore>()(
 			updateWeekStartDaysData: () => {
 				const weekStartDaysData = makeWeekStartDaysData()
 				set({ weekStartDaysData: weekStartDaysData })
+			},
+
+			currentTheme: 'light',
+			setCurrentTheme: (theme: string) => {
+				UnistylesRuntime.setTheme(theme as 'light' | 'dark')
+				set({ currentTheme: theme })
 			}
 		}),
 		{
 			name: 'settings-storage',
-			storage: createJSONStorage(() => AsyncStorage)
+			storage: createJSONStorage(() => AsyncStorage),
+			onRehydrateStorage: () => (state) => {
+				if (state?.currentTheme) {
+					UnistylesRuntime.setTheme(state.currentTheme as 'light' | 'dark')
+				}
+			}
 		}
 	)
 )
