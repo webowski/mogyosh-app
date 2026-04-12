@@ -29,11 +29,15 @@
 		"pattern": "d MMMM",
 		"patternWYear": "d MMMM ''yyyy",
 		"shortPattern": "d MMM",
-		"shortPatternWYear": "d MMM ''yy",
-		"Week start": "Inicio de semana"
+		"shortPatternWYear": "d MMM ''yy"
 	},
 	"theme": {
 		"light": "Claro",
 		"dark": "Oscuro"
+	},
+	"settings": {
+		"Language": "Idioma",
+		"Theme": "Tema",
+		"Week start": "Inicio de semana"
 	}
 }

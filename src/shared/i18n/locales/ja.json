@@ -29,11 +29,15 @@
 		"pattern": "MMMM/d",
 		"patternWYear": "yyyy/MMMM/d",
 		"shortPattern": "MMM/d",
-		"shortPatternWYear": "yy/MMM/d",
-		"Week start": "週の初日"
+		"shortPatternWYear": "yy/MMM/d"
 	},
 	"theme": {
 		"light": "ライト",
 		"dark": "ダーク"
+	},
+	"settings": {
+		"Language": "言語",
+		"Theme": "テーマ",
+		"Week start": "週の初日"
 	}
 }

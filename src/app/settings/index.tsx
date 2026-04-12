@@ -10,7 +10,6 @@ import { WeekStartDayIndex } from '@/services/settings/domain'
 import { useSettingsStore } from '@/services/settings/model/settingsStore'
 import { Button } from '@/shared/ui/Button'
 import ScrollBox from '@/shared/ui/ScrollBox'
-import { Toggle } from '@/shared/ui/Toggle'
 import { ToggleGroup } from '@/shared/ui/ToggleGroup'
 import { useTranslation } from 'react-i18next'
 
@@ -30,7 +29,7 @@ export default function SettingsScreen() {
 			<ScrollBox scrollIndent>
 				<View style={{ gap: 16 }}>
 					<SettingsItem
-						label={t('Language')}
+						label={t('settings.Language')}
 						control={
 							<Pressable onPress={() => router.push('/settings/language')}>
 								<Text
@@ -45,7 +44,7 @@ export default function SettingsScreen() {
 						}
 					/>
 					<SettingsItem
-						label={t('date.Week start')}
+						label={t('settings.Week start')}
 						control={
 							<ToggleGroup
 								value={weekStartDayIndex}
@@ -57,7 +56,7 @@ export default function SettingsScreen() {
 						}
 					/>
 					<SettingsItem
-						label='Color theme'
+						label={t('settings.Theme')}
 						control={
 							<Pressable onPress={() => router.push('/settings/theme')}>
 								<Text
@@ -71,6 +70,7 @@ export default function SettingsScreen() {
 							</Pressable>
 						}
 					/>
+					{/*
 					<SettingsItem label='Notifications' control={<Text>...</Text>} />
 					<SettingsItem label='Privacy Policy' control={<Text>...</Text>} />
 					<SettingsItem label='Apple Health' control={<Text>...</Text>} />
@@ -90,6 +90,7 @@ export default function SettingsScreen() {
 
 					<SettingsItem label='Reset app data' control={<Text>...</Text>} />
 					<SettingsItem label='Delete account' control={<Text>...</Text>} />
+					*/}
 				</View>
 			</ScrollBox>
 
