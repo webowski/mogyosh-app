@@ -1,10 +1,15 @@
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import { createMMKV } from 'react-native-mmkv'
 import { create } from 'zustand'
 import {
 	createJSONStorage,
 	persist,
 	subscribeWithSelector
 } from 'zustand/middleware'
+
+import { createZustandStorage } from '@/shared/lib/mmkv'
+
+const storage = createMMKV({ id: 'calendar-storage' })
+const zustandStorage = createZustandStorage(storage)
 
 interface CalendarStore {
 	today: Date
@@ -25,7 +30,7 @@ export const useCalendarStore = create<CalendarStore>()(
 			}),
 			{
 				name: 'calendar-storage',
-				storage: createJSONStorage(() => AsyncStorage)
+				storage: createJSONStorage(() => zustandStorage)
 			}
 		)
 	)

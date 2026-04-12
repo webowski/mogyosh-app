@@ -1,13 +1,49 @@
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { format } from 'date-fns'
 import { enUS, es, ja, ru } from 'date-fns/locale'
+import { createMMKV } from 'react-native-mmkv'
 import { create } from 'zustand'
-import { createJSONStorage, persist } from 'zustand/middleware'
+import { createJSONStorage, persist, StateStorage } from 'zustand/middleware'
 
 import i18n from '@/shared/i18n'
 import { capitalize } from '@/shared/lib/string'
 import { UnistylesRuntime } from 'react-native-unistyles'
 import { SettingsStore, WeekStartDaysData } from '../domain'
+
+const storage = createMMKV({ id: 'settings-storage' })
+
+const zustandStorage: StateStorage = {
+	setItem: (name, value) => storage.set(name, value),
+	getItem: (name) => storage.getString(name) ?? null,
+	removeItem: (name) => storage.remove(name)
+}
+
+export const useSettingsStore = create<SettingsStore>()(
+	persist(
+		(set) => ({
+			weekStartDayIndex: 1,
+			setWeekStartDayIndex: (value) => set({ weekStartDayIndex: value }),
+
+			weekStartDaysData: makeWeekStartDaysData(),
+			updateWeekStartDaysData: () =>
+				set({ weekStartDaysData: makeWeekStartDaysData() }),
+
+			currentTheme: 'light',
+			setCurrentTheme: (theme: string) => {
+				UnistylesRuntime.setTheme(theme as 'light' | 'dark')
+				set({ currentTheme: theme })
+			}
+		}),
+		{
+			name: 'settings-storage',
+			storage: createJSONStorage(() => zustandStorage),
+			onRehydrateStorage: () => (state) => {
+				if (state?.currentTheme) {
+					UnistylesRuntime.setTheme(state.currentTheme as 'light' | 'dark')
+				}
+			}
+		}
+	)
+)
 
 const getLocale = () => {
 	switch (i18n.language) {
@@ -33,36 +69,6 @@ const makeWeekStartDaysData = (): WeekStartDaysData => {
 		{ value: 0, label: capitalize(sun) }
 	]
 }
-
-export const useSettingsStore = create<SettingsStore>()(
-	persist(
-		(set) => ({
-			weekStartDayIndex: 1,
-			setWeekStartDayIndex: (value) => set({ weekStartDayIndex: value }),
-
-			weekStartDaysData: makeWeekStartDaysData(),
-			updateWeekStartDaysData: () => {
-				const weekStartDaysData = makeWeekStartDaysData()
-				set({ weekStartDaysData: weekStartDaysData })
-			},
-
-			currentTheme: 'light',
-			setCurrentTheme: (theme: string) => {
-				UnistylesRuntime.setTheme(theme as 'light' | 'dark')
-				set({ currentTheme: theme })
-			}
-		}),
-		{
-			name: 'settings-storage',
-			storage: createJSONStorage(() => AsyncStorage),
-			onRehydrateStorage: () => (state) => {
-				if (state?.currentTheme) {
-					UnistylesRuntime.setTheme(state.currentTheme as 'light' | 'dark')
-				}
-			}
-		}
-	)
-)
 
 i18n.on('languageChanged', () => {
 	useSettingsStore.getState().updateWeekStartDaysData()

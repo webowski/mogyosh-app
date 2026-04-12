@@ -1,4 +1,3 @@
-// В Settings — храни выбор пользователя (например, в AsyncStorage или через контекст),
 // с вариантами: 'ru-RU' | 'en-US' | 'system'. При 'system' вызывай getSystemLocale().
 
 import { getLocales } from 'expo-localization'
