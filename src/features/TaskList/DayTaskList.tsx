@@ -1,31 +1,26 @@
-import { Text } from 'react-native'
+import { ActivityIndicator, SectionList, Text } from 'react-native'
 
 import TaskItem from '@/features/TaskList/TaskItem'
 import { textStyles } from '@/shared/styles/text'
-import CircleProgress from '@/shared/ui/CircleProgress'
+
+import { useTasks } from './model/useTasks'
 
 export default function DayTaskList() {
+	const { data, isLoading, error } = useTasks()
+
+	if (isLoading) return <ActivityIndicator />
+	if (error) return <Text>Ошибка загрузки</Text>
+
 	return (
 		<>
-			<Text style={textStyles.heading5}>During the day</Text>
-
-			<TaskItem>
-				<CircleProgress title='Прогресс 1' />
-			</TaskItem>
-
-			<TaskItem />
-
-			<TaskItem />
-
-			<Text style={textStyles.heading5}>By time</Text>
-
-			<TaskItem />
-			<TaskItem />
-			<TaskItem />
-
-			<TaskItem />
-			<TaskItem />
-			<TaskItem />
+			<SectionList
+				sections={data ?? []}
+				keyExtractor={(item) => item.id}
+				renderItem={({ item }) => <TaskItem data={item} />}
+				renderSectionHeader={({ section: { title } }) => (
+					<Text style={textStyles.heading5}>{title}</Text>
+				)}
+			/>
 		</>
 	)
 }

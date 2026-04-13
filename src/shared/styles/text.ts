@@ -17,9 +17,9 @@ export const textStyles = StyleSheet.create((theme, rt) => ({
 	heading5: {
 		textTransform: 'uppercase',
 		fontWeight: '500',
-		fontSize: 13,
-		lineHeight: 13 * 1.2,
-		letterSpacing: 13 * 0.01,
+		fontSize: 11,
+		lineHeight: 11 * 1.2,
+		letterSpacing: 11 * 0.01,
 		color: theme.colors.muted
 	},
 
