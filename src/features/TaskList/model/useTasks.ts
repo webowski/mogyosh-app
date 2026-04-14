@@ -1,9 +1,10 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+
 import {
 	createTask,
 	getTasks,
 	type Task
 } from '@/features/TaskList/model/task.api'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 export type TaskSection = {
 	title: string

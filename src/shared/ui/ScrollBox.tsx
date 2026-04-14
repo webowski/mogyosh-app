@@ -1,6 +1,7 @@
-import { commonStyles } from '@/shared/styles/common'
 import { View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
+
+import { commonStyles } from '@/shared/styles/common'
 
 type ScrollBoxProps = React.ComponentProps<typeof ScrollView> & {
 	scrollIndent?: boolean
