@@ -45,3 +45,6 @@ app-example
 
 # bkp
 /src_bkp
+
+# symlinks
+/QWEN.md
