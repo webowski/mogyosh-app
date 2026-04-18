@@ -2,11 +2,10 @@ import { PropsWithChildren } from 'react'
 import { Text, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
+import { TaskEntity } from '@/shared/domain/task'
+
 type TaskItemProps = {
-	data: {
-		id: string
-		title: string
-	}
+	data: TaskEntity
 } & PropsWithChildren
 
 export default function TaskItem({ data, children }: TaskItemProps) {
@@ -14,7 +13,7 @@ export default function TaskItem({ data, children }: TaskItemProps) {
 		<View style={styles.card}>
 			<View>
 				<Text style={styles.card__category}>Категория • Подкатегория</Text>
-				<Text style={styles.card__title}>{data.title}</Text>
+				<Text style={styles.card__title}>{data.info}</Text>
 			</View>
 			{children}
 		</View>
