@@ -7,6 +7,7 @@
 
 - ВАЖНО! Не изменяй и не добавляй стили, если я тебя об этом не просил.
 - Supabase MCP: Не вноси изменения в базу supabase!
+- НЕ ДЕЛАЙ самостоятельно тестирование и проверки кода, такие как `bun run tsc`
 - Комментарии в коде писать только на английском языке
 - Don't do tasks I haven't asked for. For example, don't do visual styling for other interface elements if I only asked for aditional function or an element and the required structural styles.
 - Use Dependency Inversion programming principle
