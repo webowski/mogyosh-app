@@ -15,6 +15,10 @@
 - Не удаляй комментарии в коде
 - никогда не вноси изменения в папке src_bkp, это бекап, не трогай его
 
+## Правила для выполнения CLI команд
+
+- Для команд используй C:\Users\zaebcevich\scoop\shims\bash.exe вместо PowerShell
+
 ## Project Overview
 
 This is a React Native mobile application built with Expo 55 and TypeScript. The project follows a structured architecture with:
