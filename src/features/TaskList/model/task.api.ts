@@ -2,31 +2,31 @@ import { supabase } from '@/shared/api/supabase'
 import { TaskId } from '@/shared/domain/ids'
 import { TaskEntity } from '@/shared/domain/task'
 
+const TASKS_SELECT = `
+	*,
+	categories (
+		id,
+		name,
+		parent_id
+	),
+	schedules (
+		id,
+		type,
+		start_time,
+		end_time,
+		date,
+		weekday,
+		month_day,
+		month,
+		start_date,
+		end_date
+	)
+`
+
 export const getTasks = async (): Promise<TaskEntity[]> => {
 	const { data, error } = await supabase
 		.from('tasks')
-		.select(
-			`
-			*,
-			categories (
-				id,
-				name,
-				parent_id
-			),
-			schedules (
-				id,
-				type,
-				start_time,
-				end_time,
-				date,
-				weekday,
-				month_day,
-				month,
-				start_date,
-				end_date
-			)
-		`
-		)
+		.select(TASKS_SELECT)
 		.order('created_at', { ascending: false })
 
 	if (error) throw error
@@ -50,28 +50,7 @@ export const getTasks = async (): Promise<TaskEntity[]> => {
 export const getTasksByDate = async (date: string): Promise<TaskEntity[]> => {
 	const { data, error } = await supabase
 		.from('tasks')
-		.select(
-			`
-			*,
-			categories (
-				id,
-				name,
-				parent_id
-			),
-			schedules (
-				id,
-				type,
-				start_time,
-				end_time,
-				date,
-				weekday,
-				month_day,
-				month,
-				start_date,
-				end_date
-			)
-		`
-		)
+		.select(TASKS_SELECT)
 		.or(
 			`schedules.date.eq.${date},schedules.start_date.lte.${date}.and.schedules.end_date.gte.${date}`
 		)
@@ -100,28 +79,7 @@ export const getTaskSubtasks = async (
 ): Promise<TaskEntity[]> => {
 	const { data, error } = await supabase
 		.from('tasks')
-		.select(
-			`
-			*,
-			categories (
-				id,
-				name,
-				parent_id
-			),
-			schedules (
-				id,
-				type,
-				start_time,
-				end_time,
-				date,
-				weekday,
-				month_day,
-				month,
-				start_date,
-				end_date
-			)
-		`
-		)
+		.select(TASKS_SELECT)
 		.eq('parent_id', taskId)
 		.order('created_at', { ascending: true })
 
@@ -178,28 +136,7 @@ export const getTaskById = async (
 ): Promise<TaskEntity | null> => {
 	const { data, error } = await supabase
 		.from('tasks')
-		.select(
-			`
-			*,
-			categories (
-				id,
-				name,
-				parent_id
-			),
-			schedules (
-				id,
-				type,
-				start_time,
-				end_time,
-				date,
-				weekday,
-				month_day,
-				month,
-				start_date,
-				end_date
-			)
-		`
-		)
+		.select(TASKS_SELECT)
 		.eq('id', taskId)
 		.single()
 
