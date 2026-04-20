@@ -5,13 +5,13 @@ import {
 	Text
 } from 'react-native'
 
-import { useTasks } from '@/features/TaskList/model/useTasks'
+import { useTasksGrouped } from '@/features/TaskList/model/useTasks'
 import TaskItem from '@/features/TaskList/TaskItem'
 import { commonStyles } from '@/shared/styles/common'
 import { textStyles } from '@/shared/styles/text'
 
 export default function DayScreen() {
-	const { data, isLoading, error, refetch } = useTasks()
+	const { data, isLoading, error, refetch } = useTasksGrouped()
 
 	if (isLoading) return <ActivityIndicator />
 	if (error) return <Text>Ошибка загрузки</Text>

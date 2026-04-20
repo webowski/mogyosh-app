@@ -37,7 +37,7 @@ export const filterTasks = (
  * - "During the day": tasks without start_time
  * - "By time": tasks with start_time
  */
-export const categorizeTasks = (tasks: TaskEntity[]): TaskSection[] => {
+export const groupTasksByShedule = (tasks: TaskEntity[]): TaskSection[] => {
 	// Tasks with start_time go to "By time"
 	const byTimeTasks = tasks.filter((task) => {
 		return (

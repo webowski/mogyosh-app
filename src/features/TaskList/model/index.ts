@@ -8,7 +8,7 @@ export {
 	useTasksByDate,
 	useTasksCountByDay,
 	useTasksCountByPeriod,
-	useTasksFlat,
+	useTasksGrouped,
 	useTaskSubtasks
 } from './useTasks'
 
@@ -21,8 +21,8 @@ export type {
 } from './task.types'
 
 export {
-	categorizeTasks,
 	countTasksByDay,
 	filterTasks,
-	filterTasksByDate
+	filterTasksByDate,
+	groupTasksByShedule
 } from './task.utils'
