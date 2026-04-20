@@ -1,6 +1,6 @@
 import { supabase } from '@/shared/api/supabase'
 import { TaskId } from '@/shared/domain/ids'
-import { TaskEntity } from '@/shared/domain/task'
+import { TaskEntity, TaskRow } from '@/shared/domain/task'
 
 const TASKS_SELECT = `
 	*,
@@ -23,6 +23,17 @@ const TASKS_SELECT = `
 	)
 `
 
+export const makeTaskObject = (task: TaskRow): TaskEntity => ({
+	id: task.id,
+	info: task.info,
+	status: task.status,
+	priority: task.priority,
+	category: task.categories,
+	schedules: task.schedules,
+	created_at: task.created_at,
+	updated_at: task.updated_at
+})
+
 export const getTasks = async (): Promise<TaskEntity[]> => {
 	const { data, error } = await supabase
 		.from('tasks')
@@ -31,16 +42,7 @@ export const getTasks = async (): Promise<TaskEntity[]> => {
 
 	if (error) throw error
 
-	return (data ?? []).map((task) => ({
-		id: task.id,
-		info: task.info,
-		status: task.status,
-		priority: task.priority,
-		category: task.categories,
-		schedules: task.schedules,
-		created_at: task.created_at,
-		updated_at: task.updated_at
-	}))
+	return (data ?? []).map(makeTaskObject)
 }
 
 /**
@@ -58,16 +60,7 @@ export const getTasksByDate = async (date: string): Promise<TaskEntity[]> => {
 
 	if (error) throw error
 
-	return (data ?? []).map((task) => ({
-		id: task.id,
-		info: task.info,
-		status: task.status,
-		priority: task.priority,
-		category: task.categories,
-		schedules: task.schedules,
-		created_at: task.created_at,
-		updated_at: task.updated_at
-	}))
+	return (data ?? []).map(makeTaskObject)
 }
 
 /**
@@ -85,16 +78,7 @@ export const getTaskSubtasks = async (
 
 	if (error) throw error
 
-	return (data ?? []).map((task) => ({
-		id: task.id,
-		info: task.info,
-		status: task.status,
-		priority: task.priority,
-		category: task.categories,
-		schedules: task.schedules,
-		created_at: task.created_at,
-		updated_at: task.updated_at
-	}))
+	return (data ?? []).map(makeTaskObject)
 }
 
 /**
@@ -143,16 +127,7 @@ export const getTaskById = async (
 	if (error) throw error
 	if (!data) return null
 
-	return {
-		id: data.id,
-		info: data.info,
-		status: data.status,
-		priority: data.priority,
-		category: data.categories,
-		schedules: data.schedules,
-		created_at: data.created_at,
-		updated_at: data.updated_at
-	}
+	return makeTaskObject(data)
 }
 
 export const createTask = async (info: string): Promise<TaskEntity> => {

@@ -1,8 +1,10 @@
 import { TaskId } from './ids'
 
+export type ScheduleType = 'once' | 'weekday' | 'daily' | 'weekly' | 'monthly'
+
 export type ScheduleEntity = {
 	id: string
-	type: 'once' | 'weekday' | 'daily' | 'weekly' | 'monthly'
+	type: ScheduleType
 	start_time?: string | null
 	end_time?: string | null
 	date?: string | null
@@ -19,13 +21,26 @@ export type CategoryEntity = {
 	parent_id?: string | null
 }
 
+export type TaskStatus = 'active' | 'completed' | 'archived'
+
 export type TaskEntity = {
 	id: TaskId
 	info: string
-	status?: 'active' | 'completed' | 'archived'
+	status?: TaskStatus
 	priority?: number | null
 	category?: CategoryEntity | null
 	schedules?: ScheduleEntity[]
 	created_at: string
 	updated_at?: string | null
+}
+
+export type TaskRow = {
+	id: string
+	info: string
+	status: TaskStatus
+	priority: number
+	categories: any
+	schedules: any[]
+	created_at: string
+	updated_at: string
 }
