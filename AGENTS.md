@@ -24,7 +24,7 @@
 
 This is a React Native mobile application built with Expo 55 and TypeScript. The project follows a structured architecture with:
 
-- В качестве архитектуры используется Evolution Design https://ed.evocomm.space/guide/
+- В качестве архитектуры используется Evolution Design https://ed.evocomm.space/guide/ (это упрощённая и измененная вариация Feature Sliced Design)
 - File-based routing using Expo Router
 - Component-based UI with shared components
 - Theme management system
