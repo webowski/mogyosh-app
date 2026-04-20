@@ -1,9 +1,7 @@
 import { useState } from 'react'
-import { ActivityIndicator, FlatList, Text, View } from 'react-native'
+import { ActivityIndicator, Text, TextInput, View } from 'react-native'
 
 import { useTasks } from '@/features/TaskList/model/useTasks'
-import { TaskInput } from '@/features/TaskList/TaskInput'
-import TaskListItem from '@/features/TaskList/TaskListItem'
 import ScrollBox from '@/shared/ui/ScrollBox'
 
 export default function AllTasksScreen() {
@@ -18,17 +16,22 @@ export default function AllTasksScreen() {
 
 	return (
 		<ScrollBox>
-			<TaskInput />
-
 			<View>
-				{data?.map((section, sectionIndex) => (
-					<View key={section.title}>
-						<Text>{section.title}</Text>
-						<FlatList
-							data={section.data}
-							keyExtractor={(item, index) => sectionIndex + '-' + index}
+				<TextInput
+					value={searchQuery}
+					onChangeText={setSearchQuery}
+					placeholder='Поиск'
+					style={{ flex: 1, borderWidth: 1, padding: 8 }}
+				/>
+
+				{data?.map((task, taskIndex) => (
+					<View key={task.id}>
+						<Text>{task.info}</Text>
+						{/* <FlatList
+							data={task.data}
+							keyExtractor={(item, index) => 'taskIndex' + '-' + index}
 							renderItem={({ item }) => <TaskListItem data={item} />}
-						/>
+						/> */}
 					</View>
 				))}
 			</View>
