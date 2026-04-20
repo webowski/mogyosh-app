@@ -50,7 +50,6 @@ export const categorizeTasks = (tasks: TaskEntity[]): TaskSection[] => {
 
 	// Tasks without start_time go to "During the day"
 	const duringDayTasks = tasks.filter((task) => {
-		console.log(task)
 		return (
 			!task.schedules ||
 			task.schedules.every((s) => {

@@ -1,10 +1,10 @@
-import { TaskEntity } from '@/shared/domain/task'
 import { TaskId } from '@/shared/domain/ids'
+import { TaskEntity, TaskStatus } from '@/shared/domain/task'
 
 export type TaskFilters = {
 	searchQuery?: string
 	categoryId?: string
-	status?: TaskEntity['status']
+	status?: TaskStatus
 	priority?: number
 }
 

@@ -12,7 +12,8 @@ export default function TaskItem({ data, children }: TaskItemProps) {
 	return (
 		<View style={styles.card}>
 			<View>
-				<Text style={styles.card__category}>Категория • Подкатегория</Text>
+				{/* <Text style={styles.card__category}>Категория • Подкатегория</Text> */}
+				<Text style={styles.card__category}>{data.category?.name}</Text>
 				<Text style={styles.card__title}>{data.info}</Text>
 			</View>
 			{children}

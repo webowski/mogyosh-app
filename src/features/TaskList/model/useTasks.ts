@@ -10,19 +10,17 @@ import {
 } from '@/features/TaskList/model/task.api'
 import { TaskId } from '@/shared/domain/ids'
 import { CalendarDayData, TaskFilters } from './task.types'
-import { categorizeTasks, filterTasks } from './task.utils'
+import { categorizeTasks } from './task.utils'
 
 /**
  * Get all tasks with optional filtering and categorization
- * Used for "All Tasks" screen
  */
 export const useTasks = (filters?: TaskFilters) => {
 	return useQuery({
 		queryKey: ['tasks', filters],
 		queryFn: async () => {
-			const tasks = await getTasks()
-			const filtered = filterTasks(tasks, filters)
-			return categorizeTasks(filtered)
+			const tasks = await getTasks(filters)
+			return categorizeTasks(tasks)
 		}
 	})
 }
@@ -35,8 +33,7 @@ export const useTasksFlat = (filters?: TaskFilters) => {
 	return useQuery({
 		queryKey: ['tasks-flat', filters],
 		queryFn: async () => {
-			const tasks = await getTasks()
-			return filterTasks(tasks, filters)
+			return await getTasks(filters)
 		}
 	})
 }

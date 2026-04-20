@@ -40,7 +40,7 @@ export type TaskRow = {
 	status: TaskStatus
 	priority: number
 	categories: any
-	schedules: any[]
+	schedules: ScheduleEntity[]
 	created_at: string
 	updated_at: string
 }

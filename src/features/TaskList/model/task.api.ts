@@ -1,6 +1,7 @@
 import { supabase } from '@/shared/api/supabase'
 import { TaskId } from '@/shared/domain/ids'
 import { TaskEntity, TaskRow } from '@/shared/domain/task'
+import { TaskFilters } from './task.types'
 
 const TASKS_SELECT = `
 	*,
@@ -34,7 +35,36 @@ export const makeTaskObject = (task: TaskRow): TaskEntity => ({
 	updated_at: task.updated_at
 })
 
-export const getTasks = async (): Promise<TaskEntity[]> => {
+export const getTasks = async (filters?: TaskFilters) => {
+	let query = supabase
+		.from('tasks')
+		.select(TASKS_SELECT)
+		.order('created_at', { ascending: false })
+
+	if (filters?.categoryId) {
+		query = query.eq('category_id', filters.categoryId)
+	}
+
+	if (filters?.status) {
+		query = query.eq('status', filters.status)
+	}
+
+	if (filters?.priority) {
+		query = query.eq('priority', filters.priority)
+	}
+
+	if (filters?.searchQuery) {
+		query = query.ilike('info', `%${filters.searchQuery}%`)
+	}
+
+	const { data, error } = await query
+
+	if (error) throw error
+
+	return (data ?? []).map(makeTaskObject)
+}
+
+export const getAllTasks = async (): Promise<TaskEntity[]> => {
 	const { data, error } = await supabase
 		.from('tasks')
 		.select(TASKS_SELECT)
