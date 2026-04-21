@@ -173,3 +173,12 @@ export const createTask = async (info: string): Promise<TaskEntity> => {
 	if (error) throw error
 	return data
 }
+
+export const getCategories = async () => {
+	const { data, error } = await supabase
+		.from('categories')
+		.select('id, name, parent_id')
+
+	if (error) throw error
+	return data ?? []
+}

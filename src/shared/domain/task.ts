@@ -1,4 +1,4 @@
-import { TaskId } from './ids'
+import { CategoryId, TaskId } from './ids'
 
 export type ScheduleType = 'once' | 'weekday' | 'daily' | 'weekly' | 'monthly'
 
@@ -16,9 +16,9 @@ export type ScheduleEntity = {
 }
 
 export type CategoryEntity = {
-	id: string
+	id: CategoryId
 	name: string
-	parent_id?: string | null
+	parent_id: CategoryId | null
 }
 
 export type TaskStatus = 'active' | 'completed' | 'archived'

@@ -2,21 +2,34 @@ import { PropsWithChildren } from 'react'
 import { Text, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
-import { isByTime } from '@/features/TaskList/model/task.utils'
+import {
+	buildCategoryPath,
+	isByTime
+} from '@/features/TaskList/model/task.utils'
 import { TaskEntity } from '@/shared/domain/task'
+import { CategoryMap } from './model/task.types'
 
 type TaskItemProps = {
 	data: TaskEntity
+	categoryMap: CategoryMap
 } & PropsWithChildren
 
-export default function TaskItem({ data, children }: TaskItemProps) {
+export default function TaskItem({
+	data,
+	categoryMap,
+	children
+}: TaskItemProps) {
 	console.log(data)
 	return (
 		<View style={styles.card}>
 			<View style={styles.card__columns}>
 				<View>
-					{/* <Text style={styles.card__category}>Категория • Подкатегория</Text> */}
-					<Text style={styles.card__category}>{data.category?.name}</Text>
+					{data.category && (
+						<Text style={styles.card__category}>
+							{buildCategoryPath(data.category.id, categoryMap)}
+						</Text>
+					)}
+
 					<Text style={styles.card__title}>{data.info}</Text>
 				</View>
 				<View>
