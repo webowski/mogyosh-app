@@ -143,3 +143,7 @@ export const getSubtasksFromList = (
 		return task.schedules?.some((s) => s.id === parentTaskId) || false
 	})
 }
+
+export const isByTime = (task: TaskEntity): boolean => {
+	return typeof task.schedules?.[0]?.start_time === 'string'
+}
