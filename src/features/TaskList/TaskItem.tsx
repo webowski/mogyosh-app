@@ -7,6 +7,7 @@ import {
 	makeCategoryPath
 } from '@/features/TaskList/model/task.utils'
 import { TaskEntity } from '@/shared/domain/task'
+import { formatTime } from '@/shared/lib/time'
 import { useCategoriesStore } from './model/categoriesStore'
 
 type TaskItemProps = {
@@ -31,7 +32,7 @@ export default function TaskItem({ data, children }: TaskItemProps) {
 				<View>
 					{isByTime(data) && (
 						<Text style={styles.card__time}>
-							{data.schedules?.[0]?.start_time}
+							{formatTime(data.schedules?.[0]?.start_time as string)}
 						</Text>
 					)}
 				</View>

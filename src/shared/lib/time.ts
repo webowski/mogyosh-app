@@ -1,9 +1,17 @@
-import { format, isThisYear, isToday, isTomorrow, isYesterday } from 'date-fns'
-
-import { getDateFnsLocale } from '@/shared/i18n/dateFnsLocale'
+import {
+	format,
+	isThisYear,
+	isToday,
+	isTomorrow,
+	isYesterday,
+	parse
+} from 'date-fns'
 import { t } from 'i18next'
 
+import { getDateFnsLocale } from '@/shared/i18n/dateFnsLocale'
+
 import { WeekStartDayIndex } from '@/services/settings/domain'
+import { HourFormat } from '../domain/time'
 
 export const getWeekStartDate = (
 	date: Date,
@@ -47,4 +55,10 @@ export function formatNavDate(date: Date): string {
 	return format(date, t('date.shortPatternWYear'), {
 		locale: getDateFnsLocale()
 	})
+}
+
+export const formatTime = (time: string, hourFormat: HourFormat = '24') => {
+	const parsed = parse(time, 'HH:mm:ss', new Date())
+	const pattern = hourFormat === '24' ? 'H:mm' : 'h:mm a'
+	return format(parsed, pattern)
 }
