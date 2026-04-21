@@ -1,12 +1,19 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { CategoryEntity } from '@/shared/domain/task'
+import { useCategoriesStore } from './categoriesStore'
 import { getCategories } from './task.api'
 
 export const useCategories = () => {
-	return useQuery({
+	const setCategories = useCategoriesStore((state) => state.setCategories)
+
+	return useQuery<CategoryEntity[]>({
 		queryKey: ['categories'],
-		queryFn: async () => {
-			return await getCategories()
+		queryFn: getCategories,
+
+		select: (data) => {
+			setCategories(data) // синхронизация
+			return data
 		}
 	})
 }

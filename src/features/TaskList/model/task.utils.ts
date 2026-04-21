@@ -1,6 +1,6 @@
 import { CategoryId } from '@/shared/domain/ids'
-import { TaskEntity } from '@/shared/domain/task'
-import { CategoryMap, TaskFilters, TaskSection } from './task.types'
+import { CategoryMap, TaskEntity } from '@/shared/domain/task'
+import { TaskFilters, TaskSection } from './task.types'
 
 /**
  * Filter tasks by search query, category, status, and priority
@@ -149,36 +149,20 @@ export const isByTime = (task: TaskEntity): boolean => {
 	return typeof task.schedules?.[0]?.start_time === 'string'
 }
 
-export const buildCategoryPath__ = (
-	categoryId: CategoryId,
-	allCategories: { id: string; name: string; parent_id: string | null }[]
-): string => {
-	if (!categoryId) return ''
-
-	const map = new Map(allCategories.map((c) => [c.id, c]))
-	const parts: string[] = []
-	let current = map.get(categoryId)
-
-	while (current) {
-		parts.unshift(current.name)
-		current = current.parent_id ? map.get(current.parent_id) : undefined
-	}
-
-	return parts.join(' • ')
-}
-
-// buildCategoryPath принимает Map напрямую
-export const buildCategoryPath = (
+export const makeCategoryPath = (
 	categoryId: CategoryId,
 	map: CategoryMap
 ): string => {
 	const parts: string[] = []
 
-	let current = map.get(categoryId)
+	let current = map[categoryId]
 
-	while (current) {
+	const visited = new Set<string>()
+
+	while (current && !visited.has(current.id)) {
+		visited.add(current.id)
 		parts.unshift(current.name)
-		current = current.parent_id ? map.get(current.parent_id) : undefined
+		current = current.parent_id ? map[current.parent_id] : undefined
 	}
 
 	return parts.join(' • ')

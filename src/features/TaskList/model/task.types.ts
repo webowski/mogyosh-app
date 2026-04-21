@@ -1,5 +1,5 @@
-import { CategoryId, TaskId } from '@/shared/domain/ids'
-import { CategoryEntity, TaskEntity, TaskStatus } from '@/shared/domain/task'
+import { TaskId } from '@/shared/domain/ids'
+import { TaskEntity, TaskStatus } from '@/shared/domain/task'
 
 export type TaskFilters = {
 	searchQuery?: string
@@ -29,5 +29,3 @@ export type TasksByDate = {
 	date: string
 	tasks: TaskEntity[]
 }
-
-export type CategoryMap = Map<CategoryId, CategoryEntity>

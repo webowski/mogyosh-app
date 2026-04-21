@@ -1,6 +1,6 @@
 import { supabase } from '@/shared/api/supabase'
 import { TaskId } from '@/shared/domain/ids'
-import { TaskEntity, TaskRow } from '@/shared/domain/task'
+import { CategoryEntity, TaskEntity, TaskRow } from '@/shared/domain/task'
 import { TaskFilters } from './task.types'
 
 const TASKS_SELECT = `
@@ -174,7 +174,7 @@ export const createTask = async (info: string): Promise<TaskEntity> => {
 	return data
 }
 
-export const getCategories = async () => {
+export const getCategories = async (): Promise<CategoryEntity[]> => {
 	const { data, error } = await supabase
 		.from('categories')
 		.select('id, name, parent_id')

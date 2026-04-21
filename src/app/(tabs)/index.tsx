@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import {
 	ActivityIndicator,
 	RefreshControl,
@@ -14,20 +13,10 @@ import { textStyles } from '@/shared/styles/text'
 
 export default function DayScreen() {
 	const { data, isLoading, error, refetch } = useTasksGrouped()
-	const categoriesObj = useCategories()
+	const { isLoading: catLoading, error: catError } = useCategories()
 
-	const categoryMap = useMemo(
-		() =>
-			new Map(
-				categoriesObj.data?.map((category) => {
-					return [category.id, category]
-				})
-			),
-		[categoriesObj.data]
-	)
-
-	if (isLoading || categoriesObj.isLoading) return <ActivityIndicator />
-	if (error || categoriesObj.error) return <Text>Ошибка загрузки</Text>
+	if (isLoading || catLoading) return <ActivityIndicator />
+	if (error || catError) return <Text>Ошибка загрузки</Text>
 
 	return (
 		<SectionList
@@ -35,9 +24,7 @@ export default function DayScreen() {
 			style={commonStyles.mainArea}
 			contentContainerStyle={{ gap: 8 }}
 			keyExtractor={(item) => item.id}
-			renderItem={({ item }) => (
-				<TaskItem data={item} categoryMap={categoryMap} />
-			)}
+			renderItem={({ item }) => <TaskItem data={item} />}
 			renderSectionHeader={({ section: { title } }) => (
 				<Text style={textStyles.heading5}>{title}</Text>
 			)}

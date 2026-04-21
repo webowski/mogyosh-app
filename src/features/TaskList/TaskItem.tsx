@@ -3,30 +3,26 @@ import { Text, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 import {
-	buildCategoryPath,
-	isByTime
+	isByTime,
+	makeCategoryPath
 } from '@/features/TaskList/model/task.utils'
 import { TaskEntity } from '@/shared/domain/task'
-import { CategoryMap } from './model/task.types'
+import { useCategoriesStore } from './model/categoriesStore'
 
 type TaskItemProps = {
 	data: TaskEntity
-	categoryMap: CategoryMap
 } & PropsWithChildren
 
-export default function TaskItem({
-	data,
-	categoryMap,
-	children
-}: TaskItemProps) {
-	console.log(data)
+export default function TaskItem({ data, children }: TaskItemProps) {
+	const categoryMap = useCategoriesStore((store) => store.entities)
+
 	return (
 		<View style={styles.card}>
 			<View style={styles.card__columns}>
 				<View>
 					{data.category && (
 						<Text style={styles.card__category}>
-							{buildCategoryPath(data.category.id, categoryMap)}
+							{makeCategoryPath(data.category.id, categoryMap)}
 						</Text>
 					)}
 

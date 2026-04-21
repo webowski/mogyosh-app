@@ -21,6 +21,8 @@ export type CategoryEntity = {
 	parent_id: CategoryId | null
 }
 
+export type CategoryMap = Record<CategoryId, CategoryEntity | undefined>
+
 export type TaskStatus = 'active' | 'completed' | 'archived'
 
 export type TaskEntity = {
