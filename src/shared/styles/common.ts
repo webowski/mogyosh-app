@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native-unistyles'
 
 export const styleVars = {
 	sidePadding: 24,
-	insetPlus: 6
+	insetPlus: 10
 }
 
 export const commonStyles = StyleSheet.create((theme, rt) => ({
@@ -26,8 +26,8 @@ export const commonStyles = StyleSheet.create((theme, rt) => ({
 	header: {
 		backgroundColor: theme.colors.surface,
 		paddingHorizontal: styleVars.sidePadding,
-		paddingVertical: 8,
-		paddingBottom: 8,
+		paddingTop: styleVars.insetPlus,
+		paddingBottom: 14,
 		boxShadow: '0 0px 6px ' + theme.colors.shadow100
 	},
 	headerTitle: {

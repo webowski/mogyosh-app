@@ -17,8 +17,15 @@ type TaskItemProps = {
 export default function TaskItem({ data, children }: TaskItemProps) {
 	const categoryMap = useCategoriesStore((store) => store.entities)
 
+	const isByTimeBool = isByTime(data)
+
 	return (
 		<View style={styles.card}>
+			{isByTimeBool && (
+				<Text style={styles.card__time}>
+					{formatTime(data.schedules?.[0]?.start_time as string)}
+				</Text>
+			)}
 			<View style={styles.card__columns}>
 				<View>
 					{data.category && (
@@ -29,13 +36,7 @@ export default function TaskItem({ data, children }: TaskItemProps) {
 
 					<Text style={styles.card__title}>{data.info}</Text>
 				</View>
-				<View>
-					{isByTime(data) && (
-						<Text style={styles.card__time}>
-							{formatTime(data.schedules?.[0]?.start_time as string)}
-						</Text>
-					)}
-				</View>
+				<View></View>
 			</View>
 			{children}
 		</View>
@@ -44,7 +45,7 @@ export default function TaskItem({ data, children }: TaskItemProps) {
 
 const styles = StyleSheet.create((theme, rt) => ({
 	card: {
-		padding: 12,
+		padding: 14,
 		backgroundColor: theme.colors.surface,
 		boxShadow: '0px 2px 4px rgba(102, 140, 255, 0.08)',
 		borderRadius: 8
@@ -56,7 +57,8 @@ const styles = StyleSheet.create((theme, rt) => ({
 	},
 	card__category: {
 		color: theme.colors.minor,
-		fontSize: 13 * rt.fontScale
+		fontSize: 13 * rt.fontScale,
+		lineHeight: 13 * rt.fontScale * 1.2
 		// letterSpacing: (14 / 100) * -1
 	},
 	card__title: {
@@ -66,8 +68,17 @@ const styles = StyleSheet.create((theme, rt) => ({
 		// letterSpacing: (16 / 100) * -1
 	},
 	card__time: {
-		color: theme.colors.minor,
 		fontSize: 12 * rt.fontScale,
-		fontWeight: 600
+		fontWeight: 600,
+		position: 'absolute',
+		top: 0,
+		right: 0,
+		color: theme.colors.minor400,
+		backgroundColor: theme.colors.muted700,
+		borderTopRightRadius: 8,
+		borderBottomLeftRadius: 5,
+		paddingVertical: 3,
+		paddingRight: 12,
+		paddingLeft: 10
 	}
 }))

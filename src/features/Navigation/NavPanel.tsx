@@ -13,7 +13,6 @@ import SVGIconPlus from '@/shared/images/icons/plus.svg'
 import SVGIconTarget from '@/shared/images/icons/target.svg'
 
 import { useCalendarStore } from '@/shared/model/calendarStore'
-import { styleVars } from '@/shared/styles/common'
 import { useNavStore } from './model/navStore'
 
 type NavPanelProps = BottomTabBarProps
@@ -102,8 +101,7 @@ export default function NavPanel({
 			style={[
 				styles.navPanelContainer,
 				{
-					paddingBottom:
-						insets.bottom > 0 ? insets.bottom + styleVars.insetPlus : 22
+					paddingBottom: insets.bottom > 0 ? insets.bottom : 24
 				}
 			]}
 		>
@@ -111,7 +109,6 @@ export default function NavPanel({
 				onPress={() => setIsDrawerShown(true)}
 				icon={<SVGIconBurger width={32} height={32} />}
 			/>
-
 			<NavButton
 				isFocused={isCurrentRoute('motivation', state)}
 				onPress={() => navigation.navigate('motivation')}

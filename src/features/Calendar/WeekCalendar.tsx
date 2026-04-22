@@ -264,7 +264,7 @@ const styles = StyleSheet.create((theme) => ({
 		position: 'relative',
 		width: WEEK_WIDTH,
 		height: 44,
-		marginTop: 12,
+		marginTop: 6,
 		overflow: 'hidden'
 	},
 	week: {
@@ -284,9 +284,6 @@ const styles = StyleSheet.create((theme) => ({
 		paddingHorizontal: 6,
 		borderRadius: 7
 	},
-	day_selected: {
-		backgroundColor: theme.colors.primary
-	},
 	day_today: {
 		backgroundColor: theme.colors.primary800
 	},
@@ -294,16 +291,22 @@ const styles = StyleSheet.create((theme) => ({
 		fontSize: 11,
 		lineHeight: 11 * 1,
 		fontWeight: '500',
-		color: theme.colors.minor,
-		marginBottom: 2
+		// color: theme.colors.minor,
+		color: theme.colors.muted,
+		marginBottom: 3
 	},
 	dayNumber: {
 		fontSize: 14,
 		lineHeight: 14 * 1,
 		fontWeight: '600',
-		color: theme.colors.major
+		// color: theme.colors.major
+		color: theme.colors.muted
+	},
+	day_selected: {
+		backgroundColor: theme.colors.primary
 	},
 	selectedText: {
+		// color: theme.colors.major,
 		color: theme.colors.inverse
 	},
 	todayText: {

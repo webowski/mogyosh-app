@@ -36,7 +36,8 @@ export default function HeaderDay({ options, navigation, route }: HeaderProps) {
 			style={[
 				commonStyles.header,
 				{
-					paddingTop: insets.top + styleVars.insetPlus
+					paddingTop: insets.top + styleVars.insetPlus - 6,
+					paddingBottom: 6
 				}
 			]}
 		>

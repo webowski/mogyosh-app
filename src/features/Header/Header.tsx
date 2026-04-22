@@ -1,8 +1,9 @@
-import { commonStyles, styleVars } from '@/shared/styles/common'
 import { BottomTabHeaderProps } from '@react-navigation/bottom-tabs'
 import { NativeStackHeaderProps } from '@react-navigation/native-stack'
 import { Text, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+import { commonStyles, styleVars } from '@/shared/styles/common'
 
 type HeaderProps = BottomTabHeaderProps | NativeStackHeaderProps
 

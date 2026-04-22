@@ -37,10 +37,13 @@ export const Fonts = Platform.select({
 export const lightTheme = {
 	colors: {
 		major: 'hsl(224, 15%, 30%)',
+		minor400: 'hsl(225, 28%, 64%)',
 		minor: 'hsl(225, 28%, 68%)',
-		muted: 'hsl(225, 36%, 78%)',
+		// muted: 'hsl(225, 36%, 81%)',
+		muted: 'hsl(225, 36%, 75%)',
 		muted600: 'hsl(225, 36%, 87%)',
-		muted700: 'hsl(224, 37%, 92%)',
+		muted700: 'hsl(224, 37%, 93%)',
+		muted800: 'hsl(224, 37%, 96%)',
 		inverse: 'hsl(0, 0%, 100%)',
 		surface: 'hsl(0, 0%, 100%)',
 		surfaceAlter: 'hsl(228, 56%, 98%)',
@@ -49,6 +52,7 @@ export const lightTheme = {
 		primary300: 'hsl(225, 60%, 55%)',
 		primary: 'hsl(225, 100%, 70%)',
 		primary800: 'hsl(225, 100%, 92%)',
+		primary900: 'hsl(225, 100%, 97%)',
 		brand: 'hsl(225, 100%, 70%)',
 		success: 'hsl(148, 100%, 66%)',
 		danger: 'hsl(355, 100%, 75%)',
@@ -83,9 +87,11 @@ export const lightTheme = {
 
 export const darkTheme = {
 	colors: {
+		...lightTheme.colors,
 		major: 'hsl(225, 100%, 100%)',
 		minor: 'hsl(225, 28%, 68%)',
-		muted: 'hsl(225, 36%, 78%)',
+		// muted: 'hsl(225, 36%, 78%)',
+		muted: 'hsl(225, 36%, 81%)',
 		muted600: 'hsl(225, 36%, 87%)',
 		muted700: 'hsl(224, 37%, 92%)',
 		inverse: 'hsl(0, 0%, 0%)',
@@ -96,6 +102,7 @@ export const darkTheme = {
 		primary300: 'hsl(225, 60%, 55%)',
 		primary: 'hsl(225, 100%, 70%)',
 		primary800: 'hsl(225, 100%, 92%)',
+		primary900: 'hsl(225, 100%, 92%)',
 		brand: 'hsl(225, 100%, 70%)',
 		success: 'hsl(148, 100%, 66%)',
 		danger: 'hsl(355, 100%, 75%)',
