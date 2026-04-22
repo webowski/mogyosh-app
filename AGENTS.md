@@ -38,7 +38,7 @@ This is a React Native mobile application built with Expo 55 and TypeScript. The
 - Routing: Expo Router
 - State Management: Zustand
 - Backend State Management: Tanstack Query
-- Data: Supabase
+- Backend: Supabase
 - Authentication: Supabase
 - Styling: CSS-in-JS with Unistyles
 - Navigation: React Navigation
