@@ -8,6 +8,7 @@ import {
 } from '@/features/TaskList/model/task.utils'
 import { TaskEntity } from '@/shared/domain/task'
 import { formatTime } from '@/shared/lib/time'
+import CircleProgress from '@/shared/ui/CircleProgress'
 import { useCategoriesStore } from './model/categoriesStore'
 
 type TaskItemProps = {
@@ -39,6 +40,7 @@ export default function TaskItem({ data, children }: TaskItemProps) {
 				<View></View>
 			</View>
 			{children}
+			<CircleProgress title='Шаги' progress={0.6} />
 		</View>
 	)
 }
