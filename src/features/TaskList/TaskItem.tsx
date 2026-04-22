@@ -1,3 +1,4 @@
+import { useRouter } from 'expo-router'
 import { PropsWithChildren } from 'react'
 import { Pressable, Text, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
@@ -17,13 +18,19 @@ type TaskItemProps = {
 } & PropsWithChildren
 
 export default function TaskItem({ data, children }: TaskItemProps) {
+	const router = useRouter()
 	const categoryMap = useCategoriesStore((store) => store.entities)
 	const setSelectedTaskId = useTaskStore((store) => store.setSelectedTaskId)
 
 	const isByTimeBool = isByTime(data)
 
+	const handlePress = () => {
+		setSelectedTaskId(data.id)
+		router.push('/task')
+	}
+
 	return (
-		<Pressable style={styles.card} onPress={() => setSelectedTaskId(data.id)}>
+		<Pressable style={styles.card} onPress={handlePress}>
 			{isByTimeBool && (
 				<Text style={styles.card__time}>
 					{formatTime(data.schedules?.[0]?.start_time as string)}
