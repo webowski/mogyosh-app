@@ -1,11 +1,7 @@
-import { useLocalSearchParams } from 'expo-router'
 import { ActivityIndicator, Text, View } from 'react-native'
 
-import {
-	useTaskById,
-	useTaskSubtasks
-} from '@/features/TaskList/model/useTasks'
-import TaskListItem from '@/features/TaskList/TaskListItem'
+import { useTaskById } from '@/features/TaskList/model/useTasks'
+import { useTaskStore } from '@/shared/model/taskStore'
 import ScrollBox from '@/shared/ui/ScrollBox'
 
 /**
@@ -15,26 +11,25 @@ import ScrollBox from '@/shared/ui/ScrollBox'
  * - taskId: ID выбранной задачи
  */
 export default function TaskScreen() {
-	const { taskId } = useLocalSearchParams<{ taskId: string }>()
+	// const { taskId } = useLocalSearchParams<{ taskId: string }>()
+	const selectedTaskId = useTaskStore((state) => state.selectedTaskId)
 
-	const {
-		data: task,
-		isLoading: isLoadingTask,
-		error
-	} = useTaskById(taskId || null)
-	const { data: subtasks, isLoading: isLoadingSubtasks } = useTaskSubtasks(
-		taskId || null
-	)
+	const { data, isLoading, error } = useTaskById(selectedTaskId)
 
-	if (isLoadingTask) return <ActivityIndicator />
+	// const { data: subtasks, isLoading: isLoadingSubtasks } = useTaskSubtasks(
+	// 	taskId || null
+	// )
+
+	if (isLoading) return <ActivityIndicator />
 	if (error) return <Text>Ошибка загрузки задачи</Text>
-	if (!task) return <Text>Задача не найдена</Text>
+	if (!data) return <Text>Задача не найдена</Text>
 
 	return (
 		<ScrollBox>
 			<View>
-				{/* Информация о задаче */}
-				<View>
+				<Text>{data.info}</Text>
+
+				{/* <View>
 					<Text>{task.info}</Text>
 					{task.category && <Text>Категория: {task.category.name}</Text>}
 					{task.priority !== null && task.priority !== undefined && (
@@ -43,7 +38,6 @@ export default function TaskScreen() {
 					{task.status && <Text>Статус: {task.status}</Text>}
 				</View>
 
-				{/* Подзадачи */}
 				<View>
 					<Text>Подзадачи</Text>
 					{isLoadingSubtasks ? (
@@ -55,7 +49,7 @@ export default function TaskScreen() {
 					) : (
 						<Text>Нет подзадач</Text>
 					)}
-				</View>
+				</View> */}
 			</View>
 		</ScrollBox>
 	)

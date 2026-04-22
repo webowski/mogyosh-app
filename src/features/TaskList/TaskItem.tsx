@@ -18,12 +18,12 @@ type TaskItemProps = {
 
 export default function TaskItem({ data, children }: TaskItemProps) {
 	const categoryMap = useCategoriesStore((store) => store.entities)
-	const setSelectedTask = useTaskStore((store) => store.setSelectedTask)
+	const setSelectedTaskId = useTaskStore((store) => store.setSelectedTaskId)
 
 	const isByTimeBool = isByTime(data)
 
 	return (
-		<Pressable style={styles.card} onPress={() => setSelectedTask(data.id)}>
+		<Pressable style={styles.card} onPress={() => setSelectedTaskId(data.id)}>
 			{isByTimeBool && (
 				<Text style={styles.card__time}>
 					{formatTime(data.schedules?.[0]?.start_time as string)}

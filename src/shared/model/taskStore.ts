@@ -13,16 +13,16 @@ const storage = createMMKV({ id: 'task-storage' })
 const zustandStorage = createZustandStorage(storage)
 
 export interface TaskStore {
-	selectedTask: TaskId | null
-	setSelectedTask: (taskId: TaskId | null) => void
+	selectedTaskId: TaskId | null
+	setSelectedTaskId: (taskId: TaskId | null) => void
 }
 
 export const useTaskStore = create<TaskStore>()(
 	subscribeWithSelector(
 		persist(
 			(set) => ({
-				selectedTask: null,
-				setSelectedTask: (taskId) => set({ selectedTask: taskId })
+				selectedTaskId: null,
+				setSelectedTaskId: (taskId) => set({ selectedTaskId: taskId })
 			}),
 			{
 				name: 'task-storage',
