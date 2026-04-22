@@ -1,5 +1,5 @@
 import { PropsWithChildren } from 'react'
-import { Text, View } from 'react-native'
+import { Pressable, Text, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 import {
@@ -8,6 +8,7 @@ import {
 } from '@/features/TaskList/model/task.utils'
 import { TaskEntity } from '@/shared/domain/task'
 import { formatTime } from '@/shared/lib/time'
+import { useTaskStore } from '@/shared/model/taskStore'
 import CircleProgress from '@/shared/ui/CircleProgress'
 import { useCategoriesStore } from './model/categoriesStore'
 
@@ -17,11 +18,12 @@ type TaskItemProps = {
 
 export default function TaskItem({ data, children }: TaskItemProps) {
 	const categoryMap = useCategoriesStore((store) => store.entities)
+	const setSelectedTask = useTaskStore((store) => store.setSelectedTask)
 
 	const isByTimeBool = isByTime(data)
 
 	return (
-		<View style={styles.card}>
+		<Pressable style={styles.card} onPress={() => setSelectedTask(data.id)}>
 			{isByTimeBool && (
 				<Text style={styles.card__time}>
 					{formatTime(data.schedules?.[0]?.start_time as string)}
@@ -41,7 +43,7 @@ export default function TaskItem({ data, children }: TaskItemProps) {
 			</View>
 			{children}
 			<CircleProgress title='Шаги' progress={0.6} />
-		</View>
+		</Pressable>
 	)
 }
 
