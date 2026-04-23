@@ -12,6 +12,7 @@ import SVGIconBurger from '@/shared/images/icons/burger.svg'
 import SVGIconPlus from '@/shared/images/icons/plus.svg'
 import SVGIconTarget from '@/shared/images/icons/target.svg'
 
+import { SwipeSwitchItems } from '@/features/Navigation/model/navTypes'
 import { useCalendarStore } from '@/shared/model/calendarStore'
 import { useNavStore } from './model/navStore'
 
@@ -58,7 +59,7 @@ export default function NavPanel({
 	// Проверяет если currentRoute соответствует ЛЮБОЙ точке SwipeSwitch
 	const isAnySwipeRouteActive = (
 		routeName: string,
-		items: Record<string, string | undefined>[][]
+		items: SwipeSwitchItems
 	): boolean => {
 		for (const row of items) {
 			for (const item of row) {

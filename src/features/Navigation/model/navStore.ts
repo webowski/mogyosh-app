@@ -4,8 +4,9 @@ import i18n from '@/shared/i18n'
 import { formatNavDate } from '@/shared/lib/time'
 import { useCalendarStore } from '@/shared/model/calendarStore'
 import { useLangStore } from '@/shared/model/langStore'
+import { SwipeSwitchItems } from './navTypes'
 
-const buildSwipeSwitchItems = (selectedDate: Date) => {
+const buildSwipeSwitchItems = (selectedDate: Date): SwipeSwitchItems => {
 	const { t } = useLangStore.getState()
 
 	return [
@@ -23,7 +24,7 @@ const buildSwipeSwitchItems = (selectedDate: Date) => {
 }
 
 interface NavStore {
-	swipeSwitchItems: Record<string, string | undefined>[][]
+	swipeSwitchItems: SwipeSwitchItems
 	updateSwitchItems: (selectedDate?: Date) => void
 
 	isDrawerShown: boolean
