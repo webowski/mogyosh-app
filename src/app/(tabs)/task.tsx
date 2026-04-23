@@ -2,6 +2,7 @@ import { ActivityIndicator, Text, View } from 'react-native'
 
 import { useTaskById } from '@/features/TaskList/model/useTasks'
 import { useTaskStore } from '@/shared/model/taskStore'
+import { commonStyles } from '@/shared/styles/common'
 import ScrollBox from '@/shared/ui/ScrollBox'
 
 /**
@@ -20,9 +21,24 @@ export default function TaskScreen() {
 	// 	taskId || null
 	// )
 
-	if (isLoading) return <ActivityIndicator />
-	if (error) return <Text>Ошибка загрузки задачи</Text>
-	if (!data) return <Text>Задача не найдена</Text>
+	if (isLoading)
+		return (
+			<View style={commonStyles.mainArea}>
+				<ActivityIndicator />
+			</View>
+		)
+	if (error)
+		return (
+			<View style={commonStyles.mainArea}>
+				<Text>Ошибка загрузки задачи</Text>
+			</View>
+		)
+	if (!data)
+		return (
+			<View style={commonStyles.mainArea}>
+				<Text>Задача не найдена</Text>
+			</View>
+		)
 
 	return (
 		<ScrollBox>
