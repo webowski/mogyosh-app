@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { Text, View, ViewStyle } from 'react-native'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import Animated, {
@@ -10,10 +10,10 @@ import Animated, {
 	type SharedValue
 } from 'react-native-reanimated'
 import { StyleSheet } from 'react-native-unistyles'
-
-import SVGSwipeSwitchBg from '@/shared/images/swipe-switch-bg.svg'
 import { scheduleOnRN } from 'react-native-worklets'
-import { useNavStore } from './model/navStore'
+
+import { useNavStore } from '@/features/Navigation/model/navStore'
+import SVGSwipeSwitchBg from '@/shared/images/swipe-switch-bg.svg'
 
 // ─── Imports ───────────────────────────────────────────────────────────────
 
@@ -170,6 +170,8 @@ const SwipeSwitch: React.FC<SwipeSwitchProps> = ({
 	getSlideLabel
 }) => {
 	const swipeSwitchItems = useNavStore((state) => state.swipeSwitchItems)
+	const swipePosition = useNavStore((state) => state.swipePosition)
+	const setSwipePosition = useNavStore((state) => state.setSwipePosition)
 
 	// Find initial position based on current route
 	const getInitialIndices = () => {
@@ -200,21 +202,44 @@ const SwipeSwitch: React.FC<SwipeSwitchProps> = ({
 	// 0 = undecided, 1 = horizontal, 2 = vertical
 	const gestureAxis = useSharedValue(0)
 
-	// Track if initial onIndexChange has been called
-	const hasCalledInitial = useRef(false)
+	// // Track if initial onIndexChange has been called
+	// const hasCalledInitial = useRef(false)
 
-	// useEffect(
-	// 	function effectOnIndexChange() {
-	// 		if (onIndexChange) {
-	// 			onIndexChange(rowIndex.value, colIndex.value)
-	// 		}
-	// 	},
-	// 	[rowIndex.value, colIndex.value]
-	// )
+	// // useEffect(
+	// // 	function effectOnIndexChange() {
+	// // 		if (onIndexChange) {
+	// // 			onIndexChange(rowIndex.value, colIndex.value)
+	// // 		}
+	// // 	},
+	// // 	[rowIndex.value, colIndex.value]
+	// // )
 
-	const handleIndexChange = (row: number, col: number) => {
-		onIndexChange?.(row, col)
-	}
+	// const handleIndexChange = (row: number, col: number) => {
+	// 	onIndexChange?.(row, col)
+	// }
+
+	// Handle programmatic position changes from store
+	useEffect(
+		() => {
+			if (
+				swipePosition.row !== rowIndex.value ||
+				swipePosition.col !== colIndex.value
+			) {
+				const targetRow = Math.max(0, Math.min(swipePosition.row, ROWS - 1))
+				const targetCol = Math.max(0, Math.min(swipePosition.col, COLS - 1))
+
+				rowIndex.value = targetRow
+				colIndex.value = targetCol
+				posX.value = withTiming(targetCol * SLIDE_WIDTH, { duration: 200 })
+				posY.value = withTiming(targetRow * SLIDE_HEIGHT, { duration: 200 })
+
+				onIndexChange?.(targetRow, targetCol)
+			}
+		},
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[swipePosition.row, swipePosition.col]
+	)
 
 	const pan = Gesture.Pan()
 		.minDistance(6)
@@ -267,9 +292,15 @@ const SwipeSwitch: React.FC<SwipeSwitchProps> = ({
 					duration: 200
 				})
 
-				// // Call onIndexChange callback on JS thread
+				// // // Call onIndexChange callback on JS thread
+				// if (onIndexChange) {
+				// 	scheduleOnRN(handleIndexChange, rowIndex.value, newCol)
+				// }
+
+				// Update store with new position
+				scheduleOnRN(setSwipePosition, rowIndex.value, newCol)
 				if (onIndexChange) {
-					scheduleOnRN(handleIndexChange, rowIndex.value, newCol)
+					scheduleOnRN(onIndexChange, rowIndex.value, newCol)
 				}
 			} else if (gestureAxis.value === 2) {
 				// ── Vertical — determine direction delta ────────────────────
@@ -297,9 +328,15 @@ const SwipeSwitch: React.FC<SwipeSwitchProps> = ({
 				posY.value = withTiming(targetPosY, { duration: 200 })
 				posX.value = withTiming(colIndex.value * SLIDE_WIDTH, { duration: 200 })
 
-				// // Call onIndexChange callback on JS thread
+				// // // Call onIndexChange callback on JS thread
+				// if (onIndexChange) {
+				// 	scheduleOnRN(handleIndexChange, newRow, colIndex.value)
+				// }
+
+				// Update store with new position
+				scheduleOnRN(setSwipePosition, newRow, colIndex.value)
 				if (onIndexChange) {
-					scheduleOnRN(handleIndexChange, newRow, colIndex.value)
+					scheduleOnRN(onIndexChange, newRow, colIndex.value)
 				}
 			} else {
 				// No axis locked — snap back
@@ -312,16 +349,16 @@ const SwipeSwitch: React.FC<SwipeSwitchProps> = ({
 			gestureAxis.value = 0
 		})
 
-	// Call onIndexChange on mount to set initial route
-	useEffect(() => {
-		if (onIndexChange && !hasCalledInitial.current) {
-			hasCalledInitial.current = true
-			onIndexChange(rowIndex.value, colIndex.value)
-		}
-		// rowIndex and colIndex are SharedValues - their .value doesn't trigger re-renders
-		// We use a ref to ensure this only runs once on mount, preventing infinite loops
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [onIndexChange])
+	// // Call onIndexChange on mount to set initial route
+	// useEffect(() => {
+	// 	if (onIndexChange && !hasCalledInitial.current) {
+	// 		hasCalledInitial.current = true
+	// 		onIndexChange(rowIndex.value, colIndex.value)
+	// 	}
+	// 	// rowIndex and colIndex are SharedValues - their .value doesn't trigger re-renders
+	// 	// We use a ref to ensure this only runs once on mount, preventing infinite loops
+	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
+	// }, [onIndexChange])
 
 	return (
 		<View style={[styles.wrapper, style]}>

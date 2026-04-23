@@ -3,6 +3,7 @@ import { PropsWithChildren } from 'react'
 import { Pressable, Text, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
+import { useNavStore } from '@/features/Navigation/model/navStore'
 import {
 	isByTime,
 	makeCategoryPath
@@ -21,11 +22,13 @@ export default function TaskItem({ data, children }: TaskItemProps) {
 	const router = useRouter()
 	const categoryMap = useCategoriesStore((store) => store.entities)
 	const setSelectedTaskId = useTaskStore((store) => store.setSelectedTaskId)
+	const setSwipePosition = useNavStore((store) => store.setSwipePosition)
 
 	const isByTimeBool = isByTime(data)
 
 	const handlePress = () => {
 		setSelectedTaskId(data.id)
+		setSwipePosition(0, 2) // task position: row 0, col 2
 		router.push('/task')
 	}
 
@@ -49,7 +52,7 @@ export default function TaskItem({ data, children }: TaskItemProps) {
 				<View></View>
 			</View>
 			{children}
-			<CircleProgress title='Шаги' progress={0.6} />
+			<CircleProgress progress={0.6} />
 		</Pressable>
 	)
 }

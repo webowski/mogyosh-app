@@ -71,26 +71,22 @@ export default function NavPanel({
 		return false
 	}
 
-	// Handle SwipeSwitch navigation with animated transitions
-	const handleSwipeSwitchChange = (row: number, col: number) => {
-		// Since this might be called from a worklet context, we need to ensure
-		// it works properly. The actual navigation will happen in the component
-		// where this function is defined, so it should have access to navigation.
+	// Handle SwipeSwitch press for navigation
+	const handleSwipeSwitchPress = (row: number, col: number) => {
 		const routeItem = swipeSwitchItems[row]?.[col]
 		if (routeItem) {
 			const routeName = Object.keys(routeItem)[0]
-			// Only navigate if we're not already on that route
 			if (currentRoute !== routeName) {
 				navigation.navigate(routeName)
 			}
 		}
 	}
 
-	const handleSwipeSwitchPress = (row: number, col: number) => {
+	// Handle SwipeSwitch position change (from swipe or programmatic)
+	const handleSwipeSwitchChange = (row: number, col: number) => {
 		const routeItem = swipeSwitchItems[row]?.[col]
 		if (routeItem) {
 			const routeName = Object.keys(routeItem)[0]
-			// Only navigate if we're not already on that route
 			if (currentRoute !== routeName) {
 				navigation.navigate(routeName)
 			}

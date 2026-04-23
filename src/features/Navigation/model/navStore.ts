@@ -1,10 +1,13 @@
 import { create } from 'zustand'
 
+import {
+	SwipeSwitchItems,
+	SwipeSwitchPosition
+} from '@/features/Navigation/model/navTypes'
 import i18n from '@/shared/i18n'
 import { formatNavDate } from '@/shared/lib/time'
 import { useCalendarStore } from '@/shared/model/calendarStore'
 import { useLangStore } from '@/shared/model/langStore'
-import { SwipeSwitchItems } from './navTypes'
 
 const buildSwipeSwitchItems = (selectedDate: Date): SwipeSwitchItems => {
 	const { t } = useLangStore.getState()
@@ -29,18 +32,41 @@ interface NavStore {
 
 	isDrawerShown: boolean
 	setIsDrawerShown: (isShown: boolean) => void
+
+	swipePosition: SwipeSwitchPosition
+	setSwipePosition: (row: number, col: number) => void
+	getRoutePosition: (routeName: string) => SwipeSwitchPosition | null
 }
 
-export const useNavStore = create<NavStore>((set) => ({
+export const useNavStore = create<NavStore>((set, get) => ({
+	isDrawerShown: false,
+	setIsDrawerShown: (isShown: boolean) => {
+		set({ isDrawerShown: isShown })
+	},
+
 	swipeSwitchItems: buildSwipeSwitchItems(new Date()),
 	updateSwitchItems: (selectedDate?: Date) => {
 		const date = selectedDate ?? new Date()
 		set({ swipeSwitchItems: buildSwipeSwitchItems(date) })
 	},
 
-	isDrawerShown: false,
-	setIsDrawerShown: (isShown: boolean) => {
-		set({ isDrawerShown: isShown })
+	swipePosition: { row: 0, col: 1 },
+	setSwipePosition: (row, col) => {
+		set({ swipePosition: { row, col } })
+	},
+	getRoutePosition: (routeName: string) => {
+		const items = get().swipeSwitchItems
+
+		for (let row = 0; row < items.length; row++) {
+			for (let col = 0; col < items[row].length; col++) {
+				const key = Object.keys(items[row][col])[0]
+
+				if (key === routeName) {
+					return { row, col }
+				}
+			}
+		}
+		return null
 	}
 }))
 
