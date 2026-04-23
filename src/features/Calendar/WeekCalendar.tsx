@@ -1,5 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import { Dimensions, Pressable, Text, View } from 'react-native'
+import React, { useEffect, useMemo, useState } from 'react'
+import {
+	Dimensions,
+	Pressable,
+	Text,
+	useWindowDimensions,
+	View
+} from 'react-native'
 
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import Animated, {
@@ -20,12 +26,13 @@ import { useLanguageChange } from '@/shared/i18n/useLanguageChange'
 import { capitalize } from '@/shared/lib/string'
 import { getWeekStartDate } from '@/shared/lib/time'
 import { useCalendarStore } from '@/shared/model/calendarStore'
+import { styleVars } from '@/shared/styles/common'
 import { Squircle } from '@/shared/ui/Squircle'
 
-const SCREEN_WIDTH = Dimensions.get('window').width
-const WEEK_WIDTH = SCREEN_WIDTH - 48
-const DAY_WIDTH = WEEK_WIDTH / 7 - 8
-const SWIPE_THRESHOLD = DAY_WIDTH // WEEK_WIDTH * 0.25
+const BASE_SCREEN_WIDTH = Dimensions.get('window').width
+const BASE_WEEK_WIDTH = BASE_SCREEN_WIDTH - styleVars.sidePadding * 2
+const BASE_DAY_WIDTH = BASE_WEEK_WIDTH / 7 - 8
+const SWIPE_THRESHOLD = BASE_DAY_WIDTH // WEEK_WIDTH * 0.25
 const VELOCITY_THRESHOLD = 800
 const SWIPE_END_DURATION = 240
 
@@ -51,9 +58,10 @@ const getWeekDays = (weekStart: Date, today: Date) => {
 
 type DayProps = {
 	day: ReturnType<typeof getWeekDays>[number]
+	dayWidth: number
 }
 
-function Day({ day }: DayProps) {
+function Day({ day, dayWidth }: DayProps) {
 	const selectedDate = useCalendarStore((state) => state.selectedDate)
 
 	const isDaySelected = isSameDay(selectedDate, day.date)
@@ -68,7 +76,7 @@ function Day({ day }: DayProps) {
 		>
 			<Squircle
 				style={[
-					styles.day,
+					styles.day(dayWidth),
 					isDaySelected && styles.day_selected,
 					isDayToday && !isDaySelected && styles.day_today
 				]}
@@ -105,19 +113,27 @@ type WeekProps = {
 	}
 	index: number
 	swipeTranslationValue: SharedValue<number>
+	weekWidth: number
+	dayWidth: number
 }
 
-const Week = ({ weekData, index, swipeTranslationValue }: WeekProps) => {
+const Week = ({
+	weekData,
+	index,
+	swipeTranslationValue,
+	weekWidth,
+	dayWidth
+}: WeekProps) => {
 	const weekAnimatedStyle = useAnimatedStyle(() => ({
 		transform: [
-			{ translateX: (index - 2) * WEEK_WIDTH + swipeTranslationValue.value }
+			{ translateX: (index - 2) * weekWidth + swipeTranslationValue.value }
 		]
 	}))
 
 	return (
-		<Animated.View style={[styles.week, weekAnimatedStyle]}>
+		<Animated.View style={[styles.week(weekWidth), weekAnimatedStyle]}>
 			{weekData.daysList.map((day) => (
-				<Day key={day.date.getTime()} day={day} />
+				<Day key={day.date.getTime()} day={day} dayWidth={dayWidth} />
 			))}
 		</Animated.View>
 	)
@@ -153,11 +169,25 @@ function makeWeeksDataArray(): WeekData[] {
 
 export default function WeekCalendar() {
 	const today = useCalendarStore((state) => state.today)
+	const { width: windowWidth } = useWindowDimensions()
 
 	const weekStartDayIndex = useSettingsStore((state) => state.weekStartDayIndex)
 	const [weeksDataArray, setWeeksDataArray] = useState(makeWeeksDataArray())
 
 	const swipeTranslationValue = useSharedValue(0)
+
+	const { weekWidth, dayWidth } = useMemo(() => {
+		const weekWidth = windowWidth - styleVars.sidePadding * 2
+		const dayWidth = weekWidth / 7 - 8
+		return { weekWidth, dayWidth }
+	}, [windowWidth])
+
+	useEffect(
+		function effectOnWindowResize() {
+			setWeeksDataArray(makeWeeksDataArray())
+		},
+		[windowWidth]
+	)
 
 	useEffect(
 		function effectOnWeekStartChange() {
@@ -230,7 +260,7 @@ export default function WeekCalendar() {
 				targetDelta = translation > 0 ? 1 : -1
 			}
 
-			const targetOffset = targetDelta * WEEK_WIDTH
+			const targetOffset = targetDelta * weekWidth
 
 			swipeTranslationValue.value = withTiming(
 				targetOffset,
@@ -245,13 +275,15 @@ export default function WeekCalendar() {
 
 	return (
 		<GestureDetector gesture={panGesture}>
-			<View style={styles.container}>
+			<View style={styles.container(weekWidth)}>
 				{weeksDataArray.map((weekData, index) => (
 					<Week
 						key={weekData.weekStartDate.getTime()}
 						weekData={weekData}
 						index={index}
 						swipeTranslationValue={swipeTranslationValue}
+						weekWidth={weekWidth}
+						dayWidth={dayWidth}
 					/>
 				))}
 			</View>
@@ -260,30 +292,31 @@ export default function WeekCalendar() {
 }
 
 const styles = StyleSheet.create((theme) => ({
-	container: {
+	container: (weekWidth: number) => ({
 		position: 'relative',
-		width: WEEK_WIDTH,
+		width: weekWidth,
 		height: 44,
 		marginTop: 6,
 		overflow: 'hidden'
-	},
-	week: {
+	}),
+	week: (weekWidth: number) => ({
 		position: 'absolute',
 		inset: 0,
 		paddingInline: 4,
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		alignItems: 'center'
-	},
-	day: {
-		width: DAY_WIDTH,
+		alignItems: 'center',
+		width: weekWidth
+	}),
+	day: (dayWidth: number) => ({
+		width: dayWidth,
 		minWidth: 40,
 		alignItems: 'center',
 		paddingVertical: 4,
 		paddingBottom: 5,
 		paddingHorizontal: 6,
 		borderRadius: 7
-	},
+	}),
 	day_today: {
 		backgroundColor: theme.colors.primary800
 	},

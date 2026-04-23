@@ -52,17 +52,6 @@ export const commonStyles = StyleSheet.create((theme, rt) => ({
 		paddingBottom: rt.insets.bottom + 8
 	},
 
-	// card: {
-	// 	// backgroundColor: theme.colors.card,
-	// 	borderRadius: 12,
-	// 	padding: 16,
-	// 	// shadowColor: theme.colors.shadow,
-	// 	shadowOffset: { width: 0, height: 2 },
-	// 	shadowOpacity: 0.1,
-	// 	shadowRadius: 8,
-	// 	elevation: 3
-	// },
-
 	rowBetween: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
