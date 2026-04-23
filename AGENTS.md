@@ -14,7 +14,6 @@
 - Придерживаться принципов программирования SOLID
 - Не удаляй закомментированные куски кода
 - Не удаляй комментарии в коде
-- никогда не вноси изменения в папке src_bkp, это бекап, не трогай его
 
 ## Правила для выполнения CLI команд
 
@@ -45,7 +44,8 @@ This is a React Native mobile application built with Expo 55 and TypeScript. The
 
 ## React Native Expo разработка
 
-- нигода не применяй runOnJS. для react-native-reanimated НЕ использовать runOnJS, т.к. runOnJS is deprecated для latest версии react-native-reanimated
+- никогда не удаляй из имеющегося кода scheduleOnRN.
+- нигода не применяй runOnJS. для react-native-reanimated НЕ используй runOnJS, т.к. runOnJS is deprecated для latest версии react-native-reanimated
 - вместо withSpring использовать withTiming
 - Код должен быть совеременным для latest React Native Expo на март 2026
 - использовать современный Pressable, вместо устаревшего TouchableOpacity
