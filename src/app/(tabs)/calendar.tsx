@@ -1,4 +1,4 @@
-import WeekCalendar from '@/features/Calendar/WeekCalendar'
+import Calendar from '@/features/Calendar/Calendar'
 
 /**
  * Экран "Календарь" - отображает месяц с количеством задач в каждом дне
@@ -6,7 +6,7 @@ import WeekCalendar from '@/features/Calendar/WeekCalendar'
  * Использует хук useTasksCountByPeriod для получения счётчиков задач
  */
 export default function CalendarScreen() {
-	return <WeekCalendar />
+	return <Calendar />
 
 	// const [currentMonth, setCurrentMonth] = useState(new Date())
 
