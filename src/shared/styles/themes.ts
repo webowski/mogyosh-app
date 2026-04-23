@@ -36,6 +36,7 @@ export const Fonts = Platform.select({
 
 export const lightTheme = {
 	colors: {
+		bright: 'hsl(225, 100%, 100%)',
 		major: 'hsl(224, 15%, 30%)',
 		minor400: 'hsl(225, 28%, 64%)',
 		minor: 'hsl(225, 28%, 68%)',
@@ -88,6 +89,7 @@ export const lightTheme = {
 export const darkTheme = {
 	colors: {
 		...lightTheme.colors,
+
 		major: 'hsl(225, 100%, 100%)',
 		minor: 'hsl(225, 28%, 68%)',
 		// muted: 'hsl(225, 36%, 78%)',
