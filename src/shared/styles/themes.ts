@@ -42,6 +42,7 @@ export const lightTheme = {
 		minor: 'hsl(225, 28%, 68%)',
 		// muted: 'hsl(225, 36%, 81%)',
 		muted: 'hsl(225, 36%, 75%)',
+		muted500: 'hsl(225, 36%, 82%)',
 		muted600: 'hsl(225, 36%, 87%)',
 		muted700: 'hsl(224, 37%, 93%)',
 		muted800: 'hsl(224, 37%, 96%)',

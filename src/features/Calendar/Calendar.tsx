@@ -1,3 +1,4 @@
+import { format, isSameDay, isSameMonth } from 'date-fns'
 import React, { useEffect, useMemo, useState } from 'react'
 import {
 	Dimensions,
@@ -6,7 +7,6 @@ import {
 	useWindowDimensions,
 	View
 } from 'react-native'
-
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import Animated, {
 	ReduceMotion,
@@ -18,12 +18,9 @@ import Animated, {
 import { StyleSheet } from 'react-native-unistyles'
 import { scheduleOnRN } from 'react-native-worklets'
 
-import { format, isSameDay, isSameMonth } from 'date-fns'
-
 import { useSettingsStore } from '@/services/settings/model/settingsStore'
 import { getDateFnsLocale } from '@/shared/i18n/dateFnsLocale'
 import { useLanguageChange } from '@/shared/i18n/useLanguageChange'
-import { capitalize } from '@/shared/lib/string'
 import { useCalendarStore } from '@/shared/model/calendarStore'
 import { styleVars } from '@/shared/styles/common'
 import { Squircle } from '@/shared/ui/Squircle'
@@ -125,7 +122,7 @@ function WeekdayHeader({ weekStartDayIndex, dayWidth }: WeekdayHeaderProps) {
 			const dayIndex = (weekStartDayIndex + i) % 7
 			// Берём любую дату с нужным днём недели
 			const referenceDate = new Date(2024, 0, 7 + dayIndex) // 2024-01-07 = воскресенье
-			return capitalize(format(referenceDate, 'EEEEEE', { locale }))
+			return format(referenceDate, 'EEEEEE', { locale })
 		})
 	}, [weekStartDayIndex])
 
@@ -361,20 +358,22 @@ const styles = StyleSheet.create((theme, rt) => ({
 	weekdayHeader: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		marginBottom: 4
+		marginBottom: 2
 	},
 	weekdayHeaderCell: (dayWidth: number) => ({
 		width: dayWidth,
+		height: 26,
 		alignItems: 'center',
+		justifyContent: 'center',
 		paddingVertical: 4,
-		backgroundColor: theme.colors.muted800,
-		borderRadius: 6
+		backgroundColor: theme.colors.muted700,
+		borderRadius: 4
 	}),
 	weekdayHeaderText: {
-		fontSize: 11,
-		lineHeight: 11,
-		fontWeight: '500',
-		color: theme.colors.muted
+		fontSize: 12,
+		lineHeight: 12,
+		fontWeight: '600',
+		color: theme.colors.minor
 	},
 	month: (calendarWidth: number) => ({
 		position: 'absolute',
@@ -394,7 +393,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		padding: 6,
 		alignItems: 'flex-start',
 		justifyContent: 'space-between',
-		borderRadius: 6,
+		borderRadius: 4,
 		backgroundColor: theme.colors.surface
 	}),
 	day_today: {
@@ -405,8 +404,8 @@ const styles = StyleSheet.create((theme, rt) => ({
 	},
 
 	dayNumber: {
-		fontSize: 14 * rt.fontScale,
-		lineHeight: 14 * rt.fontScale,
+		fontSize: 13 * rt.fontScale,
+		lineHeight: 13 * rt.fontScale,
 		fontWeight: '700',
 		color: theme.colors.major
 	},
