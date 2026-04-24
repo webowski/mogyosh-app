@@ -170,6 +170,15 @@ function DayCellView({ cell, dayWidth }: DayCellProps) {
 				>
 					{cell.dayNumber}
 				</Text>
+				<Text
+					style={[
+						styles.day__counter,
+						!cell.isCurrentMonth && styles.text_muted,
+						isDaySelected && styles.selectedText
+					]}
+				>
+					1/5
+				</Text>
 			</Squircle>
 		</Pressable>
 	)
@@ -416,6 +425,19 @@ const styles = StyleSheet.create((theme, rt) => ({
 	},
 	dayNumber_otherMonth: {
 		color: theme.colors.muted600
+	},
+
+	day__counter: {
+		alignSelf: 'flex-end',
+		fontSize: 11 * rt.fontScale,
+		lineHeight: 11 * rt.fontScale,
+		fontWeight: '500',
+		color: theme.colors.muted500,
+		textAlign: 'center'
+	},
+
+	text_muted: {
+		color: theme.colors.muted700
 	},
 
 	selectedText: {
