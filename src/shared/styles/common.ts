@@ -2,6 +2,7 @@ import { StyleSheet } from 'react-native-unistyles'
 
 export const styleVars = {
 	sidePadding: 20,
+	sidePaddingSm: 14,
 	insetPlus: 10
 }
 

@@ -223,8 +223,11 @@ export default function Calendar() {
 	const swipeTranslationValue = useSharedValue(0)
 
 	const { calendarWidth, dayWidth } = useMemo(() => {
-		const calendarWidth = windowWidth - styleVars.sidePadding * 2
-		const dayWidth = calendarWidth / 7
+		const calendarWidth = windowWidth - styleVars.sidePaddingSm * 2
+
+		// const dayWidth = calendarWidth / 7
+		const dayWidth = (calendarWidth - 4 * 6) / 7
+
 		return { calendarWidth, dayWidth }
 	}, [windowWidth])
 
@@ -358,6 +361,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 	weekdayHeader: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
+		gap: 4,
 		marginBottom: 2
 	},
 	weekdayHeaderCell: (dayWidth: number) => ({
@@ -384,6 +388,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
+		gap: 4,
 		height: WEEK_HEIGHT
 	},
 
