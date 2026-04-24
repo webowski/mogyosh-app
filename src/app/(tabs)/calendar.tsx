@@ -1,13 +1,18 @@
+import { View } from 'react-native'
+
 import Calendar from '@/features/Calendar/Calendar'
+import { commonStyles } from '@/shared/styles/common'
 
-/**
- * Экран "Календарь" - отображает месяц с количеством задач в каждом дне
- *
- * Использует хук useTasksCountByPeriod для получения счётчиков задач
- */
 export default function CalendarScreen() {
-	return <Calendar />
+	return (
+		<View style={commonStyles.mainArea}>
+			<Calendar />
+		</View>
+	)
 
+	/**
+	 * Использует хук useTasksCountByPeriod для получения счётчиков задач
+	 */
 	// const [currentMonth, setCurrentMonth] = useState(new Date())
 
 	// const startDate = format(startOfMonth(currentMonth), 'yyyy-MM-dd')

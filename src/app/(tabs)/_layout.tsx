@@ -4,6 +4,7 @@ import { useUnistyles } from 'react-native-unistyles'
 
 import Drawer from '@/features/Drawer/Drawer'
 import Header from '@/features/Header/Header'
+import HeaderCalendar from '@/features/Header/HeaderCalendar'
 import { default as HeaderDay } from '@/features/Header/HeaderDay'
 import HeaderTask from '@/features/Header/HeaderTask'
 import NavPanel from '@/features/Navigation/NavPanel'
@@ -66,7 +67,7 @@ export default function NavPanelLayout() {
 						title: t('screen.Calendar'),
 						href: null,
 						headerShown: true,
-						header: (props) => <Header {...props} />
+						header: (props) => <HeaderCalendar {...props} />
 					}}
 				/>
 				<Tabs.Screen

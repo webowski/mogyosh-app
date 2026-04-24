@@ -337,13 +337,27 @@ export default function Calendar() {
 	)
 }
 
-const styles = StyleSheet.create((theme) => ({
+// const WEEK_HEIGHT = 44
+const WEEK_HEIGHT = 76
+// const DAY_HEIGHT = 36
+const DAY_HEIGHT = 72
+
+const styles = StyleSheet.create((theme, rt) => ({
 	container: (calendarWidth: number) => ({
 		position: 'relative',
 		width: calendarWidth,
-		height: 44 * WEEKS_PER_MONTH,
+		height: WEEK_HEIGHT * WEEKS_PER_MONTH,
 		overflow: 'hidden'
 	}),
+	calendarHeader: {
+		paddingBottom: 10
+	},
+	calendarTitle: {
+		fontSize: 15,
+		fontWeight: '700',
+		textAlign: 'center',
+		color: theme.colors.major
+	},
 	weekdayHeader: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
@@ -352,7 +366,9 @@ const styles = StyleSheet.create((theme) => ({
 	weekdayHeaderCell: (dayWidth: number) => ({
 		width: dayWidth,
 		alignItems: 'center',
-		paddingVertical: 4
+		paddingVertical: 4,
+		backgroundColor: theme.colors.muted800,
+		borderRadius: 6
 	}),
 	weekdayHeaderText: {
 		fontSize: 11,
@@ -369,14 +385,17 @@ const styles = StyleSheet.create((theme) => ({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		height: 44
+		height: WEEK_HEIGHT
 	},
+
 	day: (dayWidth: number) => ({
 		width: dayWidth,
-		height: 36,
-		alignItems: 'center',
-		justifyContent: 'center',
-		borderRadius: 7
+		height: DAY_HEIGHT,
+		padding: 6,
+		alignItems: 'flex-start',
+		justifyContent: 'space-between',
+		borderRadius: 6,
+		backgroundColor: theme.colors.surface
 	}),
 	day_today: {
 		backgroundColor: theme.colors.primary800
@@ -384,16 +403,17 @@ const styles = StyleSheet.create((theme) => ({
 	day_selected: {
 		backgroundColor: theme.colors.primary
 	},
+
 	dayNumber: {
-		fontSize: 14,
-		lineHeight: 14,
-		fontWeight: '600',
-		color: theme.colors.muted
+		fontSize: 14 * rt.fontScale,
+		lineHeight: 14 * rt.fontScale,
+		fontWeight: '700',
+		color: theme.colors.major
 	},
 	dayNumber_otherMonth: {
-		color: theme.colors.primary800,
-		opacity: 0.4
+		color: theme.colors.muted600
 	},
+
 	selectedText: {
 		color: theme.colors.inverse
 	},

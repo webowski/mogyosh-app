@@ -1,3 +1,4 @@
+import { capitalize } from '@/shared/lib/string'
 import {
 	format,
 	isThisYear,
@@ -41,6 +42,20 @@ export function formatTitleDate(date: Date): string {
 	}
 
 	return format(date, t('date.patternWYear'), { locale: getDateFnsLocale() })
+}
+
+export function formatCalendarTitle(date: Date): string {
+	let title = ''
+
+	if (isThisYear(date)) {
+		title = format(date, t('date.monthPattern'), { locale: getDateFnsLocale() })
+	} else {
+		title = format(date, t('date.monthPatternWYear'), {
+			locale: getDateFnsLocale()
+		})
+	}
+
+	return capitalize(title)
 }
 
 export function formatNavDate(date: Date): string {

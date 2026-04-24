@@ -29,7 +29,9 @@
 		"pattern": "d MMMM",
 		"patternWYear": "d MMMM yyyy",
 		"shortPattern": "d MMM",
-		"shortPatternWYear": "d MMM ''yy"
+		"shortPatternWYear": "d MMM ''yy",
+		"monthPattern": "LLLL",
+		"monthPatternWYear": "LLLL yyyy"
 	},
 	"theme": {
 		"light": "Светлая",
