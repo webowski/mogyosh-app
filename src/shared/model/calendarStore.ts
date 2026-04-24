@@ -30,7 +30,13 @@ export const useCalendarStore = create<CalendarStore>()(
 			}),
 			{
 				name: 'calendar-storage',
-				storage: createJSONStorage(() => zustandStorage)
+				storage: createJSONStorage(() => zustandStorage),
+				partialize: (state) => ({ selectedDate: state.selectedDate }),
+				onRehydrateStorage: () => (state) => {
+					if (state?.selectedDate) {
+						state.selectedDate = new Date(state.selectedDate)
+					}
+				}
 			}
 		)
 	)
