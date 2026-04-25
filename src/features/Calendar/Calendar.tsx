@@ -166,7 +166,7 @@ function DayCellView({ cell, dayWidth }: DayCellProps) {
 						styles.dayNumber,
 						!cell.isCurrentMonth && styles.dayNumber_otherMonth,
 						isDaySelected && styles.selectedText,
-						cell.isToday && !isDaySelected && styles.todayText
+						cell.isToday && !isDaySelected && styles.text_today
 					]}
 				>
 					{cell.dayNumber}
@@ -175,7 +175,8 @@ function DayCellView({ cell, dayWidth }: DayCellProps) {
 					style={[
 						styles.day__counter,
 						!cell.isCurrentMonth && styles.text_muted,
-						isDaySelected && styles.selectedText
+						isDaySelected && styles.selectedText,
+						cell.isToday && !isDaySelected && styles.text_today
 					]}
 				>
 					1/5
@@ -457,7 +458,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 	selectedText: {
 		color: theme.colors.inverse
 	},
-	todayText: {
+	text_today: {
 		color: theme.colors.primary
 	}
 }))
