@@ -105,7 +105,7 @@ const makeMonthsDataArray = (): MonthData[] => {
 	})
 }
 
-const isCurrentMonth = (monthData: MonthData): boolean => {
+export const isCurrentMonth = (monthData: MonthData): boolean => {
 	const today = useCalendarStore.getState().today
 	return isSameMonth(monthData.monthDate, today)
 }
@@ -151,6 +151,7 @@ function DayCellView({ cell, dayWidth }: DayCellProps) {
 			onPress={() => {
 				useCalendarStore.getState().setSelectedDate(cell.date)
 			}}
+			style={styles.dayPressable}
 		>
 			<Squircle
 				style={[
@@ -189,6 +190,7 @@ type MonthProps = {
 	index: number
 	swipeTranslationValue: SharedValue<number>
 	calendarWidth: number
+	calendarHeight: number
 	dayWidth: number
 }
 
@@ -197,6 +199,7 @@ function Month({
 	index,
 	swipeTranslationValue,
 	calendarWidth,
+	calendarHeight,
 	dayWidth
 }: MonthProps) {
 	const animatedStyle = useAnimatedStyle(() => ({
@@ -208,7 +211,7 @@ function Month({
 	return (
 		<Animated.View style={[styles.month(calendarWidth), animatedStyle]}>
 			{monthData.weeks.map((week, weekIndex) => (
-				<View key={weekIndex} style={styles.week}>
+				<View key={weekIndex} style={styles.week(calendarHeight)}>
 					{week.map((cell) => (
 						<DayCellView
 							key={cell.date.getTime()}
@@ -224,21 +227,23 @@ function Month({
 
 export default function Calendar() {
 	const today = useCalendarStore((state) => state.today)
-	const { width: windowWidth } = useWindowDimensions()
+	const { width: windowWidth, height: windowHeight } = useWindowDimensions()
 	const weekStartDayIndex = useSettingsStore((state) => state.weekStartDayIndex)
 
 	const [monthsDataArray, setMonthsDataArray] = useState(makeMonthsDataArray)
 
 	const swipeTranslationValue = useSharedValue(0)
 
-	const { calendarWidth, dayWidth } = useMemo(() => {
+	const { calendarWidth, calendarHeight, dayWidth } = useMemo(() => {
 		const calendarWidth = windowWidth - styleVars.sidePaddingSm * 2
+		let calendarHeight = windowHeight - styleVars.sidePaddingSm * 2 - 200
+		calendarHeight = calendarHeight > 560 ? 560 : calendarHeight
 
 		// const dayWidth = calendarWidth / 7
 		const dayWidth = (calendarWidth - 4 * 6) / 7
 
-		return { calendarWidth, dayWidth }
-	}, [windowWidth])
+		return { calendarWidth, calendarHeight, dayWidth }
+	}, [windowWidth, windowHeight])
 
 	useEffect(
 		function effectOnWindowResize() {
@@ -257,13 +262,9 @@ export default function Calendar() {
 	useEffect(
 		function effectOnMonthChange() {
 			swipeTranslationValue.value = 0
-
 			const selectedMonth = monthsDataArray[2]
-			if (isCurrentMonth(selectedMonth)) {
-				useCalendarStore.getState().setSelectedDate(today)
-			} else {
-				useCalendarStore.getState().setSelectedDate(selectedMonth.monthDate)
-			}
+
+			useCalendarStore.getState().setSelectedMonth(selectedMonth.monthDate)
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[monthsDataArray]
@@ -329,7 +330,7 @@ export default function Calendar() {
 				dayWidth={dayWidth}
 			/>
 			<GestureDetector gesture={panGesture}>
-				<View style={styles.container(calendarWidth)}>
+				<View style={styles.container(calendarWidth, calendarHeight)}>
 					{monthsDataArray.map((monthData, index) => (
 						<Month
 							key={monthData.monthDate.getTime()}
@@ -337,6 +338,7 @@ export default function Calendar() {
 							index={index}
 							swipeTranslationValue={swipeTranslationValue}
 							calendarWidth={calendarWidth}
+							calendarHeight={calendarHeight}
 							dayWidth={dayWidth}
 						/>
 					))}
@@ -347,15 +349,17 @@ export default function Calendar() {
 }
 
 // const WEEK_HEIGHT = 44
-const WEEK_HEIGHT = 76
+// const WEEK_HEIGHT = 76
+// const WEEK_HEIGHT = 106
 // const DAY_HEIGHT = 36
-const DAY_HEIGHT = 72
+// const DAY_HEIGHT = 72
+// const DAY_HEIGHT = 102
 
 const styles = StyleSheet.create((theme, rt) => ({
-	container: (calendarWidth: number) => ({
+	container: (calendarWidth: number, calendarHeight: number) => ({
 		position: 'relative',
 		width: calendarWidth,
-		height: WEEK_HEIGHT * WEEKS_PER_MONTH,
+		height: calendarHeight,
 		overflow: 'hidden'
 	}),
 	calendarHeader: {
@@ -388,22 +392,32 @@ const styles = StyleSheet.create((theme, rt) => ({
 		fontWeight: '600',
 		color: theme.colors.minor
 	},
+
 	month: (calendarWidth: number) => ({
 		position: 'absolute',
 		inset: 0,
-		width: calendarWidth
+		width: calendarWidth,
+		gap: 4
 	}),
-	week: {
+
+	week: (calendarHeight: number) => ({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		alignItems: 'center',
-		gap: 4,
-		height: WEEK_HEIGHT
-	},
+		alignItems: 'stretch',
+		flex: 1,
+		gap: 4
+	}),
 
+	dayPressable: {
+		flexDirection: 'row',
+		alignItems: 'stretch',
+		justifyContent: 'center',
+		flex: 1
+	},
 	day: (dayWidth: number) => ({
-		width: dayWidth,
-		height: DAY_HEIGHT,
+		// width: dayWidth,
+		// height: DAY_HEIGHT,
+		flex: 1,
 		padding: 6,
 		alignItems: 'flex-start',
 		justifyContent: 'space-between',

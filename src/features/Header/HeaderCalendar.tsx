@@ -19,21 +19,21 @@ export default function HeaderCalendar({
 	route
 }: HeaderProps) {
 	const insets = useSafeAreaInsets()
-	const selectedDate = useCalendarStore((state) => state.selectedDate)
+	const selectedMonth = useCalendarStore((state) => state.selectedMonth)
 
 	const [calendarTitle, setCalendarTitle] = useState(
-		formatCalendarTitle(selectedDate)
+		formatCalendarTitle(selectedMonth)
 	)
 
 	useLanguageChange(() => {
-		setCalendarTitle(formatCalendarTitle(selectedDate))
+		setCalendarTitle(formatCalendarTitle(selectedMonth))
 	})
 
 	useEffect(
-		function effectOnDateChange() {
-			setCalendarTitle(formatCalendarTitle(selectedDate))
+		function effectOnMonthChange() {
+			setCalendarTitle(formatCalendarTitle(selectedMonth))
 		},
-		[selectedDate]
+		[selectedMonth]
 	)
 
 	return (

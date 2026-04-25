@@ -13,8 +13,12 @@ const zustandStorage = createZustandStorage(storage)
 
 interface CalendarStore {
 	today: Date
+
 	selectedDate: Date
 	setSelectedDate: (date: Date) => void
+
+	selectedMonth: Date
+	setSelectedMonth: (date: Date) => void
 }
 
 export const useCalendarStore = create<CalendarStore>()(
@@ -26,15 +30,27 @@ export const useCalendarStore = create<CalendarStore>()(
 				selectedDate: new Date(),
 				setSelectedDate: (date: Date) => {
 					set({ selectedDate: date })
+				},
+
+				selectedMonth: new Date(),
+				setSelectedMonth: (date: Date) => {
+					set({ selectedMonth: date })
 				}
 			}),
 			{
 				name: 'calendar-storage',
 				storage: createJSONStorage(() => zustandStorage),
-				partialize: (state) => ({ selectedDate: state.selectedDate }),
+				partialize: (state) => ({
+					selectedDate: state.selectedDate,
+					selectedMonth: state.selectedMonth
+				}),
 				onRehydrateStorage: () => (state) => {
 					if (state?.selectedDate) {
 						state.selectedDate = new Date(state.selectedDate)
+					}
+
+					if (state?.selectedMonth) {
+						state.selectedMonth = new Date(state.selectedMonth)
 					}
 				}
 			}
