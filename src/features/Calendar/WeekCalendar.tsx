@@ -309,8 +309,8 @@ const styles = StyleSheet.create((theme) => ({
 		width: dayWidth,
 		minWidth: 40,
 		alignItems: 'center',
-		paddingVertical: 4,
-		paddingBottom: 5,
+		paddingTop: 3,
+		paddingBottom: 6,
 		paddingHorizontal: 6,
 		borderRadius: 7
 	}),
