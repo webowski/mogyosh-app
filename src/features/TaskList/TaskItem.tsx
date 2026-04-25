@@ -31,6 +31,7 @@ export default function TaskItem({ data, children }: TaskItemProps) {
 		setSwipePosition({ row: 0, col: 2 })
 		router.push('/task')
 	}
+	console.log(data)
 
 	return (
 		<Pressable style={styles.card} onPress={handlePress}>
@@ -40,7 +41,7 @@ export default function TaskItem({ data, children }: TaskItemProps) {
 				</Text>
 			)}
 			<View style={styles.card__columns}>
-				<View>
+				<View style={styles.card__header}>
 					{data.category && (
 						<Text style={styles.card__category}>
 							{makeCategoryPath(data.category.id, categoryMap)}
@@ -52,7 +53,9 @@ export default function TaskItem({ data, children }: TaskItemProps) {
 				<View></View>
 			</View>
 			{children}
-			<CircleProgress progress={0.6} />
+			<View style={styles.card__dashboard}>
+				<CircleProgress progress={0.6} value={'1/2'} />
+			</View>
 		</Pressable>
 	)
 }
@@ -62,8 +65,14 @@ const styles = StyleSheet.create((theme, rt) => ({
 		padding: 14,
 		backgroundColor: theme.colors.surface,
 		boxShadow: '0px 2px 4px rgba(102, 140, 255, 0.08)',
-		borderRadius: 8
+		borderRadius: 8,
+		gap: 8
 	},
+
+	card__header: {
+		maxWidth: '100%'
+	},
+
 	card__columns: {
 		flexDirection: 'row',
 		gap: 12,
@@ -94,5 +103,10 @@ const styles = StyleSheet.create((theme, rt) => ({
 		paddingVertical: 3,
 		paddingRight: 12,
 		paddingLeft: 10
+	},
+
+	card__dashboard: {
+		flexDirection: 'row',
+		gap: 12
 	}
 }))

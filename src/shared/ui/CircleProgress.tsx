@@ -1,19 +1,5 @@
-// import { Text, View } from 'react-native'
-
-// type CircleProgressProps = {
-// 	title: string
-// }
-
-// export default function CircleProgress({ title }: CircleProgressProps) {
-// 	return (
-// 		<View>
-// 			<Text>{title}</Text>
-// 		</View>
-// 	)
-// }
-
 import React, { useEffect } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
 import Animated, {
 	Easing,
 	useAnimatedProps,
@@ -21,12 +7,13 @@ import Animated, {
 	withTiming
 } from 'react-native-reanimated'
 import Svg, { Circle } from 'react-native-svg'
-import { useUnistyles } from 'react-native-unistyles'
+import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle)
 
 interface CircleProgressBarProps {
 	progress: number // 0 to 1
+	value: string
 	size?: number
 	strokeWidth?: number
 	trackColor?: string
@@ -36,8 +23,9 @@ interface CircleProgressBarProps {
 
 export default function CircleProgressBar({
 	progress,
-	size = 64,
-	strokeWidth = 5,
+	value,
+	size = 52,
+	strokeWidth = 4,
 	duration = 600,
 	showLabel = true
 }: CircleProgressBarProps) {
@@ -51,12 +39,16 @@ export default function CircleProgressBar({
 
 	const animatedProgress = useSharedValue(0)
 
-	useEffect(() => {
-		animatedProgress.value = withTiming(Math.min(Math.max(progress, 0), 1), {
-			duration,
-			easing: Easing.out(Easing.cubic)
-		})
-	}, [progress])
+	useEffect(
+		() => {
+			animatedProgress.value = withTiming(Math.min(Math.max(progress, 0), 1), {
+				duration,
+				easing: Easing.out(Easing.cubic)
+			})
+		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[progress]
+	)
 
 	const animatedProps = useAnimatedProps(() => ({
 		strokeDashoffset: circumference * (1 - animatedProgress.value)
@@ -65,7 +57,7 @@ export default function CircleProgressBar({
 	const center = size / 2
 
 	return (
-		<View style={styles.container}>
+		<View style={styles.container(size)}>
 			<Svg width={size} height={size}>
 				{/* Track */}
 				<Circle
@@ -92,24 +84,25 @@ export default function CircleProgressBar({
 			</Svg>
 			{showLabel && (
 				<View style={[StyleSheet.absoluteFill, styles.labelContainer]}>
-					<Text style={styles.label}>{Math.round(progress * 100)}%</Text>
+					<Text style={styles.label}>{value}</Text>
 				</View>
 			)}
 		</View>
 	)
 }
 
-const styles = StyleSheet.create({
-	container: {
-		position: 'relative'
-	},
+const styles = StyleSheet.create((theme) => ({
+	container: (size: number) => ({
+		position: 'relative',
+		width: size
+	}),
 	labelContainer: {
 		justifyContent: 'center',
 		alignItems: 'center'
 	},
 	label: {
-		fontSize: 18,
+		fontSize: 13,
 		fontWeight: '600',
 		color: '#111827'
 	}
-})
+}))
