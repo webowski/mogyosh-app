@@ -34,7 +34,7 @@ interface NavStore {
 	setIsDrawerShown: (isShown: boolean) => void
 
 	swipePosition: SwipeSwitchPosition
-	setSwipePosition: (row: number, col: number) => void
+	setSwipePosition: (position: SwipeSwitchPosition) => void
 	getRoutePosition: (routeName: string) => SwipeSwitchPosition | null
 }
 
@@ -51,7 +51,7 @@ export const useNavStore = create<NavStore>((set, get) => ({
 	},
 
 	swipePosition: { row: 0, col: 1 },
-	setSwipePosition: (row, col) => {
+	setSwipePosition: ({ row, col }) => {
 		set({ swipePosition: { row, col } })
 	},
 	getRoutePosition: (routeName: string) => {

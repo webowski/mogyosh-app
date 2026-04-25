@@ -28,7 +28,7 @@ export default function TaskItem({ data, children }: TaskItemProps) {
 
 	const handlePress = () => {
 		setSelectedTaskId(data.id)
-		setSwipePosition(0, 2) // task position: row 0, col 2
+		setSwipePosition({ row: 0, col: 2 })
 		router.push('/task')
 	}
 

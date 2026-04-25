@@ -14,6 +14,7 @@ import { scheduleOnRN } from 'react-native-worklets'
 
 import { useNavStore } from '@/features/Navigation/model/navStore'
 import SVGSwipeSwitchBg from '@/shared/images/swipe-switch-bg.svg'
+import { SwipeSwitchPosition } from './model/navTypes'
 
 // ─── Imports ───────────────────────────────────────────────────────────────
 
@@ -174,7 +175,7 @@ const SwipeSwitch: React.FC<SwipeSwitchProps> = ({
 	const setSwipePosition = useNavStore((state) => state.setSwipePosition)
 
 	// Find initial position based on current route
-	const getInitialIndices = () => {
+	const getInitialIndices = (): SwipeSwitchPosition => {
 		if (!currentRoute) return { row: 0, col: 0 }
 		for (let r = 0; r < swipeSwitchItems.length; r++) {
 			for (let c = 0; c < swipeSwitchItems[r].length; c++) {
@@ -298,7 +299,7 @@ const SwipeSwitch: React.FC<SwipeSwitchProps> = ({
 				// }
 
 				// Update store with new position
-				scheduleOnRN(setSwipePosition, rowIndex.value, newCol)
+				scheduleOnRN(setSwipePosition, { row: rowIndex.value, col: newCol })
 				if (onIndexChange) {
 					scheduleOnRN(onIndexChange, rowIndex.value, newCol)
 				}
@@ -334,7 +335,7 @@ const SwipeSwitch: React.FC<SwipeSwitchProps> = ({
 				// }
 
 				// Update store with new position
-				scheduleOnRN(setSwipePosition, newRow, colIndex.value)
+				scheduleOnRN(setSwipePosition, { row: newRow, col: colIndex.value })
 				if (onIndexChange) {
 					scheduleOnRN(onIndexChange, newRow, colIndex.value)
 				}
