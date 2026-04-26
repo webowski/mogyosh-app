@@ -12,7 +12,7 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 const AnimatedCircle = Animated.createAnimatedComponent(Circle)
 
 interface CircleProgressBarProps {
-	progress: number // 0 to 1
+	progress: number
 	value: string
 	size?: number
 	strokeWidth?: number
@@ -91,17 +91,19 @@ export default function CircleProgressBar({
 	)
 }
 
-const styles = StyleSheet.create((theme) => ({
+const styles = StyleSheet.create((theme, rt) => ({
 	container: (size: number) => ({
 		position: 'relative',
 		width: size
 	}),
 	labelContainer: {
 		justifyContent: 'center',
-		alignItems: 'center'
+		alignItems: 'center',
+		paddingBottom: 1
 	},
 	label: {
-		fontSize: 13,
+		fontSize: 13 * rt.fontScale,
+		lineHeight: 13 * rt.fontScale,
 		fontWeight: '600',
 		color: '#111827'
 	}

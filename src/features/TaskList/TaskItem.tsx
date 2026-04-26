@@ -4,6 +4,8 @@ import { Pressable, Text, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 import { useNavStore } from '@/features/Navigation/model/navStore'
+import { useTaskProgress } from '@/features/TaskList/model'
+import { useCategoriesStore } from '@/features/TaskList/model/categoriesStore'
 import {
 	isByTime,
 	makeCategoryPath
@@ -12,7 +14,6 @@ import { TaskEntity } from '@/shared/domain/task'
 import { formatTime } from '@/shared/lib/time'
 import { useTaskStore } from '@/shared/model/taskStore'
 import CircleProgress from '@/shared/ui/CircleProgress'
-import { useCategoriesStore } from './model/categoriesStore'
 
 type TaskItemProps = {
 	data: TaskEntity
@@ -23,6 +24,7 @@ export default function TaskItem({ data, children }: TaskItemProps) {
 	const categoryMap = useCategoriesStore((store) => store.entities)
 	const setSelectedTaskId = useTaskStore((store) => store.setSelectedTaskId)
 	const setSwipePosition = useNavStore((store) => store.setSwipePosition)
+	const { data: progressData } = useTaskProgress(data.id)
 
 	const isByTimeBool = isByTime(data)
 
@@ -31,7 +33,10 @@ export default function TaskItem({ data, children }: TaskItemProps) {
 		setSwipePosition({ row: 0, col: 2 })
 		router.push('/task')
 	}
-	console.log(data)
+
+	const progress = progressData?.progress ?? 0
+	const totalCount = progressData?.totalCount ?? 0
+	const completedCount = progressData?.completedCount ?? 0
 
 	return (
 		<Pressable style={styles.card} onPress={handlePress}>
@@ -54,7 +59,14 @@ export default function TaskItem({ data, children }: TaskItemProps) {
 			</View>
 			{children}
 			<View style={styles.card__dashboard}>
-				<CircleProgress progress={0.6} value={'1/2'} />
+				{totalCount > 0 ? (
+					<CircleProgress
+						progress={progress}
+						value={`${completedCount}/${totalCount}`}
+					/>
+				) : (
+					<CircleProgress progress={0.6} value={'1/2'} />
+				)}
 			</View>
 		</Pressable>
 	)

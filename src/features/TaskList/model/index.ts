@@ -12,6 +12,8 @@ export {
 	useTaskSubtasks
 } from './useTasks'
 
+export { calculateProgress, useTaskProgress } from './useTaskProgress'
+
 export type {
 	CalendarDayData,
 	CalendarPeriodData,

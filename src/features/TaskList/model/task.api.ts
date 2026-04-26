@@ -30,6 +30,7 @@ export const makeTaskObject = (task: TaskRow): TaskEntity => ({
 	status: task.status,
 	priority: task.priority,
 	category: task.categories,
+	parent_id: task.parent_id,
 	schedules: task.schedules,
 	created_at: task.created_at,
 	updated_at: task.updated_at

@@ -31,6 +31,7 @@ export type TaskEntity = {
 	status?: TaskStatus
 	priority?: number | null
 	category?: CategoryEntity | null
+	parent_id?: TaskId | null
 	schedules?: ScheduleEntity[]
 	created_at: string
 	updated_at?: string | null
@@ -42,6 +43,7 @@ export type TaskRow = {
 	status: TaskStatus
 	priority: number
 	categories: any
+	parent_id: string | null
 	schedules: ScheduleEntity[]
 	created_at: string
 	updated_at: string
