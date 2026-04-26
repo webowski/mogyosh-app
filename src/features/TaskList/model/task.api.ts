@@ -47,6 +47,7 @@ export const getTasks = async (filters?: TaskFilters) => {
 	let query = supabase
 		.from('tasks')
 		.select(TASKS_SELECT)
+		.is('parent_id', null)
 		.order('created_at', { ascending: false })
 
 	if (filters?.categoryId) {
