@@ -5,8 +5,8 @@ import {
 	Text
 } from 'react-native'
 
+import { useTasksGrouped } from '@/features/TaskList/model'
 import { useCategories } from '@/features/TaskList/model/useCategories'
-import { useTasksGrouped } from '@/features/TaskList/model/useTasks'
 import TaskItem from '@/features/TaskList/TaskItem'
 import { commonStyles } from '@/shared/styles/common'
 import { textStyles } from '@/shared/styles/text'

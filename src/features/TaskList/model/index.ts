@@ -1,16 +1,12 @@
-// Task hooks barrel export
-// Use this file to import all task-related hooks and utilities
-
-export {
-	useCreateTask,
-	useTaskById,
-	useTasks,
-	useTasksByDate,
-	useTasksCountByDay,
-	useTasksCountByPeriod,
-	useTasksGrouped,
-	useTaskSubtasks
-} from './useTasks'
+export { useCreateTask } from './useCreateTask'
+export { useTaskById } from './useTaskById'
+export { useTasks } from './useTasks'
+export { useTasksByDate } from './useTasksByDate'
+export { useTasksCountByDay } from './useTasksCountByDay'
+export { useTasksCountByPeriod } from './useTasksCountByPeriod'
+export { useTasksGrouped } from './useTasksGrouped'
+export { useTaskSubtasks } from './useTaskSubtasks'
+export { useUpdateTaskState } from './useUpdateTaskState'
 
 export { calculateProgress, useTaskProgress } from './useTaskProgress'
 

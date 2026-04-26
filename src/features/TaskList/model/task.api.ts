@@ -191,3 +191,56 @@ export const getCategories = async (): Promise<CategoryEntity[]> => {
 	if (error) throw error
 	return data ?? []
 }
+
+/**
+ * Update task state (done/active/archived)
+ * @param taskId - Task ID to update
+ * @param state - New state value
+ */
+export const updateTaskState = async (
+	taskId: TaskId,
+	state: 'done' | 'active' | 'archived'
+): Promise<TaskEntity> => {
+	// Check if state record exists for this task
+	const { data: existingState, error: checkError } = await supabase
+		.from('states')
+		.select('id')
+		.eq('task_id', taskId)
+		.single()
+
+	if (checkError && checkError.code !== 'PGRST116') {
+		throw checkError
+	}
+
+	if (existingState) {
+		// Update existing state record
+		const { error: updateError } = await supabase
+			.from('states')
+			.update({
+				state,
+				state_date: new Date().toISOString()
+			})
+			.eq('task_id', taskId)
+
+		if (updateError) throw updateError
+	} else {
+		// Insert new state record
+		const { error: insertError } = await supabase.from('states').insert({
+			task_id: taskId,
+			state,
+			state_date: new Date().toISOString()
+		})
+
+		if (insertError) throw insertError
+	}
+
+	// Fetch updated task with all relations
+	const { data, error } = await supabase
+		.from('tasks')
+		.select(TASKS_SELECT)
+		.eq('id', taskId)
+		.single()
+
+	if (error) throw error
+	return makeTaskObject(data)
+}

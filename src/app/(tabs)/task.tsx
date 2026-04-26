@@ -1,10 +1,8 @@
 import { ActivityIndicator, Text, View } from 'react-native'
 
 import { ChecklistItem } from '@/features/TaskList/ChecklistItem'
-import {
-	useTaskById,
-	useTaskSubtasks
-} from '@/features/TaskList/model/useTasks'
+import { useTaskById, useTaskSubtasks } from '@/features/TaskList/model'
+import { useUpdateTaskState } from '@/features/TaskList/model/useUpdateTaskState'
 import { useTaskStore } from '@/shared/model/taskStore'
 import { commonStyles } from '@/shared/styles/common'
 import ScrollBox from '@/shared/ui/ScrollBox'
@@ -16,6 +14,15 @@ export default function TaskScreen() {
 
 	const { data: subtasks, isLoading: isLoadingSubtasks } =
 		useTaskSubtasks(selectedTaskId)
+
+	const updateTaskState = useUpdateTaskState()
+
+	const handleToggleSubtask = (taskId: string, completed: boolean) => {
+		updateTaskState.mutate({
+			taskId,
+			state: completed ? 'done' : 'active'
+		})
+	}
 
 	if (isLoading || isLoadingSubtasks)
 		return (
@@ -42,7 +49,11 @@ export default function TaskScreen() {
 				<View>
 					{subtasks &&
 						subtasks.map((subtask) => (
-							<ChecklistItem key={subtask.id} data={subtask} />
+							<ChecklistItem
+								key={subtask.id}
+								data={subtask}
+								onToggle={handleToggleSubtask}
+							/>
 						))}
 				</View>
 			</>

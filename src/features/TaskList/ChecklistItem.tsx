@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Pressable, Text } from 'react-native'
 import Animated, {
 	interpolateColor,
@@ -17,12 +16,11 @@ type ChecklistItemProps = {
 
 export const ChecklistItem = ({ data, onToggle }: ChecklistItemProps) => {
 	const { theme } = useUnistyles()
-	const [completed, setCompleted] = useState(false)
-	const progress = useSharedValue(0)
+	const completed = data.state === 'done'
+	const progress = useSharedValue(completed ? 1 : 0)
 
 	const handlePress = () => {
 		const next = !completed
-		setCompleted(next)
 		progress.value = withTiming(next ? 1 : 0, { duration: 250 })
 		onToggle?.(data.id, next)
 	}

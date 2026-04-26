@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { ActivityIndicator, Text, TextInput, View } from 'react-native'
 
-import { useTasks } from '@/features/TaskList/model/useTasks'
+import { useTasks } from '@/features/TaskList/model'
 import ScrollBox from '@/shared/ui/ScrollBox'
 
 export default function AllTasksScreen() {
