@@ -23,9 +23,10 @@ export const useTaskProgress = (taskId: TaskId | null) => {
 			}
 
 			const subtasks = await getTaskSubtasks(taskId)
-			const completedCount = subtasks.filter(
-				(task) => task.status === 'completed'
-			).length
+
+			const completedCount = subtasks.filter((task) => {
+				return task.state === 'done'
+			}).length
 			const totalCount = subtasks.length
 			const progress = totalCount > 0 ? completedCount / totalCount : 0
 
@@ -49,9 +50,7 @@ export const calculateProgress = (subtasks: TaskEntity[]) => {
 		return { completedCount: 0, totalCount: 0, progress: 0 }
 	}
 
-	const completedCount = subtasks.filter(
-		(task) => task.status === 'completed'
-	).length
+	const completedCount = subtasks.filter((task) => task.state === 'done').length
 	const totalCount = subtasks.length
 	const progress = completedCount / totalCount
 

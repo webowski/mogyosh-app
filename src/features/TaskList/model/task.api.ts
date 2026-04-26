@@ -21,6 +21,12 @@ const TASKS_SELECT = `
 		month,
 		start_date,
 		end_date
+	),
+	states (
+		id,
+		state,
+		state_date,
+		created_at
 	)
 `
 
@@ -28,6 +34,7 @@ export const makeTaskObject = (task: TaskRow): TaskEntity => ({
 	id: task.id,
 	info: task.info,
 	status: task.status,
+	state: task.states?.[0]?.state ?? null,
 	priority: task.priority,
 	category: task.categories,
 	parent_id: task.parent_id,
