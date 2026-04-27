@@ -21,13 +21,17 @@ export const useTasksByCategory = () => {
 /**
  * Group tasks by categories and subcategories
  * Returns a hierarchical structure of categories with their tasks
+ * Only includes root-level tasks (tasks without parent_id)
  */
 const groupTasksByCategory = (
 	tasks: TaskEntity[]
 ): TaskCategoryGroupEntity[] => {
+	// Filter only root-level tasks (no parent_id)
+	const rootTasks = tasks.filter((task) => !task.parent_id)
+
 	// Build category map
 	const categoryMap = new Map<CategoryId, CategoryEntity>()
-	tasks.forEach((task) => {
+	rootTasks.forEach((task) => {
 		if (task.category && !categoryMap.has(task.category.id)) {
 			categoryMap.set(task.category.id, task.category)
 		}
@@ -35,7 +39,7 @@ const groupTasksByCategory = (
 
 	// Group tasks by category
 	const tasksByCategory = new Map<CategoryId, TaskEntity[]>()
-	tasks.forEach((task) => {
+	rootTasks.forEach((task) => {
 		if (task.category) {
 			const existing = tasksByCategory.get(task.category.id) || []
 			existing.push(task)
@@ -68,7 +72,7 @@ const groupTasksByCategory = (
 	})
 
 	// Add tasks without category
-	const tasksWithoutCategory = tasks.filter((task) => !task.category)
+	const tasksWithoutCategory = rootTasks.filter((task) => !task.category)
 	if (tasksWithoutCategory.length > 0) {
 		rootCategories.push({
 			category: {
