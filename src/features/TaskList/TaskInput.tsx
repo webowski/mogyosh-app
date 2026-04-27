@@ -1,7 +1,7 @@
 import { Button, TextInput, View } from 'react-native'
 
+import { useCreateTask } from './model'
 import { useUIStore } from './model/ui.store'
-import { useCreateTask } from './model/useTasks'
 
 export const TaskInput = () => {
 	const { input, setInput, clearInput } = useUIStore()

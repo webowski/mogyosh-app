@@ -1,5 +1,5 @@
 import { TaskId } from '@/shared/domain/ids'
-import { TaskEntity, TaskStatus } from '@/shared/domain/task'
+import { CategoryEntity, TaskEntity, TaskStatus } from '@/shared/domain/task'
 
 export type TaskFilters = {
 	searchQuery?: string
@@ -28,4 +28,10 @@ export type CalendarPeriodData = {
 export type TasksByDate = {
 	date: string
 	tasks: TaskEntity[]
+}
+
+export type TaskCategoryGroupEntity = {
+	category: CategoryEntity
+	tasks: TaskEntity[]
+	children?: TaskCategoryGroupEntity[]
 }

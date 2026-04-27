@@ -14,12 +14,11 @@ export { calculateProgress, useTaskProgress } from './useTaskProgress'
 export type {
 	CalendarDayData,
 	CalendarPeriodData,
+	TaskCategoryGroupEntity,
 	TaskFilters,
 	TasksByDate,
 	TaskSection
 } from './task.types'
-
-export type { TaskCategoryGroupEntity } from './useTasksByCategory'
 
 export {
 	countTasksByDay,

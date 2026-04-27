@@ -3,12 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { CategoryId } from '@/shared/domain/ids'
 import { CategoryEntity, TaskEntity } from '@/shared/domain/task'
 import { getAllTasks } from './task.api'
-
-export type TaskCategoryGroupEntity = {
-	category: CategoryEntity
-	tasks: TaskEntity[]
-	children?: TaskCategoryGroupEntity[]
-}
+import { TaskCategoryGroupEntity } from './task.types'
 
 /**
  * Group tasks by their categories hierarchically
