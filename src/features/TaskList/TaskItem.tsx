@@ -35,8 +35,8 @@ export default function TaskItem({ data, children }: TaskItemProps) {
 	}
 
 	const progress = progressData?.progress ?? 0
-	const totalCount = progressData?.totalCount ?? 0
-	const completedCount = progressData?.completedCount ?? 0
+	const totalProgressCount = progressData?.totalCount ?? 0
+	const completedProgressCount = progressData?.completedCount ?? 0
 
 	return (
 		<Pressable style={styles.card} onPress={handlePress}>
@@ -58,16 +58,14 @@ export default function TaskItem({ data, children }: TaskItemProps) {
 				<View></View>
 			</View>
 			{children}
-			<View style={styles.card__dashboard}>
-				{totalCount > 0 ? (
+			{totalProgressCount > 0 && (
+				<View style={styles.card__dashboard}>
 					<CircleProgress
 						progress={progress}
-						value={`${completedCount}/${totalCount}`}
+						value={`${completedProgressCount}/${totalProgressCount}`}
 					/>
-				) : (
-					<CircleProgress progress={0.6} value={'1/2'} />
-				)}
-			</View>
+				</View>
+			)}
 		</Pressable>
 	)
 }
