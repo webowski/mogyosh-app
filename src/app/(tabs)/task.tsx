@@ -53,9 +53,7 @@ export default function TaskScreen() {
 								key={subtask.id}
 								checked={subtask.state === 'done'}
 								text={subtask.info}
-								onToggle={(value) =>
-									handleToggleSubtask(subtask.id, subtask.state !== 'done')
-								}
+								onToggle={(value) => handleToggleSubtask(subtask.id, value)}
 							/>
 						))}
 				</View>

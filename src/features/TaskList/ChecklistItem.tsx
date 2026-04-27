@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Pressable, Text } from 'react-native'
 import Animated, {
 	interpolateColor,
@@ -21,9 +22,17 @@ export const ChecklistItem = ({
 	const { theme } = useUnistyles()
 	const animationProgress = useSharedValue(checked ? 1 : 0)
 
+	// Синхронизируем анимацию с prop checked
+	useEffect(
+		() => {
+			animationProgress.value = withTiming(checked ? 1 : 0, { duration: 250 })
+		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[checked]
+	)
+
 	const handlePress = () => {
 		const newValue = !checked
-		animationProgress.value = withTiming(newValue ? 1 : 0, { duration: 250 })
 		onToggle(newValue)
 	}
 

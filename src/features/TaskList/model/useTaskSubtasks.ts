@@ -15,5 +15,8 @@ export const useTaskSubtasks = (taskId: TaskId | null) => {
 			return await getTaskSubtasks(taskId)
 		},
 		enabled: !!taskId
+		// staleTime: 0,
+		// gcTime: 0,
+		// refetchOnMount: 'always'
 	})
 }
