@@ -69,7 +69,11 @@
 		"typescript": "~5.9.2"
 	},
 	"jest": {
-		"preset": "jest-expo"
+		"preset": "jest-expo",
+		"moduleNameMapper": {
+			"react-native-reanimated": "<rootDir>/__mocks__/react-native-reanimated.ts",
+			"react-native-worklets": "<rootDir>/__mocks__/react-native-worklets.ts"
+		}
 	},
 	"private": true
 }
