@@ -22,6 +22,8 @@ export default function DayScreen() {
 		<SectionList
 			sections={data ?? []}
 			style={commonStyles.mainArea}
+			overScrollMode='never'
+			bounces={true}
 			contentContainerStyle={{ gap: 8 }}
 			keyExtractor={(item) => item.id}
 			renderItem={({ item }) => <TaskItem data={item} />}
