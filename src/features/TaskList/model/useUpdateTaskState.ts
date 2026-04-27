@@ -27,7 +27,7 @@ export const useUpdateTaskState = () => {
 				queryKey: ['task-subtasks']
 			})
 			queryClient.invalidateQueries({
-				queryKey: ['task-progress', variables.taskId]
+				queryKey: ['task-progress']
 			})
 			queryClient.invalidateQueries({ queryKey: ['tasks'] })
 			queryClient.invalidateQueries({ queryKey: ['tasks-grouped'] })
