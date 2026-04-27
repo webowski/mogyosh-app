@@ -1,8 +1,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { TaskId } from '@/shared/domain/ids'
-import { TaskEntity } from '@/shared/domain/task'
+import { TaskEntity, TaskState } from '@/shared/domain/task'
 import { updateTaskState } from './task.api'
+
+type TaskStateMutationParams = {
+	taskId: TaskId
+	state: TaskState
+}
 
 /**
  * Update task state mutation
@@ -12,23 +17,13 @@ export const useUpdateTaskState = () => {
 	const queryClient = useQueryClient()
 
 	return useMutation({
-		mutationFn: async ({
-			taskId,
-			state
-		}: {
-			taskId: TaskId
-			state: 'done' | 'active' | 'archived'
-		}) => {
+		mutationFn: async ({ taskId, state }: TaskStateMutationParams) => {
 			return await updateTaskState(taskId, state)
 		},
 		onSuccess: (_, variables) => {
 			queryClient.invalidateQueries({ queryKey: ['task', variables.taskId] })
-			queryClient.invalidateQueries({
-				queryKey: ['task-subtasks']
-			})
-			queryClient.invalidateQueries({
-				queryKey: ['task-progress']
-			})
+			queryClient.invalidateQueries({ queryKey: ['task-subtasks'] })
+			queryClient.invalidateQueries({ queryKey: ['task-progress'] })
 			queryClient.invalidateQueries({ queryKey: ['tasks'] })
 			queryClient.invalidateQueries({ queryKey: ['tasks-grouped'] })
 		},
@@ -40,9 +35,14 @@ export const useUpdateTaskState = () => {
 			})
 
 			queryClient.setQueriesData(
-				{ queryKey: ['task-subtasks'] },
-				(old: TaskEntity[] | undefined) =>
-					old?.map((task) => (task.id === taskId ? { ...task, state } : task))
+				{
+					queryKey: ['task-subtasks']
+				},
+				(old: TaskEntity[] | undefined) => {
+					return old?.map((task) => {
+						return task.id === taskId ? { ...task, state } : task
+					})
+				}
 			)
 
 			return { previous }
