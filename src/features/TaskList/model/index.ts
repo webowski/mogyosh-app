@@ -1,6 +1,7 @@
 export { useCreateTask } from './useCreateTask'
 export { useTaskById } from './useTaskById'
 export { useTasks } from './useTasks'
+export { useTasksByCategory } from './useTasksByCategory'
 export { useTasksByDate } from './useTasksByDate'
 export { useTasksCountByDay } from './useTasksCountByDay'
 export { useTasksCountByPeriod } from './useTasksCountByPeriod'
@@ -17,6 +18,8 @@ export type {
 	TasksByDate,
 	TaskSection
 } from './task.types'
+
+export type { TaskCategoryGroupEntity } from './useTasksByCategory'
 
 export {
 	countTasksByDay,

@@ -1,20 +1,14 @@
 import { useState } from 'react'
 import { ActivityIndicator, Text, TextInput, View } from 'react-native'
 
-import { useTasks } from '@/features/TaskList/model'
-import TaskListItem from '@/features/TaskList/TaskListItem'
+import { useTasksByCategory } from '@/features/TaskList/model'
+import TaskCategoryGroup from '@/features/TaskList/TaskCategoryGroup'
 import ScrollBox from '@/shared/ui/ScrollBox'
 
 export default function AllTasksScreen() {
 	const [searchQuery, setSearchQuery] = useState('')
 
-	const {
-		data: tasks,
-		isLoading,
-		error
-	} = useTasks({
-		searchQuery: searchQuery || undefined
-	})
+	const { data: categoryGroups, isLoading, error } = useTasksByCategory()
 
 	if (isLoading) return <ActivityIndicator />
 	if (error) return <Text>Ошибка загрузки</Text>
@@ -29,8 +23,12 @@ export default function AllTasksScreen() {
 					style={{ flex: 1, borderWidth: 1, padding: 8 }}
 				/>
 
-				{tasks?.map((task) => (
-					<TaskListItem key={task.id} data={task} />
+				{categoryGroups?.map((group) => (
+					<TaskCategoryGroup
+						key={group.category.id}
+						group={group}
+						searchQuery={searchQuery}
+					/>
 				))}
 			</View>
 		</ScrollBox>
