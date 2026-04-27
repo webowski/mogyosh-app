@@ -4,7 +4,6 @@
 	"version": "1.0.0",
 	"scripts": {
 		"start": "bunx expo start",
-		"reset-project": "bun ./package-scripts/reset-project.js",
 		"android": "bunx expo start --android",
 		"ios": "bunx expo start --ios",
 		"web": "bunx expo start --web",
