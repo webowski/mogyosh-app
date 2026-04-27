@@ -51,8 +51,11 @@ export default function TaskScreen() {
 						subtasks.map((subtask) => (
 							<ChecklistItem
 								key={subtask.id}
-								data={subtask}
-								onToggle={handleToggleSubtask}
+								checked={subtask.state === 'done'}
+								text={subtask.info}
+								onToggle={(value) =>
+									handleToggleSubtask(subtask.id, subtask.state !== 'done')
+								}
 							/>
 						))}
 				</View>

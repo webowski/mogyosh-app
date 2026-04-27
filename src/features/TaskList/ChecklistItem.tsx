@@ -6,23 +6,26 @@ import Animated, {
 	withTiming
 } from 'react-native-reanimated'
 
-import { TaskEntity } from '@/shared/domain/task'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 type ChecklistItemProps = {
-	data: TaskEntity
-	onToggle?: (id: string, completed: boolean) => void
+	checked: boolean
+	text: string
+	onToggle: (value: boolean) => void
 }
 
-export const ChecklistItem = ({ data, onToggle }: ChecklistItemProps) => {
+export const ChecklistItem = ({
+	checked,
+	text,
+	onToggle
+}: ChecklistItemProps) => {
 	const { theme } = useUnistyles()
-	const completed = data.state === 'done'
-	const progress = useSharedValue(completed ? 1 : 0)
+	const progress = useSharedValue(checked ? 1 : 0)
 
 	const handlePress = () => {
-		const next = !completed
+		const next = !checked
 		progress.value = withTiming(next ? 1 : 0, { duration: 250 })
-		onToggle?.(data.id, next)
+		onToggle(next)
 	}
 
 	const checkboxStyle = useAnimatedStyle(() => ({
@@ -39,17 +42,15 @@ export const ChecklistItem = ({ data, onToggle }: ChecklistItemProps) => {
 	}))
 
 	const textStyle = useAnimatedStyle(() => ({
-		opacity: withTiming(completed ? 0.6 : 1, { duration: 250 })
+		opacity: withTiming(checked ? 0.6 : 1, { duration: 250 })
 	}))
 
 	return (
 		<Pressable onPress={handlePress} style={styles.container}>
 			<Animated.View style={[styles.checkbox, checkboxStyle]}>
-				{completed && <Text style={styles.checkmark}>✓</Text>}
+				{checked && <Text style={styles.checkmark}>✓</Text>}
 			</Animated.View>
-			<Animated.Text style={[styles.text, textStyle]}>
-				{data.info}
-			</Animated.Text>
+			<Animated.Text style={[styles.text, textStyle]}>{text}</Animated.Text>
 		</Pressable>
 	)
 }
