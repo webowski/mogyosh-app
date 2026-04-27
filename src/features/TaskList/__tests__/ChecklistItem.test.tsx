@@ -35,7 +35,7 @@ describe('ChecklistItem', () => {
 		const longText =
 			'Это очень длинный текст, который может занимать несколько строк и проверять, как компонент обрабатывает длинные строки без поломки layout'
 
-		const { getByText, getByTestId } = render(
+		const { getByText } = render(
 			<ChecklistItem checked={false} text={longText} onToggle={mockOnToggle} />
 		)
 
@@ -65,7 +65,7 @@ describe('ChecklistItem', () => {
 	})
 
 	it('корректно отображается с checked=true при инициализации', () => {
-		const { getByText, getByLabelText } = render(
+		const { getByText } = render(
 			<ChecklistItem
 				checked={true}
 				text='Инициализировано как выполненное'
@@ -133,7 +133,7 @@ describe('ChecklistItem', () => {
 	})
 
 	it('обрабатывает множественные нажатия корректно', () => {
-		const { getByText } = render(
+		const { getByText, rerender } = render(
 			<ChecklistItem
 				checked={false}
 				text='Множественные нажатия'
@@ -145,8 +145,14 @@ describe('ChecklistItem', () => {
 		expect(mockOnToggle).toHaveBeenCalledTimes(1)
 		expect(mockOnToggle).toHaveBeenLastCalledWith(true)
 
-		// После первого нажатия checked становится true, но компонент не перерендеривается в тесте
-		// Поэтому проверяем общее количество вызовов
+		rerender(
+			<ChecklistItem
+				checked={true}
+				text='Множественные нажатия'
+				onToggle={mockOnToggle}
+			/>
+		)
+
 		fireEvent.press(getByText('Множественные нажатия'))
 		expect(mockOnToggle).toHaveBeenCalledTimes(2)
 		expect(mockOnToggle).toHaveBeenLastCalledWith(false)
@@ -203,7 +209,7 @@ describe('ChecklistItem', () => {
 	})
 
 	it('передаёт правильные значения при последовательных нажатиях', () => {
-		const { getByText } = render(
+		const { getByText, rerender } = render(
 			<ChecklistItem
 				checked={true}
 				text='Смена состояния'
@@ -211,11 +217,17 @@ describe('ChecklistItem', () => {
 			/>
 		)
 
-		// Первое нажатие: true -> false
 		fireEvent.press(getByText('Смена состояния'))
 		expect(mockOnToggle).toHaveBeenLastCalledWith(false)
 
-		// Второе нажатие: false -> true
+		rerender(
+			<ChecklistItem
+				checked={false}
+				text='Смена состояния'
+				onToggle={mockOnToggle}
+			/>
+		)
+
 		fireEvent.press(getByText('Смена состояния'))
 		expect(mockOnToggle).toHaveBeenLastCalledWith(true)
 	})
