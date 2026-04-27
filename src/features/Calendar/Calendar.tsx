@@ -21,6 +21,7 @@ import { scheduleOnRN } from 'react-native-worklets'
 import { useSettingsStore } from '@/services/settings/model/settingsStore'
 import { getDateFnsLocale } from '@/shared/i18n/dateFnsLocale'
 import { useLanguageChange } from '@/shared/i18n/useLanguageChange'
+import { capitalize } from '@/shared/lib/string'
 import { useCalendarStore } from '@/shared/model/calendarStore'
 import { styleVars } from '@/shared/styles/common'
 import { Squircle } from '@/shared/ui/Squircle'
@@ -122,7 +123,7 @@ function WeekdayHeader({ weekStartDayIndex, dayWidth }: WeekdayHeaderProps) {
 			const dayIndex = (weekStartDayIndex + i) % 7
 			// Берём любую дату с нужным днём недели
 			const referenceDate = new Date(2024, 0, 7 + dayIndex) // 2024-01-07 = воскресенье
-			return format(referenceDate, 'EEEEEE', { locale })
+			return capitalize(format(referenceDate, 'EEEEEE', { locale }))
 		})
 	}, [weekStartDayIndex])
 

@@ -1,3 +1,4 @@
+import { format, isSameDay, isToday } from 'date-fns'
 import React, { useEffect, useMemo, useState } from 'react'
 import {
 	Dimensions,
@@ -6,7 +7,6 @@ import {
 	useWindowDimensions,
 	View
 } from 'react-native'
-
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import Animated, {
 	ReduceMotion,
@@ -18,11 +18,10 @@ import Animated, {
 import { StyleSheet } from 'react-native-unistyles'
 import { scheduleOnRN } from 'react-native-worklets'
 
-import { format, isSameDay, isToday } from 'date-fns'
-
 import { useSettingsStore } from '@/services/settings/model/settingsStore'
 import { getDateFnsLocale } from '@/shared/i18n/dateFnsLocale'
 import { useLanguageChange } from '@/shared/i18n/useLanguageChange'
+import { capitalize } from '@/shared/lib/string'
 import { getWeekStartDate } from '@/shared/lib/time'
 import { useCalendarStore } from '@/shared/model/calendarStore'
 import { styleVars } from '@/shared/styles/common'
@@ -47,7 +46,9 @@ const getWeekDays = (weekStart: Date, today: Date) => {
 		return {
 			date: dayDate,
 			dayNumber: dayDate.getDate(),
-			weekday: format(dayDate, 'EEEEEE', { locale: getDateFnsLocale() }),
+			weekday: capitalize(
+				format(dayDate, 'EEEEEE', { locale: getDateFnsLocale() })
+			),
 			isToday: isSameDay(dayDate, today)
 		}
 	})
@@ -309,8 +310,8 @@ const styles = StyleSheet.create((theme) => ({
 		width: dayWidth,
 		minWidth: 40,
 		alignItems: 'center',
-		paddingTop: 3,
-		paddingBottom: 6,
+		paddingTop: 4,
+		paddingBottom: 5,
 		paddingHorizontal: 6,
 		borderRadius: 7
 	}),
@@ -323,7 +324,7 @@ const styles = StyleSheet.create((theme) => ({
 		fontWeight: '500',
 		// color: theme.colors.minor,
 		color: theme.colors.muted,
-		marginBottom: 2
+		marginBottom: 3
 	},
 	dayNumber: {
 		fontSize: 14,
