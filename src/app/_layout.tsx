@@ -1,18 +1,16 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { useEffect, useState } from 'react'
-import { ActivityIndicator, Text } from 'react-native'
-
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
+import { ActivityIndicator, Text } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import 'react-native-reanimated'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { useUnistyles } from 'react-native-unistyles'
 
-import { login } from '@/shared/api/auth'
-
 import Header from '@/features/Header/Header'
+import { login } from '@/shared/api/auth'
 
 export const unstable_settings = {
 	anchor: '(tabs)'
