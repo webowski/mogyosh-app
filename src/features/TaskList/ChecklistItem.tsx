@@ -5,7 +5,6 @@ import Animated, {
 	useSharedValue,
 	withTiming
 } from 'react-native-reanimated'
-
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 type ChecklistItemProps = {
@@ -20,22 +19,22 @@ export const ChecklistItem = ({
 	onToggle
 }: ChecklistItemProps) => {
 	const { theme } = useUnistyles()
-	const progress = useSharedValue(checked ? 1 : 0)
+	const animationProgress = useSharedValue(checked ? 1 : 0)
 
 	const handlePress = () => {
-		const next = !checked
-		progress.value = withTiming(next ? 1 : 0, { duration: 250 })
-		onToggle(next)
+		const newValue = !checked
+		animationProgress.value = withTiming(newValue ? 1 : 0, { duration: 250 })
+		onToggle(newValue)
 	}
 
 	const checkboxStyle = useAnimatedStyle(() => ({
 		backgroundColor: interpolateColor(
-			progress.value,
+			animationProgress.value,
 			[0, 1],
 			['transparent', theme.colors.primary]
 		),
 		borderColor: interpolateColor(
-			progress.value,
+			animationProgress.value,
 			[0, 1],
 			['#D1D5DB', theme.colors.primary]
 		)
