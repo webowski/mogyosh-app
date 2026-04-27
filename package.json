@@ -9,7 +9,10 @@
 		"ios": "bunx expo start --ios",
 		"web": "bunx expo start --web",
 		"lint": "bunx expo lint",
-		"add": "bunx expo install"
+		"add": "bunx expo install",
+		"test": "jest",
+		"test:watch": "jest --watch",
+		"test:coverage": "jest --coverage"
 	},
 	"dependencies": {
 		"@expo/vector-icons": "^15.0.2",
@@ -64,6 +67,9 @@
 		"jest": "~29.7.0",
 		"jest-expo": "~55.0.16",
 		"typescript": "~5.9.2"
+	},
+	"jest": {
+		"preset": "jest-expo"
 	},
 	"private": true
 }
