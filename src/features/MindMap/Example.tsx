@@ -1,7 +1,7 @@
-import { useWindowDimensions } from 'react-native'
-
 import { MindMap } from '@/features/MindMap/MindMap'
 import { MindMapNode } from '@/features/MindMap/types'
+import React from 'react'
+import { useWindowDimensions } from 'react-native'
 
 const DEMO_DATA: MindMapNode = {
 	id: 'root',
@@ -76,7 +76,7 @@ const DEMO_DATA: MindMapNode = {
 	]
 }
 
-export default function RoadmapScreen() {
+export default function MindMapExample() {
 	const { width, height } = useWindowDimensions()
 
 	return <MindMap data={DEMO_DATA} width={width} height={height} />
