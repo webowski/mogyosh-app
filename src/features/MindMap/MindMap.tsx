@@ -7,9 +7,8 @@ import {
 	Text as SkiaText,
 	useFont
 } from '@shopify/react-native-skia'
-import { LoadSkiaWeb } from '@shopify/react-native-skia/lib/module/web'
-import React, { useEffect, useMemo, useState } from 'react'
-import { Alert, Platform, StyleSheet, Text, View } from 'react-native'
+import React, { useMemo } from 'react'
+import { Alert, StyleSheet, View } from 'react-native'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import { useDerivedValue, useSharedValue } from 'react-native-reanimated'
 
@@ -128,18 +127,6 @@ const renderNodes = (
 }
 
 export default function MindMap() {
-	const [skiaReady, setSkiaReady] = useState(false)
-
-	useEffect(() => {
-		if (Platform.OS === 'web') {
-			LoadSkiaWeb()
-				.then(() => setSkiaReady(true))
-				.catch(console.error)
-		} else {
-			setSkiaReady(true)
-		}
-	}, [])
-
 	const font = useFont(null, 13)
 
 	const root = useMemo<Node>(
@@ -206,14 +193,6 @@ export default function MindMap() {
 	})
 
 	const gesture = Gesture.Simultaneous(pan, pinch, longPress)
-
-	if (!skiaReady) {
-		return (
-			<View style={styles.container}>
-				<Text>Загрузка Skia...</Text>
-			</View>
-		)
-	}
 
 	return (
 		<View style={styles.container}>
