@@ -42,6 +42,7 @@ This is a React Native mobile application built with Expo 55 and TypeScript. The
 - Authentication: Supabase
 - Styling: CSS-in-JS with Unistyles
 - Navigation: React Navigation
+- React Native Skia для canvas графики
 
 ## React Native Expo разработка
 
@@ -92,3 +93,7 @@ src/
 - Enforced by ESLint with Expo configuration
 - Strict TypeScript compilation
 - Consistent code style throughout
+
+## React Native Skia для canvas графики
+
+- Unsupported APIs для React Native Web: PathEffectFactory.MakeSum(), PathEffectFactory.MakeCompose(), PathFactory.MakeFromText(), ShaderFilter. Остальные работают отлично.
