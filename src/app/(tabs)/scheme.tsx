@@ -70,7 +70,7 @@ const DEMO_DATA: MindMapNode = {
 	]
 }
 
-export default function RoadmapScreen() {
+export default function SchemeScreen() {
 	const { width, height } = useWindowDimensions()
 
 	return <MindMap data={DEMO_DATA} width={width} height={height} />

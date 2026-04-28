@@ -44,9 +44,9 @@ export default function NavPanelLayout() {
 					}}
 				/>
 				<Tabs.Screen
-					name='roadmap'
+					name='scheme'
 					options={{
-						title: t('screen.Roadmap'),
+						title: t('screen.Scheme'),
 						href: null,
 						headerShown: true,
 						header: (props) => <Header {...props} />

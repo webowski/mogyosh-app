@@ -19,7 +19,7 @@ const buildSwipeSwitchItems = (selectedDate: Date): SwipeSwitchItems => {
 			{ task: t('screen.Task') }
 		],
 		[
-			{ roadmap: t('screen.Roadmap') },
+			{ scheme: t('screen.Scheme') },
 			{ calendar: t('screen.Calendar') },
 			{ progress: t('screen.Progress') }
 		]
