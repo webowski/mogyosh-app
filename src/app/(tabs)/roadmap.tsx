@@ -1,5 +1,5 @@
-import Roadmap from '@/features/Roadmap/Roadmap'
+import MindMap from '@/features/MindMap/MindMap'
 
 export default function RoadmapScreen() {
-	return <Roadmap />
+	return <MindMap />
 }
