@@ -1,4 +1,4 @@
-import { DataSourceParam, matchFont, useFont } from '@shopify/react-native-skia'
+import { matchFont, useFont } from '@shopify/react-native-skia'
 import { Platform } from 'react-native'
 
 export function useCanvasFont(fontSize: number) {
@@ -14,9 +14,9 @@ export function useCanvasFont(fontSize: number) {
 				})
 			: null
 
-	const webFontSource: DataSourceParam =
+	const webFontSource =
 		Platform.OS === 'web'
-			? { uri: 'https://fonts.gstatic.com/s/roboto/v32/KFOmCnqEu92Fr1Me5Q.ttf' }
+			? 'https://fonts.gstatic.com/s/roboto/v32/KFOmCnqEu92Fr1Me5Q.ttf'
 			: null
 
 	const webFont = useFont(webFontSource, fontSize)
