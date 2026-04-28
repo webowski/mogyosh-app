@@ -82,11 +82,11 @@ export function MindMapRenderer({
 					return (
 						<Group key={node.id}>
 							<RoundedRect
-								x={x - 1}
-								y={y - 1}
-								width={NODE_WIDTH + 2}
-								height={NODE_HEIGHT + 2}
-								r={RADIUS}
+								x={x - 2}
+								y={y - 2}
+								width={NODE_WIDTH + 4}
+								height={NODE_HEIGHT + 4}
+								r={RADIUS + 4}
 								color={colors.border}
 							/>
 							<RoundedRect

@@ -66,12 +66,6 @@ const DEMO_DATA: MindMapNode = {
 			label: 'Category',
 			type: 'category',
 			children: []
-		},
-		{
-			id: 'cat7',
-			label: 'Category',
-			type: 'category',
-			children: []
 		}
 	]
 }

@@ -12,14 +12,14 @@ export const COLORS = {
 		border: '#6B8CFF'
 	},
 	subcategory: {
-		bg: '#F0F0F0',
-		text: '#555555',
-		border: '#BBBBBB'
+		bg: '#97A2C4',
+		text: '#fff',
+		border: '#97A2C4'
 	},
 	task: {
 		bg: '#FFFFFF',
 		text: '#444444',
-		border: '#BBBBBB'
+		border: '#97A2C4'
 	},
 	edge: '#6B8CFF',
 	canvasBg: '#F7F8FC'
