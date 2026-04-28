@@ -73,5 +73,5 @@ const DEMO_DATA: MindMapNode = {
 export default function SchemeScreen() {
 	const { width, height } = useWindowDimensions()
 
-	return <MindMap data={DEMO_DATA} width={width} height={height} />
+	return <MindMap data={DEMO_DATA} width={width} height={height - 94 - 43} />
 }
