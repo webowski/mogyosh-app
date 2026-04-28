@@ -121,4 +121,28 @@ export function flattenLayout(root: LayoutNode): LayoutNode[] {
 	return result
 }
 
+export function getLayoutBounds(root: LayoutNode) {
+	const nodes = flattenLayout(root)
+	let minX = Infinity
+	let maxX = -Infinity
+	let minY = Infinity
+	let maxY = -Infinity
+
+	for (const node of nodes) {
+		minX = Math.min(minX, node.x - NODE_WIDTH / 2)
+		maxX = Math.max(maxX, node.x + NODE_WIDTH / 2)
+		minY = Math.min(minY, node.y - NODE_HEIGHT / 2)
+		maxY = Math.max(maxY, node.y + NODE_HEIGHT / 2)
+	}
+
+	return {
+		minX,
+		maxX,
+		minY,
+		maxY,
+		width: maxX - minX,
+		height: maxY - minY
+	}
+}
+
 export { NODE_HEIGHT, NODE_WIDTH }

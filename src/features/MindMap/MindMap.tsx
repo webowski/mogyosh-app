@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { StyleSheet, View } from 'react-native'
 import {
 	Gesture,
@@ -8,7 +8,7 @@ import {
 import { useSharedValue } from 'react-native-reanimated'
 
 import { MindMapRenderer } from './MindMapRenderer'
-import { computeLayout } from './model/layout'
+import { computeLayout, getLayoutBounds } from './model/layout'
 import { COLORS } from './model/theme'
 import { MindMapNode } from './model/types'
 
@@ -20,16 +20,55 @@ interface Props {
 
 const MIN_SCALE = 0.3
 const MAX_SCALE = 3
+const PADDING = 24
+
+function computeFitTransform(
+	layout: import('./model/types').LayoutNode,
+	width: number,
+	height: number
+) {
+	const bounds = getLayoutBounds(layout)
+	const boundsWidth = bounds.width + PADDING * 2
+	const boundsHeight = bounds.height + PADDING * 2
+
+	const nextScale = Math.min(
+		MAX_SCALE,
+		Math.max(MIN_SCALE, Math.min(width / boundsWidth, height / boundsHeight))
+	)
+
+	const centerX = (bounds.minX + bounds.maxX) / 2
+	const centerY = (bounds.minY + bounds.maxY) / 2
+
+	return {
+		scale: nextScale,
+		translateX: -centerX * nextScale,
+		translateY: -centerY * nextScale
+	}
+}
 
 export function MindMap({ data, width, height }: Props) {
 	const layout = useMemo(() => computeLayout(data), [data])
 
-	const translateX = useSharedValue(0)
-	const translateY = useSharedValue(0)
-	const savedTx = useSharedValue(0)
-	const savedTy = useSharedValue(0)
-	const scale = useSharedValue(1)
-	const savedScale = useSharedValue(1)
+	const fit = useMemo(
+		() => computeFitTransform(layout, width, height),
+		[layout, width, height]
+	)
+
+	const translateX = useSharedValue(fit.translateX)
+	const translateY = useSharedValue(fit.translateY)
+	const savedTx = useSharedValue(fit.translateX)
+	const savedTy = useSharedValue(fit.translateY)
+	const scale = useSharedValue(fit.scale)
+	const savedScale = useSharedValue(fit.scale)
+
+	useEffect(() => {
+		translateX.value = fit.translateX
+		translateY.value = fit.translateY
+		savedTx.value = fit.translateX
+		savedTy.value = fit.translateY
+		scale.value = fit.scale
+		savedScale.value = fit.scale
+	}, [fit, translateX, translateY, savedTx, savedTy, scale, savedScale])
 
 	const panGesture = Gesture.Pan()
 		.onStart(() => {
