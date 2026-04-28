@@ -7,6 +7,7 @@ import {
 	vec
 } from '@shopify/react-native-skia'
 import React, { useMemo } from 'react'
+import { SharedValue, useDerivedValue } from 'react-native-reanimated'
 
 import { flattenLayout, NODE_HEIGHT, NODE_WIDTH } from './layout'
 import { COLORS, getNodeColors } from './theme'
@@ -17,13 +18,13 @@ interface Props {
 	root: LayoutNode
 	width: number
 	height: number
-	translateX: number
-	translateY: number
-	scale: number
+	translateX: SharedValue<number>
+	translateY: SharedValue<number>
+	scale: SharedValue<number>
 }
 
 const RADIUS = 18
-const FONT_SIZE = 13
+const FONT_SIZE = 14
 
 export function MindMapRenderer({
 	root,
@@ -50,13 +51,18 @@ export function MindMapRenderer({
 		return result
 	}, [nodes])
 
-	const cx = width / 2 + translateX
-	const cy = height / 2 + translateY
+	const cx = width / 2
+	const cy = height / 2
+
+	const transform = useDerivedValue(() => [
+		{ translateX: cx + translateX.value },
+		{ translateY: cy + translateY.value },
+		{ scale: scale.value }
+	])
 
 	return (
 		<Canvas style={{ width, height }}>
-			<Group transform={[{ translateX: cx }, { translateY: cy }, { scale }]}>
-				{/* Edges */}
+			<Group transform={transform}>
 				{edges.map(({ from, to }, i) => (
 					<Line
 						key={`edge-${i}`}
@@ -68,7 +74,6 @@ export function MindMapRenderer({
 					/>
 				))}
 
-				{/* Nodes */}
 				{nodes.map((node) => {
 					const colors = getNodeColors(node.type)
 					const x = node.x - NODE_WIDTH / 2
@@ -76,7 +81,6 @@ export function MindMapRenderer({
 
 					return (
 						<Group key={node.id}>
-							{/* Border */}
 							<RoundedRect
 								x={x - 1}
 								y={y - 1}
@@ -85,7 +89,6 @@ export function MindMapRenderer({
 								r={RADIUS}
 								color={colors.border}
 							/>
-							{/* Background */}
 							<RoundedRect
 								x={x}
 								y={y}
@@ -94,7 +97,6 @@ export function MindMapRenderer({
 								r={RADIUS}
 								color={colors.bg}
 							/>
-							{/* Label */}
 							{font && (
 								<Text
 									x={node.x - font.getTextWidth(node.label) / 2}
