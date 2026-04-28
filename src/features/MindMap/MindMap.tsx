@@ -6,10 +6,11 @@ import {
 	GestureHandlerRootView
 } from 'react-native-gesture-handler'
 import { useSharedValue } from 'react-native-reanimated'
-import { computeLayout } from './layout'
+
 import { MindMapRenderer } from './MindMapRenderer'
-import { COLORS } from './theme'
-import { MindMapNode } from './types'
+import { computeLayout } from './model/layout'
+import { COLORS } from './model/theme'
+import { MindMapNode } from './model/types'
 
 interface Props {
 	data: MindMapNode

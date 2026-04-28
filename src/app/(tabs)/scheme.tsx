@@ -1,7 +1,7 @@
 import { useWindowDimensions } from 'react-native'
 
 import { MindMap } from '@/features/MindMap/MindMap'
-import { MindMapNode } from '@/features/MindMap/types'
+import { MindMapNode } from '@/features/MindMap/model/types'
 
 const DEMO_DATA: MindMapNode = {
 	id: 'root',
