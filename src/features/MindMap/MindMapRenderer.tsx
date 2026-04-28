@@ -2,17 +2,16 @@ import {
 	Canvas,
 	Group,
 	Line,
-	matchFont,
 	RoundedRect,
 	Text,
 	vec
 } from '@shopify/react-native-skia'
 import React, { useMemo } from 'react'
-import { Platform } from 'react-native'
 
 import { flattenLayout, NODE_HEIGHT, NODE_WIDTH } from './layout'
 import { COLORS, getNodeColors } from './theme'
 import { LayoutNode } from './types'
+import { useCanvasFont } from './useСanvasFont'
 
 interface Props {
 	root: LayoutNode
@@ -34,14 +33,7 @@ export function MindMapRenderer({
 	translateY,
 	scale
 }: Props) {
-	const font = matchFont({
-		fontFamily: Platform.select({
-			ios: 'system-ui',
-			android: 'sans-serif'
-		}),
-		fontSize: FONT_SIZE,
-		fontWeight: 'normal'
-	})
+	const font = useCanvasFont(FONT_SIZE)
 
 	const nodes = useMemo(() => flattenLayout(root), [root])
 
