@@ -11,7 +11,7 @@ import { SharedValue, useDerivedValue } from 'react-native-reanimated'
 
 import { flattenLayout, NODE_HEIGHT, NODE_WIDTH } from './model/layout'
 import { COLORS, getNodeColors } from './model/theme'
-import { LayoutNode } from './model/types'
+import type { LayoutNode } from './model/types'
 import { useCanvasFont } from './model/useСanvasFont'
 
 interface Props {

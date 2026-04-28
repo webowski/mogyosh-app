@@ -1,4 +1,4 @@
-import { LayoutNode, MindMapNode } from './types'
+import type { LayoutNode, MindMapNode } from './types'
 
 const NODE_WIDTH = 110
 const NODE_HEIGHT = 36

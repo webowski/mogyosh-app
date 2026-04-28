@@ -10,7 +10,7 @@ import { useSharedValue } from 'react-native-reanimated'
 import { MindMapRenderer } from './MindMapRenderer'
 import { computeLayout, getLayoutBounds } from './model/layout'
 import { COLORS } from './model/theme'
-import { MindMapNode } from './model/types'
+import type { LayoutNode, MindMapNode } from './model/types'
 
 interface Props {
 	data: MindMapNode
@@ -23,7 +23,7 @@ const MAX_SCALE = 3
 const PADDING = 24
 
 function computeFitTransform(
-	layout: import('./model/types').LayoutNode,
+	layout: LayoutNode,
 	width: number,
 	height: number
 ) {

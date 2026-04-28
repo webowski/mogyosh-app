@@ -1,4 +1,4 @@
-import { NodeType } from './types'
+import type { NodeType } from './types'
 
 export const COLORS = {
 	root: {
