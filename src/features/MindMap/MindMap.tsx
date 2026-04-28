@@ -7,10 +7,10 @@ import {
 	Text as SkiaText,
 	useFont
 } from '@shopify/react-native-skia'
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Alert, StyleSheet, View } from 'react-native'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
-import { useDerivedValue, useSharedValue } from 'react-native-reanimated'
+import { useSharedValue } from 'react-native-reanimated'
 
 type Node = {
 	id: string
@@ -20,12 +20,14 @@ type Node = {
 	y?: number
 }
 
+type Position = { x: number; y: number }
+
 const NODE_RADIUS = 28
 const BASE_RADIUS = 120
 const LEVEL_GAP = 110
 
 const computeRadialPositions = (root: Node) => {
-	const positions = new Map<string, { x: number; y: number }>()
+	const positions = new Map<string, Position>()
 
 	const calculate = (
 		node: Node,
@@ -54,10 +56,7 @@ const computeRadialPositions = (root: Node) => {
 	return positions
 }
 
-const renderConnections = (
-	positions: Map<string, { x: number; y: number }>,
-	root: Node
-) => {
+const renderConnections = (positions: Map<string, Position>, root: Node) => {
 	const paths: React.ReactNode[] = []
 
 	const draw = (node: Node) => {
@@ -91,7 +90,7 @@ const renderConnections = (
 }
 
 const renderNodes = (
-	positions: Map<string, { x: number; y: number }>,
+	positions: Map<string, Position>,
 	root: Node,
 	font: any
 ) => {
@@ -126,8 +125,32 @@ const renderNodes = (
 	return nodes
 }
 
+// Helper function to find closest node
+const findClosestNode = (
+	positions: Map<string, Position>,
+	canvasX: number,
+	canvasY: number,
+	threshold: number
+): string | null => {
+	let closestId: string | null = null
+	let minDist = Infinity
+
+	positions.forEach((pos, id) => {
+		const dx = pos.x - canvasX
+		const dy = pos.y - canvasY
+		const dist = dx * dx + dy * dy
+		if (dist < minDist && dist < threshold) {
+			minDist = dist
+			closestId = id
+		}
+	})
+
+	return closestId
+}
+
 export default function MindMap() {
 	const font = useFont(null, 13)
+	const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 })
 
 	const root = useMemo<Node>(
 		() => ({
@@ -149,11 +172,36 @@ export default function MindMap() {
 		[]
 	)
 
-	const scale = useSharedValue(1)
+	const { positions, maxRadius } = useMemo(() => {
+		const pos = computeRadialPositions(root)
+		let maxR = NODE_RADIUS
+		pos.forEach((p) => {
+			const dist = Math.sqrt(p.x * p.x + p.y * p.y) + NODE_RADIUS
+			if (dist > maxR) maxR = dist
+		})
+		return { positions: pos, maxRadius: maxR }
+	}, [root])
+
+	const minDimension = Math.min(canvasSize.width, canvasSize.height)
+	const padding = 40
+	const fitScale =
+		canvasSize.width > 0 && canvasSize.height > 0
+			? Math.min(1, (minDimension / 2 - padding) / maxRadius)
+			: 1
+
+	const [scaleValue, setScaleValue] = useState(1)
+	const scale = useSharedValue(scaleValue)
 	const translateX = useSharedValue(0)
 	const translateY = useSharedValue(0)
 
-	const positions = useDerivedValue(() => computeRadialPositions(root))
+	// Обновить масштаб при изменении размеров холста
+	useEffect(() => {
+		if (canvasSize.width > 0 && canvasSize.height > 0) {
+			scale.value = fitScale
+			setScaleValue(fitScale)
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [canvasSize])
 
 	const pan = Gesture.Pan().onChange((e) => {
 		translateX.value += e.changeX / scale.value
@@ -161,53 +209,60 @@ export default function MindMap() {
 	})
 
 	const pinch = Gesture.Pinch().onChange((e) => {
-		scale.value = Math.max(0.3, Math.min(3, scale.value * e.scaleChange))
+		const newScale = Math.max(0.3, Math.min(3, scale.value * e.scaleChange))
+		scale.value = newScale
+		setScaleValue(newScale)
 	})
 
 	const longPress = Gesture.LongPress().onEnd((e) => {
-		const canvasX = (e.x - translateX.value) / scale.value
-		const canvasY = (e.y - translateY.value) / scale.value
+		const centerX = canvasSize.width / 2
+		const centerY = canvasSize.height / 2
 
-		let closestId: string | null = null
-		let minDist = Infinity
+		const canvasX = (e.x - centerX - translateX.value) / scale.value
+		const canvasY = (e.y - centerY - translateY.value) / scale.value
 
-		positions.value.forEach((pos, id) => {
-			const dx = pos.x - canvasX
-			const dy = pos.y - canvasY
-			const dist = dx * dx + dy * dy
-			if (dist < minDist && dist < NODE_RADIUS * NODE_RADIUS * 3) {
-				minDist = dist
-				closestId = id
-			}
-		})
+		const closestId = findClosestNode(
+			positions,
+			canvasX,
+			canvasY,
+			NODE_RADIUS * NODE_RADIUS * 3
+		)
 
 		if (closestId) {
 			Alert.alert('Узел нажат', closestId)
 		} else {
-			root.children.push({
-				id: Date.now().toString(),
-				label: 'Новая',
-				children: []
-			})
+			Alert.alert('Пустое место', 'Добавление узла')
 		}
 	})
 
 	const gesture = Gesture.Simultaneous(pan, pinch, longPress)
 
 	return (
-		<View style={styles.container}>
+		<View
+			style={styles.container}
+			onLayout={(e) =>
+				setCanvasSize({
+					width: e.nativeEvent.layout.width,
+					height: e.nativeEvent.layout.height
+				})
+			}
+		>
 			<GestureDetector gesture={gesture}>
 				<Canvas style={styles.canvas}>
-					<Group
-						transform={[
-							{ translateX: translateX.value },
-							{ translateY: translateY.value },
-							{ scale: scale.value }
-						]}
-					>
-						{renderConnections(positions.value, root)}
-						{renderNodes(positions.value, root, font)}
-					</Group>
+					{canvasSize.width > 0 && canvasSize.height > 0 && (
+						<Group
+							transform={[
+								{ translateX: canvasSize.width / 2 },
+								{ translateY: canvasSize.height / 2 },
+								{ translateX: translateX.value },
+								{ translateY: translateY.value },
+								{ scale: scaleValue }
+							]}
+						>
+							{renderConnections(positions, root)}
+							{renderNodes(positions, root, font)}
+						</Group>
+					)}
 				</Canvas>
 			</GestureDetector>
 		</View>
