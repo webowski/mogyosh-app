@@ -24,7 +24,7 @@ interface MindMapCanvasProps {
 }
 
 const RADIUS = 18
-const FONT_SIZE = 14
+const FONT_SIZE = 15
 
 export function MindMapCanvas({
 	root,
