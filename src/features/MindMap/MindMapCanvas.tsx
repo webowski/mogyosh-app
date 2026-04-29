@@ -110,7 +110,7 @@ export function MindMapCanvas({
 						key={`vline-${i}`}
 						p1={vec(line.x, line.y1)}
 						p2={vec(line.x, line.y2)}
-						color={COLORS.edge}
+						color={COLORS.lineMinor}
 						strokeWidth={1.5}
 						style='stroke'
 					/>

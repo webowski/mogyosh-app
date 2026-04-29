@@ -21,6 +21,7 @@ export const COLORS = {
 		text: '#444444',
 		border: '#97A2C4'
 	},
+	lineMinor: '#97A2C4',
 	edge: '#6B8CFF',
 	canvasBg: '#F7F8FC'
 }
