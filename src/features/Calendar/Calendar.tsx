@@ -1,5 +1,5 @@
 import { format, isSameDay, isSameMonth } from 'date-fns'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import {
 	Dimensions,
 	Pressable,
@@ -145,14 +145,13 @@ const DayCellView = React.memo(function DayCellView({
 	cell,
 	selectedDate
 }: DayCellProps) {
-	const isDaySelected = isSameDay(selectedDate, cell.date)
-
-	const handlePress = useCallback(() => {
-		useCalendarStore.getState().setSelectedDate(cell.date)
-	}, [cell.date])
+	const isDaySelected = selectedDate.getTime() === cell.date.getTime()
 
 	return (
-		<Pressable onPress={handlePress} style={styles.dayPressable}>
+		<Pressable
+			onPress={() => useCalendarStore.getState().setSelectedDate(cell.date)}
+			style={styles.dayPressable}
+		>
 			<View
 				style={[
 					styles.day,
