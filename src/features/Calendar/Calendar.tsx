@@ -150,36 +150,32 @@ const DayCellView = React.memo(function DayCellView({
 	return (
 		<Pressable
 			onPress={() => useCalendarStore.getState().setSelectedDate(cell.date)}
-			style={styles.dayPressable}
+			style={[
+				styles.day,
+				isDaySelected && styles.day_selected,
+				cell.isToday && !isDaySelected && styles.day_today
+			]}
 		>
-			<View
+			<Text
 				style={[
-					styles.day,
-					isDaySelected && styles.day_selected,
-					cell.isToday && !isDaySelected && styles.day_today
+					styles.dayNumber,
+					!cell.isCurrentMonth && styles.dayNumber_otherMonth,
+					isDaySelected && styles.selectedText,
+					cell.isToday && !isDaySelected && styles.text_today
 				]}
 			>
-				<Text
-					style={[
-						styles.dayNumber,
-						!cell.isCurrentMonth && styles.dayNumber_otherMonth,
-						isDaySelected && styles.selectedText,
-						cell.isToday && !isDaySelected && styles.text_today
-					]}
-				>
-					{cell.dayNumber}
-				</Text>
-				<Text
-					style={[
-						styles.day__counter,
-						!cell.isCurrentMonth && styles.text_muted,
-						isDaySelected && styles.selectedText,
-						cell.isToday && !isDaySelected && styles.text_today
-					]}
-				>
-					1/5
-				</Text>
-			</View>
+				{cell.dayNumber}
+			</Text>
+			<Text
+				style={[
+					styles.day__counter,
+					!cell.isCurrentMonth && styles.text_muted,
+					isDaySelected && styles.selectedText,
+					cell.isToday && !isDaySelected && styles.text_today
+				]}
+			>
+				1/5
+			</Text>
 		</Pressable>
 	)
 })
@@ -405,15 +401,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		gap: 4
 	}),
 
-	dayPressable: {
-		flexDirection: 'row',
-		alignItems: 'stretch',
-		justifyContent: 'center',
-		flex: 1
-	},
 	day: {
-		// width: dayWidth,
-		// height: DAY_HEIGHT,
 		flex: 1,
 		padding: 6,
 		alignItems: 'flex-start',
