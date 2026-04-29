@@ -96,10 +96,8 @@ function placeVerticalChildren(
 	isAboveRoot: boolean,
 	isRightSide: boolean
 ): LayoutNode[] {
-	// Вертикальная линия выходит из боковой стороны категории (середина по Y)
-	const lineX = isRightSide
-		? parent.x + NODE_WIDTH / 2
-		: parent.x - NODE_WIDTH / 2
+	// Вертикальная линия выходит из центра категории (середина по X и Y)
+	const lineX = parent.x
 	// Задачи располагаются с соответствующей стороны от линии
 	const childX = isRightSide ? lineX + NODE_WIDTH / 2 : lineX - NODE_WIDTH / 2
 

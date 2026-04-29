@@ -57,9 +57,8 @@ export function MindMapCanvas({
 		const result: { x: number; y1: number; y2: number }[] = []
 		for (const n of nodes) {
 			if (n.children.length > 0 && n.type !== 'root') {
-				const isRightSide = n.x >= 0
-				const lineX = isRightSide ? n.x + NODE_WIDTH / 2 : n.x - NODE_WIDTH / 2
-				const y1 = n.y
+				const lineX = n.x // Линия из центра категории по X
+				const y1 = n.y // Центр категории по Y
 
 				// Находим крайнюю точку - центр последнего потомка
 				let extremeY = y1
