@@ -112,10 +112,9 @@ export const isCurrentMonth = (monthData: MonthData): boolean => {
 
 type WeekdayHeaderProps = {
 	weekStartDayIndex: number
-	dayWidth: number
 }
 
-function WeekdayHeader({ weekStartDayIndex, dayWidth }: WeekdayHeaderProps) {
+function WeekdayHeader({ weekStartDayIndex }: WeekdayHeaderProps) {
 	const headers = useMemo(() => {
 		const locale = getDateFnsLocale()
 		return Array.from({ length: 7 }, (_, i) => {
@@ -129,7 +128,7 @@ function WeekdayHeader({ weekStartDayIndex, dayWidth }: WeekdayHeaderProps) {
 	return (
 		<View style={styles.weekdayHeader}>
 			{headers.map((label, index) => (
-				<View key={index} style={styles.weekdayHeaderCell(dayWidth)}>
+				<View key={index} style={styles.weekdayHeaderCell}>
 					<Text style={styles.weekdayHeaderText}>{label}</Text>
 				</View>
 			))}
@@ -139,13 +138,11 @@ function WeekdayHeader({ weekStartDayIndex, dayWidth }: WeekdayHeaderProps) {
 
 type DayCellProps = {
 	cell: DayCell
-	dayWidth: number
 	selectedDate: Date
 }
 
 const DayCellView = React.memo(function DayCellView({
 	cell,
-	dayWidth,
 	selectedDate
 }: DayCellProps) {
 	const isDaySelected = isSameDay(selectedDate, cell.date)
@@ -158,7 +155,7 @@ const DayCellView = React.memo(function DayCellView({
 		<Pressable onPress={handlePress} style={styles.dayPressable}>
 			<View
 				style={[
-					styles.day(dayWidth),
+					styles.day,
 					isDaySelected && styles.day_selected,
 					cell.isToday && !isDaySelected && styles.day_today
 				]}
@@ -194,7 +191,6 @@ type MonthProps = {
 	swipeTranslationValue: SharedValue<number>
 	calendarWidth: number
 	calendarHeight: number
-	dayWidth: number
 	selectedDate: Date
 }
 
@@ -204,7 +200,6 @@ const Month = React.memo(function Month({
 	swipeTranslationValue,
 	calendarWidth,
 	calendarHeight,
-	dayWidth,
 	selectedDate
 }: MonthProps) {
 	const animatedStyle = useAnimatedStyle(() => ({
@@ -221,7 +216,6 @@ const Month = React.memo(function Month({
 						<DayCellView
 							key={cell.date.getTime()}
 							cell={cell}
-							dayWidth={dayWidth}
 							selectedDate={selectedDate}
 						/>
 					))}
@@ -241,15 +235,15 @@ export default function Calendar() {
 
 	const swipeTranslationValue = useSharedValue(0)
 
-	const { calendarWidth, calendarHeight, dayWidth } = useMemo(() => {
+	const { calendarWidth, calendarHeight } = useMemo(() => {
 		const calendarWidth = windowWidth - styleVars.sidePaddingSm * 2
 		let calendarHeight = windowHeight - styleVars.sidePaddingSm * 2 - 200
 		calendarHeight = calendarHeight > 560 ? 560 : calendarHeight
 
 		// const dayWidth = calendarWidth / 7
-		const dayWidth = (calendarWidth - 4 * 6) / 7
+		// const dayWidth = (calendarWidth - 4 * 6) / 7
 
-		return { calendarWidth, calendarHeight, dayWidth }
+		return { calendarWidth, calendarHeight }
 	}, [windowWidth, windowHeight])
 
 	useEffect(
@@ -332,10 +326,7 @@ export default function Calendar() {
 
 	return (
 		<View>
-			<WeekdayHeader
-				weekStartDayIndex={weekStartDayIndex}
-				dayWidth={dayWidth}
-			/>
+			<WeekdayHeader weekStartDayIndex={weekStartDayIndex} />
 			<GestureDetector gesture={panGesture}>
 				<View style={styles.container(calendarWidth, calendarHeight)}>
 					{monthsDataArray.map((monthData, index) => (
@@ -346,7 +337,6 @@ export default function Calendar() {
 							swipeTranslationValue={swipeTranslationValue}
 							calendarWidth={calendarWidth}
 							calendarHeight={calendarHeight}
-							dayWidth={dayWidth}
 							selectedDate={selectedDate}
 						/>
 					))}
@@ -385,15 +375,15 @@ const styles = StyleSheet.create((theme, rt) => ({
 		gap: 4,
 		marginBottom: 2
 	},
-	weekdayHeaderCell: (dayWidth: number) => ({
-		width: dayWidth,
+	weekdayHeaderCell: {
+		flex: 1,
 		height: 26,
 		alignItems: 'center',
 		justifyContent: 'center',
 		paddingVertical: 4,
 		backgroundColor: theme.colors.muted700,
 		borderRadius: 4
-	}),
+	},
 	weekdayHeaderText: {
 		fontSize: 12,
 		lineHeight: 12,
@@ -422,7 +412,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		justifyContent: 'center',
 		flex: 1
 	},
-	day: (dayWidth: number) => ({
+	day: {
 		// width: dayWidth,
 		// height: DAY_HEIGHT,
 		flex: 1,
@@ -431,7 +421,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		justifyContent: 'space-between',
 		borderRadius: 4,
 		backgroundColor: theme.colors.surface
-	}),
+	},
 	day_today: {
 		backgroundColor: theme.colors.primary800
 	},
