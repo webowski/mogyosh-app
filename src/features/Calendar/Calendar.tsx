@@ -1,5 +1,5 @@
 import { format, isSameDay, isSameMonth } from 'date-fns'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import {
 	Dimensions,
 	Pressable,
@@ -24,7 +24,6 @@ import { useLanguageChange } from '@/shared/i18n/useLanguageChange'
 import { capitalize } from '@/shared/lib/string'
 import { useCalendarStore } from '@/shared/model/calendarStore'
 import { styleVars } from '@/shared/styles/common'
-import { Squircle } from '@/shared/ui/Squircle'
 
 const BASE_SCREEN_WIDTH = Dimensions.get('window').width
 const BASE_CALENDAR_WIDTH = BASE_SCREEN_WIDTH - styleVars.sidePadding * 2
@@ -141,26 +140,28 @@ function WeekdayHeader({ weekStartDayIndex, dayWidth }: WeekdayHeaderProps) {
 type DayCellProps = {
 	cell: DayCell
 	dayWidth: number
+	selectedDate: Date
 }
 
-function DayCellView({ cell, dayWidth }: DayCellProps) {
-	const selectedDate = useCalendarStore((state) => state.selectedDate)
+const DayCellView = React.memo(function DayCellView({
+	cell,
+	dayWidth,
+	selectedDate
+}: DayCellProps) {
 	const isDaySelected = isSameDay(selectedDate, cell.date)
 
+	const handlePress = useCallback(() => {
+		useCalendarStore.getState().setSelectedDate(cell.date)
+	}, [cell.date])
+
 	return (
-		<Pressable
-			onPress={() => {
-				useCalendarStore.getState().setSelectedDate(cell.date)
-			}}
-			style={styles.dayPressable}
-		>
-			<Squircle
+		<Pressable onPress={handlePress} style={styles.dayPressable}>
+			<View
 				style={[
 					styles.day(dayWidth),
 					isDaySelected && styles.day_selected,
 					cell.isToday && !isDaySelected && styles.day_today
 				]}
-				cornerSmoothing={0.6}
 			>
 				<Text
 					style={[
@@ -182,10 +183,10 @@ function DayCellView({ cell, dayWidth }: DayCellProps) {
 				>
 					1/5
 				</Text>
-			</Squircle>
+			</View>
 		</Pressable>
 	)
-}
+})
 
 type MonthProps = {
 	monthData: MonthData
@@ -194,15 +195,17 @@ type MonthProps = {
 	calendarWidth: number
 	calendarHeight: number
 	dayWidth: number
+	selectedDate: Date
 }
 
-function Month({
+const Month = React.memo(function Month({
 	monthData,
 	index,
 	swipeTranslationValue,
 	calendarWidth,
 	calendarHeight,
-	dayWidth
+	dayWidth,
+	selectedDate
 }: MonthProps) {
 	const animatedStyle = useAnimatedStyle(() => ({
 		transform: [
@@ -219,16 +222,18 @@ function Month({
 							key={cell.date.getTime()}
 							cell={cell}
 							dayWidth={dayWidth}
+							selectedDate={selectedDate}
 						/>
 					))}
 				</View>
 			))}
 		</Animated.View>
 	)
-}
+})
 
 export default function Calendar() {
 	const today = useCalendarStore((state) => state.today)
+	const selectedDate = useCalendarStore((state) => state.selectedDate)
 	const { width: windowWidth, height: windowHeight } = useWindowDimensions()
 	const weekStartDayIndex = useSettingsStore((state) => state.weekStartDayIndex)
 
@@ -342,6 +347,7 @@ export default function Calendar() {
 							calendarWidth={calendarWidth}
 							calendarHeight={calendarHeight}
 							dayWidth={dayWidth}
+							selectedDate={selectedDate}
 						/>
 					))}
 				</View>
