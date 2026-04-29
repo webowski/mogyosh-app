@@ -5,6 +5,7 @@ const NODE_HEIGHT = 36
 const LEVEL_DISTANCE = 160
 const MIN_ANGULAR_GAP = 0.18 // radians
 const VERTICAL_GAP = 16
+const CATEGORY_TASK_GAP = 44
 
 function countLeaves(node: MindMapNode): number {
 	if (!node.children || node.children.length === 0) return 1
@@ -103,11 +104,11 @@ function placeVerticalChildren(
 
 	// Если категория выше корня - задачи идут вверх, иначе вниз
 	const startY = isAboveRoot
-		? parent.y - NODE_HEIGHT / 2 - VERTICAL_GAP
-		: parent.y + NODE_HEIGHT / 2 + VERTICAL_GAP
+		? parent.y - NODE_HEIGHT / 2 - CATEGORY_TASK_GAP
+		: parent.y + NODE_HEIGHT / 2 + CATEGORY_TASK_GAP
 
 	return children.map((child, index) => {
-		const offset = index * (NODE_HEIGHT + VERTICAL_GAP)
+		const offset = index === 0 ? 0 : (NODE_HEIGHT + VERTICAL_GAP) * index
 		const childY = isAboveRoot ? startY - offset : startY + offset
 		const layoutNode = buildLayoutNode(child, childX, childY, parent.id)
 
