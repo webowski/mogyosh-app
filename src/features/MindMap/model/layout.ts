@@ -4,6 +4,7 @@ const NODE_WIDTH = 110
 const NODE_HEIGHT = 36
 const LEVEL_DISTANCE = 160
 const MIN_ANGULAR_GAP = 0.18 // radians
+const VERTICAL_GAP = 16
 
 function countLeaves(node: MindMapNode): number {
 	if (!node.children || node.children.length === 0) return 1
@@ -46,13 +47,12 @@ export function computeLayout(root: MindMapNode): LayoutNode {
 		const midAngle = currentAngle + angleSpan / 2
 		currentAngle += angleSpan
 
-		const childNode = placeSubtree(
+		const childNode = placeRadialNode(
 			child,
 			0,
 			0,
 			LEVEL_DISTANCE,
 			midAngle,
-			angleSpan,
 			root.id
 		)
 		rootNode.children.push(childNode)
@@ -61,13 +61,12 @@ export function computeLayout(root: MindMapNode): LayoutNode {
 	return rootNode
 }
 
-function placeSubtree(
+function placeRadialNode(
 	node: MindMapNode,
 	parentX: number,
 	parentY: number,
 	distance: number,
 	angle: number,
-	angleSpan: number,
 	parentId: string
 ): LayoutNode {
 	const x = parentX + Math.cos(angle) * distance
@@ -77,35 +76,46 @@ function placeSubtree(
 
 	if (!node.children || node.children.length === 0) return layoutNode
 
-	const totalLeaves = node.children.reduce((sum, c) => sum + countLeaves(c), 0)
-
-	const halfSpan = Math.min(angleSpan / 2, (Math.PI * 2) / 3)
-	const startAngle = angle - halfSpan
-
-	let currentAngle = startAngle
-
-	for (const child of node.children) {
-		const leaves = countLeaves(child)
-		const childSpan = Math.max(
-			(leaves / totalLeaves) * halfSpan * 2,
-			MIN_ANGULAR_GAP
-		)
-		const midAngle = currentAngle + childSpan / 2
-		currentAngle += childSpan
-
-		const childNode = placeSubtree(
-			child,
-			x,
-			y,
-			LEVEL_DISTANCE * 0.85,
-			midAngle,
-			childSpan,
-			node.id
-		)
-		layoutNode.children.push(childNode)
-	}
+	// Если категория выше корня (y < 0), задача идет вверх, иначе вниз
+	const isAboveRoot = y < 0
+	layoutNode.children = placeVerticalChildren(
+		layoutNode,
+		node.children,
+		isAboveRoot
+	)
 
 	return layoutNode
+}
+
+function placeVerticalChildren(
+	parent: LayoutNode,
+	children: MindMapNode[],
+	isAboveRoot: boolean
+): LayoutNode[] {
+	// Вертикальная линия выходит из центра категории (по оси X)
+	const lineX = parent.x
+	const childX = lineX
+
+	// Если категория выше корня - задачи идут вверх, иначе вниз
+	const startY = isAboveRoot
+		? parent.y - NODE_HEIGHT / 2 - VERTICAL_GAP
+		: parent.y + NODE_HEIGHT / 2 + VERTICAL_GAP
+
+	return children.map((child, index) => {
+		const offset = index * (NODE_HEIGHT + VERTICAL_GAP)
+		const childY = isAboveRoot ? startY - offset : startY + offset
+		const layoutNode = buildLayoutNode(child, childX, childY, parent.id)
+
+		if (child.children && child.children.length > 0) {
+			layoutNode.children = placeVerticalChildren(
+				layoutNode,
+				child.children,
+				isAboveRoot
+			)
+		}
+
+		return layoutNode
+	})
 }
 
 export function flattenLayout(root: LayoutNode): LayoutNode[] {

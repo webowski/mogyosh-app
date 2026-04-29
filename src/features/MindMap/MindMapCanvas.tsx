@@ -38,14 +38,45 @@ export function MindMapCanvas({
 
 	const nodes = useMemo(() => flattenLayout(root), [root])
 
-	const edges = useMemo(() => {
+	const radialEdges = useMemo(() => {
 		const result: { from: LayoutNode; to: LayoutNode }[] = []
 		const nodeMap = new Map<string, LayoutNode>()
 		for (const n of nodes) nodeMap.set(n.id, n)
 		for (const n of nodes) {
 			if (n.parentId) {
 				const parent = nodeMap.get(n.parentId)
-				if (parent) result.push({ from: parent, to: n })
+				if (parent && parent.type === 'root') {
+					result.push({ from: parent, to: n })
+				}
+			}
+		}
+		return result
+	}, [nodes])
+
+	const verticalLines = useMemo(() => {
+		const result: { x: number; y1: number; y2: number }[] = []
+		for (const n of nodes) {
+			if (n.children.length > 0 && n.type !== 'root') {
+				const lineX = n.x // Линия из центра категории
+				const y1 = n.y // Центр категории
+
+				// Находим крайнюю точку - центр последнего потомка
+				let extremeY = y1
+				const stack = [...n.children]
+				while (stack.length > 0) {
+					const current = stack.pop()!
+					if (n.y < 0) {
+						// Категория выше корня - ищем минимальный Y
+						extremeY = Math.min(extremeY, current.y)
+					} else {
+						// Категория ниже корня - ищем максимальный Y
+						extremeY = Math.max(extremeY, current.y)
+					}
+					for (const child of current.children) {
+						stack.push(child)
+					}
+				}
+				result.push({ x: lineX, y1, y2: extremeY })
 			}
 		}
 		return result
@@ -63,11 +94,22 @@ export function MindMapCanvas({
 	return (
 		<Canvas style={{ width, height }}>
 			<Group transform={transform}>
-				{edges.map(({ from, to }, i) => (
+				{radialEdges.map(({ from, to }, i) => (
 					<Line
 						key={`edge-${i}`}
 						p1={vec(from.x, from.y)}
 						p2={vec(to.x, to.y)}
+						color={COLORS.edge}
+						strokeWidth={1.5}
+						style='stroke'
+					/>
+				))}
+
+				{verticalLines.map((line, i) => (
+					<Line
+						key={`vline-${i}`}
+						p1={vec(line.x, line.y1)}
+						p2={vec(line.x, line.y2)}
 						color={COLORS.edge}
 						strokeWidth={1.5}
 						style='stroke'
