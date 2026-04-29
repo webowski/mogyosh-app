@@ -13,7 +13,8 @@
 		"Calendar": "Calendar",
 		"Progress": "Progress",
 		"Create Task": "Create Task",
-		"Language": "Language"
+		"Language": "Language",
+		"Time format": "Time format"
 	},
 	"Task": "Task",
 	"Tasks": "Tasks",
@@ -40,6 +41,11 @@
 	"settings": {
 		"Language": "Language",
 		"Theme": "Theme",
-		"Week start": "Week start"
+		"Week start": "Week start",
+		"Time format": "Time format"
+	},
+	"timeFormat": {
+		"12": "12-hour",
+		"24": "24-hour"
 	}
 }

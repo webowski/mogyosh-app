@@ -23,6 +23,7 @@ export default function SettingsScreen() {
 	)
 	const weekStartDaysData = useSettingsStore((state) => state.weekStartDaysData)
 	const currentTheme = useSettingsStore((state) => state.currentTheme)
+	const hourFormat = useSettingsStore((state) => state.hourFormat)
 
 	return (
 		<>
@@ -66,6 +67,21 @@ export default function SettingsScreen() {
 									}}
 								>
 									{t(`theme.${currentTheme}`)}
+								</Text>
+							</Pressable>
+						}
+					/>
+					<SettingsItem
+						label={t('settings.Time format')}
+						control={
+							<Pressable onPress={() => router.push('/settings/time-format')}>
+								<Text
+									style={{
+										fontSize: 16,
+										color: theme.colors.minor
+									}}
+								>
+									{t(`timeFormat.${hourFormat}`)}
 								</Text>
 							</Pressable>
 						}

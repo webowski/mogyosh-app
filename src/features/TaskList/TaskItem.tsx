@@ -10,6 +10,7 @@ import {
 	isByTime,
 	makeCategoryPath
 } from '@/features/TaskList/model/task.utils'
+import { useSettingsStore } from '@/services/settings/model/settingsStore'
 import { TaskEntity } from '@/shared/domain/task'
 import { formatTime } from '@/shared/lib/time'
 import { useTaskStore } from '@/shared/model/taskStore'
@@ -24,6 +25,7 @@ export default function TaskItem({ data, children }: TaskItemProps) {
 	const categoryMap = useCategoriesStore((store) => store.entities)
 	const setSelectedTaskId = useTaskStore((store) => store.setSelectedTaskId)
 	const setSwipePosition = useNavStore((store) => store.setSwipePosition)
+	const hourFormat = useSettingsStore((store) => store.hourFormat)
 	const { data: progressData } = useTaskProgress(data.id)
 
 	const isByTimeBool = isByTime(data)
@@ -42,7 +44,7 @@ export default function TaskItem({ data, children }: TaskItemProps) {
 		<Pressable style={styles.card} onPress={handlePress}>
 			{isByTimeBool && (
 				<Text style={styles.card__time}>
-					{formatTime(data.schedules?.[0]?.start_time as string)}
+					{formatTime(data.schedules?.[0]?.start_time as string, hourFormat)}
 				</Text>
 			)}
 			<View style={styles.card__columns}>

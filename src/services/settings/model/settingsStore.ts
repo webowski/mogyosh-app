@@ -56,7 +56,10 @@ export const useSettingsStore = create<SettingsStore>()(
 			setCurrentTheme: (theme) => {
 				UnistylesRuntime.setTheme(theme)
 				set({ currentTheme: theme })
-			}
+			},
+
+			hourFormat: '24',
+			setHourFormat: (value) => set({ hourFormat: value })
 		}),
 		{
 			name: 'settings-storage',

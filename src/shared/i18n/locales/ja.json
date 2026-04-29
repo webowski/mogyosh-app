@@ -13,7 +13,8 @@
 		"Calendar": "カレンダー",
 		"Progress": "進捗",
 		"Create Task": "タスクを作成",
-		"Language": "言語"
+		"Language": "言語",
+		"Time format": "時間形式"
 	},
 	"Task": "タスク",
 	"Tasks": "タスク",
@@ -40,6 +41,11 @@
 	"settings": {
 		"Language": "言語",
 		"Theme": "テーマ",
-		"Week start": "週の初日"
+		"Week start": "週の初日",
+		"Time format": "時間形式"
+	},
+	"timeFormat": {
+		"12": "12時間制",
+		"24": "24時間制"
 	}
 }

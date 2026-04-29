@@ -13,7 +13,8 @@
 		"Calendar": "Calendario",
 		"Progress": "Progreso",
 		"Create Task": "Crear tarea",
-		"Language": "Idioma"
+		"Language": "Idioma",
+		"Time format": "Formato de hora"
 	},
 	"Task": "Tarea",
 	"Tasks": "Tareas",
@@ -40,6 +41,11 @@
 	"settings": {
 		"Language": "Idioma",
 		"Theme": "Tema",
-		"Week start": "Inicio de semana"
+		"Week start": "Inicio de semana",
+		"Time format": "Formato de hora"
+	},
+	"timeFormat": {
+		"12": "12 horas",
+		"24": "24 horas"
 	}
 }

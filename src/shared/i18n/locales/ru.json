@@ -13,7 +13,8 @@
 		"Calendar": "Календарь",
 		"Progress": "Прогресс",
 		"Create Task": "Создать задачу",
-		"Language": "Язык"
+		"Language": "Язык",
+		"Time format": "Формат времени"
 	},
 	"Task": "Задача",
 	"Tasks": "Задачи",
@@ -40,6 +41,11 @@
 	"settings": {
 		"Language": "Язык",
 		"Theme": "Тема",
-		"Week start": "Начало недели"
+		"Week start": "Начало недели",
+		"Time format": "Формат времени"
+	},
+	"timeFormat": {
+		"12": "12-часовой",
+		"24": "24-часовой"
 	}
 }

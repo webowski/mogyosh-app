@@ -36,6 +36,14 @@ export default function SettingsLayout() {
 					header: (props) => <Header {...props} />
 				}}
 			/>
+			<Stack.Screen
+				name='time-format'
+				options={{
+					title: t('screen.Time format'),
+					headerShown: true,
+					header: (props) => <Header {...props} />
+				}}
+			/>
 		</Stack>
 	)
 }
