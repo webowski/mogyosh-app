@@ -12,7 +12,7 @@ import { computeLayout, getLayoutBounds } from './model/layout'
 import { COLORS } from './model/theme'
 import type { LayoutNode, MindMapNode } from './model/types'
 
-interface Props {
+interface MindMapProps {
 	data: MindMapNode
 	width: number
 	height: number
@@ -46,7 +46,7 @@ function computeFitTransform(
 	}
 }
 
-export function MindMap({ data, width, height }: Props) {
+export function MindMap({ data, width, height }: MindMapProps) {
 	const layout = useMemo(() => computeLayout(data), [data])
 
 	const fit = useMemo(
