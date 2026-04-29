@@ -34,19 +34,13 @@ export function computeLayout(root: MindMapNode): LayoutNode {
 
 	if (!root.children || root.children.length === 0) return rootNode
 
-	const totalLeaves = root.children.reduce((sum, c) => sum + countLeaves(c), 0)
-
+	const childCount = root.children.length
+	const angleStep = (Math.PI * 2) / childCount
 	let currentAngle = -Math.PI
-	const twoPi = Math.PI * 2
 
 	for (const child of root.children) {
-		const leaves = countLeaves(child)
-		const angleSpan = Math.max(
-			(leaves / totalLeaves) * twoPi,
-			MIN_ANGULAR_GAP * 2
-		)
-		const midAngle = currentAngle + angleSpan / 2
-		currentAngle += angleSpan
+		const midAngle = currentAngle + angleStep / 2
+		currentAngle += angleStep
 
 		const childNode = placeRadialNode(
 			child,
