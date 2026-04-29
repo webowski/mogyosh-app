@@ -14,7 +14,7 @@ import { COLORS, getNodeColors } from './model/theme'
 import type { LayoutNode } from './model/types'
 import { useCanvasFont } from './model/useСanvasFont'
 
-interface Props {
+interface MindMapCanvasProps {
 	root: LayoutNode
 	width: number
 	height: number
@@ -26,14 +26,14 @@ interface Props {
 const RADIUS = 18
 const FONT_SIZE = 14
 
-export function MindMapRenderer({
+export function MindMapCanvas({
 	root,
 	width,
 	height,
 	translateX,
 	translateY,
 	scale
-}: Props) {
+}: MindMapCanvasProps) {
 	const font = useCanvasFont(FONT_SIZE)
 
 	const nodes = useMemo(() => flattenLayout(root), [root])

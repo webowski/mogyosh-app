@@ -7,7 +7,7 @@ import {
 } from 'react-native-gesture-handler'
 import { useSharedValue } from 'react-native-reanimated'
 
-import { MindMapRenderer } from './MindMapRenderer'
+import { MindMapCanvas } from './MindMapCanvas'
 import { computeLayout, getLayoutBounds } from './model/layout'
 import { COLORS } from './model/theme'
 import type { LayoutNode, MindMapNode } from './model/types'
@@ -100,7 +100,7 @@ export function MindMap({ data, width, height }: MindMapProps) {
 						{ width, height, backgroundColor: COLORS.canvasBg }
 					]}
 				>
-					<MindMapRenderer
+					<MindMapCanvas
 						root={layout}
 						width={width}
 						height={height}
