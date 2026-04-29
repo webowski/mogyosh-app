@@ -76,12 +76,15 @@ function placeRadialNode(
 
 	if (!node.children || node.children.length === 0) return layoutNode
 
-	// Если категория выше корня (y < 0), задача идет вверх, иначе вниз
+	// Если категория выше корня (y < 0), задачи идут вверх, иначе вниз
 	const isAboveRoot = y < 0
+	// Если категория правее корня (x >= 0), задачи справа, иначе слева
+	const isRightSide = x >= 0
 	layoutNode.children = placeVerticalChildren(
 		layoutNode,
 		node.children,
-		isAboveRoot
+		isAboveRoot,
+		isRightSide
 	)
 
 	return layoutNode
@@ -90,11 +93,15 @@ function placeRadialNode(
 function placeVerticalChildren(
 	parent: LayoutNode,
 	children: MindMapNode[],
-	isAboveRoot: boolean
+	isAboveRoot: boolean,
+	isRightSide: boolean
 ): LayoutNode[] {
-	// Вертикальная линия выходит из центра категории (по оси X)
-	const lineX = parent.x
-	const childX = lineX
+	// Вертикальная линия выходит из боковой стороны категории (середина по Y)
+	const lineX = isRightSide
+		? parent.x + NODE_WIDTH / 2
+		: parent.x - NODE_WIDTH / 2
+	// Задачи располагаются с соответствующей стороны от линии
+	const childX = isRightSide ? lineX + NODE_WIDTH / 2 : lineX - NODE_WIDTH / 2
 
 	// Если категория выше корня - задачи идут вверх, иначе вниз
 	const startY = isAboveRoot
@@ -110,7 +117,8 @@ function placeVerticalChildren(
 			layoutNode.children = placeVerticalChildren(
 				layoutNode,
 				child.children,
-				isAboveRoot
+				isAboveRoot,
+				isRightSide
 			)
 		}
 
