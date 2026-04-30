@@ -3,14 +3,14 @@ import type { LayoutNode, MindMapNode } from './types'
 const NODE_WIDTH = 110
 const NODE_HEIGHT = 36
 const LEVEL_DISTANCE = 160
-const MIN_ANGULAR_GAP = 0.18 // radians
+// const MIN_ANGULAR_GAP = 0.18 // radians
 const VERTICAL_GAP = 16
 const CATEGORY_TASK_GAP = 44
 
-function countLeaves(node: MindMapNode): number {
-	if (!node.children || node.children.length === 0) return 1
-	return node.children.reduce((sum, c) => sum + countLeaves(c), 0)
-}
+// function countLeaves(node: MindMapNode): number {
+// 	if (!node.children || node.children.length === 0) return 1
+// 	return node.children.reduce((sum, c) => sum + countLeaves(c), 0)
+// }
 
 function buildLayoutNode(
 	node: MindMapNode,
@@ -73,8 +73,10 @@ function placeRadialNode(
 
 	// Если категория выше корня (y < 0), задачи идут вверх, иначе вниз
 	const isAboveRoot = y < 0
+
 	// Если категория правее корня (x >= 0), задачи справа, иначе слева
-	const isRightSide = x >= 0
+	const isRightSide = x >= -1
+
 	layoutNode.children = placeVerticalChildren(
 		layoutNode,
 		node.children,
@@ -94,7 +96,9 @@ function placeVerticalChildren(
 	// Вертикальная линия выходит из центра категории (середина по X и Y)
 	const lineX = parent.x
 	// Задачи располагаются с соответствующей стороны от линии
-	const childX = isRightSide ? lineX + NODE_WIDTH / 2 : lineX - NODE_WIDTH / 2
+	const childX = isRightSide
+		? lineX + NODE_WIDTH / 2 + 1
+		: lineX - NODE_WIDTH / 2 - 1
 
 	// Если категория выше корня - задачи идут вверх, иначе вниз
 	const startY = isAboveRoot
