@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { Pressable, Text, View } from 'react-native'
 
 import { TaskCategoryGroupEntity } from '@/features/TaskList/model'
+import { MaterialIcons } from '@expo/vector-icons'
+import { useUnistyles } from 'react-native-unistyles'
 import TaskListItem from './TaskListItem'
 
 type TaskCategoryGroupProps = {
@@ -16,6 +18,7 @@ export default function TaskCategoryGroup({
 	level = 0
 }: TaskCategoryGroupProps) {
 	const [isExpanded, setIsExpanded] = useState(true)
+	const { theme } = useUnistyles()
 
 	// Filter tasks by search query
 	const filteredTasks = group.tasks.filter((task) => {
@@ -60,21 +63,33 @@ export default function TaskCategoryGroup({
 				style={{
 					flexDirection: 'row',
 					alignItems: 'center',
-					padding: 12,
-					backgroundColor: level === 0 ? '#f0f0f0' : '#f8f8f8',
-					borderRadius: 8,
+					paddingVertical: 4,
 					marginVertical: 4
 				}}
 			>
-				<Text style={{ fontSize: 12, marginRight: 8 }}>
-					{isExpanded ? '▼' : '▶'}
-				</Text>
+				<View style={{ marginRight: 4, paddingTop: 2 }}>
+					{isExpanded ? (
+						<View style={{ transform: [{ rotate: '90deg' }] }}>
+							<MaterialIcons
+								name='play-arrow'
+								size={18}
+								color={theme.colors.primary}
+							/>
+						</View>
+					) : (
+						<MaterialIcons
+							name='play-arrow'
+							size={18}
+							color={theme.colors.primary}
+						/>
+					)}
+				</View>
 				<Text style={{ fontSize: 16, fontWeight: '600' }}>
 					{group.category.name}
 				</Text>
-				<Text style={{ fontSize: 12, color: '#888', marginLeft: 8 }}>
-					({filteredTasks.length})
-				</Text>
+				{/* <Text style={{ fontSize: 12, color: '#888', marginLeft: 8 }}>
+					{filteredTasks.length}
+				</Text> */}
 			</Pressable>
 
 			{isExpanded && (
@@ -96,3 +111,9 @@ export default function TaskCategoryGroup({
 		</View>
 	)
 }
+
+// const styles = StyleSheet.create((theme, rt) => ({
+// 	group__arrow: {
+// 		color: theme.colors.primary
+// 	}
+// }))
