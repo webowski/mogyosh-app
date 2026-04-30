@@ -20,11 +20,13 @@ interface MindMapProps {
 	data: MindMapNode
 	width: number
 	height: number
+	onTaskPress?: (taskId: string) => void
 }
 
 const MIN_SCALE = 0.3
 const MAX_SCALE = 3
 const PADDING = 24
+const NODE_HEIGHT = 36
 
 function computeFitTransform(
 	layout: LayoutNode,
@@ -50,13 +52,18 @@ function computeFitTransform(
 	}
 }
 
-export function MindMap({ data, width, height }: MindMapProps) {
+export function MindMap({ data, width, height, onTaskPress }: MindMapProps) {
 	const measureWidth = useMemo(() => getDefaultMeasureWidth(), [])
 
 	const layout = useMemo(
 		() => computeLayout(data, measureWidth),
 		[data, measureWidth]
 	)
+
+	const layoutRef = useRef<LayoutNode>(layout)
+	useEffect(() => {
+		layoutRef.current = layout
+	}, [layout])
 
 	const fit = useMemo(
 		() => computeFitTransform(layout, width, height),
@@ -88,6 +95,50 @@ export function MindMap({ data, width, height }: MindMapProps) {
 		[]
 	)
 
+	const flattenNodes = (node: LayoutNode): LayoutNode[] => {
+		const result: LayoutNode[] = [node]
+		node.children.forEach((child) => {
+			result.push(...flattenNodes(child))
+		})
+		return result
+	}
+
+	const handleTap = (e: any) => {
+		if (!onTaskPress) return
+
+		const cx = width / 2
+		const cy = height / 2
+
+		const screenX = e.x
+		const screenY = e.y
+
+		const localX = (screenX - cx - translateX.value) / scale.value
+		const localY = (screenY - cy - translateY.value) / scale.value
+
+		const allNodes = flattenNodes(layoutRef.current)
+
+		for (const node of allNodes) {
+			if (node.type === 'task') {
+				const nodeLeft = node.x - node.width / 2
+				const nodeRight = node.x + node.width / 2
+				const nodeTop = node.y - NODE_HEIGHT / 2
+				const nodeBottom = node.y + NODE_HEIGHT / 2
+
+				if (
+					localX >= nodeLeft &&
+					localX <= nodeRight &&
+					localY >= nodeTop &&
+					localY <= nodeBottom
+				) {
+					onTaskPress(node.id)
+					return
+				}
+			}
+		}
+	}
+
+	const tapGesture = Gesture.Tap().numberOfTaps(1).onEnd(handleTap)
+
 	const panGesture = Gesture.Pan()
 		.onStart(() => {
 			savedTx.value = translateX.value
@@ -107,7 +158,11 @@ export function MindMap({ data, width, height }: MindMapProps) {
 			scale.value = Math.min(MAX_SCALE, Math.max(MIN_SCALE, next))
 		})
 
-	const composedGesture = Gesture.Simultaneous(panGesture, pinchGesture)
+	const composedGesture = Gesture.Simultaneous(
+		panGesture,
+		pinchGesture,
+		tapGesture
+	)
 
 	return (
 		<GestureHandlerRootView style={styles.root}>

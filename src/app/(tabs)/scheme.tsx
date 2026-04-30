@@ -1,9 +1,12 @@
+import { useRouter } from 'expo-router'
 import { ActivityIndicator, Text, useWindowDimensions } from 'react-native'
 
 import { MindMap } from '@/features/MindMap/MindMap'
 import { MindMapNode } from '@/features/MindMap/model/types'
+import { useNavStore } from '@/features/Navigation/model/navStore'
 import { useTasksByCategory } from '@/features/TaskList/model'
 import { TaskCategoryGroupEntity } from '@/features/TaskList/model/task.types'
+import { useTaskStore } from '@/shared/model/taskStore'
 
 function mapCategoryGroupToMindMapNode(
 	group: TaskCategoryGroupEntity
@@ -47,8 +50,18 @@ function buildMindMapData(groups: TaskCategoryGroupEntity[]): MindMapNode {
 }
 
 export default function SchemeScreen() {
+	const router = useRouter()
 	const { width, height } = useWindowDimensions()
 	const { data: groups, isLoading, error } = useTasksByCategory()
+
+	const setSelectedTaskId = useTaskStore((store) => store.setSelectedTaskId)
+	const setSwipePosition = useNavStore((store) => store.setSwipePosition)
+
+	const handleTaskPress = (taskId: string) => {
+		setSelectedTaskId(taskId)
+		setSwipePosition({ row: 0, col: 2 })
+		router.push('/task')
+	}
 
 	if (isLoading) {
 		return <ActivityIndicator />
@@ -60,5 +73,12 @@ export default function SchemeScreen() {
 
 	const mindMapData = buildMindMapData(groups ?? [])
 
-	return <MindMap data={mindMapData} width={width} height={height - 94 - 43} />
+	return (
+		<MindMap
+			data={mindMapData}
+			width={width}
+			height={height - 94 - 43}
+			onTaskPress={handleTaskPress}
+		/>
+	)
 }
