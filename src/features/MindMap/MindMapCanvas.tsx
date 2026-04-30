@@ -55,17 +55,13 @@ export function MindMapCanvas({
 				const lineX = n.x
 				const y1 = n.y
 
-				let extremeY = y1
-				const stack = [...n.children]
-				while (stack.length > 0) {
-					const current = stack.pop()!
+				// Находим крайнюю точку среди непосредственных детей
+				let extremeY = n.y < 0 ? Infinity : -Infinity
+				for (const child of n.children) {
 					if (n.y < 0) {
-						extremeY = Math.min(extremeY, current.y)
+						extremeY = Math.min(extremeY, child.y)
 					} else {
-						extremeY = Math.max(extremeY, current.y)
-					}
-					for (const child of current.children) {
-						stack.push(child)
+						extremeY = Math.max(extremeY, child.y)
 					}
 				}
 				vLines.push({ x: lineX, y1, y2: extremeY })
