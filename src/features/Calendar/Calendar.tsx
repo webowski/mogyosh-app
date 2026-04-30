@@ -1,12 +1,6 @@
 import { format, isSameDay, isSameMonth } from 'date-fns'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import {
-	Dimensions,
-	Pressable,
-	Text,
-	useWindowDimensions,
-	View
-} from 'react-native'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Dimensions, Pressable, Text, View } from 'react-native'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import Animated, {
 	ReduceMotion,
@@ -25,9 +19,8 @@ import { capitalize } from '@/shared/lib/string'
 import { useCalendarStore } from '@/shared/model/calendarStore'
 import { styleVars } from '@/shared/styles/common'
 
-const BASE_SCREEN_WIDTH = Dimensions.get('window').width
-const BASE_CALENDAR_WIDTH = BASE_SCREEN_WIDTH - styleVars.sidePadding * 2
-// const BASE_DAY_WIDTH = BASE_CALENDAR_WIDTH / 7
+const { width: BASE_WINDOW_WIDTH } = Dimensions.get('window')
+const BASE_CALENDAR_WIDTH = BASE_WINDOW_WIDTH - styleVars.sidePadding * 2
 
 const SWIPE_THRESHOLD = BASE_CALENDAR_WIDTH * 0.25
 const VELOCITY_THRESHOLD = 800
@@ -141,7 +134,6 @@ type DayCellProps = {
 }
 
 const DayCellView = React.memo(function DayCellView({ cell }: DayCellProps) {
-	console.log('DayCellView')
 	const isDaySelected = useCalendarStore((state) =>
 		isSameDay(state.selectedDate, cell.date)
 	)
@@ -218,37 +210,42 @@ const Month = React.memo(function Month({
 })
 
 export default function Calendar() {
-	const today = useCalendarStore((state) => state.today)
-	const { width: windowWidth, height: windowHeight } = useWindowDimensions()
+	// const today = useCalendarStore((state) => state.today)
+	const today = useCalendarStore.getState().today
+	const [dimensions, setDimensions] = useState(() => Dimensions.get('window'))
+
 	const weekStartDayIndex = useSettingsStore((state) => state.weekStartDayIndex)
 
 	const [monthsDataArray, setMonthsDataArray] = useState(makeMonthsDataArray)
 
 	const swipeTranslationValue = useSharedValue(0)
 
+	useEffect(() => {
+		const sub = Dimensions.addEventListener('change', ({ window }) => {
+			setDimensions(window)
+		})
+		return () => sub.remove()
+	}, [])
+
 	const { calendarWidth, calendarHeight } = useMemo(() => {
-		const calendarWidth = windowWidth - styleVars.sidePaddingSm * 2
-		let calendarHeight = windowHeight - styleVars.sidePaddingSm * 2 - 200
+		const calendarWidth = dimensions.width - styleVars.sidePaddingSm * 2
+		let calendarHeight = dimensions.height - styleVars.sidePaddingSm * 2 - 200
 		calendarHeight = calendarHeight > 560 ? 560 : calendarHeight
 
-		// const dayWidth = calendarWidth / 7
-		// const dayWidth = (calendarWidth - 4 * 6) / 7
-
 		return { calendarWidth, calendarHeight }
-	}, [windowWidth, windowHeight])
+	}, [dimensions.width, dimensions.height])
+
+	const isFirstRender = useRef(true)
 
 	useEffect(
-		function effectOnWindowResize() {
+		function effectForMonthRebuild() {
+			if (isFirstRender.current) {
+				isFirstRender.current = false
+				return
+			}
 			setMonthsDataArray(makeMonthsDataArray())
 		},
-		[windowWidth]
-	)
-
-	useEffect(
-		function effectOnWeekStartChange() {
-			setMonthsDataArray(makeMonthsDataArray())
-		},
-		[weekStartDayIndex]
+		[dimensions.width, weekStartDayIndex]
 	)
 
 	useEffect(
@@ -335,13 +332,6 @@ export default function Calendar() {
 		</View>
 	)
 }
-
-// const WEEK_HEIGHT = 44
-// const WEEK_HEIGHT = 76
-// const WEEK_HEIGHT = 106
-// const DAY_HEIGHT = 36
-// const DAY_HEIGHT = 72
-// const DAY_HEIGHT = 102
 
 const styles = StyleSheet.create((theme, rt) => ({
 	container: (calendarWidth: number, calendarHeight: number) => ({
