@@ -1,77 +1,64 @@
-import { useWindowDimensions } from 'react-native'
+import { ActivityIndicator, Text, useWindowDimensions } from 'react-native'
 
 import { MindMap } from '@/features/MindMap/MindMap'
 import { MindMapNode } from '@/features/MindMap/model/types'
+import { useTasksByCategory } from '@/features/TaskList/model'
+import { TaskCategoryGroupEntity } from '@/features/TaskList/model/task.types'
 
-const DEMO_DATA: MindMapNode = {
-	id: 'root',
-	label: 'Categories',
-	type: 'root',
-	children: [
-		{
-			id: 'cat1',
-			label: 'Category',
-			type: 'category',
-			children: [
-				{ id: 'task1', label: 'Task', type: 'task' },
-				{ id: 'task2', label: 'Task', type: 'task' }
-			]
-		},
-		{
-			id: 'cat2',
-			label: 'Category',
-			type: 'category',
-			children: [
-				{ id: 'task3', label: 'Task', type: 'task' },
-				{ id: 'task4', label: 'Task', type: 'task' }
-			]
-		},
-		{
-			id: 'cat3',
-			label: 'Category',
-			type: 'category',
-			children: [
-				{
-					id: 'sub1',
-					label: 'Subcategory',
-					type: 'subcategory',
-					children: []
-				},
-				{
-					id: 'sub2',
-					label: 'Subcategory',
-					type: 'subcategory',
-					children: []
-				}
-			]
-		},
-		{
-			id: 'cat4',
-			label: 'Category',
-			type: 'category',
-			children: [
-				{ id: 'task5', label: 'Task', type: 'task' },
-				{ id: 'task6', label: 'Task', type: 'task' },
-				{ id: 'task7', label: 'Task', type: 'task' }
-			]
-		},
-		{
-			id: 'cat5',
-			label: 'Category',
-			type: 'category',
-			children: []
-		},
-		{
-			id: 'cat6',
-			label: 'Category',
-			type: 'category',
-			children: []
+function mapCategoryGroupToMindMapNode(
+	group: TaskCategoryGroupEntity
+): MindMapNode {
+	const children: MindMapNode[] = []
+
+	if (group.children) {
+		for (const child of group.children) {
+			children.push(mapCategoryGroupToMindMapNode(child))
 		}
-	]
+	}
+
+	for (const task of group.tasks) {
+		children.push({
+			id: task.id,
+			label: task.info,
+			type: 'task'
+		})
+	}
+
+	const isSubcategory =
+		group.category.parent_id !== null && group.category.parent_id !== undefined
+
+	return {
+		id: group.category.id,
+		label: group.category.name,
+		type: isSubcategory ? 'subcategory' : 'category',
+		children: children.length > 0 ? children : undefined
+	}
+}
+
+function buildMindMapData(groups: TaskCategoryGroupEntity[]): MindMapNode {
+	const children = groups.map(mapCategoryGroupToMindMapNode)
+
+	return {
+		id: 'root',
+		label: 'Categories',
+		type: 'root',
+		children: children.length > 0 ? children : undefined
+	}
 }
 
 export default function SchemeScreen() {
 	const { width, height } = useWindowDimensions()
+	const { data: groups, isLoading, error } = useTasksByCategory()
 
-	return <MindMap data={DEMO_DATA} width={width} height={height - 94 - 43} />
+	if (isLoading) {
+		return <ActivityIndicator />
+	}
+
+	if (error) {
+		return <Text>Error loading data</Text>
+	}
+
+	const mindMapData = buildMindMapData(groups ?? [])
+
+	return <MindMap data={mindMapData} width={width} height={height - 94 - 43} />
 }
