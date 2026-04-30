@@ -7,6 +7,7 @@ import {
 } from 'react-native-gesture-handler'
 import { useSharedValue } from 'react-native-reanimated'
 
+import { scheduleOnRN } from 'react-native-worklets'
 import { MindMapCanvas } from './MindMapCanvas'
 import {
 	computeLayout,
@@ -137,7 +138,11 @@ export function MindMap({ data, width, height, onTaskPress }: MindMapProps) {
 		}
 	}
 
-	const tapGesture = Gesture.Tap().numberOfTaps(1).onEnd(handleTap)
+	const tapGesture = Gesture.Tap()
+		.numberOfTaps(1)
+		.onEnd((event) => {
+			scheduleOnRN(handleTap, event)
+		})
 
 	const panGesture = Gesture.Pan()
 		.onStart(() => {
