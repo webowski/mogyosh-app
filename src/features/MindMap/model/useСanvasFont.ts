@@ -1,25 +1,26 @@
 import { matchFont, useFont } from '@shopify/react-native-skia'
 import { Platform } from 'react-native'
 
-export function useCanvasFont(fontSize: number) {
-	const nativeFont =
-		Platform.OS !== 'web'
-			? matchFont({
-					fontFamily: Platform.select({
-						ios: 'Helvetica Neue',
-						android: 'sans-serif'
-					})!,
-					fontSize,
-					fontWeight: 'normal'
-				})
-			: null
+export const CANVAS_FONT_SIZE = 15
 
-	const webFontSource =
-		Platform.OS === 'web'
-			? 'https://fonts.gstatic.com/s/roboto/v32/KFOmCnqEu92Fr1Me5Q.ttf'
-			: null
+const nativeFont =
+	Platform.OS !== 'web'
+		? matchFont({
+				fontFamily: Platform.select({
+					ios: 'Helvetica Neue',
+					android: 'sans-serif'
+				})!,
+				fontSize: CANVAS_FONT_SIZE,
+				fontWeight: 'normal'
+			})
+		: null
 
-	const webFont = useFont(webFontSource, fontSize)
+const webFontSource =
+	Platform.OS === 'web'
+		? 'https://fonts.gstatic.com/s/roboto/v32/KFOmCnqEu92Fr1Me5Q.ttf'
+		: null
 
+export function useCanvasFont() {
+	const webFont = useFont(webFontSource, CANVAS_FONT_SIZE)
 	return Platform.OS === 'web' ? webFont : nativeFont
 }

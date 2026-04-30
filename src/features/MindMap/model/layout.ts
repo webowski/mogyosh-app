@@ -1,21 +1,26 @@
 import type { LayoutNode, MindMapNode } from './types'
 
-const NODE_WIDTH = 110
-const NODE_HEIGHT = 36
+export const NODE_HEIGHT = 36
 const LEVEL_DISTANCE = 160
-// const MIN_ANGULAR_GAP = 0.18 // radians
 const VERTICAL_GAP = 16
 const CATEGORY_TASK_GAP = 44
+const HORIZONTAL_PADDING = 24
+const MIN_NODE_WIDTH = 110
+export const FONT_SIZE = 15
 
-// function countLeaves(node: MindMapNode): number {
-// 	if (!node.children || node.children.length === 0) return 1
-// 	return node.children.reduce((sum, c) => sum + countLeaves(c), 0)
-// }
+export function getDefaultMeasureWidth() {
+	return (label: string) =>
+		Math.max(
+			MIN_NODE_WIDTH,
+			label.length * FONT_SIZE * 0.6 + HORIZONTAL_PADDING
+		)
+}
 
 function buildLayoutNode(
 	node: MindMapNode,
 	x: number,
 	y: number,
+	measureWidth: (label: string) => number,
 	parentId?: string
 ): LayoutNode {
 	return {
@@ -24,13 +29,18 @@ function buildLayoutNode(
 		type: node.type,
 		x,
 		y,
+		width: measureWidth(node.label),
 		children: [],
 		parentId
 	}
 }
 
-export function computeLayout(root: MindMapNode): LayoutNode {
-	const rootNode = buildLayoutNode(root, 0, 0)
+export function computeLayout(
+	root: MindMapNode,
+	measureWidth?: (label: string) => number
+): LayoutNode {
+	const measure = measureWidth ?? getDefaultMeasureWidth()
+	const rootNode = buildLayoutNode(root, 0, 0, measure)
 
 	if (!root.children || root.children.length === 0) return rootNode
 
@@ -48,7 +58,8 @@ export function computeLayout(root: MindMapNode): LayoutNode {
 			0,
 			LEVEL_DISTANCE,
 			midAngle,
-			root.id
+			root.id,
+			measure
 		)
 		rootNode.children.push(childNode)
 	}
@@ -62,12 +73,13 @@ function placeRadialNode(
 	parentY: number,
 	distance: number,
 	angle: number,
-	parentId: string
+	parentId: string,
+	measureWidth: (label: string) => number
 ): LayoutNode {
 	const x = parentX + Math.cos(angle) * distance
 	const y = parentY + Math.sin(angle) * distance
 
-	const layoutNode = buildLayoutNode(node, x, y, parentId)
+	const layoutNode = buildLayoutNode(node, x, y, measureWidth, parentId)
 
 	if (!node.children || node.children.length === 0) return layoutNode
 
@@ -81,7 +93,8 @@ function placeRadialNode(
 		layoutNode,
 		node.children,
 		isAboveRoot,
-		isRightSide
+		isRightSide,
+		measureWidth
 	)
 
 	return layoutNode
@@ -91,14 +104,15 @@ function placeVerticalChildren(
 	parent: LayoutNode,
 	children: MindMapNode[],
 	isAboveRoot: boolean,
-	isRightSide: boolean
+	isRightSide: boolean,
+	measureWidth: (label: string) => number
 ): LayoutNode[] {
 	// Вертикальная линия выходит из центра категории (середина по X и Y)
 	const lineX = parent.x
 	// Задачи располагаются с соответствующей стороны от линии
 	const childX = isRightSide
-		? lineX + NODE_WIDTH / 2 + 1
-		: lineX - NODE_WIDTH / 2 - 1
+		? lineX + parent.width / 2 + 1
+		: lineX - parent.width / 2 - 1
 
 	// Если категория выше корня - задачи идут вверх, иначе вниз
 	const startY = isAboveRoot
@@ -108,14 +122,21 @@ function placeVerticalChildren(
 	return children.map((child, index) => {
 		const offset = index === 0 ? 0 : (NODE_HEIGHT + VERTICAL_GAP) * index
 		const childY = isAboveRoot ? startY - offset : startY + offset
-		const layoutNode = buildLayoutNode(child, childX, childY, parent.id)
+		const layoutNode = buildLayoutNode(
+			child,
+			childX,
+			childY,
+			measureWidth,
+			parent.id
+		)
 
 		if (child.children && child.children.length > 0) {
 			layoutNode.children = placeVerticalChildren(
 				layoutNode,
 				child.children,
 				isAboveRoot,
-				isRightSide
+				isRightSide,
+				measureWidth
 			)
 		}
 
@@ -144,8 +165,8 @@ export function getLayoutBounds(root: LayoutNode) {
 	let maxY = -Infinity
 
 	for (const node of nodes) {
-		minX = Math.min(minX, node.x - NODE_WIDTH / 2)
-		maxX = Math.max(maxX, node.x + NODE_WIDTH / 2)
+		minX = Math.min(minX, node.x - node.width / 2)
+		maxX = Math.max(maxX, node.x + node.width / 2)
 		minY = Math.min(minY, node.y - NODE_HEIGHT / 2)
 		maxY = Math.max(maxY, node.y + NODE_HEIGHT / 2)
 	}
@@ -159,5 +180,3 @@ export function getLayoutBounds(root: LayoutNode) {
 		height: maxY - minY
 	}
 }
-
-export { NODE_HEIGHT, NODE_WIDTH }

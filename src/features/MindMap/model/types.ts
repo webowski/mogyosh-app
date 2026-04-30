@@ -13,6 +13,13 @@ export interface LayoutNode {
 	type: NodeType
 	x: number
 	y: number
+	width: number
 	children: LayoutNode[]
 	parentId?: string
+}
+
+export interface LayoutNodeWithText extends LayoutNode {
+	textWidth: number
+	textX: number
+	textY: number
 }

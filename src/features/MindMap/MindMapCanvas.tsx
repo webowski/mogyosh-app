@@ -9,9 +9,9 @@ import {
 import React, { useMemo } from 'react'
 import { SharedValue, useDerivedValue } from 'react-native-reanimated'
 
-import { flattenLayout, NODE_HEIGHT, NODE_WIDTH } from './model/layout'
+import { flattenLayout, FONT_SIZE, NODE_HEIGHT } from './model/layout'
 import { COLORS, getNodeColors } from './model/theme'
-import type { LayoutNode } from './model/types'
+import type { LayoutNode, LayoutNodeWithText } from './model/types'
 import { useCanvasFont } from './model/useСanvasFont'
 
 interface MindMapCanvasProps {
@@ -24,7 +24,6 @@ interface MindMapCanvasProps {
 }
 
 const RADIUS = 18
-const FONT_SIZE = 15
 
 export function MindMapCanvas({
 	root,
@@ -34,11 +33,10 @@ export function MindMapCanvas({
 	translateY,
 	scale
 }: MindMapCanvasProps) {
-	const font = useCanvasFont(FONT_SIZE)
-
+	const font = useCanvasFont()
 	const nodes = useMemo(() => flattenLayout(root), [root])
 
-	const radialEdges = useMemo(() => {
+	const { radialEdges, verticalLines } = useMemo(() => {
 		const result: { from: LayoutNode; to: LayoutNode }[] = []
 		const nodeMap = new Map<string, LayoutNode>()
 		for (const n of nodes) nodeMap.set(n.id, n)
@@ -50,40 +48,47 @@ export function MindMapCanvas({
 				}
 			}
 		}
-		return result
-	}, [nodes])
 
-	const verticalLines = useMemo(() => {
-		const result: { x: number; y1: number; y2: number }[] = []
+		const vLines: { x: number; y1: number; y2: number }[] = []
 		for (const n of nodes) {
 			if (n.children.length > 0 && n.type !== 'root') {
-				const lineX = n.x // Линия из центра категории по X
-				const y1 = n.y // Центр категории по Y
+				const lineX = n.x
+				const y1 = n.y
 
-				// Находим крайнюю точку - центр последнего потомка
 				let extremeY = y1
 				const stack = [...n.children]
 				while (stack.length > 0) {
 					const current = stack.pop()!
 					if (n.y < 0) {
-						// Категория выше корня - ищем минимальный Y
 						extremeY = Math.min(extremeY, current.y)
 					} else {
-						// Категория ниже корня - ищем максимальный Y
 						extremeY = Math.max(extremeY, current.y)
 					}
 					for (const child of current.children) {
 						stack.push(child)
 					}
 				}
-				result.push({ x: lineX, y1, y2: extremeY })
+				vLines.push({ x: lineX, y1, y2: extremeY })
 			}
 		}
-		return result
+
+		return { radialEdges: result, verticalLines: vLines }
 	}, [nodes])
 
-	const cx = width / 2
-	const cy = height / 2
+	const nodesWithText = useMemo((): LayoutNodeWithText[] => {
+		return nodes.map((node) => {
+			const tw = font ? font.getTextWidth(node.label) : 0
+			return {
+				...node,
+				textWidth: tw,
+				textX: node.x - tw / 2,
+				textY: node.y + FONT_SIZE / 2 - 1
+			}
+		})
+	}, [nodes, font])
+
+	const cx = useMemo(() => width / 2, [width])
+	const cy = useMemo(() => height / 2, [height])
 
 	const transform = useDerivedValue(() => [
 		{ translateX: cx + translateX.value },
@@ -116,33 +121,35 @@ export function MindMapCanvas({
 					/>
 				))}
 
-				{nodes.map((node) => {
+				{nodesWithText.map((node) => {
 					const colors = getNodeColors(node.type)
-					const x = node.x - NODE_WIDTH / 2
-					const y = node.y - NODE_HEIGHT / 2
+					const w = node.width
+					const h = NODE_HEIGHT
+					const x = node.x - w / 2
+					const y = node.y - h / 2
 
 					return (
 						<Group key={node.id}>
 							<RoundedRect
 								x={x - 2}
 								y={y - 2}
-								width={NODE_WIDTH + 4}
-								height={NODE_HEIGHT + 4}
+								width={w + 4}
+								height={h + 4}
 								r={RADIUS + 4}
 								color={colors.border}
 							/>
 							<RoundedRect
 								x={x}
 								y={y}
-								width={NODE_WIDTH}
-								height={NODE_HEIGHT}
+								width={w}
+								height={h}
 								r={RADIUS}
 								color={colors.bg}
 							/>
 							{font && (
 								<Text
-									x={node.x - font.getTextWidth(node.label) / 2}
-									y={node.y + FONT_SIZE / 2 - 1}
+									x={node.textX}
+									y={node.textY}
 									text={node.label}
 									font={font}
 									color={colors.text}

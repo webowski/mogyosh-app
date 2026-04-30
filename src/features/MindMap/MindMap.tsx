@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 import { StyleSheet, View } from 'react-native'
 import {
 	Gesture,
@@ -8,7 +8,11 @@ import {
 import { useSharedValue } from 'react-native-reanimated'
 
 import { MindMapCanvas } from './MindMapCanvas'
-import { computeLayout, getLayoutBounds } from './model/layout'
+import {
+	computeLayout,
+	getDefaultMeasureWidth,
+	getLayoutBounds
+} from './model/layout'
 import { COLORS } from './model/theme'
 import type { LayoutNode, MindMapNode } from './model/types'
 
@@ -47,7 +51,12 @@ function computeFitTransform(
 }
 
 export function MindMap({ data, width, height }: MindMapProps) {
-	const layout = useMemo(() => computeLayout(data), [data])
+	const measureWidth = useMemo(() => getDefaultMeasureWidth(), [])
+
+	const layout = useMemo(
+		() => computeLayout(data, measureWidth),
+		[data, measureWidth]
+	)
 
 	const fit = useMemo(
 		() => computeFitTransform(layout, width, height),
@@ -61,14 +70,23 @@ export function MindMap({ data, width, height }: MindMapProps) {
 	const scale = useSharedValue(fit.scale)
 	const savedScale = useSharedValue(fit.scale)
 
+	const fitRef = useRef(fit)
 	useEffect(() => {
-		translateX.value = fit.translateX
-		translateY.value = fit.translateY
-		savedTx.value = fit.translateX
-		savedTy.value = fit.translateY
-		scale.value = fit.scale
-		savedScale.value = fit.scale
-	}, [fit, translateX, translateY, savedTx, savedTy, scale, savedScale])
+		fitRef.current = fit
+	}, [fit])
+
+	useEffect(
+		() => {
+			translateX.value = fitRef.current.translateX
+			translateY.value = fitRef.current.translateY
+			savedTx.value = fitRef.current.translateX
+			savedTy.value = fitRef.current.translateY
+			scale.value = fitRef.current.scale
+			savedScale.value = fitRef.current.scale
+		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[]
+	)
 
 	const panGesture = Gesture.Pan()
 		.onStart(() => {
