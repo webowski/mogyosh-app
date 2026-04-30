@@ -1,5 +1,5 @@
 import { format, isSameDay, isSameMonth } from 'date-fns'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import {
 	Dimensions,
 	Pressable,
@@ -138,18 +138,20 @@ function WeekdayHeader({ weekStartDayIndex }: WeekdayHeaderProps) {
 
 type DayCellProps = {
 	cell: DayCell
-	selectedDate: Date
 }
 
-const DayCellView = React.memo(function DayCellView({
-	cell,
-	selectedDate
-}: DayCellProps) {
-	const isDaySelected = selectedDate.getTime() === cell.date.getTime()
+const DayCellView = React.memo(function DayCellView({ cell }: DayCellProps) {
+	const isDaySelected = useCalendarStore((state) =>
+		isSameDay(state.selectedDate, cell.date)
+	)
+
+	const handlePress = useCallback(() => {
+		useCalendarStore.getState().setSelectedDate(cell.date)
+	}, [cell.date])
 
 	return (
 		<Pressable
-			onPress={() => useCalendarStore.getState().setSelectedDate(cell.date)}
+			onPress={handlePress}
 			style={[
 				styles.day,
 				isDaySelected && styles.day_selected,
@@ -186,7 +188,6 @@ type MonthProps = {
 	swipeTranslationValue: SharedValue<number>
 	calendarWidth: number
 	calendarHeight: number
-	selectedDate: Date
 }
 
 const Month = React.memo(function Month({
@@ -194,8 +195,7 @@ const Month = React.memo(function Month({
 	index,
 	swipeTranslationValue,
 	calendarWidth,
-	calendarHeight,
-	selectedDate
+	calendarHeight
 }: MonthProps) {
 	const animatedStyle = useAnimatedStyle(() => ({
 		transform: [
@@ -208,11 +208,7 @@ const Month = React.memo(function Month({
 			{monthData.weeks.map((week, weekIndex) => (
 				<View key={weekIndex} style={styles.week(calendarHeight)}>
 					{week.map((cell) => (
-						<DayCellView
-							key={cell.date.getTime()}
-							cell={cell}
-							selectedDate={selectedDate}
-						/>
+						<DayCellView key={cell.date.getTime()} cell={cell} />
 					))}
 				</View>
 			))}
@@ -222,7 +218,6 @@ const Month = React.memo(function Month({
 
 export default function Calendar() {
 	const today = useCalendarStore((state) => state.today)
-	const selectedDate = useCalendarStore((state) => state.selectedDate)
 	const { width: windowWidth, height: windowHeight } = useWindowDimensions()
 	const weekStartDayIndex = useSettingsStore((state) => state.weekStartDayIndex)
 
@@ -332,7 +327,6 @@ export default function Calendar() {
 							swipeTranslationValue={swipeTranslationValue}
 							calendarWidth={calendarWidth}
 							calendarHeight={calendarHeight}
-							selectedDate={selectedDate}
 						/>
 					))}
 				</View>
