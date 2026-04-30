@@ -109,10 +109,6 @@ function placeVerticalChildren(
 ): LayoutNode[] {
 	// Вертикальная линия выходит из центра категории (середина по X и Y)
 	const lineX = parent.x
-	// Задачи располагаются с соответствующей стороны от линии
-	const childX = isRightSide
-		? lineX + parent.width / 2 + 1
-		: lineX - parent.width / 2 - 1
 
 	// Если категория выше корня - задачи идут вверх, иначе вниз
 	const startY = isAboveRoot
@@ -122,6 +118,15 @@ function placeVerticalChildren(
 	return children.map((child, index) => {
 		const offset = index === 0 ? 0 : (NODE_HEIGHT + VERTICAL_GAP) * index
 		const childY = isAboveRoot ? startY - offset : startY + offset
+
+		// Сначала измеряем ширину потомка
+		const childW = measureWidth(child.label)
+
+		// Позиционируем центр потомка так, чтобы узел примыкал к вертикальной линии
+		// childX - childW / 2 = lineX + 1 (для правой стороны)
+		// childX + childW / 2 = lineX - 1 (для левой стороны)
+		const childX = isRightSide ? lineX + childW / 2 + 1 : lineX - childW / 2 - 1
+
 		const layoutNode = buildLayoutNode(
 			child,
 			childX,
