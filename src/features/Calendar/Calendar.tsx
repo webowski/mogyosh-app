@@ -141,6 +141,7 @@ type DayCellProps = {
 }
 
 const DayCellView = React.memo(function DayCellView({ cell }: DayCellProps) {
+	console.log('DayCellView')
 	const isDaySelected = useCalendarStore((state) =>
 		isSameDay(state.selectedDate, cell.date)
 	)
