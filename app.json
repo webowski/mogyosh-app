@@ -56,7 +56,8 @@
     ],
     "experiments": {
       "typedRoutes": true,
-      "reactCompiler": true
+      "reactCompiler": true,
+      "reactStrictMode": false
     },
     "extra": {
       "router": {},
