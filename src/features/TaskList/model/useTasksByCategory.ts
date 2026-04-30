@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { CategoryId } from '@/shared/domain/ids'
 import { CategoryEntity, TaskEntity } from '@/shared/domain/task'
-import { getAllTasks } from './task.api'
+import { getAllTasks, getCategories } from './task.api'
 import { TaskCategoryGroupEntity } from './task.types'
 
 /**
@@ -12,8 +12,11 @@ export const useTasksByCategory = () => {
 	return useQuery({
 		queryKey: ['tasks-by-category'],
 		queryFn: async () => {
-			const tasks = await getAllTasks()
-			return groupTasksByCategory(tasks)
+			const [tasks, categories] = await Promise.all([
+				getAllTasks(),
+				getCategories()
+			])
+			return groupTasksByCategory(tasks, categories)
 		}
 	})
 }
@@ -21,25 +24,26 @@ export const useTasksByCategory = () => {
 /**
  * Group tasks by categories and subcategories
  * Returns a hierarchical structure of categories with their tasks
- * Only includes root-level tasks (tasks without parent_id)
+ * Includes all tasks without parent_id (root tasks and tasks with subtasks)
  */
 const groupTasksByCategory = (
-	tasks: TaskEntity[]
+	tasks: TaskEntity[],
+	categories: CategoryEntity[]
 ): TaskCategoryGroupEntity[] => {
-	// Filter only root-level tasks (no parent_id)
-	const rootTasks = tasks.filter((task) => !task.parent_id)
+	// Filter tasks without parent_id (includes root tasks and tasks that have subtasks)
+	const tasksWithoutParent = tasks.filter(
+		(task) => task.parent_id === null || task.parent_id === undefined
+	)
 
-	// Build category map
+	// Build category map from all categories
 	const categoryMap = new Map<CategoryId, CategoryEntity>()
-	rootTasks.forEach((task) => {
-		if (task.category && !categoryMap.has(task.category.id)) {
-			categoryMap.set(task.category.id, task.category)
-		}
+	categories.forEach((category) => {
+		categoryMap.set(category.id, category)
 	})
 
 	// Group tasks by category
 	const tasksByCategory = new Map<CategoryId, TaskEntity[]>()
-	rootTasks.forEach((task) => {
+	tasksWithoutParent.forEach((task) => {
 		if (task.category) {
 			const existing = tasksByCategory.get(task.category.id) || []
 			existing.push(task)
@@ -47,32 +51,47 @@ const groupTasksByCategory = (
 		}
 	})
 
+	// Helper to find root category for a given category
+	const findRootCategory = (categoryId: CategoryId): CategoryId | null => {
+		const category = categoryMap.get(categoryId)
+		if (!category) return null
+		if (!category.parent_id || !categoryMap.has(category.parent_id)) {
+			return categoryId
+		}
+		return findRootCategory(category.parent_id)
+	}
+
 	// Build hierarchical structure
 	const rootCategories: TaskCategoryGroupEntity[] = []
 
-	categoryMap.forEach((category) => {
-		if (!category.parent_id) {
-			const group: TaskCategoryGroupEntity = {
-				category,
-				tasks: tasksByCategory.get(category.id) || []
-			}
+	// Collect all root category IDs that have tasks
+	const rootCategoryIds = new Set<CategoryId>()
+	tasksByCategory.forEach((_, categoryId) => {
+		const rootId = findRootCategory(categoryId)
+		if (rootId) rootCategoryIds.add(rootId)
+	})
 
-			// Find and add children categories
-			const children = findCategoryChildren(
-				category.id,
-				categoryMap,
-				tasksByCategory
-			)
-			if (children.length > 0) {
-				group.children = children
-			}
-
-			rootCategories.push(group)
+	// Create groups for each root category
+	rootCategoryIds.forEach((rootId) => {
+		const rootCategory = categoryMap.get(rootId)!
+		const group: TaskCategoryGroupEntity = {
+			category: rootCategory,
+			tasks: tasksByCategory.get(rootId) || []
 		}
+
+		// Find and add children categories
+		const children = findCategoryChildren(rootId, categoryMap, tasksByCategory)
+		if (children.length > 0) {
+			group.children = children
+		}
+
+		rootCategories.push(group)
 	})
 
 	// Add tasks without category
-	const tasksWithoutCategory = rootTasks.filter((task) => !task.category)
+	const tasksWithoutCategory = tasksWithoutParent.filter(
+		(task) => !task.category
+	)
 	if (tasksWithoutCategory.length > 0) {
 		rootCategories.push({
 			category: {

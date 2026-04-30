@@ -26,3 +26,5 @@ export {
 	filterTasksByDate,
 	groupTasksByShedule
 } from './task.utils'
+
+export { getCategories } from './task.api'
