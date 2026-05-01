@@ -8,6 +8,7 @@ import { SettingsItem } from '@/features/Settings/SettingsItem'
 
 import { WeekStartDayIndex } from '@/services/settings/domain'
 import { useSettingsStore } from '@/services/settings/model/settingsStore'
+import { HourFormat } from '@/shared/domain/time'
 import { Button } from '@/shared/ui/Button'
 import ScrollBox from '@/shared/ui/ScrollBox'
 import { ToggleGroup } from '@/shared/ui/ToggleGroup'
@@ -23,7 +24,9 @@ export default function SettingsScreen() {
 	)
 	const weekStartDaysData = useSettingsStore((state) => state.weekStartDaysData)
 	const currentTheme = useSettingsStore((state) => state.currentTheme)
+
 	const hourFormat = useSettingsStore((state) => state.hourFormat)
+	const setHourFormat = useSettingsStore((state) => state.setHourFormat)
 
 	return (
 		<>
@@ -74,16 +77,16 @@ export default function SettingsScreen() {
 					<SettingsItem
 						label={t('settings.Time format')}
 						control={
-							<Pressable onPress={() => router.push('/settings/time-format')}>
-								<Text
-									style={{
-										fontSize: 16,
-										color: theme.colors.minor
-									}}
-								>
-									{t(`timeFormat.${hourFormat}`)}
-								</Text>
-							</Pressable>
+							<ToggleGroup
+								value={hourFormat}
+								onChange={(value) => {
+									setHourFormat(value as HourFormat)
+								}}
+								buttons={[
+									{ value: '24', label: '24' },
+									{ value: '12', label: '12' }
+								]}
+							/>
 						}
 					/>
 					{/*
