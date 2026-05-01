@@ -16,6 +16,12 @@ export default function AllTasksScreen() {
 
 	return (
 		<ScrollBox>
+			<TextInput
+				value={searchQuery}
+				onChangeText={setSearchQuery}
+				placeholder='Поиск'
+				style={styles.input}
+			/>
 			<View>
 				{categoryGroups?.map((group) => (
 					<TaskCategoryGroup
@@ -26,13 +32,6 @@ export default function AllTasksScreen() {
 				))}
 			</View>
 			<View style={{ flexDirection: 'row' }}>
-				<TextInput
-					value={searchQuery}
-					onChangeText={setSearchQuery}
-					placeholder='Поиск'
-					style={{ width: 80, borderWidth: 1, padding: 8 }}
-				/>
-
 				<View style={styles.pills}>
 					<View style={styles.pill}>
 						<Text style={styles.pill__text}>Все</Text>
@@ -62,6 +61,13 @@ export default function AllTasksScreen() {
 }
 
 const styles = StyleSheet.create((theme, rt) => ({
+	input: {
+		borderWidth: 1,
+		padding: 8,
+		border: 0,
+		backgroundColor: theme.colors.background,
+		borderRadius: 6
+	},
 	pills: {
 		flexDirection: 'row',
 		gap: 8
