@@ -9,6 +9,8 @@ export { useTasksGrouped } from './useTasksGrouped'
 export { useTaskSubtasks } from './useTaskSubtasks'
 export { useUpdateTaskState } from './useUpdateTaskState'
 
+export { useCategories } from './useCategories'
+
 export { calculateProgress, useTaskProgress } from './useTaskProgress'
 
 export type {

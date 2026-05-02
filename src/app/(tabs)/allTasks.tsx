@@ -1,21 +1,42 @@
 import { useState } from 'react'
-import { ActivityIndicator, Text, TextInput, View } from 'react-native'
-
-import { useTasks } from '@/features/TaskList/model'
-import TaskListItem from '@/features/TaskList/TaskListItem'
-import ScrollBox from '@/shared/ui/ScrollBox'
+import {
+	ActivityIndicator,
+	Pressable,
+	Text,
+	TextInput,
+	View
+} from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
+
+import { useCategories, useTasks } from '@/features/TaskList/model'
+import TaskListItem from '@/features/TaskList/TaskListItem'
+import type { CategoryEntity } from '@/shared/domain/task'
+import ScrollBox from '@/shared/ui/ScrollBox'
 
 export default function AllTasksScreen() {
 	const [searchQuery, setSearchQuery] = useState('')
+	const [selectedCategory, setSelectedCategory] =
+		useState<CategoryEntity | null>(null)
+
+	const { data: categories } = useCategories()
 
 	const {
 		data: tasks,
 		isLoading,
 		error
 	} = useTasks({
-		searchQuery: searchQuery.trim() || undefined
+		searchQuery: searchQuery.trim() || undefined,
+		categoryId: selectedCategory?.id || undefined
 	})
+
+	const handlerFilterByCategory = (category: CategoryEntity | null) => {
+		// Если нажали на уже выбранную категорию — сбрасываем фильтр
+		if (selectedCategory?.id === category?.id) {
+			setSelectedCategory(null)
+		} else {
+			setSelectedCategory(category)
+		}
+	}
 
 	return (
 		<ScrollBox>
@@ -38,27 +59,27 @@ export default function AllTasksScreen() {
 			)}
 			<View style={{ flexDirection: 'row' }}>
 				<View style={styles.pills}>
-					<View style={styles.pill}>
-						<Text style={styles.pill__text}>Все</Text>
-					</View>
-					<View style={styles.pill}>
-						<Text style={styles.pill__text}>Заработок</Text>
-					</View>
-					<View style={styles.pill}>
-						<Text style={styles.pill__text}>Работа</Text>
-					</View>
-					<View style={styles.pill}>
-						<Text style={styles.pill__text}>Здоровье</Text>
-					</View>
-					<View style={styles.pill}>
-						<Text style={styles.pill__text}>Купить</Text>
-					</View>
-					<View style={styles.pill}>
-						<Text style={styles.pill__text}>Обучение</Text>
-					</View>
-					<View style={styles.pill}>
+					{categories?.map((category) => (
+						<Pressable
+							key={category.id}
+							style={[
+								styles.pill,
+								selectedCategory?.id === category.id && styles.pill__active
+							]}
+							onPress={() => handlerFilterByCategory(category)}
+						>
+							<Text style={styles.pill__text}>{category.name}</Text>
+						</Pressable>
+					))}
+					<Pressable
+						style={[
+							styles.pill,
+							selectedCategory === null && styles.pill__active
+						]}
+						onPress={() => handlerFilterByCategory(null)}
+					>
 						<Text style={styles.pill__text}>Без категории</Text>
-					</View>
+					</Pressable>
 				</View>
 			</View>
 		</ScrollBox>
@@ -82,6 +103,9 @@ const styles = StyleSheet.create((theme, rt) => ({
 		paddingVertical: 5,
 		paddingHorizontal: 16,
 		borderRadius: 20
+	},
+	pill__active: {
+		backgroundColor: theme.colors.primary
 	},
 	pill__text: {
 		fontSize: 14,
