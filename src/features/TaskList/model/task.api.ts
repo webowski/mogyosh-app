@@ -68,7 +68,10 @@ export const getTasks = async (filters?: TaskFilters) => {
 
 	const { data, error } = await query
 
-	if (error) throw error
+	if (error) {
+		console.error('getTasks error:', error)
+		throw error
+	}
 
 	return (data ?? []).map(makeTaskObject)
 }
@@ -109,15 +112,27 @@ export const getTasksByDate = async (date: string): Promise<TaskEntity[]> => {
 export const getTaskSubtasks = async (
 	taskId: TaskId
 ): Promise<TaskEntity[]> => {
-	const { data, error } = await supabase
-		.from('tasks')
-		.select(TASKS_SELECT)
-		.eq('parent_id', taskId)
-		.order('created_at', { ascending: true })
+	try {
+		console.log('Fetching subtasks for task ID:', taskId)
 
-	if (error) throw error
+		const { data, error } = await supabase
+			.from('tasks')
+			.select(TASKS_SELECT)
+			.eq('parent_id', taskId)
+			.order('created_at', { ascending: true })
 
-	return (data ?? []).map(makeTaskObject)
+		if (error) {
+			console.error('Error fetching subtasks:', error)
+			throw error
+		}
+
+		const subtasks = (data ?? []).map(makeTaskObject)
+		console.log('Subtasks fetched successfully:', subtasks.length)
+		return subtasks
+	} catch (error) {
+		console.error('getTaskSubtasks caught error:', error)
+		throw error
+	}
 }
 
 /**
@@ -157,16 +172,31 @@ export const getTasksCountByPeriod = async (
 export const getTaskById = async (
 	taskId: TaskId
 ): Promise<TaskEntity | null> => {
-	const { data, error } = await supabase
-		.from('tasks')
-		.select(TASKS_SELECT)
-		.eq('id', taskId)
-		.single()
+	try {
+		console.log('Fetching task by ID:', taskId)
 
-	if (error) throw error
-	if (!data) return null
+		const { data, error } = await supabase
+			.from('tasks')
+			.select(TASKS_SELECT)
+			.eq('id', taskId)
+			.single()
 
-	return makeTaskObject(data)
+		if (error) {
+			console.error('Error fetching task by ID:', error)
+			throw error
+		}
+
+		if (!data) {
+			console.warn('Task not found:', taskId)
+			return null
+		}
+
+		console.log('Task fetched successfully:', data.id)
+		return makeTaskObject(data)
+	} catch (error) {
+		console.error('getTaskById caught error:', error)
+		throw error
+	}
 }
 
 export const createTask = async (info: string): Promise<TaskEntity> => {
