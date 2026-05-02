@@ -14,6 +14,7 @@ import { useSettingsStore } from '@/services/settings/model/settingsStore'
 import { TaskEntity } from '@/shared/domain/task'
 import { formatTime } from '@/shared/lib/time'
 import { useTaskStore } from '@/shared/model/taskStore'
+import { styleVars } from '@/shared/styles/common'
 import CircleProgress from '@/shared/ui/CircleProgress'
 
 type TaskItemProps = {
@@ -77,7 +78,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		padding: 14,
 		backgroundColor: theme.colors.surface,
 		boxShadow: '0px 2px 4px rgba(102, 140, 255, 0.08)',
-		borderRadius: 8,
+		borderRadius: styleVars.radius,
 		gap: 8
 	},
 
