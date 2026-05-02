@@ -1,18 +1,21 @@
 import { useState } from 'react'
 import { ActivityIndicator, Text, TextInput, View } from 'react-native'
 
-import { useTasksByCategory } from '@/features/TaskList/model'
-import TaskCategoryGroup from '@/features/TaskList/TaskCategoryGroup'
+import { useTasks } from '@/features/TaskList/model'
+import TaskListItem from '@/features/TaskList/TaskListItem'
 import ScrollBox from '@/shared/ui/ScrollBox'
 import { StyleSheet } from 'react-native-unistyles'
 
 export default function AllTasksScreen() {
 	const [searchQuery, setSearchQuery] = useState('')
 
-	const { data: categoryGroups, isLoading, error } = useTasksByCategory()
-
-	if (isLoading) return <ActivityIndicator />
-	if (error) return <Text>Ошибка загрузки</Text>
+	const {
+		data: tasks,
+		isLoading,
+		error
+	} = useTasks({
+		searchQuery: searchQuery.trim() || undefined
+	})
 
 	return (
 		<ScrollBox>
@@ -22,15 +25,17 @@ export default function AllTasksScreen() {
 				placeholder='Поиск'
 				style={styles.input}
 			/>
-			<View>
-				{categoryGroups?.map((group) => (
-					<TaskCategoryGroup
-						key={group.category.id}
-						group={group}
-						searchQuery={searchQuery}
-					/>
-				))}
-			</View>
+			{isLoading ? (
+				<ActivityIndicator />
+			) : error ? (
+				<Text>Ошибка загрузки</Text>
+			) : (
+				<View>
+					{tasks?.map((task) => (
+						<TaskListItem key={task.id} data={task} />
+					))}
+				</View>
+			)}
 			<View style={{ flexDirection: 'row' }}>
 				<View style={styles.pills}>
 					<View style={styles.pill}>
