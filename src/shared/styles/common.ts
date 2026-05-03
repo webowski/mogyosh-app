@@ -1,10 +1,10 @@
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styleVars = {
-	sidePadding: 20,
+	sidePadding: 16,
 	sidePaddingSm: 12,
 	insetPlus: 10,
-	radius: 6
+	radius: 5
 }
 
 export const commonStyles = StyleSheet.create((theme, rt) => ({
@@ -64,5 +64,14 @@ export const commonStyles = StyleSheet.create((theme, rt) => ({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center'
+	},
+
+	input: {
+		paddingHorizontal: 20,
+		paddingVertical: 10,
+		backgroundColor: theme.colors.background,
+		borderRadius: 24,
+		borderWidth: 0,
+		border: 0
 	}
 }))

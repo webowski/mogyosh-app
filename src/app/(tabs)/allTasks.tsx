@@ -11,7 +11,8 @@ import { StyleSheet } from 'react-native-unistyles'
 import { useCategories, useTasks } from '@/features/TaskList/model'
 import TaskListItem from '@/features/TaskList/TaskListItem'
 import type { CategoryEntity } from '@/shared/domain/task'
-import ScrollBox from '@/shared/ui/ScrollBox'
+import { commonStyles, styleVars } from '@/shared/styles/common'
+import { ScrollView } from 'react-native-gesture-handler'
 
 export default function AllTasksScreen() {
 	const [searchQuery, setSearchQuery] = useState('')
@@ -39,61 +40,75 @@ export default function AllTasksScreen() {
 	}
 
 	return (
-		<ScrollBox>
+		<View style={[commonStyles.mainArea, { paddingBottom: 30 }]}>
 			<TextInput
 				value={searchQuery}
 				onChangeText={setSearchQuery}
 				placeholder='Поиск'
-				style={styles.input}
+				style={commonStyles.input}
 			/>
-			{isLoading ? (
-				<ActivityIndicator />
-			) : error ? (
-				<Text>Ошибка загрузки</Text>
-			) : (
-				<View>
-					{tasks?.map((task) => (
-						<TaskListItem key={task.id} data={task} />
-					))}
-				</View>
-			)}
-			<View style={{ flexDirection: 'row' }}>
-				<View style={styles.pills}>
-					{categories?.map((category) => (
-						<Pressable
-							key={category.id}
-							style={[
-								styles.pill,
-								selectedCategory?.id === category.id && styles.pill__active
-							]}
-							onPress={() => handlerFilterByCategory(category)}
-						>
-							<Text style={styles.pill__text}>{category.name}</Text>
-						</Pressable>
-					))}
+
+			<ScrollView
+				style={commonStyles.scrollBox}
+				contentContainerStyle={{
+					flexGrow: 1,
+					// paddingHorizontal: styleVars.sidePadding,
+					paddingTop: styleVars.sidePadding / 2,
+					paddingBottom: styleVars.sidePadding / 2,
+					gap: 8
+				}}
+			>
+				{isLoading ? (
+					<ActivityIndicator />
+				) : error ? (
+					<Text>Ошибка загрузки</Text>
+				) : (
+					tasks?.map((task) => <TaskListItem key={task.id} data={task} />)
+				)}
+			</ScrollView>
+
+			<View style={styles.pills}>
+				{categories?.map((category) => (
 					<Pressable
+						key={category.id}
 						style={[
 							styles.pill,
-							selectedCategory === null && styles.pill__active
+							selectedCategory?.id === category.id && styles.pill__active
 						]}
-						onPress={() => handlerFilterByCategory(null)}
+						onPress={() => handlerFilterByCategory(category)}
 					>
-						<Text style={styles.pill__text}>Без категории</Text>
+						<Text
+							style={[
+								styles.pill__text,
+								selectedCategory?.id === category.id && styles.pill__text_active
+							]}
+						>
+							{category.name}
+						</Text>
 					</Pressable>
-				</View>
+				))}
+				<Pressable
+					style={[
+						styles.pill,
+						selectedCategory === null && styles.pill__active
+					]}
+					onPress={() => handlerFilterByCategory(null)}
+				>
+					<Text
+						style={[
+							styles.pill__text,
+							selectedCategory === null && styles.pill__text_active
+						]}
+					>
+						Без категории
+					</Text>
+				</Pressable>
 			</View>
-		</ScrollBox>
+		</View>
 	)
 }
 
 const styles = StyleSheet.create((theme, rt) => ({
-	input: {
-		borderWidth: 1,
-		padding: 8,
-		border: 0,
-		backgroundColor: theme.colors.background,
-		borderRadius: 6
-	},
 	pills: {
 		flexDirection: 'row',
 		gap: 8
@@ -102,14 +117,20 @@ const styles = StyleSheet.create((theme, rt) => ({
 		backgroundColor: theme.colors.primary800,
 		paddingVertical: 5,
 		paddingHorizontal: 16,
-		borderRadius: 20
+		borderRadius: 20,
+		borderWidth: 1,
+		borderColor: theme.colors.primary
 	},
 	pill__active: {
+		color: theme.colors.inverse,
 		backgroundColor: theme.colors.primary
 	},
 	pill__text: {
 		fontSize: 14,
 		fontWeight: 500,
 		color: theme.colors.major
+	},
+	pill__text_active: {
+		color: theme.colors.inverse
 	}
 }))

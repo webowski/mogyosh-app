@@ -43,7 +43,6 @@ export default function TaskListItem({ data }: TaskListItemProps) {
 const styles = StyleSheet.create((theme, rt) => ({
 	taskListItem: {
 		padding: 12,
-		marginVertical: 4,
 		backgroundColor: '#ffffff',
 		borderRadius: styleVars.radius,
 		boxShadow: '0px 2px 4px rgba(102, 140, 255, 0.08)'

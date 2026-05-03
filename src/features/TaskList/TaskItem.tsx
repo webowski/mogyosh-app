@@ -111,8 +111,8 @@ const styles = StyleSheet.create((theme, rt) => ({
 		right: 0,
 		color: theme.colors.minor400,
 		backgroundColor: theme.colors.muted700,
-		borderTopRightRadius: 8,
-		borderBottomLeftRadius: 5,
+		borderTopRightRadius: styleVars.radius,
+		borderBottomLeftRadius: styleVars.radius,
 		paddingVertical: 3,
 		paddingRight: 12,
 		paddingLeft: 10
