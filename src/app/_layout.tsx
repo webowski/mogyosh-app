@@ -42,7 +42,7 @@ export default function RootLayout() {
 					<Stack
 						screenOptions={{
 							contentStyle: {
-								backgroundColor: theme.colors.surfaceAlter
+								backgroundColor: theme.colors.backgroundAlter
 							}
 						}}
 					>
@@ -50,9 +50,6 @@ export default function RootLayout() {
 							name='(tabs)'
 							options={{
 								headerShown: false
-								// contentStyle: {
-								// 	backgroundColor: 'blue'
-								// }
 							}}
 						/>
 						<Stack.Screen

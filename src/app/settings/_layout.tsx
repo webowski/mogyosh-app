@@ -1,15 +1,20 @@
 import { Stack } from 'expo-router'
+import { useTranslation } from 'react-i18next'
+import { useUnistyles } from 'react-native-unistyles'
 
 import Header from '@/features/Header/Header'
-import { useTranslation } from 'react-i18next'
 
 export default function SettingsLayout() {
 	const { t } = useTranslation()
+	const { theme } = useUnistyles()
 
 	return (
 		<Stack
 			screenOptions={{
-				headerShown: false
+				headerShown: false,
+				contentStyle: {
+					backgroundColor: theme.colors.backgroundAlter
+				}
 			}}
 		>
 			<Stack.Screen

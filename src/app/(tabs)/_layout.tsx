@@ -21,8 +21,11 @@ export default function NavPanelLayout() {
 				screenOptions={{
 					tabBarShowLabel: false,
 					tabBarActiveTintColor: theme.colors.primary,
-					headerShown: false
-					// tabBarButton: HapticTab
+					headerShown: false,
+					// tabBarButton: HapticTab,
+					sceneStyle: {
+						backgroundColor: theme.colors.backgroundAlter
+					}
 				}}
 			>
 				<Tabs.Screen
