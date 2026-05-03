@@ -101,7 +101,7 @@ export function MindMapCanvas({
 						p1={vec(from.x, from.y)}
 						p2={vec(to.x, to.y)}
 						color={COLORS.edge}
-						strokeWidth={1.5}
+						strokeWidth={2}
 						style='stroke'
 					/>
 				))}
@@ -112,7 +112,7 @@ export function MindMapCanvas({
 						p1={vec(line.x, line.y1)}
 						p2={vec(line.x, line.y2)}
 						color={COLORS.lineMinor}
-						strokeWidth={1.5}
+						strokeWidth={2}
 						style='stroke'
 					/>
 				))}
