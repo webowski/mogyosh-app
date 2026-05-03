@@ -11,13 +11,13 @@ export const useTaskSubtasks = (taskId: TaskId | null) => {
 	return useQuery({
 		queryKey: ['task-subtasks', taskId],
 		queryFn: async () => {
-			console.log('useTaskSubtasks queryFn called, taskId:', taskId)
+			// console.log('useTaskSubtasks queryFn called, taskId:', taskId)
 			if (!taskId) {
 				console.log('No taskId provided, returning empty array')
 				return []
 			}
 			const result = await getTaskSubtasks(taskId)
-			console.log('useTaskSubtasks result:', result.length, 'subtasks')
+			// console.log('useTaskSubtasks result:', result.length, 'subtasks')
 			return result
 		},
 		enabled: !!taskId,

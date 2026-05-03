@@ -113,7 +113,7 @@ export const getTaskSubtasks = async (
 	taskId: TaskId
 ): Promise<TaskEntity[]> => {
 	try {
-		console.log('Fetching subtasks for task ID:', taskId)
+		// console.log('Fetching subtasks for task ID:', taskId)
 
 		const { data, error } = await supabase
 			.from('tasks')
@@ -127,7 +127,7 @@ export const getTaskSubtasks = async (
 		}
 
 		const subtasks = (data ?? []).map(makeTaskObject)
-		console.log('Subtasks fetched successfully:', subtasks.length)
+		// console.log('Subtasks fetched successfully:', subtasks.length)
 		return subtasks
 	} catch (error) {
 		console.error('getTaskSubtasks caught error:', error)
@@ -173,7 +173,7 @@ export const getTaskById = async (
 	taskId: TaskId
 ): Promise<TaskEntity | null> => {
 	try {
-		console.log('Fetching task by ID:', taskId)
+		// console.log('Fetching task by ID:', taskId)
 
 		const { data, error } = await supabase
 			.from('tasks')
@@ -191,7 +191,7 @@ export const getTaskById = async (
 			return null
 		}
 
-		console.log('Task fetched successfully:', data.id)
+		// console.log('Task fetched successfully:', data.id)
 		return makeTaskObject(data)
 	} catch (error) {
 		console.error('getTaskById caught error:', error)

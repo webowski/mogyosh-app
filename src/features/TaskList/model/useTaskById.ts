@@ -11,13 +11,13 @@ export const useTaskById = (taskId: TaskId | null) => {
 	return useQuery({
 		queryKey: ['task', taskId],
 		queryFn: async () => {
-			console.log('useTaskById queryFn called, taskId:', taskId)
+			// console.log('useTaskById queryFn called, taskId:', taskId)
 			if (!taskId) {
 				console.log('No taskId provided, returning null')
 				return null
 			}
 			const result = await getTaskById(taskId)
-			console.log('useTaskById result:', result)
+			// console.log('useTaskById result:', result)
 			return result
 		},
 		enabled: !!taskId,
