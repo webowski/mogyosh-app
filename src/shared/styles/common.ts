@@ -68,14 +68,5 @@ export const commonStyles = StyleSheet.create((theme, rt) => ({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center'
-	},
-
-	input: {
-		paddingHorizontal: 20,
-		paddingVertical: 10,
-		backgroundColor: theme.colors.background,
-		borderRadius: 24,
-		borderWidth: 0,
-		border: 0
 	}
 }))

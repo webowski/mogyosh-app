@@ -9,6 +9,7 @@ import { useCategories, useTasks } from '@/features/TaskList/model'
 import TaskListItem from '@/features/TaskList/TaskListItem'
 import type { CategoryEntity } from '@/shared/domain/task'
 import { commonStyles, STYLE_VARS } from '@/shared/styles/common'
+import { formStyles } from '@/shared/styles/form'
 import { useTranslation } from 'react-i18next'
 import { useUnistyles } from 'react-native-unistyles'
 
@@ -65,24 +66,27 @@ export default function AllTasksScreen() {
 		<>
 			<View
 				style={[
-					commonStyles.mainArea,
-					{ paddingBottom: 16, flexGrow: 0, flexShrink: 0, flexBasis: 'auto' }
+					{
+						paddingHorizontal: STYLE_VARS.sidePadding,
+						paddingTop: STYLE_VARS.sidePadding,
+						paddingBottom: STYLE_VARS.sidePadding
+					}
 				]}
 			>
 				<TextInput
 					value={searchQuery}
 					onChangeText={setSearchQuery}
 					placeholder='Поиск'
-					style={commonStyles.input}
+					style={formStyles.input}
 				/>
 			</View>
 
 			<ScrollView
-				style={commonStyles.scrollBox}
+				style={[commonStyles.scrollBox]}
 				contentContainerStyle={{
 					flexGrow: 1,
 					paddingHorizontal: STYLE_VARS.sidePadding,
-					paddingTop: STYLE_VARS.sidePadding / 2,
+					// paddingTop: STYLE_VARS.sidePadding / 2,
 					paddingBottom: STYLE_VARS.sidePadding / 2,
 					gap: 4
 				}}
@@ -99,8 +103,7 @@ export default function AllTasksScreen() {
 			<View
 				style={{
 					paddingHorizontal: STYLE_VARS.sidePadding,
-					paddingBottom: 34,
-					flexGrow: 0
+					paddingBottom: 34
 				}}
 			>
 				<VirtualizedWheelPicker
