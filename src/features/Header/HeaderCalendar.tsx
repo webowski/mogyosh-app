@@ -9,7 +9,7 @@ import { useCalendarStore } from '@/shared/model/calendarStore'
 import { formatCalendarTitle } from '@/shared/lib/time'
 
 import { useLanguageChange } from '@/shared/i18n/useLanguageChange'
-import { commonStyles, styleVars } from '@/shared/styles/common'
+import { commonStyles, STYLE_VARS } from '@/shared/styles/common'
 
 type HeaderProps = BottomTabHeaderProps | NativeStackHeaderProps
 
@@ -41,7 +41,7 @@ export default function HeaderCalendar({
 			style={[
 				commonStyles.header,
 				{
-					paddingTop: insets.top + styleVars.insetPlus
+					paddingTop: insets.top + STYLE_VARS.insetPlus
 				}
 			]}
 		>

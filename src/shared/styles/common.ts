@@ -1,8 +1,9 @@
 import { StyleSheet } from 'react-native-unistyles'
 
-export const styleVars = {
+export const STYLE_VARS = {
 	sidePadding: 16,
 	sidePaddingSm: 12,
+	inputPadding: 16,
 	insetPlus: 10,
 	radius: 5
 }
@@ -14,14 +15,14 @@ export const commonStyles = StyleSheet.create((theme, rt) => ({
 
 	mainArea: {
 		flex: 1,
-		paddingHorizontal: styleVars.sidePadding,
-		paddingTop: styleVars.sidePadding,
-		paddingBottom: styleVars.sidePadding,
+		paddingHorizontal: STYLE_VARS.sidePadding,
+		paddingTop: STYLE_VARS.sidePadding,
+		paddingBottom: STYLE_VARS.sidePadding,
 		gap: 6
 	},
 
 	scrollIndent: {
-		paddingBottom: rt.insets.bottom + styleVars.sidePadding + 70
+		paddingBottom: rt.insets.bottom + STYLE_VARS.sidePadding + 70
 	},
 
 	scrollBox: {
@@ -30,8 +31,8 @@ export const commonStyles = StyleSheet.create((theme, rt) => ({
 
 	header: {
 		backgroundColor: theme.colors.surface,
-		paddingHorizontal: styleVars.sidePadding,
-		paddingTop: styleVars.insetPlus,
+		paddingHorizontal: STYLE_VARS.sidePadding,
+		paddingTop: STYLE_VARS.insetPlus,
 		paddingBottom: 14,
 		boxShadow: '0 0px 6px ' + theme.colors.shadow100
 	},

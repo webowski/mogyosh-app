@@ -17,10 +17,10 @@ import { getDateFnsLocale } from '@/shared/i18n/dateFnsLocale'
 import { useLanguageChange } from '@/shared/i18n/useLanguageChange'
 import { capitalize } from '@/shared/lib/string'
 import { useCalendarStore } from '@/shared/model/calendarStore'
-import { styleVars } from '@/shared/styles/common'
+import { STYLE_VARS } from '@/shared/styles/common'
 
 const { width: BASE_WINDOW_WIDTH } = Dimensions.get('window')
-const BASE_CALENDAR_WIDTH = BASE_WINDOW_WIDTH - styleVars.sidePadding * 2
+const BASE_CALENDAR_WIDTH = BASE_WINDOW_WIDTH - STYLE_VARS.sidePadding * 2
 
 const SWIPE_THRESHOLD = BASE_CALENDAR_WIDTH * 0.25
 const VELOCITY_THRESHOLD = 800
@@ -228,8 +228,8 @@ export default function Calendar() {
 	}, [])
 
 	const { calendarWidth, calendarHeight } = useMemo(() => {
-		const calendarWidth = dimensions.width - styleVars.sidePaddingSm * 2
-		let calendarHeight = dimensions.height - styleVars.sidePaddingSm * 2 - 200
+		const calendarWidth = dimensions.width - STYLE_VARS.sidePaddingSm * 2
+		let calendarHeight = dimensions.height - STYLE_VARS.sidePaddingSm * 2 - 200
 		calendarHeight = calendarHeight > 560 ? 560 : calendarHeight
 
 		return { calendarWidth, calendarHeight }

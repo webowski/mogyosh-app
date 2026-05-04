@@ -4,7 +4,7 @@ import { Pressable, Text } from 'react-native'
 import { useNavStore } from '@/features/Navigation/model/navStore'
 import { TaskEntity } from '@/shared/domain/task'
 import { useTaskStore } from '@/shared/model/taskStore'
-import { styleVars } from '@/shared/styles/common'
+import { STYLE_VARS } from '@/shared/styles/common'
 import { StyleSheet } from 'react-native-unistyles'
 
 type TaskListItemProps = {
@@ -44,7 +44,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 	taskListItem: {
 		padding: 12,
 		backgroundColor: '#ffffff',
-		borderRadius: styleVars.radius,
+		borderRadius: STYLE_VARS.radius,
 		boxShadow: '0px 2px 4px rgba(102, 140, 255, 0.08)'
 	}
 }))

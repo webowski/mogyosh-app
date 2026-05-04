@@ -24,11 +24,11 @@ import { useLanguageChange } from '@/shared/i18n/useLanguageChange'
 import { capitalize } from '@/shared/lib/string'
 import { getWeekStartDate } from '@/shared/lib/time'
 import { useCalendarStore } from '@/shared/model/calendarStore'
-import { styleVars } from '@/shared/styles/common'
+import { STYLE_VARS } from '@/shared/styles/common'
 import { Squircle } from '@/shared/ui/Squircle'
 
 const BASE_SCREEN_WIDTH = Dimensions.get('window').width
-const BASE_WEEK_WIDTH = BASE_SCREEN_WIDTH - styleVars.sidePadding * 2
+const BASE_WEEK_WIDTH = BASE_SCREEN_WIDTH - STYLE_VARS.sidePadding * 2
 const BASE_DAY_WIDTH = BASE_WEEK_WIDTH / 7 - 8
 const SWIPE_THRESHOLD = BASE_DAY_WIDTH // WEEK_WIDTH * 0.25
 const VELOCITY_THRESHOLD = 800
@@ -175,7 +175,7 @@ export default function WeekCalendar() {
 	const swipeTranslationValue = useSharedValue(0)
 
 	const { weekWidth, dayWidth } = useMemo(() => {
-		const weekWidth = windowWidth - styleVars.sidePadding * 2
+		const weekWidth = windowWidth - STYLE_VARS.sidePadding * 2
 		const dayWidth = weekWidth / 7 - 8
 		return { weekWidth, dayWidth }
 	}, [windowWidth])

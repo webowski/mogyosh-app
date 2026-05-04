@@ -3,7 +3,7 @@ import { NativeStackHeaderProps } from '@react-navigation/native-stack'
 import { Text, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-import { commonStyles, styleVars } from '@/shared/styles/common'
+import { commonStyles, STYLE_VARS } from '@/shared/styles/common'
 
 type HeaderProps = BottomTabHeaderProps | NativeStackHeaderProps
 
@@ -15,7 +15,7 @@ export default function Header({ options, navigation, route }: HeaderProps) {
 			style={[
 				commonStyles.header,
 				{
-					paddingTop: insets.top + styleVars.insetPlus
+					paddingTop: insets.top + STYLE_VARS.insetPlus
 				}
 			]}
 		>

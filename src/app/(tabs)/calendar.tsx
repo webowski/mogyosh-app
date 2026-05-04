@@ -1,7 +1,7 @@
 import { View } from 'react-native'
 
 import Calendar from '@/features/Calendar/Calendar'
-import { commonStyles, styleVars } from '@/shared/styles/common'
+import { commonStyles, STYLE_VARS } from '@/shared/styles/common'
 
 export default function CalendarScreen() {
 	return (
@@ -9,7 +9,7 @@ export default function CalendarScreen() {
 			style={[
 				commonStyles.mainArea,
 				{
-					paddingHorizontal: styleVars.sidePaddingSm,
+					paddingHorizontal: STYLE_VARS.sidePaddingSm,
 					justifyContent: 'center'
 				}
 			]}

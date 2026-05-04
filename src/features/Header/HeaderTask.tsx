@@ -7,7 +7,7 @@ import { useTaskById } from '@/features/TaskList/model'
 import { useCategoriesStore } from '@/features/TaskList/model/categoriesStore'
 import { makeCategoryPath } from '@/features/TaskList/model/task.utils'
 import { useTaskStore } from '@/shared/model/taskStore'
-import { commonStyles, styleVars } from '@/shared/styles/common'
+import { commonStyles, STYLE_VARS } from '@/shared/styles/common'
 
 type HeaderProps = BottomTabHeaderProps | NativeStackHeaderProps
 
@@ -30,7 +30,7 @@ export default function HeaderTask({
 			style={[
 				commonStyles.header,
 				{
-					paddingTop: insets.top + styleVars.insetPlus
+					paddingTop: insets.top + STYLE_VARS.insetPlus
 				}
 			]}
 		>

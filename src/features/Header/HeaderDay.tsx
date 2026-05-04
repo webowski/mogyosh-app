@@ -10,7 +10,7 @@ import WeekCalendar from '@/features/Calendar/WeekCalendar'
 import { formatTitleDate } from '@/shared/lib/time'
 
 import { useLanguageChange } from '@/shared/i18n/useLanguageChange'
-import { commonStyles, styleVars } from '@/shared/styles/common'
+import { commonStyles, STYLE_VARS } from '@/shared/styles/common'
 
 type HeaderProps = BottomTabHeaderProps | NativeStackHeaderProps
 
@@ -36,7 +36,7 @@ export default function HeaderDay({ options, navigation, route }: HeaderProps) {
 			style={[
 				commonStyles.header,
 				{
-					paddingTop: insets.top + styleVars.insetPlus - 6,
+					paddingTop: insets.top + STYLE_VARS.insetPlus - 6,
 					paddingBottom: 6
 				}
 			]}
