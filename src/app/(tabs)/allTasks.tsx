@@ -66,7 +66,7 @@ export default function AllTasksScreen() {
 			<View
 				style={[
 					commonStyles.mainArea,
-					{ paddingBottom: 16, flexGrow: 0, flexBasis: 'auto' }
+					{ paddingBottom: 16, flexGrow: 0, flexShrink: 0, flexBasis: 'auto' }
 				]}
 			>
 				<TextInput
