@@ -223,7 +223,6 @@ export const getCategories = async (): Promise<CategoryEntity[]> => {
 	const { data, error } = await supabase
 		.from('categories')
 		.select('id, name, parent_id')
-		.order('name', { ascending: true })
 
 	if (error) throw error
 	return data ?? []
