@@ -10,7 +10,8 @@ export const useCategories = () => {
 
 	const query = useQuery<CategoryEntity[]>({
 		queryKey: ['categories'],
-		queryFn: getCategories
+		queryFn: getCategories,
+		select: (data) => [...data].sort((a, b) => a.name.localeCompare(b.name))
 	})
 
 	useEffect(
