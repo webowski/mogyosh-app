@@ -1,7 +1,7 @@
 import type { LayoutNode, MindMapNode } from './types'
 
 export const NODE_HEIGHT = 36
-const LEVEL_DISTANCE = 160
+const LEVEL_DISTANCE = 120
 const VERTICAL_GAP = 16
 const CATEGORY_TASK_GAP = 44
 const HORIZONTAL_PADDING = 24
