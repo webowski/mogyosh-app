@@ -24,22 +24,30 @@ export default function TaskScreen() {
 		})
 	}
 
+	// Show loading state when waiting for task data
 	if (isLoading || isLoadingSubtasks)
 		return (
 			<View style={commonStyles.mainArea}>
 				<ActivityIndicator />
 			</View>
 		)
+
+	// Show error state
 	if (error)
 		return (
 			<View style={commonStyles.mainArea}>
-				<Text>Ошибка загрузки задачи</Text>
+				<Text>
+					Ошибка загрузки задачи:{' '}
+					{error instanceof Error ? error.message : 'Неизвестная ошибка'}
+				</Text>
 			</View>
 		)
+
+	// Show not found state when no task data and not loading
 	if (!data)
 		return (
 			<View style={commonStyles.mainArea}>
-				<Text>Задача не найдена</Text>
+				<Text>Задача не найдена или не выбрана</Text>
 			</View>
 		)
 

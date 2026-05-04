@@ -183,6 +183,12 @@ export const getTaskById = async (
 
 		if (error) {
 			console.error('Error fetching task by ID:', error)
+			// Handle specific Supabase error codes
+			if (error.code === 'PGRST116') {
+				// Row not found
+				console.warn('Task not found:', taskId)
+				return null
+			}
 			throw error
 		}
 

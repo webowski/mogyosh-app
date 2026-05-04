@@ -16,13 +16,18 @@ export const useTaskSubtasks = (taskId: TaskId | null) => {
 				console.log('No taskId provided, returning empty array')
 				return []
 			}
-			const result = await getTaskSubtasks(taskId)
-			// console.log('useTaskSubtasks result:', result.length, 'subtasks')
-			return result
+			try {
+				const result = await getTaskSubtasks(taskId)
+				// console.log('useTaskSubtasks result:', result.length, 'subtasks')
+				return result
+			} catch (error) {
+				console.error('useTaskSubtasks query error:', error)
+				throw error
+			}
 		},
 		enabled: !!taskId,
-		retry: 2
-		// staleTime: 5 * 60 * 1000 // 5 minutes
+		retry: 2,
+		staleTime: 5 * 60 * 1000 // 5 minutes
 		// staleTime: 0,
 		// gcTime: 0,
 		// refetchOnMount: 'always'

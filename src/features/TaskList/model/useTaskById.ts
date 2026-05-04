@@ -16,12 +16,18 @@ export const useTaskById = (taskId: TaskId | null) => {
 				console.log('No taskId provided, returning null')
 				return null
 			}
-			const result = await getTaskById(taskId)
-			// console.log('useTaskById result:', result)
-			return result
+			try {
+				const result = await getTaskById(taskId)
+				// console.log('useTaskById result:', result)
+				return result
+			} catch (error) {
+				console.error('useTaskById query error:', error)
+				throw error
+			}
 		},
 		enabled: !!taskId,
-		retry: 2
+		retry: 2,
+		staleTime: 5 * 60 * 1000 // 5 minutes
 		// staleTime: 5 * 60 * 1000 // 5 minutes
 	})
 }
