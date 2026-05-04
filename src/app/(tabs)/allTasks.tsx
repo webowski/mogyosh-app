@@ -6,13 +6,13 @@ import {
 	TextInput,
 	View
 } from 'react-native'
+import { ScrollView } from 'react-native-gesture-handler'
 import { StyleSheet } from 'react-native-unistyles'
 
 import { useCategories, useTasks } from '@/features/TaskList/model'
 import TaskListItem from '@/features/TaskList/TaskListItem'
 import type { CategoryEntity } from '@/shared/domain/task'
 import { commonStyles, styleVars } from '@/shared/styles/common'
-import { ScrollView } from 'react-native-gesture-handler'
 
 export default function AllTasksScreen() {
 	const [searchQuery, setSearchQuery] = useState('')
@@ -40,22 +40,29 @@ export default function AllTasksScreen() {
 	}
 
 	return (
-		<View style={[commonStyles.mainArea, { paddingBottom: 30 }]}>
-			<TextInput
-				value={searchQuery}
-				onChangeText={setSearchQuery}
-				placeholder='Поиск'
-				style={commonStyles.input}
-			/>
+		<>
+			<View
+				style={[
+					commonStyles.mainArea,
+					{ paddingBottom: 16, flexGrow: 0, flexBasis: 'auto' }
+				]}
+			>
+				<TextInput
+					value={searchQuery}
+					onChangeText={setSearchQuery}
+					placeholder='Поиск'
+					style={commonStyles.input}
+				/>
+			</View>
 
 			<ScrollView
 				style={commonStyles.scrollBox}
 				contentContainerStyle={{
 					flexGrow: 1,
-					// paddingHorizontal: styleVars.sidePadding,
+					paddingHorizontal: styleVars.sidePadding,
 					paddingTop: styleVars.sidePadding / 2,
 					paddingBottom: styleVars.sidePadding / 2,
-					gap: 8
+					gap: 4
 				}}
 			>
 				{isLoading ? (
@@ -67,7 +74,32 @@ export default function AllTasksScreen() {
 				)}
 			</ScrollView>
 
-			<View style={styles.pills}>
+			<ScrollView
+				horizontal
+				showsHorizontalScrollIndicator={false}
+				style={[{ paddingBottom: 34, flexGrow: 0, flexBasis: 'auto' }]}
+				// contentContainerStyle={styles.pills}
+				contentContainerStyle={{
+					paddingHorizontal: styleVars.sidePadding,
+					gap: 6
+				}}
+			>
+				<Pressable
+					style={[
+						styles.pill,
+						selectedCategory === null && styles.pill__active
+					]}
+					onPress={() => handlerFilterByCategory(null)}
+				>
+					<Text
+						style={[
+							styles.pill__text,
+							selectedCategory === null && styles.pill__text_active
+						]}
+					>
+						Без категории
+					</Text>
+				</Pressable>
 				{categories?.map((category) => (
 					<Pressable
 						key={category.id}
@@ -87,36 +119,22 @@ export default function AllTasksScreen() {
 						</Text>
 					</Pressable>
 				))}
-				<Pressable
-					style={[
-						styles.pill,
-						selectedCategory === null && styles.pill__active
-					]}
-					onPress={() => handlerFilterByCategory(null)}
-				>
-					<Text
-						style={[
-							styles.pill__text,
-							selectedCategory === null && styles.pill__text_active
-						]}
-					>
-						Без категории
-					</Text>
-				</Pressable>
-			</View>
-		</View>
+			</ScrollView>
+		</>
 	)
 }
 
 const styles = StyleSheet.create((theme, rt) => ({
 	pills: {
-		flexDirection: 'row',
-		gap: 8
+		// flexDirection: 'row',
+		gap: 8,
+		paddingHorizontal: styleVars.sidePadding,
+		backgroundColor: 'black'
 	},
 	pill: {
 		backgroundColor: theme.colors.primary800,
 		paddingVertical: 5,
-		paddingHorizontal: 16,
+		paddingHorizontal: 14,
 		borderRadius: 20,
 		borderWidth: 1,
 		borderColor: theme.colors.primary

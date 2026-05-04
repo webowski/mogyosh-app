@@ -24,7 +24,7 @@ export default function DayScreen() {
 			style={commonStyles.mainArea}
 			overScrollMode='never'
 			bounces={true}
-			contentContainerStyle={{ gap: 8 }}
+			contentContainerStyle={{ gap: 4 }}
 			keyExtractor={(item) => item.id}
 			renderItem={({ item }) => <TaskItem data={item} />}
 			renderSectionHeader={({ section: { title } }) => (

@@ -8,13 +8,16 @@ export const styleVars = {
 }
 
 export const commonStyles = StyleSheet.create((theme, rt) => ({
+	scene: {
+		backgroundColor: theme.colors.backgroundAlter
+	},
+
 	mainArea: {
 		flex: 1,
-		backgroundColor: theme.colors.backgroundAlter,
 		paddingHorizontal: styleVars.sidePadding,
 		paddingTop: styleVars.sidePadding,
 		paddingBottom: styleVars.sidePadding,
-		gap: 8
+		gap: 6
 	},
 
 	scrollIndent: {
