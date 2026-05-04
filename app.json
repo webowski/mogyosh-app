@@ -52,12 +52,6 @@
             "imageWidth": 76
           }
         }
-      ],
-      [
-        "expo-dev-client",
-        {
-          "devToolsClient": false
-        }
       ]
     ],
     "experiments": {
