@@ -17,7 +17,7 @@ const VirtualizedWheelPicker = withVirtualized(WheelPicker)
 
 export default function AllTasksScreen() {
 	const { theme } = useUnistyles()
-	const { t } = useTranslation()
+	const { t, i18n } = useTranslation()
 
 	const [searchQuery, setSearchQuery] = useState('')
 	const [selectedCategory, setSelectedCategory] =
@@ -54,7 +54,7 @@ export default function AllTasksScreen() {
 			return [allCategories, ...categoriesSet, noCategory]
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[categories]
+		[categories, i18n.language]
 	)
 
 	const handlePickerChange = (object: { item: { value: string | null } }) => {
