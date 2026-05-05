@@ -54,7 +54,15 @@ export const getTasks = async (filters?: TaskFilters) => {
 		const categoryIds = Array.isArray(filters.categoryId)
 			? filters.categoryId
 			: [filters.categoryId]
-		query = query.in('category_id', categoryIds)
+
+		if (categoryIds.includes('uncategorized')) {
+			query = query.is('category_id', null)
+		} else {
+			const validIds = categoryIds.filter((id) => id !== 'uncategorized')
+			if (validIds.length > 0) {
+				query = query.in('category_id', validIds)
+			}
+		}
 	}
 
 	if (filters?.status) {

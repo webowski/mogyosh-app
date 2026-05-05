@@ -3,7 +3,7 @@ import { CategoryEntity, TaskEntity, TaskStatus } from '@/shared/domain/task'
 
 export type TaskFilters = {
 	searchQuery?: string
-	categoryId?: string | string[]
+	categoryId?: string | string[] | 'uncategorized'
 	status?: TaskStatus
 	priority?: number
 }

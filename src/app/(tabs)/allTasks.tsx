@@ -26,6 +26,7 @@ export default function AllTasksScreen() {
 	const [searchQuery, setSearchQuery] = useState('')
 	const [selectedCategory, setSelectedCategory] =
 		useState<CategoryEntity | null>(null)
+	const [isUncategorized, setIsUncategorized] = useState(false)
 
 	const { data: categories } = useCategories()
 
@@ -35,8 +36,9 @@ export default function AllTasksScreen() {
 		error
 	} = useTasks({
 		searchQuery: searchQuery.trim() || undefined,
-		categoryId:
-			selectedCategory && categories
+		categoryId: isUncategorized
+			? 'uncategorized'
+			: selectedCategory && categories
 				? getCategoryIdsWithSubcategories(selectedCategory.id, categories)
 				: undefined
 	})
@@ -51,14 +53,13 @@ export default function AllTasksScreen() {
 	// }
 
 	const pickerItems = useMemo(() => {
-		const noCategory = { value: null, label: t('Uncategorized') }
+		const noCategory = { value: 'uncategorized', label: t('Uncategorized') }
 		const allCategories = { value: null, label: t('All categories') }
 
 		if (!categories || categories.length === 0) {
 			return [allCategories, noCategory]
 		}
 
-		// const categoryMap = new Map(categories.map((c) => [c.id, c]))
 		const visited = new Set<string>()
 		const result: { value: string | null; label: string }[] = []
 
@@ -78,13 +79,20 @@ export default function AllTasksScreen() {
 
 		buildCategoriesTree(null, 0)
 
-		return [allCategories, ...result, noCategory]
+		return [allCategories, noCategory, ...result]
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [categories, i18n.language])
 
 	const handlePickerChange = (object: { item: { value: string | null } }) => {
-		const category = categories?.find((c) => c.id === object.item.value) ?? null
-		setSelectedCategory(category)
+		if (object.item.value === 'uncategorized') {
+			setIsUncategorized(true)
+			setSelectedCategory(null)
+		} else {
+			setIsUncategorized(false)
+			const category =
+				categories?.find((c) => c.id === object.item.value) ?? null
+			setSelectedCategory(category)
+		}
 	}
 
 	return (
@@ -133,7 +141,9 @@ export default function AllTasksScreen() {
 			>
 				<VirtualizedWheelPicker
 					data={pickerItems}
-					value={selectedCategory?.id ?? null}
+					value={
+						isUncategorized ? 'uncategorized' : (selectedCategory?.id ?? null)
+					}
 					onValueChanged={handlePickerChange}
 					itemHeight={40}
 					visibleItemCount={3}
