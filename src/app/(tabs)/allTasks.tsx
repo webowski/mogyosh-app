@@ -14,6 +14,7 @@ import TaskListItem from '@/features/TaskList/TaskListItem'
 import type { CategoryEntity } from '@/shared/domain/task'
 import { commonStyles, STYLE_VARS } from '@/shared/styles/common'
 import { formStyles } from '@/shared/styles/form'
+import { MaterialIcons } from '@expo/vector-icons'
 import { useTranslation } from 'react-i18next'
 import { useUnistyles } from 'react-native-unistyles'
 
@@ -106,12 +107,27 @@ export default function AllTasksScreen() {
 					}
 				]}
 			>
-				<TextInput
-					value={searchQuery}
-					onChangeText={setSearchQuery}
-					placeholder='Поиск'
-					style={formStyles.input}
-				/>
+				<View style={{ position: 'relative' }}>
+					<MaterialIcons
+						name='search'
+						size={20}
+						color={theme.colors.minor}
+						style={{
+							position: 'absolute',
+							left: 12,
+							top: '50%',
+							transform: [{ translateY: -9 }],
+							zIndex: 1
+						}}
+					/>
+					<TextInput
+						value={searchQuery}
+						onChangeText={setSearchQuery}
+						placeholder='Поиск'
+						placeholderTextColor={theme.colors.minor}
+						style={[formStyles.input, { paddingLeft: 38 }]}
+					/>
+				</View>
 			</View>
 
 			<ScrollView
