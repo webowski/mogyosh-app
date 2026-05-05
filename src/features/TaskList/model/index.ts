@@ -29,4 +29,6 @@ export {
 	groupTasksByShedule
 } from './task.utils'
 
+export { getCategoryIdsWithSubcategories } from './category.utils'
+
 export { getCategories } from './task.api'

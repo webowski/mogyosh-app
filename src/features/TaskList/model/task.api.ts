@@ -51,7 +51,10 @@ export const getTasks = async (filters?: TaskFilters) => {
 		.order('created_at', { ascending: false })
 
 	if (filters?.categoryId) {
-		query = query.eq('category_id', filters.categoryId)
+		const categoryIds = Array.isArray(filters.categoryId)
+			? filters.categoryId
+			: [filters.categoryId]
+		query = query.in('category_id', categoryIds)
 	}
 
 	if (filters?.status) {
