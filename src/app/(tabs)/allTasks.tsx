@@ -44,15 +44,6 @@ export default function AllTasksScreen() {
 				: undefined
 	})
 
-	// const handlerFilterByCategory = (category: CategoryEntity | null) => {
-	// 	// Если нажали на уже выбранную категорию — сбрасываем фильтр
-	// 	if (selectedCategory?.id === category?.id) {
-	// 		setSelectedCategory(null)
-	// 	} else {
-	// 		setSelectedCategory(category)
-	// 	}
-	// }
-
 	const pickerItems = useMemo(() => {
 		const noCategory = { value: 'uncategorized', label: t('Uncategorized') }
 		const allCategories = { value: null, label: t('All categories') }
