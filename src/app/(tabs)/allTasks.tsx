@@ -2,8 +2,16 @@ import WheelPicker, {
 	withVirtualized
 } from '@quidone/react-native-wheel-picker'
 import { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ActivityIndicator, Text, TextInput, View } from 'react-native'
-import { ScrollView } from 'react-native-gesture-handler'
+import Animated, {
+	Extrapolation,
+	interpolate,
+	useAnimatedScrollHandler,
+	useAnimatedStyle,
+	useSharedValue
+} from 'react-native-reanimated'
+import { useUnistyles } from 'react-native-unistyles'
 
 import {
 	getCategoryIdsWithSubcategories,
@@ -15,8 +23,6 @@ import type { CategoryEntity } from '@/shared/domain/task'
 import { commonStyles, STYLE_VARS } from '@/shared/styles/common'
 import { formStyles } from '@/shared/styles/form'
 import { MaterialIcons } from '@expo/vector-icons'
-import { useTranslation } from 'react-i18next'
-import { useUnistyles } from 'react-native-unistyles'
 
 const VirtualizedWheelPicker = withVirtualized(WheelPicker)
 
@@ -31,6 +37,37 @@ export default function AllTasksScreen() {
 
 	const { data: categories } = useCategories()
 
+	//
+
+	const SEARCH_BAR_HEIGHT = 68 // paddingTop + paddingBottom + input height
+
+	const scrollY = useSharedValue(0)
+
+	const scrollHandler = useAnimatedScrollHandler({
+		onScroll: (event) => {
+			scrollY.value = event.contentOffset.y
+		}
+	})
+
+	const searchBarAnimatedStyle = useAnimatedStyle(() => {
+		const overscrollAmount = Math.max(0, -scrollY.value)
+		const height = interpolate(
+			overscrollAmount,
+			[0, SEARCH_BAR_HEIGHT],
+			[0, SEARCH_BAR_HEIGHT],
+			Extrapolation.CLAMP
+		)
+		const opacity = interpolate(
+			overscrollAmount,
+			[0, SEARCH_BAR_HEIGHT * 0.6],
+			[0, 1],
+			Extrapolation.CLAMP
+		)
+		return { height, opacity, overflow: 'hidden' as const }
+	})
+
+	//
+
 	const {
 		data: tasks,
 		isLoading,
@@ -44,36 +81,39 @@ export default function AllTasksScreen() {
 				: undefined
 	})
 
-	const pickerItems = useMemo(() => {
-		const noCategory = { value: 'uncategorized', label: t('Uncategorized') }
-		const allCategories = { value: null, label: t('All categories') }
+	const pickerItems = useMemo(
+		() => {
+			const noCategory = { value: 'uncategorized', label: t('Uncategorized') }
+			const allCategories = { value: null, label: t('All categories') }
 
-		if (!categories || categories.length === 0) {
-			return [allCategories, noCategory]
-		}
-
-		const visited = new Set<string>()
-		const result: { value: string | null; label: string }[] = []
-
-		const buildCategoriesTree = (parentId: string | null, depth: number) => {
-			for (const category of categories) {
-				if (category.parent_id !== parentId || visited.has(category.id)) {
-					continue
-				}
-				visited.add(category.id)
-
-				const prefix = depth > 0 ? ' — '.repeat(depth) : ''
-				result.push({ value: category.id, label: prefix + category.name })
-
-				buildCategoriesTree(category.id, depth + 1)
+			if (!categories || categories.length === 0) {
+				return [allCategories, noCategory]
 			}
-		}
 
-		buildCategoriesTree(null, 0)
+			const visited = new Set<string>()
+			const result: { value: string | null; label: string }[] = []
 
-		return [allCategories, noCategory, ...result]
+			const buildCategoriesTree = (parentId: string | null, depth: number) => {
+				for (const category of categories) {
+					if (category.parent_id !== parentId || visited.has(category.id)) {
+						continue
+					}
+					visited.add(category.id)
+
+					const prefix = depth > 0 ? ' — '.repeat(depth) : ''
+					result.push({ value: category.id, label: prefix + category.name })
+
+					buildCategoriesTree(category.id, depth + 1)
+				}
+			}
+
+			buildCategoriesTree(null, 0)
+
+			return [allCategories, noCategory, ...result]
+		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [categories, i18n.language])
+		[categories, i18n.language]
+	)
 
 	const handlePickerChange = (object: { item: { value: string | null } }) => {
 		if (object.item.value === 'uncategorized') {
@@ -89,13 +129,14 @@ export default function AllTasksScreen() {
 
 	return (
 		<>
-			<View
+			<Animated.View
 				style={[
 					{
 						paddingHorizontal: STYLE_VARS.sidePadding,
 						paddingTop: STYLE_VARS.sidePadding,
 						paddingBottom: STYLE_VARS.sidePadding
-					}
+					},
+					searchBarAnimatedStyle
 				]}
 			>
 				<View style={{ position: 'relative' }}>
@@ -119,9 +160,14 @@ export default function AllTasksScreen() {
 						style={[formStyles.input, { paddingLeft: 38 }]}
 					/>
 				</View>
-			</View>
+			</Animated.View>
 
-			<ScrollView
+			<Animated.FlatList
+				data={tasks}
+				keyExtractor={(item) => item.id}
+				onScroll={scrollHandler}
+				scrollEventThrottle={16}
+				bounces={true}
 				style={[commonStyles.scrollBox]}
 				contentContainerStyle={{
 					flexGrow: 1,
@@ -130,15 +176,15 @@ export default function AllTasksScreen() {
 					paddingBottom: STYLE_VARS.sidePadding / 2,
 					gap: 4
 				}}
-			>
-				{isLoading ? (
-					<ActivityIndicator />
-				) : error ? (
-					<Text>Ошибка загрузки</Text>
-				) : (
-					tasks?.map((task) => <TaskListItem key={task.id} data={task} />)
-				)}
-			</ScrollView>
+				renderItem={({ item }) => <TaskListItem data={item} />}
+				ListEmptyComponent={
+					isLoading ? (
+						<ActivityIndicator />
+					) : error ? (
+						<Text>Ошибка загрузки</Text>
+					) : null
+				}
+			/>
 
 			<View
 				style={{
