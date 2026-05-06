@@ -26,6 +26,17 @@ export default function RootLayout() {
 	const [loginError, setLoginError] = useState<string | null>(null)
 
 	useEffect(() => {
+		// // Тест 1: Простой публичный API
+		// fetch('https://httpbin.org/get')
+		// 	.then((r) => r.json())
+		// 	.then((data) => console.log('HTTPBIN OK:', data.origin))
+		// 	.catch((err) => console.log('HTTPBIN FAILED:', err.message))
+
+		// // Тест 2: Прямо к Supabase REST (без auth)
+		// fetch('https://oqlbysmlbmlqviljrayc.supabase.co/rest/v1/')
+		// 	.then((r) => console.log('SUPABASE REST STATUS:', r.status))
+		// 	.catch((err) => console.log('SUPABASE REST FAILED:', err.message))
+
 		login()
 			.then(() => setLoggedIn(true))
 			.catch((err) => setLoginError(err.message))
