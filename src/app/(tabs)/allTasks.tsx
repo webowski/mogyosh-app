@@ -1,16 +1,16 @@
+import { MaterialIcons } from '@expo/vector-icons'
 import WheelPicker, {
 	withVirtualized
 } from '@quidone/react-native-wheel-picker'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ActivityIndicator, Text, TextInput, View } from 'react-native'
-import Animated, {
-	Extrapolation,
-	interpolate,
-	useAnimatedScrollHandler,
-	useAnimatedStyle,
-	useSharedValue
-} from 'react-native-reanimated'
+import {
+	ActivityIndicator,
+	FlatList,
+	Text,
+	TextInput,
+	View
+} from 'react-native'
 import { useUnistyles } from 'react-native-unistyles'
 
 import {
@@ -22,7 +22,6 @@ import TaskListItem from '@/features/TaskList/TaskListItem'
 import type { CategoryEntity } from '@/shared/domain/task'
 import { commonStyles, STYLE_VARS } from '@/shared/styles/common'
 import { formStyles } from '@/shared/styles/form'
-import { MaterialIcons } from '@expo/vector-icons'
 
 const VirtualizedWheelPicker = withVirtualized(WheelPicker)
 
@@ -36,37 +35,6 @@ export default function AllTasksScreen() {
 	const [isUncategorized, setIsUncategorized] = useState(false)
 
 	const { data: categories } = useCategories()
-
-	//
-
-	const SEARCH_BAR_HEIGHT = 68 // paddingTop + paddingBottom + input height
-
-	const scrollY = useSharedValue(0)
-
-	const scrollHandler = useAnimatedScrollHandler({
-		onScroll: (event) => {
-			scrollY.value = event.contentOffset.y
-		}
-	})
-
-	const searchBarAnimatedStyle = useAnimatedStyle(() => {
-		const overscrollAmount = Math.max(0, -scrollY.value)
-		const height = interpolate(
-			overscrollAmount,
-			[0, SEARCH_BAR_HEIGHT],
-			[0, SEARCH_BAR_HEIGHT],
-			Extrapolation.CLAMP
-		)
-		const opacity = interpolate(
-			overscrollAmount,
-			[0, SEARCH_BAR_HEIGHT * 0.6],
-			[0, 1],
-			Extrapolation.CLAMP
-		)
-		return { height, opacity, overflow: 'hidden' as const }
-	})
-
-	//
 
 	const {
 		data: tasks,
@@ -129,14 +97,13 @@ export default function AllTasksScreen() {
 
 	return (
 		<>
-			<Animated.View
+			<View
 				style={[
 					{
 						paddingHorizontal: STYLE_VARS.sidePadding,
 						paddingTop: STYLE_VARS.sidePadding,
 						paddingBottom: STYLE_VARS.sidePadding
-					},
-					searchBarAnimatedStyle
+					}
 				]}
 			>
 				<View style={{ position: 'relative' }}>
@@ -160,12 +127,11 @@ export default function AllTasksScreen() {
 						style={[formStyles.input, { paddingLeft: 38 }]}
 					/>
 				</View>
-			</Animated.View>
+			</View>
 
-			<Animated.FlatList
+			<FlatList
 				data={tasks}
 				keyExtractor={(item) => item.id}
-				onScroll={scrollHandler}
 				scrollEventThrottle={16}
 				bounces={true}
 				style={[commonStyles.scrollBox]}
