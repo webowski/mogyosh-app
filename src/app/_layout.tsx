@@ -1,15 +1,16 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ActivityIndicator, Text } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import 'react-native-reanimated'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { useUnistyles } from 'react-native-unistyles'
 
 import Header from '@/features/Header/Header'
-import { runMigrations } from '@/services/database/migrate'
+import { login } from '@/shared/api/auth'
 
 export const unstable_settings = {
 	anchor: '(tabs)'
@@ -21,11 +22,28 @@ export default function RootLayout() {
 	const { theme } = useUnistyles()
 	const { t } = useTranslation()
 
+	const [isLoggedIn, setLoggedIn] = useState(false)
+	const [loginError, setLoginError] = useState<string | null>(null)
+
 	useEffect(() => {
-		runMigrations().catch((err) => {
-			console.error('Migration error:', err)
-		})
+		// // Тест 1: Простой публичный API
+		// fetch('https://httpbin.org/get')
+		// 	.then((r) => r.json())
+		// 	.then((data) => console.log('HTTPBIN OK:', data.origin))
+		// 	.catch((err) => console.log('HTTPBIN FAILED:', err.message))
+
+		// // Тест 2: Прямо к Supabase REST (без auth)
+		// fetch('https://oqlbysmlbmlqviljrayc.supabase.co/rest/v1/')
+		// 	.then((r) => console.log('SUPABASE REST STATUS:', r.status))
+		// 	.catch((err) => console.log('SUPABASE REST FAILED:', err.message))
+
+		login()
+			.then(() => setLoggedIn(true))
+			.catch((err) => setLoginError(err.message))
 	}, [])
+
+	if (loginError) return <Text>Ошибка логина: {loginError}</Text>
+	if (!isLoggedIn) return <ActivityIndicator />
 
 	return (
 		<QueryClientProvider client={queryClient}>
