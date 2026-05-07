@@ -2,7 +2,7 @@ import { addDays, format } from 'date-fns'
 import { useState } from 'react'
 import { ActivityIndicator, FlatList, Text, View } from 'react-native'
 
-import { useTasksByDate } from '@/features/TaskList/model/useTasks'
+import { useTasksByDate } from '@/features/TaskList/model'
 import TaskListItem from '@/features/TaskList/TaskListItem'
 import ScrollBox from '@/shared/ui/ScrollBox'
 

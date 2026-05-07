@@ -1,13 +1,13 @@
-import { ActivityIndicator, FlatList, Text, View } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
+import { ActivityIndicator, FlatList, Text, View } from 'react-native'
 
-import { useTaskById, useTaskSubtasks } from '@/features/TaskList/model/useTasks'
+import { useTaskById, useTaskSubtasks } from '@/features/TaskList/model'
 import TaskListItem from '@/features/TaskList/TaskListItem'
 import ScrollBox from '@/shared/ui/ScrollBox'
 
 /**
  * Экран "Задача" с отображением подзадач
- * 
+ *
  * Использует хуки:
  * - useTaskById для получения основной задачи
  * - useTaskSubtasks для получения списка подзадач
@@ -16,7 +16,9 @@ export default function TaskDetailScreenExample() {
 	const { taskId } = useLocalSearchParams<{ taskId: string }>()
 
 	const { data: task, isLoading: isLoadingTask } = useTaskById(taskId || null)
-	const { data: subtasks, isLoading: isLoadingSubtasks } = useTaskSubtasks(taskId || null)
+	const { data: subtasks, isLoading: isLoadingSubtasks } = useTaskSubtasks(
+		taskId || null
+	)
 
 	if (isLoadingTask) return <ActivityIndicator />
 	if (!task) return <Text>Задача не найдена</Text>

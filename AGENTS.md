@@ -7,7 +7,7 @@
 ## Общие правила
 
 - ВАЖНО! Не изменяй и не добавляй стили, если я тебя об этом не просил.
-- Supabase MCP: Не вноси изменения в базу supabase!
+- Database: op-sqlite + drizzle-orm (local storage)
 - НЕ ДЕЛАЙ самостоятельно тестирование и проверки кода, такие как `bun run tsc`
 - Комментарии в коде писать только на английском языке
 - Use Dependency Inversion programming principle
@@ -40,8 +40,8 @@ This is a React Native mobile application built with Expo 55 and TypeScript. The
 - Routing: Expo Router
 - State Management: Zustand
 - Backend State Management: Tanstack Query
-- Backend: Supabase
-- Authentication: Supabase
+- Backend: Local SQLite (op-sqlite + drizzle-orm)
+- Authentication: None (local app)
 - Styling: CSS-in-JS with Unistyles
 - Navigation: React Navigation
 - React Native Skia для canvas графики

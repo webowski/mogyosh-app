@@ -32,7 +32,7 @@ export type StateEntity = {
 	task_id: TaskId
 	state: TaskState
 	state_date?: string | null
-	created_at: string
+	created_at: string | null
 }
 
 export type TaskEntity = {
@@ -52,11 +52,11 @@ export type TaskRow = {
 	id: string
 	info: string
 	status: TaskStatus
-	priority: number
-	categories: any
+	priority: number | null
+	category: CategoryEntity | null
 	parent_id: string | null
 	states: StateEntity[]
 	schedules: ScheduleEntity[]
 	created_at: string
-	updated_at: string
+	updated_at: string | null
 }

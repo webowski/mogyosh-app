@@ -1,21 +1,27 @@
+import {
+	addMonths,
+	eachDayOfInterval,
+	endOfMonth,
+	format,
+	startOfMonth
+} from 'date-fns'
 import { useState } from 'react'
 import { Text, View } from 'react-native'
-import { addMonths, format, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns'
 
-import { useTasksCountByPeriod } from '@/features/TaskList/model/useTasks'
+import { useTasksCountByPeriod } from '@/features/TaskList/model'
 import ScrollBox from '@/shared/ui/ScrollBox'
 
 /**
  * Экран "Календарь" с отображением количества задач в каждом дне
- * 
+ *
  * Использует хук useTasksCountByPeriod для получения счётчиков задач по дням
  */
 export default function CalendarScreenExample() {
 	const [currentMonth, setCurrentMonth] = useState(new Date())
-	
+
 	const startDate = format(startOfMonth(currentMonth), 'yyyy-MM-dd')
 	const endDate = format(endOfMonth(currentMonth), 'yyyy-MM-dd')
-	
+
 	const { data, isLoading, error } = useTasksCountByPeriod(startDate, endDate)
 
 	const goToPreviousMonth = () => {
@@ -69,7 +75,7 @@ export default function CalendarScreenExample() {
 						{daysInMonth.map((day) => {
 							const dateStr = format(day, 'yyyy-MM-dd')
 							const count = tasksCountMap.get(dateStr) || 0
-							
+
 							return (
 								<View key={dateStr}>
 									<Text>{format(day, 'd')}</Text>
