@@ -26,6 +26,7 @@
 		"@react-navigation/native": "^7.1.33",
 		"@shopify/react-native-skia": "2.4.18",
 		"@sqlite.org/sqlite-wasm": "^3.53.0-build1",
+		"@supabase/supabase-js": "^2.105.3",
 		"@tanstack/react-query": "^5.96.0",
 		"date-fns": "^4.1.0",
 		"drizzle-orm": "^0.45.2",
