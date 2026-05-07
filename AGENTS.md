@@ -40,7 +40,9 @@ This is a React Native mobile application built with Expo 55 and TypeScript. The
 - Routing: Expo Router
 - State Management: Zustand
 - Backend State Management: Tanstack Query
-- Backend: Local SQLite (op-sqlite + drizzle-orm)
+- Local Database: @op-engineering/op-sqlite
+- Backend ORM: drizzle-orm
+- Local Storage: react-native-mmkv
 - Authentication: None (local app)
 - Styling: CSS-in-JS with Unistyles
 - Navigation: React Navigation
