@@ -68,8 +68,11 @@ export default function RootLayout() {
 							options={{
 								title: t('screen.Create Task'),
 								// headerShown: false,
-								presentation: 'modal',
-								animation: 'slide_from_bottom'
+								presentation: 'formSheet',
+								sheetAllowedDetents: [0.9],
+								sheetElevation: 1,
+								sheetCornerRadius: 16
+								// animation: 'slide_from_bottom'
 							}}
 						/>
 						<Stack.Screen
