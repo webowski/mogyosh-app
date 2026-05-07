@@ -1,6 +1,4 @@
-import { relations } from 'drizzle-orm'
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core'
-import { tasks } from './tasks'
 
 export const schedules = sqliteTable('schedules', {
 	id: text('id').primaryKey(),
@@ -18,10 +16,3 @@ export const schedules = sqliteTable('schedules', {
 	end_date: text('end_date'),
 	created_at: text('created_at')
 })
-
-export const schedulesRelations = relations(schedules, ({ one }) => ({
-	task: one(tasks, {
-		fields: [schedules.task_id],
-		references: [tasks.id]
-	})
-}))
