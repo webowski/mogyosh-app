@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native-unistyles'
 
-import { STYLE_VARS } from './common'
+import { STYLE_VARS } from '@/shared/styles/common'
 
 export const pillStyles = StyleSheet.create((theme, rt) => ({
 	pills: {
