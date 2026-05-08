@@ -1,9 +1,8 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ActivityIndicator, Text } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import 'react-native-reanimated'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
@@ -11,7 +10,6 @@ import { useUnistyles } from 'react-native-unistyles'
 
 import Header from '@/features/Header/Header'
 import runMigrations from '@/services/database/migrations'
-import { login } from '@/shared/api/auth'
 
 export const unstable_settings = {
 	anchor: '(tabs)'
@@ -27,8 +25,8 @@ export default function RootLayout() {
 	const { theme } = useUnistyles()
 	const { t } = useTranslation()
 
-	const [isLoggedIn, setLoggedIn] = useState(false)
-	const [loginError, setLoginError] = useState<string | null>(null)
+	// const [isLoggedIn, setLoggedIn] = useState(false)
+	// const [loginError, setLoginError] = useState<string | null>(null)
 
 	useEffect(
 		function effectDatabaseRelated() {
@@ -45,16 +43,16 @@ export default function RootLayout() {
 			// 	.then((r) => console.log('SUPABASE REST STATUS:', r.status))
 			// 	.catch((err) => console.log('SUPABASE REST FAILED:', err.message))
 
-			login()
-				.then(() => setLoggedIn(true))
-				.catch((err) => setLoginError(err.message))
+			// login()
+			// 	.then(() => setLoggedIn(true))
+			// 	.catch((err) => setLoginError(err.message))
 		},
 		//
 		[]
 	)
 
-	if (loginError) return <Text>Ошибка логина: {loginError}</Text>
-	if (!isLoggedIn) return <ActivityIndicator />
+	// if (loginError) return <Text>Ошибка логина: {loginError}</Text>
+	// if (!isLoggedIn) return <ActivityIndicator />
 
 	return (
 		<QueryClientProvider client={queryClient}>
