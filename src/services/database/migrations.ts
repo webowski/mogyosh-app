@@ -3,9 +3,9 @@ import { sql } from 'drizzle-orm'
 import { db } from './client'
 
 const runMigrations = async (): Promise<void> => {
-	console.log('migrations: start')
+	// console.log('migrations: start')
 	await db.run(sql`PRAGMA foreign_keys = ON`)
-	console.log('migrations: pragma done')
+	// console.log('migrations: pragma done')
 
 	await db.run(sql`
     CREATE TABLE IF NOT EXISTS categories (
@@ -15,7 +15,7 @@ const runMigrations = async (): Promise<void> => {
       created_at TEXT NOT NULL
     )
   `)
-	console.log('migrations: categories done')
+	// console.log('migrations: categories done')
 
 	await db.run(sql`
     CREATE TABLE IF NOT EXISTS tasks (
@@ -30,7 +30,7 @@ const runMigrations = async (): Promise<void> => {
       updated_at TEXT
     )
   `)
-	console.log('migrations: tasks done')
+	// console.log('migrations: tasks done')
 
 	await db.run(sql`
     CREATE TABLE IF NOT EXISTS schedules (
@@ -48,7 +48,7 @@ const runMigrations = async (): Promise<void> => {
       created_at TEXT NOT NULL
     )
   `)
-	console.log('migrations: schedules done')
+	// console.log('migrations: schedules done')
 
 	await db.run(sql`
     CREATE TABLE IF NOT EXISTS states (
@@ -59,9 +59,9 @@ const runMigrations = async (): Promise<void> => {
       created_at TEXT NOT NULL
     )
   `)
-	console.log('migrations: states done')
+	// console.log('migrations: states done')
 
-	console.log('migrations: complete')
+	// console.log('migrations: complete')
 }
 
 export default runMigrations
