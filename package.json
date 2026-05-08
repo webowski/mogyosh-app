@@ -29,7 +29,6 @@
 		"date-fns": "^4.1.0",
 		"expo": "~55.0.19",
 		"expo-constants": "~55.0.15",
-		"expo-crypto": "~55.0.14",
 		"expo-dev-client": "~55.0.30",
 		"expo-device": "~55.0.15",
 		"expo-font": "~55.0.6",
