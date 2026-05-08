@@ -31,4 +31,4 @@ export {
 
 export { getCategoryIdsWithSubcategories } from './category.utils'
 
-// export { getCategories } from './task.api'
+export { getCategories } from './task.api'
