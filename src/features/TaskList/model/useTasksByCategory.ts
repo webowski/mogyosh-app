@@ -2,8 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { CategoryId } from '@/shared/domain/ids'
 import { CategoryEntity, TaskEntity } from '@/shared/domain/task'
-import { categoryRepository } from '../repository/categoryRepository'
-import { taskRepository } from '../repository/taskRepository'
+import { getAllTasks, getCategories } from './task.api'
 import { TaskCategoryGroupEntity } from './task.types'
 
 /**
@@ -14,8 +13,8 @@ export const useTasksByCategory = () => {
 		queryKey: ['tasks-by-category'],
 		queryFn: async () => {
 			const [tasks, categories] = await Promise.all([
-				taskRepository.getAll(),
-				categoryRepository.getAll()
+				getAllTasks(),
+				getCategories()
 			])
 			return groupTasksByCategory(tasks, categories)
 		}

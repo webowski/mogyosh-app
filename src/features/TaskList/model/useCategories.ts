@@ -1,16 +1,16 @@
 import { useQuery } from '@tanstack/react-query'
 import { useEffect } from 'react'
 
-import type { CategoryEntity } from '@/shared/domain/task'
-import { categoryRepository } from '../repository/categoryRepository'
+import { CategoryEntity } from '@/shared/domain/task'
 import { useCategoriesStore } from './categoriesStore'
+import { getCategories } from './task.api'
 
 export const useCategories = () => {
 	const setCategories = useCategoriesStore((state) => state.setCategories)
 
 	const query = useQuery<CategoryEntity[]>({
 		queryKey: ['categories'],
-		queryFn: categoryRepository.getAll,
+		queryFn: getCategories,
 		select: (data) => [...data].sort((a, b) => a.name.localeCompare(b.name))
 	})
 
