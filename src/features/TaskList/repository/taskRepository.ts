@@ -20,7 +20,11 @@ import {
 	tasksTable
 } from '@/services/database/schema'
 import type { TaskId } from '@/shared/domain/ids'
-import type { TaskEntity, TaskState } from '@/shared/domain/task'
+import type {
+	ScheduleEntity,
+	TaskEntity,
+	TaskState
+} from '@/shared/domain/task'
 import type { TaskFilters } from '../model/task.types'
 
 // Build TaskEntity from joined rows
@@ -39,7 +43,7 @@ const buildTaskEntity = (
 	priority: task.priority,
 	category: relations.category ?? null,
 	parent_id: task.parent_id,
-	schedules: relations.schedules ?? [],
+	schedules: relations.schedules as unknown as ScheduleEntity[],
 	created_at: task.created_at,
 	updated_at: task.updated_at
 })
@@ -243,6 +247,8 @@ export const taskRepository = {
 			type: 'task',
 			created_at: now
 		})
+
+		console.log('taskRepository.create: inserted')
 
 		return {
 			id,
