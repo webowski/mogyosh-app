@@ -43,7 +43,7 @@ This is a React Native mobile application built with Expo 55 and TypeScript. The
 - Local Database: @op-engineering/op-sqlite
 - Backend ORM: drizzle-orm
 - Local Storage: react-native-mmkv
-- Authentication: None (local app)
+- Authentication: None (local app), но в дальнейшем планируется использование Supabase
 - Styling: CSS-in-JS with Unistyles
 - Navigation: React Navigation
 - React Native Skia для canvas графики
