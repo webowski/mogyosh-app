@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import 'react-native-reanimated'
@@ -17,19 +17,21 @@ export const unstable_settings = {
 
 const queryClient = new QueryClient()
 
-const initializeSqliteDatabase = async () => {
-	await runMigrations()
-}
-
 export default function RootLayout() {
 	const { theme } = useUnistyles()
 	const { t } = useTranslation()
+
+	const [isDatabaseReady, setDatabaseReady] = useState(false)
 
 	// const [isLoggedIn, setLoggedIn] = useState(false)
 	// const [loginError, setLoginError] = useState<string | null>(null)
 
 	useEffect(
 		function effectDatabaseRelated() {
+			const initializeSqliteDatabase = async () => {
+				await runMigrations()
+				setDatabaseReady(true)
+			}
 			initializeSqliteDatabase()
 
 			// // Тест 1: Простой публичный API
@@ -51,6 +53,7 @@ export default function RootLayout() {
 		[]
 	)
 
+	if (!isDatabaseReady) return null
 	// if (loginError) return <Text>Ошибка логина: {loginError}</Text>
 	// if (!isLoggedIn) return <ActivityIndicator />
 
