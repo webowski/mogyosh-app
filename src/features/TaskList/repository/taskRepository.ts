@@ -248,20 +248,9 @@ export const taskRepository = {
 			created_at: now
 		})
 
-		console.log('taskRepository.create: inserted')
-
-		return {
-			id,
-			info,
-			status: 'active',
-			state: null,
-			priority: null,
-			category: null,
-			parent_id: null,
-			schedules: [],
-			created_at: now,
-			updated_at: null
-		}
+		const result = await taskRepository.getById(id)
+		if (!result) throw new Error(`Task not created: ${id}`)
+		return result
 	},
 
 	updateState: async (
