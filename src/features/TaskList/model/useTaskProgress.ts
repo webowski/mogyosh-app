@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { TaskId } from '@/shared/domain/ids'
 import { TaskEntity } from '@/shared/domain/task'
-import { getTaskSubtasks } from './task.api'
+import { taskRepository } from '../repository/taskRepository'
 
 /**
  * Get subtasks and calculate completion progress for a task
@@ -22,7 +22,7 @@ export const useTaskProgress = (taskId: TaskId | null) => {
 				}
 			}
 
-			const subtasks = await getTaskSubtasks(taskId)
+			const subtasks = await taskRepository.getSubtasks(taskId)
 
 			const completedCount = subtasks.filter((task) => {
 				return task.state === 'done'

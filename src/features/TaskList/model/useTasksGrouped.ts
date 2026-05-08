@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { getTasks } from './task.api'
+import { taskRepository } from '../repository/taskRepository'
 import { TaskFilters } from './task.types'
 import { groupTasksByShedule } from './task.utils'
 
@@ -11,7 +11,7 @@ export const useTasksGrouped = (filters?: TaskFilters) => {
 	return useQuery({
 		queryKey: ['tasks-grouped', filters],
 		queryFn: async () => {
-			const tasks = await getTasks(filters)
+			const tasks = await taskRepository.getAll(filters)
 			return groupTasksByShedule(tasks)
 		}
 	})
