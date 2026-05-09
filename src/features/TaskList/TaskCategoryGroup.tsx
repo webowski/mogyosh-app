@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Pressable, Text, View } from 'react-native'
 
-import { TaskCategoryGroupEntity } from '@/features/TaskList/model'
+import { TaskCategoryGroupEntity } from '@/features/TaskList'
 import { MaterialIcons } from '@expo/vector-icons'
 import { useUnistyles } from 'react-native-unistyles'
 import TaskListItem from './TaskListItem'

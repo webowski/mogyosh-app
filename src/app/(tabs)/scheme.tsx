@@ -4,7 +4,7 @@ import { ActivityIndicator, Text, useWindowDimensions } from 'react-native'
 import { MindMap } from '@/features/MindMap/MindMap'
 import { MindMapNode } from '@/features/MindMap/model/types'
 import { useNavStore } from '@/features/Navigation/model/navStore'
-import { useTasksByCategory } from '@/features/TaskList/model'
+import { useTasksByCategory } from '@/features/TaskList'
 import { TaskCategoryGroupEntity } from '@/features/TaskList/model/task.types'
 import { useTaskStore } from '@/shared/model/taskStore'
 

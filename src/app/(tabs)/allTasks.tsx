@@ -17,7 +17,7 @@ import {
 	getCategoryIdsWithSubcategories,
 	useCategories,
 	useTasks
-} from '@/features/TaskList/model'
+} from '@/features/TaskList'
 import TaskListItem from '@/features/TaskList/TaskListItem'
 import type { CategoryEntity } from '@/shared/domain/task'
 import { commonStyles, STYLE_VARS } from '@/shared/styles/common'

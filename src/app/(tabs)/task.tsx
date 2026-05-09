@@ -1,7 +1,7 @@
 import { ActivityIndicator, Text, View } from 'react-native'
 
+import { useTaskById, useTaskSubtasks } from '@/features/TaskList'
 import { ChecklistItem } from '@/features/TaskList/ChecklistItem'
-import { useTaskById, useTaskSubtasks } from '@/features/TaskList/model'
 import { useUpdateTaskState } from '@/features/TaskList/model/useUpdateTaskState'
 import { useTaskStore } from '@/shared/model/taskStore'
 import { commonStyles } from '@/shared/styles/common'

@@ -4,7 +4,7 @@ import { Pressable, Text, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 import { useNavStore } from '@/features/Navigation/model/navStore'
-import { useTaskProgress } from '@/features/TaskList/model'
+import { useTaskProgress } from '@/features/TaskList'
 import { useCategoriesStore } from '@/features/TaskList/model/categoriesStore'
 import {
 	isByTime,

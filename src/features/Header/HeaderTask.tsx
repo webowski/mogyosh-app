@@ -3,7 +3,7 @@ import { NativeStackHeaderProps } from '@react-navigation/native-stack'
 import { ActivityIndicator, Text, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-import { useTaskById } from '@/features/TaskList/model'
+import { useTaskById } from '@/features/TaskList'
 import { useCategoriesStore } from '@/features/TaskList/model/categoriesStore'
 import { makeCategoryPath } from '@/features/TaskList/model/task.utils'
 import { useTaskStore } from '@/shared/model/taskStore'

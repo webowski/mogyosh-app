@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Pressable, ScrollView, Text } from 'react-native'
 
-import { useCategories } from '@/features/TaskList/model'
+import { useCategories } from '@/features/TaskList'
 import { CategoryEntity } from '@/shared/domain/task'
 import { STYLE_VARS } from '@/shared/styles/common'
 import { pillStyles } from './pillsStyles'
