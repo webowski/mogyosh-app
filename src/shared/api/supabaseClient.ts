@@ -22,7 +22,7 @@ const localStorage = {
 	}
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+export const supabaseClient = createClient(supabaseUrl, supabaseAnonKey, {
 	auth: {
 		storage: localStorage,
 		autoRefreshToken: true,

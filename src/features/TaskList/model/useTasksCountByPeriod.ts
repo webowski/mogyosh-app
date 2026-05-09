@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { getTasksCountByPeriod } from './task.api'
+import { taskAPI } from '../repository/task.api'
 import { CalendarDayData } from './task.types'
 
 /**
@@ -13,7 +13,10 @@ export const useTasksCountByPeriod = (startDate: string, endDate: string) => {
 	return useQuery({
 		queryKey: ['tasks-count-period', startDate, endDate],
 		queryFn: async () => {
-			const countByDate = await getTasksCountByPeriod(startDate, endDate)
+			const countByDate = await taskAPI.getTasksCountByPeriod(
+				startDate,
+				endDate
+			)
 
 			// Convert to array of CalendarDayData
 			const days: CalendarDayData[] = Object.entries(countByDate).map(

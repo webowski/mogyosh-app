@@ -1,12 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { createTask } from './task.api'
+import { taskAPI } from '../repository/task.api'
 
 export const useCreateTask = () => {
 	const queryClient = useQueryClient()
 
 	return useMutation({
-		mutationFn: createTask,
+		mutationFn: taskAPI.createTask,
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['tasks'] })
 			queryClient.invalidateQueries({ queryKey: ['tasks-flat'] })

@@ -1,7 +1,7 @@
-import { supabase } from '@/shared/api/supabase'
+import { supabaseClient } from '@/shared/api/supabaseClient'
 import { TaskId } from '@/shared/domain/ids'
-import { CategoryEntity, TaskEntity, TaskRow } from '@/shared/domain/task'
-import { TaskFilters } from './task.types'
+import { TaskEntity, TaskRow } from '@/shared/domain/task'
+import { TaskFilters } from '../model/task.types'
 
 const TASKS_SELECT = `
 	*,
@@ -30,7 +30,7 @@ const TASKS_SELECT = `
 	)
 `
 
-export const makeTaskObject = (task: TaskRow): TaskEntity => ({
+const makeTaskObject = (task: TaskRow): TaskEntity => ({
 	id: task.id,
 	info: task.info,
 	status: task.status,
@@ -43,8 +43,8 @@ export const makeTaskObject = (task: TaskRow): TaskEntity => ({
 	updated_at: task.updated_at
 })
 
-export const getTasks = async (filters?: TaskFilters) => {
-	let query = supabase
+const getTasks = async (filters?: TaskFilters) => {
+	let query = supabaseClient
 		.from('tasks')
 		.select(TASKS_SELECT)
 		.is('parent_id', null)
@@ -87,8 +87,8 @@ export const getTasks = async (filters?: TaskFilters) => {
 	return (data ?? []).map(makeTaskObject)
 }
 
-export const getAllTasks = async (): Promise<TaskEntity[]> => {
-	const { data, error } = await supabase
+const getAllTasks = async (): Promise<TaskEntity[]> => {
+	const { data, error } = await supabaseClient
 		.from('tasks')
 		.select(TASKS_SELECT)
 		.order('created_at', { ascending: false })
@@ -102,8 +102,8 @@ export const getAllTasks = async (): Promise<TaskEntity[]> => {
  * Get tasks for a specific date
  * @param date - Date in ISO format (YYYY-MM-DD)
  */
-export const getTasksByDate = async (date: string): Promise<TaskEntity[]> => {
-	const { data, error } = await supabase
+const getTasksByDate = async (date: string): Promise<TaskEntity[]> => {
+	const { data, error } = await supabaseClient
 		.from('tasks')
 		.select(TASKS_SELECT)
 		.or(
@@ -120,13 +120,11 @@ export const getTasksByDate = async (date: string): Promise<TaskEntity[]> => {
  * Get subtasks for a specific task
  * @param taskId - Parent task ID
  */
-export const getTaskSubtasks = async (
-	taskId: TaskId
-): Promise<TaskEntity[]> => {
+const getTaskSubtasks = async (taskId: TaskId): Promise<TaskEntity[]> => {
 	try {
 		// console.log('Fetching subtasks for task ID:', taskId)
 
-		const { data, error } = await supabase
+		const { data, error } = await supabaseClient
 			.from('tasks')
 			.select(TASKS_SELECT)
 			.eq('parent_id', taskId)
@@ -151,11 +149,11 @@ export const getTaskSubtasks = async (
  * @param startDate - Start date in ISO format (YYYY-MM-DD)
  * @param endDate - End date in ISO format (YYYY-MM-DD)
  */
-export const getTasksCountByPeriod = async (
+const getTasksCountByPeriod = async (
 	startDate: string,
 	endDate: string
 ): Promise<Record<string, number>> => {
-	const { data, error } = await supabase
+	const { data, error } = await supabaseClient
 		.from('tasks')
 		.select('schedules(date)')
 		.or(`schedules.date.gte.${startDate}.and.schedules.date.lte.${endDate}`)
@@ -180,13 +178,11 @@ export const getTasksCountByPeriod = async (
 /**
  * Get a single task by ID with all relations
  */
-export const getTaskById = async (
-	taskId: TaskId
-): Promise<TaskEntity | null> => {
+const getTaskById = async (taskId: TaskId): Promise<TaskEntity | null> => {
 	try {
 		// console.log('Fetching task by ID:', taskId)
 
-		const { data, error } = await supabase
+		const { data, error } = await supabaseClient
 			.from('tasks')
 			.select(TASKS_SELECT)
 			.eq('id', taskId)
@@ -216,11 +212,11 @@ export const getTaskById = async (
 	}
 }
 
-export const createTask = async (info: string): Promise<TaskEntity> => {
-	const { data: userData } = await supabase.auth.getUser()
+const createTask = async (info: string): Promise<TaskEntity> => {
+	const { data: userData } = await supabaseClient.auth.getUser()
 	const userId = userData?.user?.id
 
-	const { data, error } = await supabase
+	const { data, error } = await supabaseClient
 		.from('tasks')
 		.insert({ info, user_id: userId })
 		.select()
@@ -230,26 +226,17 @@ export const createTask = async (info: string): Promise<TaskEntity> => {
 	return data
 }
 
-export const getCategories = async (): Promise<CategoryEntity[]> => {
-	const { data, error } = await supabase
-		.from('categories')
-		.select('id, name, parent_id')
-
-	if (error) throw error
-	return data ?? []
-}
-
 /**
  * Update task state (done/active/archived)
  * @param taskId - Task ID to update
  * @param state - New state value
  */
-export const updateTaskState = async (
+const updateTaskState = async (
 	taskId: TaskId,
 	state: 'done' | 'active' | 'archived'
 ): Promise<TaskEntity> => {
 	// Check if state record exists for this task
-	const { data: existingState, error: checkError } = await supabase
+	const { data: existingState, error: checkError } = await supabaseClient
 		.from('states')
 		.select('id')
 		.eq('task_id', taskId)
@@ -261,7 +248,7 @@ export const updateTaskState = async (
 
 	if (existingState) {
 		// Update existing state record
-		const { error: updateError } = await supabase
+		const { error: updateError } = await supabaseClient
 			.from('states')
 			.update({
 				state,
@@ -272,7 +259,7 @@ export const updateTaskState = async (
 		if (updateError) throw updateError
 	} else {
 		// Insert new state record
-		const { error: insertError } = await supabase.from('states').insert({
+		const { error: insertError } = await supabaseClient.from('states').insert({
 			task_id: taskId,
 			state,
 			state_date: new Date().toISOString()
@@ -282,7 +269,7 @@ export const updateTaskState = async (
 	}
 
 	// Fetch updated task with all relations
-	const { data, error } = await supabase
+	const { data, error } = await supabaseClient
 		.from('tasks')
 		.select(TASKS_SELECT)
 		.eq('id', taskId)
@@ -290,4 +277,15 @@ export const updateTaskState = async (
 
 	if (error) throw error
 	return makeTaskObject(data)
+}
+
+export const taskAPI = {
+	getTasks,
+	getAllTasks,
+	getTasksByDate,
+	getTaskSubtasks,
+	getTasksCountByPeriod,
+	getTaskById,
+	createTask,
+	updateTaskState
 }

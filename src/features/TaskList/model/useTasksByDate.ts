@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { getTasksByDate } from './task.api'
+import { taskAPI } from '../repository/task.api'
 
 /**
  * Get tasks for a specific date
@@ -10,7 +10,7 @@ export const useTasksByDate = (date: string) => {
 	return useQuery({
 		queryKey: ['tasks-by-date', date],
 		queryFn: async () => {
-			return await getTasksByDate(date)
+			return await taskAPI.getTasksByDate(date)
 		}
 	})
 }

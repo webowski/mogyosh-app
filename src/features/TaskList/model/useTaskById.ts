@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { TaskId } from '@/shared/domain/ids'
-import { getTaskById } from './task.api'
+import { taskAPI } from '../repository/task.api'
 
 /**
  * Get a single task by ID
@@ -17,7 +17,7 @@ export const useTaskById = (taskId: TaskId | null) => {
 				return null
 			}
 			try {
-				const result = await getTaskById(taskId)
+				const result = await taskAPI.getTaskById(taskId)
 				// console.log('useTaskById result:', result)
 				return result
 			} catch (error) {

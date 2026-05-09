@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { TaskId } from '@/shared/domain/ids'
-import { getTaskSubtasks } from './task.api'
+import { taskAPI } from '../repository/task.api'
 
 /**
  * Get subtasks for a specific task
@@ -17,7 +17,7 @@ export const useTaskSubtasks = (taskId: TaskId | null) => {
 				return []
 			}
 			try {
-				const result = await getTaskSubtasks(taskId)
+				const result = await taskAPI.getTaskSubtasks(taskId)
 				// console.log('useTaskSubtasks result:', result.length, 'subtasks')
 				return result
 			} catch (error) {

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { getTasks } from '@/features/TaskList/model/task.api'
+import { taskAPI } from '../repository/task.api'
 import { TaskFilters } from './task.types'
 
 /**
@@ -11,7 +11,7 @@ export const useTasks = (filters?: TaskFilters) => {
 	return useQuery({
 		queryKey: ['tasks', filters],
 		queryFn: async () => {
-			return await getTasks(filters)
+			return await taskAPI.getTasks(filters)
 		}
 	})
 }
