@@ -22,6 +22,7 @@ import TaskListItem from '@/features/TaskList/TaskListItem'
 import type { CategoryEntity } from '@/shared/domain/task'
 import { commonStyles, STYLE_VARS } from '@/shared/styles/common'
 import { formStyles } from '@/shared/styles/form'
+import { Button } from '@/shared/ui/Button'
 
 const VirtualizedWheelPicker = withVirtualized(WheelPicker)
 
@@ -151,6 +152,8 @@ export default function AllTasksScreen() {
 					) : null
 				}
 			/>
+
+			<Button>Категории</Button>
 
 			<View
 				style={{
