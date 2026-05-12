@@ -18,7 +18,6 @@
 		"postinstall": "bunx setup-skia-web public"
 	},
 	"dependencies": {
-		"@expo/ui": "~55.0.15",
 		"@expo/vector-icons": "^15.0.2",
 		"@lodev09/react-native-true-sheet": "^3.10.1",
 		"@quidone/react-native-wheel-picker": "^1.6.4",
