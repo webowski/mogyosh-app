@@ -47,6 +47,12 @@ This is a React Native mobile application built with Expo 55 and TypeScript. The
 - Navigation: React Navigation
 - React Native Skia для canvas графики
 
+## Components and deps
+
+### BottomSheet
+
+@lodev09/react-native-true-sheet [Migrating to v3](https://sheet.lodev09.com/migration)
+
 ## React Native Expo разработка
 
 - Код должен быть совеременным для latest React Native Expo на апрель 2026
