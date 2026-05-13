@@ -1,12 +1,12 @@
 import { MaterialIcons } from '@expo/vector-icons'
-import WheelPicker, {
-	withVirtualized
-} from '@quidone/react-native-wheel-picker'
-import { useMemo, useState } from 'react'
+import { TrueSheet } from '@lodev09/react-native-true-sheet'
+import { useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	ActivityIndicator,
 	FlatList,
+	Pressable,
+	ScrollView,
 	Text,
 	TextInput,
 	View
@@ -24,8 +24,6 @@ import { commonStyles, STYLE_VARS } from '@/shared/styles/common'
 import { formStyles } from '@/shared/styles/form'
 import { Button } from '@/shared/ui/Button'
 
-const VirtualizedWheelPicker = withVirtualized(WheelPicker)
-
 export default function AllTasksScreen() {
 	const { theme } = useUnistyles()
 	const { t, i18n } = useTranslation()
@@ -34,6 +32,8 @@ export default function AllTasksScreen() {
 	const [selectedCategory, setSelectedCategory] =
 		useState<CategoryEntity | null>(null)
 	const [isUncategorized, setIsUncategorized] = useState(false)
+
+	const sheetRef = useRef<TrueSheet>(null)
 
 	const { data: categories } = useCategories()
 
@@ -153,38 +153,78 @@ export default function AllTasksScreen() {
 				}
 			/>
 
-			<Button>Категории</Button>
-
 			<View
 				style={{
 					paddingHorizontal: STYLE_VARS.sidePadding,
 					paddingBottom: 34
 				}}
 			>
-				<VirtualizedWheelPicker
-					data={pickerItems}
-					value={
-						isUncategorized ? 'uncategorized' : (selectedCategory?.id ?? null)
-					}
-					onValueChanged={handlePickerChange}
-					itemHeight={40}
-					visibleItemCount={3}
-					// contentContainerStyle={{
-					// 	// backgroundColor: theme.colors.primary
-					// }}
-					overlayItemStyle={{
-						backgroundColor: theme.colors.primary,
-						opacity: 0.2
-					}}
-					itemTextStyle={{
-						paddingHorizontal: STYLE_VARS.inputPadding,
-						textAlign: 'left',
-						fontSize: 16,
-						fontWeight: 500,
-						color: theme.colors.major
-					}}
-				/>
+				<Button onPress={() => sheetRef.current?.present()}>Категории</Button>
 			</View>
+
+			<TrueSheet
+				ref={sheetRef}
+				detents={[0.5]}
+				cornerRadius={16}
+				style={{ backgroundColor: theme.colors.surface }}
+			>
+				<ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 16 }}>
+					{pickerItems.map((item) => {
+						const isSelected =
+							item.value === 'uncategorized'
+								? isUncategorized
+								: item.value === null
+									? !isUncategorized && selectedCategory === null
+									: selectedCategory?.id === item.value
+
+						return (
+							<Pressable
+								key={String(item.value)}
+								onPress={() => handlePickerChange({ item })}
+								style={{
+									flexDirection: 'row',
+									alignItems: 'center',
+									paddingVertical: 10,
+									paddingHorizontal: STYLE_VARS.inputPadding,
+									gap: 12
+								}}
+							>
+								<View
+									style={{
+										width: 20,
+										height: 20,
+										borderRadius: 10,
+										borderWidth: 2,
+										borderColor: theme.colors.major,
+										alignItems: 'center',
+										justifyContent: 'center'
+									}}
+								>
+									{isSelected && (
+										<View
+											style={{
+												width: 10,
+												height: 10,
+												borderRadius: 5,
+												backgroundColor: theme.colors.major
+											}}
+										/>
+									)}
+								</View>
+								<Text
+									style={{
+										fontSize: 16,
+										fontWeight: '500',
+										color: theme.colors.major
+									}}
+								>
+									{item.label}
+								</Text>
+							</Pressable>
+						)
+					})}
+				</ScrollView>
+			</TrueSheet>
 		</>
 	)
 }
