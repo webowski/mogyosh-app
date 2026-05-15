@@ -168,10 +168,11 @@ export default function AllTasksScreen() {
 
 			<View style={styles.SubPanel}>
 				<Button
-					size='sm'
 					variant='pill'
+					size='sm'
 					style={{ width: 'auto' }}
 					onPress={() => sheetRef.current?.present()}
+					indicator={isUncategorized || selectedCategory !== null}
 				>
 					Категории
 				</Button>

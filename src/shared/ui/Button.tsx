@@ -23,6 +23,7 @@ interface ButtonProps {
 	disabled?: boolean
 	style?: ViewStyle
 	textStyle?: TextStyle
+	indicator?: boolean
 }
 
 interface Ripple {
@@ -123,7 +124,8 @@ export const Button: React.FC<ButtonProps> = ({
 	size = 'default',
 	disabled = false,
 	style,
-	textStyle
+	textStyle,
+	indicator = false
 }) => {
 	const { theme } = useUnistyles()
 	const [ripples, setRipples] = React.useState<Ripple[]>([])
@@ -239,6 +241,23 @@ export const Button: React.FC<ButtonProps> = ({
 				</Text>
 			) : (
 				children
+			)}
+
+			{/* Layer 3.5: indicator */}
+			{indicator && (
+				<View
+					style={{
+						position: 'absolute',
+						top: 2,
+						right: 2,
+						width: 7,
+						height: 7,
+						borderRadius: 999,
+						backgroundColor: theme.colors.primary600,
+						boxShadow: '0 0px 4px ' + theme.colors.shadow100
+					}}
+					pointerEvents='none'
+				/>
 			)}
 		</Pressable>
 	)
