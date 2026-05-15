@@ -12,7 +12,7 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-type Variant = 'default' | 'secondary'
+type Variant = 'default' | 'secondary' | 'pill'
 type Size = 'default' | 'sm' | 'lg' | 'icon' | 'round'
 
 interface ButtonProps {
@@ -46,12 +46,11 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		overflow: 'hidden',
 		position: 'relative',
-		// Добавляем тень
 		shadowColor: '#1a237e',
 		shadowOffset: { width: 0, height: 5 },
 		shadowOpacity: 0.24,
 		shadowRadius: 10,
-		elevation: 8 // для Android
+		elevation: 8
 	},
 	disabled: {
 		opacity: 0.5
@@ -59,7 +58,7 @@ const styles = StyleSheet.create({
 	text: {
 		includeFontPadding: false
 	},
-	secondaryNoShadow: {
+	noShadow: {
 		shadowOpacity: 0,
 		elevation: 0
 	}
@@ -73,6 +72,10 @@ const getVariantStyles = (
 		rippleColor: 'rgba(255,255,255,0.35)'
 	},
 	secondary: {
+		text: { color: theme.colors.major },
+		rippleColor: 'rgba(99,125,255,0.15)'
+	},
+	pill: {
 		text: { color: theme.colors.major },
 		rippleColor: 'rgba(99,125,255,0.15)'
 	}
@@ -127,7 +130,8 @@ export const Button: React.FC<ButtonProps> = ({
 
 	const variantStyle = getVariantStyles(theme)[variant]
 	const sizeStyle = sizeStyles[size]
-	const borderRadius = (sizeStyle.container as any).borderRadius ?? 8
+	const borderRadius =
+		variant === 'pill' ? 999 : ((sizeStyle.container as any).borderRadius ?? 8)
 
 	const handlePressIn = (event: any) => {
 		const { locationX, locationY } = event.nativeEvent
@@ -154,11 +158,11 @@ export const Button: React.FC<ButtonProps> = ({
 				styles.base,
 				sizeStyle.container,
 				disabled && styles.disabled,
-				variant === 'secondary' && styles.secondaryNoShadow,
+				variant !== 'default' && styles.noShadow,
 				style
 			]}
 		>
-			{/* Layer 1: gradient background */}
+			{/* Layer 1: background */}
 			{variant === 'default' ? (
 				<LinearGradient
 					colors={[
@@ -170,15 +174,26 @@ export const Button: React.FC<ButtonProps> = ({
 					end={{ x: 1, y: 1 }}
 					style={[StyleSheet.absoluteFill, { borderRadius }]}
 				/>
-			) : (
+			) : variant === 'secondary' ? (
 				<View
 					style={[
 						StyleSheet.absoluteFill,
 						{
 							borderRadius,
-							// borderWidth: 1.5,
-							// borderColor: 'hsl(225, 100%, 70%)',
 							backgroundColor: theme.colors.primary800
+						}
+					]}
+				/>
+			) : (
+				// pill
+				<View
+					style={[
+						StyleSheet.absoluteFill,
+						{
+							borderRadius,
+							borderWidth: 1.5,
+							borderColor: theme.colors.primary700,
+							backgroundColor: theme.colors.primary900
 						}
 					]}
 				/>

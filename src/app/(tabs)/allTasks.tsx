@@ -168,8 +168,8 @@ export default function AllTasksScreen() {
 			<View style={styles.SubPanel}>
 				<Button
 					size='sm'
+					variant='pill'
 					style={{ width: 'auto' }}
-					variant='secondary'
 					onPress={() => sheetRef.current?.present()}
 				>
 					Категории
@@ -181,6 +181,7 @@ export default function AllTasksScreen() {
 				detents={[0.4]}
 				cornerRadius={STYLE_VARS.radius_2xl}
 				backgroundColor={theme.colors.surface}
+				grabberOptions={{ color: theme.colors.minor }}
 			>
 				<View
 					style={{
