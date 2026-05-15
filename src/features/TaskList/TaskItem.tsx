@@ -78,7 +78,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		padding: 14,
 		backgroundColor: theme.colors.surface,
 		boxShadow: '0px 2px 4px rgba(102, 140, 255, 0.08)',
-		borderRadius: STYLE_VARS.radius,
+		borderRadius: STYLE_VARS.radius_sm,
 		gap: 8
 	},
 
@@ -111,8 +111,8 @@ const styles = StyleSheet.create((theme, rt) => ({
 		right: 0,
 		color: theme.colors.minor400,
 		backgroundColor: theme.colors.muted700,
-		borderTopRightRadius: STYLE_VARS.radius,
-		borderBottomLeftRadius: STYLE_VARS.radius,
+		borderTopRightRadius: STYLE_VARS.radius_sm,
+		borderBottomLeftRadius: STYLE_VARS.radius_sm,
 		paddingVertical: 3,
 		paddingRight: 12,
 		paddingLeft: 10

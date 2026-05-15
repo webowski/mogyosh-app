@@ -5,7 +5,11 @@ export const STYLE_VARS = {
 	sidePaddingSm: 12,
 	inputPadding: 16,
 	insetPlus: 10,
-	radius: 5
+	radius_sm: 5,
+	radius_md: 8,
+	radius_xl: 16,
+	radius_2xl: 24,
+	radius_3xl: 32
 }
 
 export const commonStyles = StyleSheet.create((theme, rt) => ({

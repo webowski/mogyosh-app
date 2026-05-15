@@ -5,8 +5,6 @@ import { useTranslation } from 'react-i18next'
 import {
 	ActivityIndicator,
 	FlatList,
-	Pressable,
-	ScrollView,
 	Text,
 	TextInput,
 	View
@@ -23,6 +21,7 @@ import type { CategoryEntity } from '@/shared/domain/task'
 import { commonStyles, STYLE_VARS } from '@/shared/styles/common'
 import { formStyles } from '@/shared/styles/form'
 import { Button } from '@/shared/ui/Button'
+import RadioButton from '@/shared/ui/RadioButton'
 
 export default function AllTasksScreen() {
 	const { theme } = useUnistyles()
@@ -164,11 +163,21 @@ export default function AllTasksScreen() {
 
 			<TrueSheet
 				ref={sheetRef}
-				detents={[0.5]}
-				cornerRadius={16}
-				style={{ backgroundColor: theme.colors.surface }}
+				detents={[0.4]}
+				cornerRadius={STYLE_VARS.radius_2xl}
+				backgroundColor={theme.colors.surface}
+				style={
+					{
+						// padding: commonStyles.mainArea.paddingHorizontal
+					}
+				}
 			>
-				<ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 16 }}>
+				<View
+					style={{
+						// backgroundColor: theme.colors.primary300,
+						padding: commonStyles.mainArea.paddingHorizontal
+					}}
+				>
 					{pickerItems.map((item) => {
 						const isSelected =
 							item.value === 'uncategorized'
@@ -178,52 +187,15 @@ export default function AllTasksScreen() {
 									: selectedCategory?.id === item.value
 
 						return (
-							<Pressable
+							<RadioButton
 								key={String(item.value)}
+								title={item.label}
+								checked={isSelected}
 								onPress={() => handlePickerChange({ item })}
-								style={{
-									flexDirection: 'row',
-									alignItems: 'center',
-									paddingVertical: 10,
-									paddingHorizontal: STYLE_VARS.inputPadding,
-									gap: 12
-								}}
-							>
-								<View
-									style={{
-										width: 20,
-										height: 20,
-										borderRadius: 10,
-										borderWidth: 2,
-										borderColor: theme.colors.major,
-										alignItems: 'center',
-										justifyContent: 'center'
-									}}
-								>
-									{isSelected && (
-										<View
-											style={{
-												width: 10,
-												height: 10,
-												borderRadius: 5,
-												backgroundColor: theme.colors.major
-											}}
-										/>
-									)}
-								</View>
-								<Text
-									style={{
-										fontSize: 16,
-										fontWeight: '500',
-										color: theme.colors.major
-									}}
-								>
-									{item.label}
-								</Text>
-							</Pressable>
+							/>
 						)
 					})}
-				</ScrollView>
+				</View>
 			</TrueSheet>
 		</>
 	)

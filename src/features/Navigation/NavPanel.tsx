@@ -14,6 +14,7 @@ import SVGIconTarget from '@/shared/images/icons/target.svg'
 
 import { SwipeSwitchItems } from '@/features/Navigation/model/navTypes'
 import { useCalendarStore } from '@/shared/model/calendarStore'
+import { STYLE_VARS } from '@/shared/styles/common'
 import { useNavStore } from './model/navStore'
 
 type NavPanelProps = BottomTabBarProps
@@ -139,8 +140,8 @@ const styles = StyleSheet.create((theme, rt) => ({
 		alignItems: 'center',
 		justifyContent: 'space-between',
 		backgroundColor: theme.colors.background,
-		borderTopLeftRadius: 32,
-		borderTopRightRadius: 32,
+		borderTopLeftRadius: STYLE_VARS.radius_3xl,
+		borderTopRightRadius: STYLE_VARS.radius_3xl,
 		borderCurve: 'continuous',
 		boxShadow: '0 0px 40px ' + theme.colors.shadow150
 	}

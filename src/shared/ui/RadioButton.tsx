@@ -6,11 +6,16 @@ type RadioButtonProps = {
 	checked: boolean
 } & PressableProps
 
-export default function RadioButton({ title, checked }: RadioButtonProps) {
+export default function RadioButton({
+	title,
+	checked,
+	...props
+}: RadioButtonProps) {
 	const { theme } = useUnistyles()
 
 	return (
 		<Pressable
+			{...props}
 			style={[
 				styles.RadioItem,
 				{
@@ -18,36 +23,33 @@ export default function RadioButton({ title, checked }: RadioButtonProps) {
 				}
 			]}
 		>
-			<View
-				style={[
-					styles.RadioItem__indicator,
-					checked && { backgroundColor: theme.colors.primary }
-				]}
-			/>
+			<View style={[styles.RadioItem__indicator(checked)]} />
 			<Text style={styles.RadioItem__text}>{title}</Text>
 		</Pressable>
 	)
 }
 
-const styles = StyleSheet.create((theme) => ({
+const styles = StyleSheet.create((theme, rt) => ({
 	RadioItem: {
 		// padding: 10,
 		// borderRadius: 4,
 		backgroundColor: theme.colors.surface,
 		// borderWidth: 2,
 		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'flex-start'
+		alignItems: 'flex-start',
+		justifyContent: 'flex-start',
+		gap: 8
 	},
 	RadioItem__text: {
-		fontSize: 15,
+		fontSize: 15 * rt.fontScale,
 		color: theme.colors.major,
 		fontWeight: '500'
 	},
-	RadioItem__indicator: {
-		width: 14,
-		height: 14,
+	RadioItem__indicator: (checked: boolean) => ({
+		marginTop: 6 * rt.fontScale,
+		width: 10,
+		height: 10,
 		borderRadius: 10,
-		backgroundColor: theme.colors.primary
-	}
+		backgroundColor: checked ? theme.colors.primary : theme.colors.muted700
+	})
 }))
