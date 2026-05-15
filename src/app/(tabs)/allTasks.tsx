@@ -168,10 +168,18 @@ export default function AllTasksScreen() {
 			<View
 				style={{
 					paddingHorizontal: STYLE_VARS.sidePadding,
-					paddingBottom: 34
+					paddingBottom: 34,
+					flexDirection: 'row'
 				}}
 			>
-				<Button onPress={() => sheetRef.current?.present()}>Категории</Button>
+				<Button
+					size='sm'
+					style={{ width: 'auto' }}
+					variant='secondary'
+					onPress={() => sheetRef.current?.present()}
+				>
+					Категории
+				</Button>
 			</View>
 
 			<TrueSheet

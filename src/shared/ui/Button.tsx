@@ -12,7 +12,7 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-type Variant = 'default'
+type Variant = 'default' | 'secondary'
 type Size = 'default' | 'sm' | 'lg' | 'icon' | 'round'
 
 interface ButtonProps {
@@ -58,6 +58,10 @@ const styles = StyleSheet.create({
 	},
 	text: {
 		includeFontPadding: false
+	},
+	secondaryNoShadow: {
+		shadowOpacity: 0,
+		elevation: 0
 	}
 })
 
@@ -67,6 +71,10 @@ const getVariantStyles = (
 	default: {
 		text: { color: theme.colors.inverse },
 		rippleColor: 'rgba(255,255,255,0.35)'
+	},
+	secondary: {
+		text: { color: theme.colors.major },
+		rippleColor: 'rgba(99,125,255,0.15)'
 	}
 })
 
@@ -76,7 +84,7 @@ const sizeStyles: Record<Size, { container: ViewStyle; text: TextStyle }> = {
 		text: { fontSize: 15, fontWeight: '600' }
 	},
 	sm: {
-		container: { height: 38, paddingHorizontal: 16, borderRadius: 4 },
+		container: { height: 34, paddingHorizontal: 16, borderRadius: 4 },
 		text: { fontSize: 15, fontWeight: '600' }
 	},
 	lg: {
@@ -146,20 +154,35 @@ export const Button: React.FC<ButtonProps> = ({
 				styles.base,
 				sizeStyle.container,
 				disabled && styles.disabled,
+				variant === 'secondary' && styles.secondaryNoShadow,
 				style
 			]}
 		>
 			{/* Layer 1: gradient background */}
-			<LinearGradient
-				colors={[
-					'hsl(225, 100%, 74%)',
-					'hsl(225, 100%, 70%)',
-					'hsl(225, 85%, 65%)'
-				]}
-				start={{ x: 0, y: 0 }}
-				end={{ x: 1, y: 1 }}
-				style={[StyleSheet.absoluteFill, { borderRadius }]}
-			/>
+			{variant === 'default' ? (
+				<LinearGradient
+					colors={[
+						'hsl(225, 100%, 74%)',
+						'hsl(225, 100%, 70%)',
+						'hsl(225, 85%, 65%)'
+					]}
+					start={{ x: 0, y: 0 }}
+					end={{ x: 1, y: 1 }}
+					style={[StyleSheet.absoluteFill, { borderRadius }]}
+				/>
+			) : (
+				<View
+					style={[
+						StyleSheet.absoluteFill,
+						{
+							borderRadius,
+							// borderWidth: 1.5,
+							// borderColor: 'hsl(225, 100%, 70%)',
+							backgroundColor: theme.colors.primary800
+						}
+					]}
+				/>
+			)}
 
 			{/* Layer 2: ripple */}
 			<View style={StyleSheet.absoluteFill} pointerEvents='none'>
