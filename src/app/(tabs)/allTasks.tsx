@@ -200,7 +200,7 @@ export default function AllTasksScreen() {
 								title={item.label}
 								checked={isSelected}
 								onPress={() => handlePickerChange({ item })}
-								style={item.depth > 0 ? { marginLeft: 26 } : undefined}
+								style={{ marginLeft: 26 * item.depth }}
 							/>
 						)
 					})}
