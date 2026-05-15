@@ -218,7 +218,7 @@ export default function AllTasksScreen() {
 const styles = StyleSheet.create((theme, rt) => ({
 	SubPanel: {
 		paddingHorizontal: STYLE_VARS.sidePadding,
-		paddingTop: 12,
+		paddingTop: 14,
 		paddingBottom: 18,
 		flexDirection: 'row',
 		backgroundColor: theme.colors.surface,
