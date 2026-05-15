@@ -106,6 +106,7 @@ export default function AllTasksScreen() {
 				categories?.find((c) => c.id === object.item.value) ?? null
 			setSelectedCategory(category)
 		}
+		sheetRef.current?.dismiss()
 	}
 
 	return (
