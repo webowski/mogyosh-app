@@ -9,7 +9,7 @@ export default function CalendarScreen() {
 			style={[
 				commonStyles.mainArea,
 				{
-					paddingHorizontal: STYLE_VARS.sidePaddingSm,
+					paddingHorizontal: STYLE_VARS.sidePadding_sm,
 					justifyContent: 'center'
 				}
 			]}

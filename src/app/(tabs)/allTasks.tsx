@@ -51,15 +51,24 @@ export default function AllTasksScreen() {
 
 	const pickerItems = useMemo(
 		() => {
-			const noCategory = { value: 'uncategorized', label: t('Uncategorized') }
-			const allCategories = { value: null, label: t('All categories') }
+			const noCategory = {
+				value: 'uncategorized',
+				label: t('Uncategorized'),
+				depth: 0
+			}
+			const allCategories = {
+				value: null,
+				label: t('All categories'),
+				depth: 0
+			}
 
 			if (!categories || categories.length === 0) {
 				return [allCategories, noCategory]
 			}
 
 			const visited = new Set<string>()
-			const result: { value: string | null; label: string }[] = []
+			const result: { value: string | null; label: string; depth: number }[] =
+				[]
 
 			const buildCategoriesTree = (parentId: string | null, depth: number) => {
 				for (const category of categories) {
@@ -68,8 +77,12 @@ export default function AllTasksScreen() {
 					}
 					visited.add(category.id)
 
-					const prefix = depth > 0 ? ' — '.repeat(depth) : ''
-					result.push({ value: category.id, label: prefix + category.name })
+					// const prefix = depth > 0 ? ' — '.repeat(depth) : ''
+					result.push({
+						value: category.id,
+						label: category.name,
+						depth
+					})
 
 					buildCategoriesTree(category.id, depth + 1)
 				}
@@ -166,16 +179,11 @@ export default function AllTasksScreen() {
 				detents={[0.4]}
 				cornerRadius={STYLE_VARS.radius_2xl}
 				backgroundColor={theme.colors.surface}
-				style={
-					{
-						// padding: commonStyles.mainArea.paddingHorizontal
-					}
-				}
 			>
 				<View
 					style={{
-						// backgroundColor: theme.colors.primary300,
-						padding: commonStyles.mainArea.paddingHorizontal
+						padding: STYLE_VARS.sidePadding_xl,
+						gap: 12
 					}}
 				>
 					{pickerItems.map((item) => {
@@ -192,6 +200,7 @@ export default function AllTasksScreen() {
 								title={item.label}
 								checked={isSelected}
 								onPress={() => handlePickerChange({ item })}
+								style={item.depth > 0 ? { marginLeft: 26 } : undefined}
 							/>
 						)
 					})}

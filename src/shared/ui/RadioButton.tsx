@@ -4,6 +4,7 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 type RadioButtonProps = {
 	title: string
 	checked: boolean
+	style?: PressableProps['style']
 } & PressableProps
 
 export default function RadioButton({
@@ -16,14 +17,28 @@ export default function RadioButton({
 	return (
 		<Pressable
 			{...props}
-			style={[
-				styles.RadioItem,
-				{
-					borderColor: checked ? theme.colors.primary : 'transparent'
-				}
-			]}
+			style={
+				[
+					styles.RadioItem,
+					{
+						borderColor: checked ? theme.colors.primary : 'transparent'
+					},
+					props.style
+				] as PressableProps['style']
+			}
 		>
-			<View style={[styles.RadioItem__indicator(checked)]} />
+			<View style={[styles.RadioItem__indicator(checked)]}>
+				{checked && (
+					<View
+						style={{
+							width: 6,
+							height: 6,
+							borderRadius: 4,
+							backgroundColor: 'white'
+						}}
+					/>
+				)}
+			</View>
 			<Text style={styles.RadioItem__text}>{title}</Text>
 		</Pressable>
 	)
@@ -31,14 +46,11 @@ export default function RadioButton({
 
 const styles = StyleSheet.create((theme, rt) => ({
 	RadioItem: {
-		// padding: 10,
-		// borderRadius: 4,
 		backgroundColor: theme.colors.surface,
-		// borderWidth: 2,
 		flexDirection: 'row',
 		alignItems: 'flex-start',
 		justifyContent: 'flex-start',
-		gap: 8
+		gap: 10
 	},
 	RadioItem__text: {
 		fontSize: 15 * rt.fontScale,
@@ -46,10 +58,14 @@ const styles = StyleSheet.create((theme, rt) => ({
 		fontWeight: '500'
 	},
 	RadioItem__indicator: (checked: boolean) => ({
-		marginTop: 6 * rt.fontScale,
-		width: 10,
-		height: 10,
-		borderRadius: 10,
-		backgroundColor: checked ? theme.colors.primary : theme.colors.muted700
+		marginTop: 2 * rt.fontScale,
+		width: 18,
+		height: 18,
+		borderRadius: 9,
+		backgroundColor: checked ? theme.colors.primary : 'transparent',
+		borderWidth: checked ? 0 : 2,
+		borderColor: theme.colors.muted700,
+		alignItems: 'center',
+		justifyContent: 'center'
 	})
 }))

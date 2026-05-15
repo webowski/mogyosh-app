@@ -228,8 +228,8 @@ export default function Calendar() {
 	}, [])
 
 	const { calendarWidth, calendarHeight } = useMemo(() => {
-		const calendarWidth = dimensions.width - STYLE_VARS.sidePaddingSm * 2
-		let calendarHeight = dimensions.height - STYLE_VARS.sidePaddingSm * 2 - 200
+		const calendarWidth = dimensions.width - STYLE_VARS.sidePadding_sm * 2
+		let calendarHeight = dimensions.height - STYLE_VARS.sidePadding_sm * 2 - 200
 		calendarHeight = calendarHeight > 560 ? 560 : calendarHeight
 
 		return { calendarWidth, calendarHeight }

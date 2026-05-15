@@ -1,8 +1,9 @@
 import { StyleSheet } from 'react-native-unistyles'
 
 export const STYLE_VARS = {
+	sidePadding_sm: 12,
 	sidePadding: 16,
-	sidePaddingSm: 12,
+	sidePadding_xl: 28,
 	inputPadding: 16,
 	insetPlus: 10,
 	radius_sm: 5,
