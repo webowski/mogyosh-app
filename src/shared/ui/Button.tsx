@@ -84,7 +84,7 @@ const sizeStyles: Record<Size, { container: ViewStyle; text: TextStyle }> = {
 		text: { fontSize: 15, fontWeight: '600' }
 	},
 	sm: {
-		container: { height: 34, paddingHorizontal: 16, borderRadius: 4 },
+		container: { height: 32, paddingHorizontal: 14, borderRadius: 4 },
 		text: { fontSize: 15, fontWeight: '600' }
 	},
 	lg: {

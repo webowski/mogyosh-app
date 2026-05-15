@@ -8,6 +8,7 @@ export const STYLE_VARS = {
 	insetPlus: 10,
 	radius_sm: 5,
 	radius_md: 8,
+	radius_lg: 12,
 	radius_xl: 16,
 	radius_2xl: 24,
 	radius_3xl: 32
