@@ -51,7 +51,6 @@ export function TaskCreateForm({ onClose }: Props) {
 			>
 				<View style={[commonStyles.mainArea, commonStyles.scrollIndent]}>
 					<View style={styles.fieldGroup}>
-						<Text style={styles.label}>Название</Text>
 						<Controller
 							control={control}
 							name='title'
@@ -74,14 +73,13 @@ export function TaskCreateForm({ onClose }: Props) {
 					</View>
 
 					<View style={styles.fieldGroup}>
-						<Text style={styles.label}>Описание</Text>
 						<Controller
 							control={control}
 							name='description'
 							render={({ field: { onChange, onBlur, value } }) => (
 								<TextInput
 									style={[styles.input, styles.input__multiline]}
-									placeholder='Описание задачи (необязательно)'
+									placeholder='Подробности задачи (необязательно)'
 									placeholderTextColor={theme.colors.minor}
 									value={value}
 									onChangeText={onChange}
