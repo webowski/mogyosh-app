@@ -1,25 +1,99 @@
-import { Link, router } from 'expo-router'
-import { Text } from 'react-native'
-import { useUnistyles } from 'react-native-unistyles'
+import { MaterialIcons } from '@expo/vector-icons'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { router } from 'expo-router'
+import { Controller, useForm } from 'react-hook-form'
+import { Text, TextInput, View } from 'react-native'
+import { ScrollView } from 'react-native-gesture-handler'
+import { StyleSheet, useUnistyles } from 'react-native-unistyles'
+import { z } from 'zod'
 
 import { ActionsPanel } from '@/features/ActionsPanel/ActionsPanel'
-import { TaskInput } from '@/features/TaskList/TaskInput'
+import { commonStyles, STYLE_VARS } from '@/shared/styles/common'
 import { Button } from '@/shared/ui/Button'
-import ScrollBox from '@/shared/ui/ScrollBox'
-import { MaterialIcons } from '@expo/vector-icons'
+
+const schema = z.object({
+	title: z.string().min(1, 'Название обязательно').max(100),
+	description: z.string().optional()
+})
+
+type TaskFormData = z.infer<typeof schema>
 
 export default function CreateTaskScreen() {
 	const { theme } = useUnistyles()
 
+	const {
+		control,
+		handleSubmit,
+		formState: { errors, isSubmitting }
+	} = useForm<TaskFormData>({
+		resolver: zodResolver(schema),
+		defaultValues: {
+			title: '',
+			description: ''
+		}
+	})
+
+	const onSubmit = async (data: TaskFormData) => {
+		// TODO: save task
+		console.log(data)
+		router.back()
+	}
+
 	return (
 		<>
-			<ScrollBox>
-				<TaskInput />
+			<ScrollView
+				style={commonStyles.scrollBox}
+				contentContainerStyle={{ flexGrow: 1 }}
+				keyboardShouldPersistTaps='handled'
+			>
+				<View style={[commonStyles.mainArea, commonStyles.scrollIndent]}>
+					{/* Title */}
+					<View style={styles.fieldGroup}>
+						<Text style={styles.label}>Название</Text>
+						<Controller
+							control={control}
+							name='title'
+							render={({ field: { onChange, onBlur, value } }) => (
+								<TextInput
+									style={[styles.input, errors.title && styles.input__error]}
+									placeholder='Название задачи'
+									placeholderTextColor={theme.colors.minor}
+									value={value}
+									onChangeText={onChange}
+									onBlur={onBlur}
+									returnKeyType='next'
+									autoFocus
+								/>
+							)}
+						/>
+						{errors.title && (
+							<Text style={styles.errorText}>{errors.title.message}</Text>
+						)}
+					</View>
 
-				<Link href='/' dismissTo>
-					<Text>Go to home screen</Text>
-				</Link>
-			</ScrollBox>
+					{/* Description */}
+					<View style={styles.fieldGroup}>
+						<Text style={styles.label}>Описание</Text>
+						<Controller
+							control={control}
+							name='description'
+							render={({ field: { onChange, onBlur, value } }) => (
+								<TextInput
+									style={[styles.input, styles.input__multiline]}
+									placeholder='Описание задачи (необязательно)'
+									placeholderTextColor={theme.colors.minor}
+									value={value}
+									onChangeText={onChange}
+									onBlur={onBlur}
+									multiline
+									numberOfLines={4}
+									textAlignVertical='top'
+								/>
+							)}
+						/>
+					</View>
+				</View>
+			</ScrollView>
 
 			<ActionsPanel>
 				<Button size='round' onPress={() => router.back()}>
@@ -29,7 +103,52 @@ export default function CreateTaskScreen() {
 						color={theme.colors.buttonText}
 					/>
 				</Button>
+
+				<Button
+					size='round'
+					onPress={handleSubmit(onSubmit)}
+					disabled={isSubmitting}
+				>
+					<MaterialIcons
+						name='check'
+						size={28}
+						color={theme.colors.buttonText}
+					/>
+				</Button>
 			</ActionsPanel>
 		</>
 	)
 }
+
+const styles = StyleSheet.create((theme) => ({
+	fieldGroup: {
+		marginBottom: theme.spacing.md,
+		gap: theme.spacing.xs
+	},
+	label: {
+		fontSize: 14,
+		fontWeight: '500',
+		color: theme.colors.minor
+	},
+	input: {
+		backgroundColor: theme.colors.surface,
+		borderWidth: 1,
+		borderColor: theme.colors.border,
+		borderRadius: STYLE_VARS.radius_sm,
+		paddingHorizontal: theme.spacing.md,
+		paddingVertical: theme.spacing.sm,
+		fontSize: 16,
+		color: theme.colors.major
+	},
+	input__error: {
+		borderColor: theme.colors.danger
+	},
+	input__multiline: {
+		minHeight: 100,
+		paddingTop: theme.spacing.sm
+	},
+	errorText: {
+		fontSize: 12,
+		color: theme.colors.danger
+	}
+}))
