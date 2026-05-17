@@ -1,5 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { Text, TextInput, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
@@ -8,6 +9,7 @@ import { z } from 'zod'
 
 import { ActionsPanel } from '@/features/ActionsPanel/ActionsPanel'
 import { useCreateTask } from '@/features/TaskList'
+import { useTaskStore } from '@/shared/model/taskStore'
 import { commonStyles, STYLE_VARS } from '@/shared/styles/common'
 import { Button } from '@/shared/ui/Button'
 
@@ -25,10 +27,13 @@ interface Props {
 export function TaskCreateForm({ onClose }: Props) {
 	const { theme } = useUnistyles()
 	const createTask = useCreateTask()
+	const setDraftTitle = useTaskStore((store) => store.setDraftTitle)
+	const clearDraftTitle = useTaskStore((store) => store.clearDraftTitle)
 
 	const {
 		control,
 		handleSubmit,
+		watch,
 		formState: { errors, isSubmitting }
 	} = useForm<TaskFormData>({
 		resolver: zodResolver(schema),
@@ -37,6 +42,18 @@ export function TaskCreateForm({ onClose }: Props) {
 			description: ''
 		}
 	})
+
+	const title = watch('title')
+
+	useEffect(() => {
+		setDraftTitle(title)
+	}, [title, setDraftTitle])
+
+	useEffect(() => {
+		return () => {
+			clearDraftTitle()
+		}
+	}, [clearDraftTitle])
 
 	const onSubmit = async (data: TaskFormData) => {
 		await createTask.mutateAsync(data.title)

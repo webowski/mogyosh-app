@@ -1,9 +1,9 @@
 import { BottomTabHeaderProps } from '@react-navigation/bottom-tabs'
 import { NativeStackHeaderProps } from '@react-navigation/native-stack'
-import { useLocalSearchParams } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { ActivityIndicator, Text, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useUnistyles } from 'react-native-unistyles'
 
 import { useTaskById } from '@/features/TaskList'
 import { useCategoriesStore } from '@/features/TaskList/model/categoriesStore'
@@ -20,11 +20,14 @@ export default function HeaderTask({
 }: HeaderProps) {
 	const insets = useSafeAreaInsets()
 	const { t } = useTranslation()
-	const { mode } = useLocalSearchParams<{ mode?: string }>()
-	const isCreateMode = mode === 'create'
+	const { theme } = useUnistyles()
+
+	const params = route.params as { mode?: string } | undefined
+	const isCreateMode = params?.mode === 'create'
 
 	const categoryMap = useCategoriesStore((state) => state.entities)
 	const selectedTaskId = useTaskStore((state) => state.selectedTaskId)
+	const draftTitle = useTaskStore((state) => state.draftTitle)
 
 	const { data, isLoading, error } = useTaskById(selectedTaskId)
 
@@ -40,7 +43,15 @@ export default function HeaderTask({
 					}
 				]}
 			>
-				<Text style={commonStyles.headerTitle}>{t('screen.Create Task')}</Text>
+				<Text style={commonStyles.headerTitle}>
+					{draftTitle.trim() ? (
+						draftTitle.trim()
+					) : (
+						<Text style={{ color: theme.colors.minor }}>
+							{t('screen.Create Task')}
+						</Text>
+					)}
+				</Text>
 			</View>
 		)
 	}

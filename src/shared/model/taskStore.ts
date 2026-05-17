@@ -15,6 +15,9 @@ const zustandStorage = createZustandStorage(storage)
 export interface TaskStore {
 	selectedTaskId: TaskId | null
 	setSelectedTaskId: (taskId: TaskId | null) => void
+	draftTitle: string
+	setDraftTitle: (title: string) => void
+	clearDraftTitle: () => void
 }
 
 export const useTaskStore = create<TaskStore>()(
@@ -22,7 +25,10 @@ export const useTaskStore = create<TaskStore>()(
 		persist(
 			(set) => ({
 				selectedTaskId: null,
-				setSelectedTaskId: (taskId) => set({ selectedTaskId: taskId })
+				setSelectedTaskId: (taskId) => set({ selectedTaskId: taskId }),
+				draftTitle: '',
+				setDraftTitle: (title) => set({ draftTitle: title }),
+				clearDraftTitle: () => set({ draftTitle: '' })
 			}),
 			{
 				name: 'task-storage',
