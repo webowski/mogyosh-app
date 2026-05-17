@@ -13,6 +13,7 @@ import SVGIconPlus from '@/shared/images/icons/plus.svg'
 import SVGIconTarget from '@/shared/images/icons/target.svg'
 
 import { SwipeSwitchItems } from '@/features/Navigation/model/navTypes'
+import { createTaskSheetRef } from '@/features/TaskList/CreateTask/CreateTaskSheet'
 import { useCalendarStore } from '@/shared/model/calendarStore'
 import { STYLE_VARS } from '@/shared/styles/common'
 import { useNavStore } from './model/navStore'
@@ -121,9 +122,14 @@ export default function NavPanel({
 				getSlideLabel={getSlideLabel}
 			/>
 
-			<NavButton
+			{/* <NavButton
 				isFocused={isCurrentRoute('createTask', state)}
 				onPress={() => navigation.navigate('createTask')}
+				icon={<SVGIconPlus width={32} height={32} />}
+			/> */}
+			<NavButton
+				isFocused={false} // sheet не имеет фокуса маршрута
+				onPress={() => createTaskSheetRef.current?.present()}
 				icon={<SVGIconPlus width={32} height={32} />}
 			/>
 		</View>
