@@ -21,7 +21,7 @@ interface Props {
 	onClose: () => void
 }
 
-export function CreateTaskForm({ onClose }: Props) {
+export function TaskCreateForm({ onClose }: Props) {
 	const { theme } = useUnistyles()
 
 	const {
