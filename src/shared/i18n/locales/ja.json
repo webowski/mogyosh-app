@@ -23,6 +23,9 @@
 	"Edit Task": "タスクを編集",
 	"Delete Task": "タスクを削除",
 	"Done": "完了",
+	"filters": {
+		"Categories": "カテゴリ"
+	},
 	"All categories": "すべてのカテゴリ",
 	"Uncategorized": "みぶんるい",
 	"date": {

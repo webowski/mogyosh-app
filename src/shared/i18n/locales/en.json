@@ -23,6 +23,9 @@
 	"Edit Task": "Edit Task",
 	"Delete Task": "Delete Task",
 	"Done": "Done",
+	"filters": {
+		"Categories": "Categories"
+	},
 	"All categories": "All categories",
 	"Uncategorized": "Uncategorized",
 	"date": {

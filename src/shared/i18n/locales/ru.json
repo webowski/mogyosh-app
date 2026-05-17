@@ -23,6 +23,9 @@
 	"Edit Task": "Редактировать задачу",
 	"Delete Task": "Удалить задачу",
 	"Done": "Готово",
+	"filters": {
+		"Categories": "Категории"
+	},
 	"All categories": "Все категории",
 	"Uncategorized": "Без категории",
 	"date": {

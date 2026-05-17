@@ -174,7 +174,7 @@ export default function AllTasksScreen() {
 					onPress={() => sheetRef.current?.present()}
 					indicator={isUncategorized || selectedCategory !== null}
 				>
-					Категории
+					{t('filters.Categories')}
 				</Button>
 			</View>
 

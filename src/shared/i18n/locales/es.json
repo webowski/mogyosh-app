@@ -23,6 +23,9 @@
 	"Edit Task": "Editar tarea",
 	"Delete Task": "Eliminar tarea",
 	"Done": "Hecho",
+	"filters": {
+		"Categories": "Categorías"
+	},
 	"All categories": "Todas las categorías",
 	"Uncategorized": "Sin categoría",
 	"date": {
