@@ -11,7 +11,6 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { useUnistyles } from 'react-native-unistyles'
 
 import Header from '@/features/Header/Header'
-import { TaskCreateSheet } from '@/features/TaskCreate/TaskCreateSheet'
 import { login } from '@/shared/api/auth'
 
 export const unstable_settings = {
@@ -58,8 +57,6 @@ export default function RootLayout() {
 					<ReducedMotionConfig mode={ReduceMotion.Never} />
 					<BottomSheetModalProvider>
 						<StatusBar style={theme.statusBarColor} />
-
-						<TaskCreateSheet />
 
 						<Stack
 							screenOptions={{

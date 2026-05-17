@@ -1,5 +1,7 @@
 import { BottomTabHeaderProps } from '@react-navigation/bottom-tabs'
 import { NativeStackHeaderProps } from '@react-navigation/native-stack'
+import { useLocalSearchParams } from 'expo-router'
+import { useTranslation } from 'react-i18next'
 import { ActivityIndicator, Text, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
@@ -17,6 +19,9 @@ export default function HeaderTask({
 	route
 }: HeaderProps) {
 	const insets = useSafeAreaInsets()
+	const { t } = useTranslation()
+	const { mode } = useLocalSearchParams<{ mode?: string }>()
+	const isCreateMode = mode === 'create'
 
 	const categoryMap = useCategoriesStore((state) => state.entities)
 	const selectedTaskId = useTaskStore((state) => state.selectedTaskId)
@@ -24,6 +29,21 @@ export default function HeaderTask({
 	const { data, isLoading, error } = useTaskById(selectedTaskId)
 
 	if (isLoading) return <ActivityIndicator />
+
+	if (isCreateMode) {
+		return (
+			<View
+				style={[
+					commonStyles.header,
+					{
+						paddingTop: insets.top + STYLE_VARS.insetPlus
+					}
+				]}
+			>
+				<Text style={commonStyles.headerTitle}>{t('screen.Create Task')}</Text>
+			</View>
+		)
+	}
 
 	return (
 		<View

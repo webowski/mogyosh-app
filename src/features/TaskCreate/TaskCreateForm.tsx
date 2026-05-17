@@ -7,6 +7,7 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 import { z } from 'zod'
 
 import { ActionsPanel } from '@/features/ActionsPanel/ActionsPanel'
+import { useCreateTask } from '@/features/TaskList'
 import { commonStyles, STYLE_VARS } from '@/shared/styles/common'
 import { Button } from '@/shared/ui/Button'
 
@@ -23,6 +24,7 @@ interface Props {
 
 export function TaskCreateForm({ onClose }: Props) {
 	const { theme } = useUnistyles()
+	const createTask = useCreateTask()
 
 	const {
 		control,
@@ -37,8 +39,7 @@ export function TaskCreateForm({ onClose }: Props) {
 	})
 
 	const onSubmit = async (data: TaskFormData) => {
-		// TODO: save task
-		console.log(data)
+		await createTask.mutateAsync(data.title)
 		onClose()
 	}
 
@@ -106,7 +107,7 @@ export function TaskCreateForm({ onClose }: Props) {
 				<Button
 					size='round'
 					onPress={handleSubmit(onSubmit)}
-					disabled={isSubmitting}
+					disabled={isSubmitting || createTask.isPending}
 				>
 					<MaterialIcons
 						name='check'

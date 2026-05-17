@@ -44,7 +44,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 	taskListItem: {
 		padding: 12,
 		backgroundColor: '#ffffff',
-		borderRadius: STYLE_VARS.radius,
+		borderRadius: STYLE_VARS.radius_md,
 		boxShadow: '0px 2px 4px rgba(102, 140, 255, 0.08)'
 	}
 }))

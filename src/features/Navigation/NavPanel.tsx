@@ -13,8 +13,8 @@ import SVGIconPlus from '@/shared/images/icons/plus.svg'
 import SVGIconTarget from '@/shared/images/icons/target.svg'
 
 import { SwipeSwitchItems } from '@/features/Navigation/model/navTypes'
-import { taskCreateSheetRef } from '@/features/TaskCreate/TaskCreateSheet'
 import { useCalendarStore } from '@/shared/model/calendarStore'
+import { useTaskStore } from '@/shared/model/taskStore'
 import { STYLE_VARS } from '@/shared/styles/common'
 import { useNavStore } from './model/navStore'
 
@@ -37,6 +37,8 @@ export default function NavPanel({
 	const insets = useSafeAreaInsets()
 
 	const setIsDrawerShown = useNavStore((store) => store.setIsDrawerShown)
+	const setSelectedTaskId = useTaskStore((store) => store.setSelectedTaskId)
+	const setSwipePosition = useNavStore((store) => store.setSwipePosition)
 
 	// Get selected date and swipe switch items from store
 	const selectedDate = useCalendarStore((state) => state.selectedDate)
@@ -122,14 +124,13 @@ export default function NavPanel({
 				getSlideLabel={getSlideLabel}
 			/>
 
-			{/* <NavButton
-				isFocused={isCurrentRoute('createTask', state)}
-				onPress={() => navigation.navigate('createTask')}
-				icon={<SVGIconPlus width={32} height={32} />}
-			/> */}
 			<NavButton
-				isFocused={false} // sheet не имеет фокуса маршрута
-				onPress={() => taskCreateSheetRef.current?.present()}
+				isFocused={false}
+				onPress={() => {
+					setSelectedTaskId(null)
+					setSwipePosition({ row: 0, col: 2 })
+					navigation.navigate('task', { mode: 'create' })
+				}}
 				icon={<SVGIconPlus width={32} height={32} />}
 			/>
 		</View>
