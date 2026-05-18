@@ -14,8 +14,7 @@ import { commonStyles, STYLE_VARS } from '@/shared/styles/common'
 import { Button } from '@/shared/ui/Button'
 
 const schema = z.object({
-	title: z.string().min(1, 'Название обязательно').max(100),
-	description: z.string().optional()
+	title: z.string().min(1, 'Название обязательно').max(100)
 })
 
 type TaskFormData = z.infer<typeof schema>
@@ -41,8 +40,7 @@ export function TaskCreateForm({ onClose }: Props) {
 	} = useForm<TaskFormData>({
 		resolver: zodResolver(schema),
 		defaultValues: {
-			title: '',
-			description: ''
+			title: ''
 		}
 	})
 
@@ -118,27 +116,6 @@ export function TaskCreateForm({ onClose }: Props) {
 					</View>
 
 					<View style={styles.fieldGroup}>
-						<Controller
-							control={control}
-							name='description'
-							render={({ field: { onChange, onBlur, value } }) => (
-								<TextInput
-									style={[styles.input, styles.input__multiline]}
-									placeholder='Подробности задачи (необязательно)'
-									placeholderTextColor={theme.colors.minor}
-									value={value}
-									onChangeText={onChange}
-									onBlur={onBlur}
-									multiline
-									numberOfLines={4}
-									textAlignVertical='top'
-								/>
-							)}
-						/>
-					</View>
-
-					<View style={styles.fieldGroup}>
-						<Text style={styles.label}>Подзадачи</Text>
 						{subtasks.map((subtask, index) => (
 							<View key={`${subtask}-${index}`} style={styles.subtaskRow}>
 								<View style={styles.subtaskCheckbox} />
