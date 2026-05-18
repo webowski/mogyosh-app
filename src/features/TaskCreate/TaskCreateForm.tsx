@@ -113,18 +113,19 @@ export function TaskCreateForm({ onClose }: Props) {
 			</ScrollView>
 
 			<ActionsPanel>
-				<Button size='round' onPress={onClose}>
+				{/* <Button size='round' onPress={onClose}>
 					<MaterialIcons
 						name='arrow-back'
 						size={28}
 						color={theme.colors.buttonText}
 					/>
-				</Button>
+				</Button> */}
 
 				<Button
 					size='round'
 					onPress={handleSubmit(onSubmit)}
 					disabled={isSubmitting || createTask.isPending}
+					style={{ marginLeft: 'auto' }}
 				>
 					<MaterialIcons
 						name='check'
