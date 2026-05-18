@@ -212,13 +212,22 @@ const getTaskById = async (taskId: TaskId): Promise<TaskEntity | null> => {
 	}
 }
 
-const createTask = async (info: string): Promise<TaskEntity> => {
+type CreateTaskPayload = {
+	info: string
+	parent_id?: string | null
+}
+
+const createTask = async (payload: CreateTaskPayload): Promise<TaskEntity> => {
 	const { data: userData } = await supabaseClient.auth.getUser()
 	const userId = userData?.user?.id
 
 	const { data, error } = await supabaseClient
 		.from('tasks')
-		.insert({ info, user_id: userId })
+		.insert({
+			info: payload.info,
+			user_id: userId,
+			parent_id: payload.parent_id ?? null
+		})
 		.select()
 		.single()
 

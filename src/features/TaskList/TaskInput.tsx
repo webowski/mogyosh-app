@@ -10,11 +10,14 @@ export const TaskInput = () => {
 	const handleAdd = () => {
 		if (!input.trim()) return
 
-		mutate(input, {
-			onSuccess: () => {
-				clearInput()
+		mutate(
+			{ info: input },
+			{
+				onSuccess: () => {
+					clearInput()
+				}
 			}
-		})
+		)
 	}
 
 	return (

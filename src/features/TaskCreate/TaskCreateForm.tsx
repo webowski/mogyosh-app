@@ -1,8 +1,8 @@
 import { MaterialIcons } from '@expo/vector-icons'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { Text, TextInput, View } from 'react-native'
+import { Pressable, Text, TextInput, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 import { z } from 'zod'
@@ -30,6 +30,9 @@ export function TaskCreateForm({ onClose }: Props) {
 	const setDraftTitle = useTaskStore((store) => store.setDraftTitle)
 	const clearDraftTitle = useTaskStore((store) => store.clearDraftTitle)
 
+	const [subtasks, setSubtasks] = useState<string[]>([])
+	const [subtaskInput, setSubtaskInput] = useState('')
+
 	const {
 		control,
 		handleSubmit,
@@ -55,8 +58,32 @@ export function TaskCreateForm({ onClose }: Props) {
 		}
 	}, [clearDraftTitle])
 
+	const handleAddSubtask = () => {
+		const trimmed = subtaskInput.trim()
+		if (!trimmed) return
+
+		setSubtasks((prev) => [...prev, trimmed])
+		setSubtaskInput('')
+	}
+
+	const handleRemoveSubtask = (index: number) => {
+		setSubtasks((prev) => prev.filter((_, i) => i !== index))
+	}
+
 	const onSubmit = async (data: TaskFormData) => {
-		await createTask.mutateAsync(data.title)
+		const parentTask = await createTask.mutateAsync({ info: data.title })
+
+		if (subtasks.length > 0 && parentTask.id) {
+			await Promise.all(
+				subtasks.map((subtaskTitle) =>
+					createTask.mutateAsync({
+						info: subtaskTitle,
+						parent_id: parentTask.id
+					})
+				)
+			)
+		}
+
 		onClose()
 	}
 
@@ -108,6 +135,47 @@ export function TaskCreateForm({ onClose }: Props) {
 								/>
 							)}
 						/>
+					</View>
+
+					<View style={styles.fieldGroup}>
+						<Text style={styles.label}>Подзадачи</Text>
+						{subtasks.map((subtask, index) => (
+							<View key={`${subtask}-${index}`} style={styles.subtaskRow}>
+								<View style={styles.subtaskCheckbox} />
+								<Text style={styles.subtaskText} numberOfLines={1}>
+									{subtask}
+								</Text>
+								<Pressable
+									onPress={() => handleRemoveSubtask(index)}
+									hitSlop={8}
+								>
+									<MaterialIcons
+										name='close'
+										size={20}
+										color={theme.colors.minor}
+									/>
+								</Pressable>
+							</View>
+						))}
+						<View style={styles.subtaskInputRow}>
+							<View style={styles.subtaskCheckbox} />
+							<TextInput
+								style={styles.subtaskInput}
+								placeholder='Добавить подзадачу'
+								placeholderTextColor={theme.colors.minor}
+								value={subtaskInput}
+								onChangeText={setSubtaskInput}
+								onSubmitEditing={handleAddSubtask}
+								returnKeyType='done'
+							/>
+							<Pressable onPress={handleAddSubtask} hitSlop={8}>
+								<MaterialIcons
+									name='add'
+									size={22}
+									color={theme.colors.primary}
+								/>
+							</Pressable>
+						</View>
 					</View>
 				</View>
 			</ScrollView>
@@ -168,5 +236,36 @@ const styles = StyleSheet.create((theme) => ({
 	errorText: {
 		fontSize: 12,
 		color: theme.colors.danger
+	},
+	subtaskRow: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		gap: theme.spacing.sm,
+		paddingVertical: theme.spacing.xs
+	},
+	subtaskInputRow: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		gap: theme.spacing.sm,
+		paddingVertical: theme.spacing.xs
+	},
+	subtaskCheckbox: {
+		width: 18,
+		height: 18,
+		borderRadius: 4,
+		borderWidth: 2,
+		borderColor: theme.colors.border,
+		backgroundColor: 'transparent'
+	},
+	subtaskText: {
+		flex: 1,
+		fontSize: 15,
+		color: theme.colors.major
+	},
+	subtaskInput: {
+		flex: 1,
+		fontSize: 15,
+		color: theme.colors.major,
+		paddingVertical: 0
 	}
 }))
