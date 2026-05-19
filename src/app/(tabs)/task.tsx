@@ -1,4 +1,4 @@
-import { useLocalSearchParams, useRouter } from 'expo-router'
+import { useLocalSearchParams, useNavigation } from 'expo-router'
 import { ActivityIndicator, Text, View } from 'react-native'
 
 import { TaskCreateForm } from '@/features/TaskCreate/TaskCreateForm'
@@ -10,8 +10,12 @@ import { commonStyles } from '@/shared/styles/common'
 import ScrollBox from '@/shared/ui/ScrollBox'
 
 export default function TaskScreen() {
-	const { mode } = useLocalSearchParams<{ mode?: string }>()
-	const router = useRouter()
+	const { mode, returnTo } = useLocalSearchParams<{
+		mode?: string
+		returnTo?: string
+	}>()
+
+	const navigation = useNavigation()
 	const isCreateMode = mode === 'create'
 
 	const selectedTaskId = useTaskStore((state) => state.selectedTaskId)
@@ -33,7 +37,11 @@ export default function TaskScreen() {
 	if (isCreateMode) {
 		return (
 			<View style={{ flex: 1 }}>
-				<TaskCreateForm onClose={() => router.back()} />
+				<TaskCreateForm
+					onClose={() => {
+						navigation.navigate((returnTo || 'index') as never)
+					}}
+				/>
 			</View>
 		)
 	}

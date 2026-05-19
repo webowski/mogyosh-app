@@ -71,16 +71,6 @@ export default function RootLayout() {
 									headerShown: false
 								}}
 							/>
-							{/* <Stack.Screen
-								name='createTask'
-								options={{
-									title: t('screen.Create Task'),
-									presentation: 'formSheet',
-									sheetAllowedDetents: [0.9],
-									sheetElevation: 1,
-									sheetCornerRadius: 16
-								}}
-							/> */}
 							<Stack.Screen
 								name='about'
 								options={{

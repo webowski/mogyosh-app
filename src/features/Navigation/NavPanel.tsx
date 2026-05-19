@@ -129,7 +129,10 @@ export default function NavPanel({
 				onPress={() => {
 					setSelectedTaskId(null)
 					setSwipePosition({ row: 0, col: 2 })
-					navigation.navigate('task', { mode: 'create' })
+					navigation.navigate('task', {
+						mode: 'create',
+						returnTo: currentRoute
+					})
 				}}
 				icon={<SVGIconPlus width={32} height={32} />}
 			/>
