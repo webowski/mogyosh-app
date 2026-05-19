@@ -288,6 +288,42 @@ const updateTaskState = async (
 	return makeTaskObject(data)
 }
 
+/**
+ * Delete a task by ID (soft delete with cascading)
+ * @param taskId - Task ID to delete
+ */
+const deleteTask = async (taskId: TaskId): Promise<void> => {
+	// Delete task states first
+	const { error: statesError } = await supabaseClient
+		.from('states')
+		.delete()
+		.eq('task_id', taskId)
+
+	if (statesError) throw statesError
+
+	// Delete task schedules
+	const { error: schedulesError } = await supabaseClient
+		.from('schedules')
+		.delete()
+		.eq('task_id', taskId)
+
+	if (schedulesError) throw schedulesError
+
+	// Delete subtasks recursively
+	const subtasks = await getTaskSubtasks(taskId)
+	for (const subtask of subtasks) {
+		await deleteTask(subtask.id)
+	}
+
+	// Delete the task itself
+	const { error: taskError } = await supabaseClient
+		.from('tasks')
+		.delete()
+		.eq('id', taskId)
+
+	if (taskError) throw taskError
+}
+
 export const taskAPI = {
 	getTasks,
 	getAllTasks,
@@ -296,5 +332,6 @@ export const taskAPI = {
 	getTasksCountByPeriod,
 	getTaskById,
 	createTask,
-	updateTaskState
+	updateTaskState,
+	deleteTask
 }

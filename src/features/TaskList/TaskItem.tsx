@@ -10,7 +10,7 @@ import Animated, {
 import { StyleSheet } from 'react-native-unistyles'
 
 import { useNavStore } from '@/features/Navigation/model/navStore'
-import { useTaskProgress } from '@/features/TaskList'
+import { useDeleteTask, useTaskProgress } from '@/features/TaskList'
 import { useCategoriesStore } from '@/features/TaskList/model/categoriesStore'
 import {
 	isByTime,
@@ -48,6 +48,7 @@ export default function TaskItem({
 	const setSwipeRoute = useNavStore((store) => store.setSwipeRoute)
 	const hourFormat = useSettingsStore((store) => store.hourFormat)
 	const { data: progressData } = useTaskProgress(data.id)
+	const deleteTaskMutation = useDeleteTask()
 
 	const isByTimeBool = isByTime(data)
 
@@ -56,6 +57,15 @@ export default function TaskItem({
 	const itemHeight = useSharedValue(0)
 	const deleteOpacity = useSharedValue(0)
 	const completeOpacity = useSharedValue(0)
+
+	const deleteTask = () => {
+		deleteTaskMutation.mutate(data.id)
+		onDelete?.(data.id)
+	}
+
+	const completeTask = () => {
+		onComplete?.(data.id)
+	}
 
 	const panGesture = Gesture.Pan()
 		.activeOffsetX([-10, 10])
@@ -80,15 +90,13 @@ export default function TaskItem({
 		})
 		.onEnd((event) => {
 			if (event.translationX < DELETE_THRESHOLD) {
-				// Delete
 				translateX.value = withTiming(-500, { duration: 300 })
 				itemHeight.value = withTiming(0, { duration: 300 })
-				onDelete?.(data.id)
+				scheduleOnRN(deleteTask)
 			} else if (event.translationX > COMPLETE_THRESHOLD) {
-				// Complete
 				translateX.value = withTiming(500, { duration: 300 })
 				itemHeight.value = withTiming(0, { duration: 300 })
-				onComplete?.(data.id)
+				scheduleOnRN(completeTask)
 			} else {
 				// Snap back
 				translateX.value = withTiming(0, { duration: 250 })
@@ -107,8 +115,8 @@ export default function TaskItem({
 		scheduleOnRN(goTaskScreen)
 	})
 
-	// Combine tap and pan — pan has priority
-	const composedGesture = Gesture.Simultaneous(tapGesture, panGesture)
+	// Combine tap and pan — pan has priority and blocks tap
+	const composedGesture = Gesture.Exclusive(panGesture, tapGesture)
 
 	const cardAnimatedStyle = useAnimatedStyle(() => ({
 		transform: [{ translateX: translateX.value }]
@@ -121,10 +129,6 @@ export default function TaskItem({
 	const completeContainerStyle = useAnimatedStyle(() => ({
 		opacity: completeOpacity.value
 	}))
-
-	const handleDeleteLayout = () => {
-		// Called after item height is measured to animate collapse
-	}
 
 	const progress = progressData?.progress ?? 0
 	const totalProgressCount = progressData?.totalCount ?? 0
