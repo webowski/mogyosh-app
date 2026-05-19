@@ -1,6 +1,7 @@
 import { useLocalSearchParams, useNavigation } from 'expo-router'
 import { ActivityIndicator, Text, View } from 'react-native'
 
+import { useNavStore } from '@/features/Navigation/model/navStore'
 import { TaskCreateForm } from '@/features/TaskCreate/TaskCreateForm'
 import { useTaskById, useTaskSubtasks } from '@/features/TaskList'
 import { ChecklistItem } from '@/features/TaskList/ChecklistItem'
@@ -19,6 +20,7 @@ export default function TaskScreen() {
 	const isCreateMode = mode === 'create'
 
 	const selectedTaskId = useTaskStore((state) => state.selectedTaskId)
+	const setSwipeRoute = useNavStore((store) => store.setSwipeRoute)
 
 	const { data, isLoading, error } = useTaskById(selectedTaskId)
 
@@ -40,6 +42,7 @@ export default function TaskScreen() {
 				<TaskCreateForm
 					onClose={() => {
 						navigation.navigate((returnTo || 'index') as never)
+						setSwipeRoute(returnTo || 'index')
 					}}
 				/>
 			</View>
