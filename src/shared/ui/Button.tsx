@@ -47,11 +47,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		overflow: 'hidden',
 		position: 'relative',
-		shadowColor: '#1a237e',
-		shadowOffset: { width: 0, height: 5 },
-		shadowOpacity: 0.24,
-		shadowRadius: 10,
-		elevation: 8
+		boxShadow: '0px 5px 10px rgba(26, 35, 126, 0.16)'
 	},
 	disabled: {
 		opacity: 0.5
@@ -60,8 +56,7 @@ const styles = StyleSheet.create({
 		includeFontPadding: false
 	},
 	noShadow: {
-		shadowOpacity: 0,
-		elevation: 0
+		boxShadow: 'none'
 	}
 })
 
@@ -72,10 +67,12 @@ const getVariantStyles = (
 		text: { color: theme.colors.inverse },
 		rippleColor: 'rgba(255,255,255,0.35)'
 	},
+
 	secondary: {
 		text: { color: theme.colors.major },
 		rippleColor: 'rgba(99,125,255,0.15)'
 	},
+
 	pill: {
 		text: { color: theme.colors.major },
 		rippleColor: 'rgba(99,125,255,0.15)'
@@ -87,14 +84,17 @@ const sizeStyles: Record<Size, { container: ViewStyle; text: TextStyle }> = {
 		container: { height: 42, paddingHorizontal: 20, borderRadius: 5 },
 		text: { fontSize: 15, fontWeight: '600' }
 	},
+
 	sm: {
 		container: { height: 32, paddingHorizontal: 14, borderRadius: 4 },
 		text: { fontSize: 15, fontWeight: '600' }
 	},
+
 	lg: {
 		container: { height: 48, paddingHorizontal: 32, borderRadius: 10 },
 		text: { fontSize: 16, fontWeight: '600' }
 	},
+
 	icon: {
 		container: {
 			height: 46,
@@ -104,6 +104,7 @@ const sizeStyles: Record<Size, { container: ViewStyle; text: TextStyle }> = {
 		},
 		text: { fontSize: 15, fontWeight: '600' }
 	},
+
 	round: {
 		container: {
 			height: 48,
@@ -160,7 +161,7 @@ export const Button: React.FC<ButtonProps> = ({
 				styles.base,
 				sizeStyle.container,
 				disabled && styles.disabled,
-				variant !== 'default' && styles.noShadow,
+				variant === 'pill' && styles.noShadow,
 				style
 			]}
 		>
@@ -182,7 +183,7 @@ export const Button: React.FC<ButtonProps> = ({
 						StyleSheet.absoluteFill,
 						{
 							borderRadius,
-							backgroundColor: theme.colors.primary800
+							backgroundColor: theme.colors.surface
 						}
 					]}
 				/>

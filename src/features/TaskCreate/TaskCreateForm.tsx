@@ -15,7 +15,7 @@ import { Button } from '@/shared/ui/Button'
 import { TodoListEditor } from './TodoListEditor'
 
 const schema = z.object({
-	title: z.string().min(1, 'Название обязательно').max(100)
+	title: z.string().min(1, 'Введите название задачи').max(100)
 })
 
 type TaskFormData = z.infer<typeof schema>
@@ -113,13 +113,9 @@ export function TaskCreateForm({ onClose }: Props) {
 			</ScrollView>
 
 			<ActionsPanel>
-				{/* <Button size='round' onPress={onClose}>
-					<MaterialIcons
-						name='arrow-back'
-						size={28}
-						color={theme.colors.buttonText}
-					/>
-				</Button> */}
+				<Button size='round' variant='secondary' onPress={onClose}>
+					<MaterialIcons name='clear' size={28} color={theme.colors.primary} />
+				</Button>
 
 				<Button
 					size='round'
