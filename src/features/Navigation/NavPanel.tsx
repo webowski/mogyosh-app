@@ -14,7 +14,6 @@ import SVGIconTarget from '@/shared/images/icons/target.svg'
 
 import { SwipeSwitchItems } from '@/features/Navigation/model/navTypes'
 import { useCalendarStore } from '@/shared/model/calendarStore'
-import { useTaskStore } from '@/shared/model/taskStore'
 import { STYLE_VARS } from '@/shared/styles/common'
 import { useNavStore } from './model/navStore'
 
@@ -37,7 +36,6 @@ export default function NavPanel({
 	const insets = useSafeAreaInsets()
 
 	const setIsDrawerShown = useNavStore((store) => store.setIsDrawerShown)
-	const setSelectedTaskId = useTaskStore((store) => store.setSelectedTaskId)
 	const setSwipeRoute = useNavStore((store) => store.setSwipeRoute)
 
 	// Get selected date and swipe switch items from store
@@ -127,7 +125,6 @@ export default function NavPanel({
 			<NavButton
 				isFocused={false}
 				onPress={() => {
-					setSelectedTaskId(null)
 					setSwipeRoute('task')
 					navigation.navigate('task', {
 						mode: 'create',
