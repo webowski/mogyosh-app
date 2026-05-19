@@ -55,11 +55,11 @@ export default function SchemeScreen() {
 	const { data: groups, isLoading, error } = useTasksByCategory()
 
 	const setSelectedTaskId = useTaskStore((store) => store.setSelectedTaskId)
-	const setSwipePosition = useNavStore((store) => store.setSwipePosition)
+	const setSwipeRoute = useNavStore((store) => store.setSwipeRoute)
 
 	const handleTaskPress = (taskId: string) => {
 		setSelectedTaskId(taskId)
-		setSwipePosition({ row: 0, col: 2 })
+		setSwipeRoute('task')
 		router.push('/task')
 	}
 

@@ -15,11 +15,11 @@ export default function TaskListItem({ data }: TaskListItemProps) {
 	const router = useRouter()
 
 	const setSelectedTaskId = useTaskStore((store) => store.setSelectedTaskId)
-	const setSwipePosition = useNavStore((store) => store.setSwipePosition)
+	const setSwipeRoute = useNavStore((store) => store.setSwipeRoute)
 
 	const handlePress = () => {
 		setSelectedTaskId(data.id)
-		setSwipePosition({ row: 0, col: 2 })
+		setSwipeRoute('task')
 		router.push('/task')
 	}
 

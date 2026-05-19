@@ -36,6 +36,8 @@ interface NavStore {
 	swipePosition: SwipeSwitchPosition
 	setSwipePosition: (position: SwipeSwitchPosition) => void
 	getRoutePosition: (routeName: string) => SwipeSwitchPosition | null
+
+	setSwipeRoute: (route: string) => void
 }
 
 export const useNavStore = create<NavStore>((set, get) => ({
@@ -67,6 +69,13 @@ export const useNavStore = create<NavStore>((set, get) => ({
 			}
 		}
 		return null
+	},
+
+	setSwipeRoute: (route: string) => {
+		const position = get().getRoutePosition(route)
+		if (position) {
+			set({ swipePosition: position })
+		}
 	}
 }))
 

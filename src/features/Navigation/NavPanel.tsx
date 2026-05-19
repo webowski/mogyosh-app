@@ -38,7 +38,7 @@ export default function NavPanel({
 
 	const setIsDrawerShown = useNavStore((store) => store.setIsDrawerShown)
 	const setSelectedTaskId = useTaskStore((store) => store.setSelectedTaskId)
-	const setSwipePosition = useNavStore((store) => store.setSwipePosition)
+	const setSwipeRoute = useNavStore((store) => store.setSwipeRoute)
 
 	// Get selected date and swipe switch items from store
 	const selectedDate = useCalendarStore((state) => state.selectedDate)
@@ -128,7 +128,7 @@ export default function NavPanel({
 				isFocused={false}
 				onPress={() => {
 					setSelectedTaskId(null)
-					setSwipePosition({ row: 0, col: 2 })
+					setSwipeRoute('task')
 					navigation.navigate('task', {
 						mode: 'create',
 						returnTo: currentRoute

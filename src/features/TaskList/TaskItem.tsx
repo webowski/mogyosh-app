@@ -25,7 +25,7 @@ export default function TaskItem({ data, children }: TaskItemProps) {
 	const router = useRouter()
 	const categoryMap = useCategoriesStore((store) => store.entities)
 	const setSelectedTaskId = useTaskStore((store) => store.setSelectedTaskId)
-	const setSwipePosition = useNavStore((store) => store.setSwipePosition)
+	const setSwipeRoute = useNavStore((store) => store.setSwipeRoute)
 	const hourFormat = useSettingsStore((store) => store.hourFormat)
 	const { data: progressData } = useTaskProgress(data.id)
 
@@ -33,7 +33,7 @@ export default function TaskItem({ data, children }: TaskItemProps) {
 
 	const handlePress = () => {
 		setSelectedTaskId(data.id)
-		setSwipePosition({ row: 0, col: 2 })
+		setSwipeRoute('task')
 		router.push('/task')
 	}
 
