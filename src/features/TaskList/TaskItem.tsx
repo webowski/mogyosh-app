@@ -22,16 +22,26 @@ import { formatTime } from '@/shared/lib/time'
 import { useTaskStore } from '@/shared/model/taskStore'
 import { STYLE_VARS } from '@/shared/styles/common'
 import CircleProgress from '@/shared/ui/CircleProgress'
+import { scheduleOnRN } from 'react-native-worklets'
 
 const DELETE_THRESHOLD = -80
 const DELETE_ZONE_WIDTH = 72
 
+const COMPLETE_THRESHOLD = 80
+const COMPLETE_ZONE_WIDTH = 72
+
 type TaskItemProps = {
 	data: TaskEntity
 	onDelete?: (id: string) => void
+	onComplete?: (id: string) => void
 } & PropsWithChildren
 
-export default function TaskItem({ data, children, onDelete }: TaskItemProps) {
+export default function TaskItem({
+	data,
+	children,
+	onDelete,
+	onComplete
+}: TaskItemProps) {
 	const router = useRouter()
 	const categoryMap = useCategoriesStore((store) => store.entities)
 	const setSelectedTaskId = useTaskStore((store) => store.setSelectedTaskId)
@@ -45,34 +55,56 @@ export default function TaskItem({ data, children, onDelete }: TaskItemProps) {
 	const translateX = useSharedValue(0)
 	const itemHeight = useSharedValue(0)
 	const deleteOpacity = useSharedValue(0)
+	const completeOpacity = useSharedValue(0)
 
 	const panGesture = Gesture.Pan()
 		.activeOffsetX([-10, 10])
 		.onUpdate((event) => {
-			// Only allow swiping left
-			if (event.translationX > 0) return
 			translateX.value = event.translationX
-			deleteOpacity.value = Math.min(
-				1,
-				Math.abs(event.translationX) / Math.abs(DELETE_THRESHOLD)
-			)
+
+			if (event.translationX < 0) {
+				// Swipe left — delete zone
+				deleteOpacity.value = Math.min(
+					1,
+					Math.abs(event.translationX) / Math.abs(DELETE_THRESHOLD)
+				)
+				completeOpacity.value = 0
+			} else {
+				// Swipe right — complete zone
+				completeOpacity.value = Math.min(
+					1,
+					event.translationX / COMPLETE_THRESHOLD
+				)
+				deleteOpacity.value = 0
+			}
 		})
 		.onEnd((event) => {
 			if (event.translationX < DELETE_THRESHOLD) {
-				// Swipe past threshold — trigger delete
+				// Delete
 				translateX.value = withTiming(-500, { duration: 300 })
 				itemHeight.value = withTiming(0, { duration: 300 })
+				onDelete?.(data.id)
+			} else if (event.translationX > COMPLETE_THRESHOLD) {
+				// Complete
+				translateX.value = withTiming(500, { duration: 300 })
+				itemHeight.value = withTiming(0, { duration: 300 })
+				onComplete?.(data.id)
 			} else {
 				// Snap back
 				translateX.value = withTiming(0, { duration: 250 })
 				deleteOpacity.value = withTiming(0, { duration: 250 })
+				completeOpacity.value = withTiming(0, { duration: 250 })
 			}
 		})
 
-	const tapGesture = Gesture.Tap().onEnd(() => {
+	const goTaskScreen = () => {
 		setSelectedTaskId(data.id)
 		setSwipeRoute('task')
 		router.push('/task')
+	}
+
+	const tapGesture = Gesture.Tap().onEnd(() => {
+		scheduleOnRN(goTaskScreen)
 	})
 
 	// Combine tap and pan — pan has priority
@@ -86,6 +118,10 @@ export default function TaskItem({ data, children, onDelete }: TaskItemProps) {
 		opacity: deleteOpacity.value
 	}))
 
+	const completeContainerStyle = useAnimatedStyle(() => ({
+		opacity: completeOpacity.value
+	}))
+
 	const handleDeleteLayout = () => {
 		// Called after item height is measured to animate collapse
 	}
@@ -96,6 +132,13 @@ export default function TaskItem({ data, children, onDelete }: TaskItemProps) {
 
 	return (
 		<View style={styles.wrapper}>
+			{/* Complete background */}
+			<Animated.View
+				style={[styles.completeBackground, completeContainerStyle]}
+			>
+				<Text style={styles.completeBackground__label}>Done</Text>
+			</Animated.View>
+
 			{/* Delete background */}
 			<Animated.View style={[styles.deleteBackground, deleteContainerStyle]}>
 				<Text style={styles.deleteBackground__label}>Delete</Text>
@@ -147,6 +190,24 @@ const styles = StyleSheet.create((theme, rt) => ({
 		position: 'relative',
 		// overflow: 'hidden',
 		borderRadius: STYLE_VARS.radius_sm
+	},
+
+	completeBackground: {
+		position: 'absolute',
+		left: 0,
+		top: 0,
+		bottom: 0,
+		width: COMPLETE_ZONE_WIDTH,
+		backgroundColor: theme.colors.success,
+		alignItems: 'center',
+		justifyContent: 'center',
+		borderRadius: STYLE_VARS.radius_sm
+	},
+
+	completeBackground__label: {
+		color: '#fff',
+		fontSize: 12 * rt.fontScale,
+		fontWeight: 600
 	},
 
 	deleteBackground: {
