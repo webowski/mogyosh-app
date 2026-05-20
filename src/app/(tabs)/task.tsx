@@ -38,14 +38,12 @@ export default function TaskScreen() {
 
 	if (isCreateMode) {
 		return (
-			<View style={{ flex: 1 }}>
-				<TaskCreateForm
-					onClose={() => {
-						navigation.navigate((returnTo || 'index') as never)
-						setSwipeRoute(returnTo || 'index')
-					}}
-				/>
-			</View>
+			<TaskCreateForm
+				onClose={() => {
+					navigation.navigate((returnTo || 'index') as never)
+					setSwipeRoute(returnTo || 'index')
+				}}
+			/>
 		)
 	}
 
@@ -78,19 +76,14 @@ export default function TaskScreen() {
 
 	return (
 		<ScrollBox>
-			<>
-				<View>
-					{subtasks &&
-						subtasks.map((subtask) => (
-							<ChecklistItem
-								key={subtask.id}
-								checked={subtask.state === 'done'}
-								text={subtask.info}
-								onToggle={(value) => handleToggleSubtask(subtask.id, value)}
-							/>
-						))}
-				</View>
-			</>
+			{subtasks?.map((subtask) => (
+				<ChecklistItem
+					key={subtask.id}
+					checked={subtask.state === 'done'}
+					text={subtask.info}
+					onToggle={(value) => handleToggleSubtask(subtask.id, value)}
+				/>
+			))}
 		</ScrollBox>
 	)
 }

@@ -10,7 +10,7 @@ import { z } from 'zod'
 import { ActionsPanel } from '@/features/ActionsPanel/ActionsPanel'
 import { useCreateTask } from '@/features/TaskList'
 import { useTaskStore } from '@/shared/model/taskStore'
-import { commonStyles, STYLE_VARS } from '@/shared/styles/common'
+import { STYLE_VARS } from '@/shared/styles/common'
 import { Button } from '@/shared/ui/Button'
 import { TodoListEditor } from './TodoListEditor'
 
@@ -79,40 +79,46 @@ export function TaskCreateForm({ onClose }: Props) {
 	return (
 		<>
 			<ScrollView
-				style={commonStyles.scrollBox}
-				contentContainerStyle={{ flexGrow: 1 }}
+				style={{
+					flex: 1
+				}}
+				contentContainerStyle={{
+					flex: 1,
+					paddingHorizontal: STYLE_VARS.sidePadding,
+					paddingTop: STYLE_VARS.sidePadding,
+					paddingBottom: STYLE_VARS.sidePadding + STYLE_VARS.navPanelUnderlap,
+					gap: 6
+				}}
 				keyboardShouldPersistTaps='handled'
 			>
-				<View style={[commonStyles.mainArea, commonStyles.scrollIndent]}>
-					<View style={styles.fieldGroup}>
-						<Controller
-							control={control}
-							name='title'
-							render={({ field: { onChange, onBlur, value } }) => (
-								<TextInput
-									style={[styles.input, errors.title && styles.input__error]}
-									placeholder='Название задачи'
-									placeholderTextColor={theme.colors.minor}
-									value={value}
-									onChangeText={onChange}
-									onBlur={onBlur}
-									returnKeyType='next'
-									autoFocus
-								/>
-							)}
-						/>
-						{errors.title && (
-							<Text style={styles.errorText}>{errors.title.message}</Text>
+				<View style={styles.fieldGroup}>
+					<Controller
+						control={control}
+						name='title'
+						render={({ field: { onChange, onBlur, value } }) => (
+							<TextInput
+								style={[styles.input, errors.title && styles.input__error]}
+								placeholder='Название задачи'
+								placeholderTextColor={theme.colors.minor}
+								value={value}
+								onChangeText={onChange}
+								onBlur={onBlur}
+								returnKeyType='next'
+								autoFocus
+							/>
 						)}
-					</View>
+					/>
+					{errors.title && (
+						<Text style={styles.errorText}>{errors.title.message}</Text>
+					)}
+				</View>
 
-					<View style={styles.fieldGroup}>
-						<TodoListEditor items={subtasks} onChange={setSubtasks} />
-					</View>
+				<View style={styles.fieldGroup}>
+					<TodoListEditor items={subtasks} onChange={setSubtasks} />
 				</View>
 			</ScrollView>
 
-			<ActionsPanel>
+			<ActionsPanel style={{ paddingBottom: STYLE_VARS.navPanelUnderlap }}>
 				<Button size='round' variant='secondary' onPress={onClose}>
 					<MaterialIcons name='clear' size={28} color={theme.colors.primary} />
 				</Button>

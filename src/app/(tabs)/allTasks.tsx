@@ -18,7 +18,7 @@ import {
 } from '@/features/TaskList'
 import TaskListItem from '@/features/TaskList/TaskListItem'
 import type { CategoryEntity } from '@/shared/domain/task'
-import { commonStyles, STYLE_VARS } from '@/shared/styles/common'
+import { STYLE_VARS } from '@/shared/styles/common'
 import { formStyles } from '@/shared/styles/form'
 import { Button } from '@/shared/ui/Button'
 import RadioButton from '@/shared/ui/RadioButton'
@@ -148,7 +148,9 @@ export default function AllTasksScreen() {
 				keyExtractor={(item) => item.id}
 				scrollEventThrottle={16}
 				bounces={true}
-				style={[commonStyles.scrollBox]}
+				style={{
+					flex: 1
+				}}
 				contentContainerStyle={{
 					flexGrow: 1,
 					paddingHorizontal: STYLE_VARS.sidePadding,

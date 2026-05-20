@@ -24,16 +24,14 @@ export const commonStyles = StyleSheet.create((theme, rt) => ({
 		flex: 1,
 		paddingHorizontal: STYLE_VARS.sidePadding,
 		paddingTop: STYLE_VARS.sidePadding,
-		paddingBottom: STYLE_VARS.sidePadding,
+		paddingBottom: STYLE_VARS.sidePadding + STYLE_VARS.navPanelUnderlap,
 		gap: 6
 	},
 
-	scrollIndent: {
-		paddingBottom: rt.insets.bottom + STYLE_VARS.sidePadding + 70
-	},
-
-	scrollBox: {
-		flex: 1
+	box: {
+		paddingHorizontal: STYLE_VARS.sidePadding,
+		paddingTop: STYLE_VARS.sidePadding,
+		paddingBottom: STYLE_VARS.sidePadding
 	},
 
 	header: {

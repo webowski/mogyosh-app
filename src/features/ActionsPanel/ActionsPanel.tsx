@@ -1,10 +1,19 @@
 import { STYLE_VARS } from '@/shared/styles/common'
-import { View } from 'react-native'
+import { PropsWithChildren } from 'react'
+import { View, ViewStyle } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
-export const ActionsPanel = ({ children }: { children: React.ReactNode }) => {
+type ActionsPanelProps = PropsWithChildren & {
+	style?: ViewStyle | ViewStyle[]
+}
+
+export const ActionsPanel = ({
+	children,
+	style,
+	...rest
+}: ActionsPanelProps) => {
 	return (
-		<View pointerEvents='box-none' style={styles.screenActions}>
+		<View pointerEvents='box-none' style={[styles.screenActions, style]}>
 			{children}
 		</View>
 	)

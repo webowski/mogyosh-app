@@ -1,7 +1,7 @@
-import { View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 
-import { commonStyles } from '@/shared/styles/common'
+import { STYLE_VARS } from '@/shared/styles/common'
+import { useUnistyles } from 'react-native-unistyles'
 
 type ScrollBoxProps = React.ComponentProps<typeof ScrollView> & {
 	scrollIndent?: boolean
@@ -12,20 +12,28 @@ export default function ScrollBox({
 	scrollIndent = false,
 	...props
 }: ScrollBoxProps) {
+	const { rt } = useUnistyles()
+
 	return (
 		<ScrollView
-			style={commonStyles.scrollBox}
-			contentContainerStyle={{ flexGrow: 1 }}
+			style={{
+				flex: 1
+			}}
+			contentContainerStyle={[
+				{
+					flex: 1,
+					paddingHorizontal: STYLE_VARS.sidePadding,
+					paddingTop: STYLE_VARS.sidePadding,
+					paddingBottom: STYLE_VARS.sidePadding + STYLE_VARS.navPanelUnderlap,
+					gap: 6
+				},
+				scrollIndent && {
+					paddingBottom: rt.insets.bottom + STYLE_VARS.sidePadding + 70
+				}
+			]}
 			{...props}
 		>
-			<View
-				style={[
-					commonStyles.mainArea,
-					scrollIndent && commonStyles.scrollIndent
-				]}
-			>
-				{children}
-			</View>
+			{children}
 		</ScrollView>
 	)
 }
