@@ -220,10 +220,10 @@ export default function AllTasksScreen() {
 const styles = StyleSheet.create((theme, rt) => ({
 	SubPanel: {
 		paddingHorizontal: STYLE_VARS.sidePadding,
-		paddingTop: 14,
-		paddingBottom: 18 + STYLE_VARS.navPanelUnderlap,
-		flexDirection: 'row',
-		backgroundColor: theme.colors.surface,
-		boxShadow: '0 0px 6px ' + theme.colors.shadow100
+		paddingTop: 20,
+		paddingBottom: 24 + STYLE_VARS.navPanelUnderlap,
+		flexDirection: 'row'
+		// backgroundColor: theme.colors.surface,
+		// boxShadow: '0 0px 6px ' + theme.colors.shadow100
 	}
 }))

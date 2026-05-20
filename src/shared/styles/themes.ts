@@ -65,6 +65,7 @@ export const lightTheme = {
 		border700: 'hsl(240, 5%, 92%)',
 		shadow100: 'hsla(225, 74%, 40%, .09)',
 		shadow150: 'hsla(225, 74%, 40%, .12)',
+		shadow200: 'hsla(225, 74%, 40%, .16)',
 		shadow: 'hsla(225, 74%, 40%, .55)',
 		// gradient: {
 		// 	primary: ['', ''],
@@ -117,6 +118,7 @@ export const darkTheme = {
 		border700: 'hsl(240, 5%, 92%)',
 		shadow100: 'hsla(225, 0%, 0%, .09)',
 		shadow150: 'hsla(225, 0%, 0%, .12)',
+		shadow200: 'hsla(225, 0%, 0%, .16)',
 		shadow: 'hsla(225, 0%, 0%, .55)',
 		// gradient: {
 		// 	primary: ['', ''],

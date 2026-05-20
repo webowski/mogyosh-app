@@ -146,12 +146,12 @@ const styles = StyleSheet.create((theme, rt) => ({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
-		backgroundColor: theme.colors.background,
+		backgroundColor: theme.colors.surface,
 		marginTop: -1 * STYLE_VARS.radius_3xl,
 		borderTopLeftRadius: STYLE_VARS.radius_3xl,
 		borderTopRightRadius: STYLE_VARS.radius_3xl,
 		borderCurve: 'continuous',
-		boxShadow: '0 0px 28px ' + theme.colors.shadow150
+		boxShadow: '0 0px 32px ' + theme.colors.shadow150
 	}
 }))
 
