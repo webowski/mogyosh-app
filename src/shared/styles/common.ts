@@ -56,6 +56,11 @@ export const commonStyles = StyleSheet.create((theme, rt) => ({
 		marginBottom: 2
 	},
 
+	sectionHeader: {
+		paddingTop: 5,
+		paddingBottom: 3
+	},
+
 	screen: {
 		flex: 1,
 		paddingHorizontal: 16,

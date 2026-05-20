@@ -2,7 +2,8 @@ import {
 	ActivityIndicator,
 	RefreshControl,
 	SectionList,
-	Text
+	Text,
+	View
 } from 'react-native'
 
 import { useTasksGrouped } from '@/features/TaskList'
@@ -28,7 +29,9 @@ export default function DayScreen() {
 			keyExtractor={(item) => item.id}
 			renderItem={({ item }) => <TaskItem data={item} />}
 			renderSectionHeader={({ section: { title } }) => (
-				<Text style={textStyles.heading5}>{title}</Text>
+				<View style={commonStyles.sectionHeader}>
+					<Text style={textStyles.heading5}>{title}</Text>
+				</View>
 			)}
 			refreshControl={
 				<RefreshControl refreshing={isLoading} onRefresh={refetch} />
