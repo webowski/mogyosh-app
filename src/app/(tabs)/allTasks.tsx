@@ -182,7 +182,7 @@ export default function AllTasksScreen() {
 
 			<TrueSheet
 				ref={sheetRef}
-				detents={[0.4]}
+				detents={['auto']}
 				cornerRadius={STYLE_VARS.radius_2xl}
 				backgroundColor={theme.colors.surface}
 				grabberOptions={{ color: theme.colors.minor }}

@@ -253,7 +253,7 @@ export const Button: React.FC<ButtonProps> = ({
 						right: 2,
 						width: 7,
 						height: 7,
-						boxShadow: '0 0px 0px 2.5px ' + theme.colors.shadow100,
+						boxShadow: '0 0px 0px 3px ' + theme.colors.shadow100,
 						borderRadius: 999,
 						backgroundColor: theme.colors.primary600
 					}}
