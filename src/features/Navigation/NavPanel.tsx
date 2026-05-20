@@ -98,7 +98,7 @@ export default function NavPanel({
 	return (
 		<View
 			style={[
-				styles.navPanelContainer,
+				styles.NavPanel,
 				{
 					paddingBottom: insets.bottom > 0 ? insets.bottom : 24
 				}
@@ -138,7 +138,7 @@ export default function NavPanel({
 }
 
 const styles = StyleSheet.create((theme, rt) => ({
-	navPanelContainer: {
+	NavPanel: {
 		height: 70,
 		paddingHorizontal: 18,
 		zIndex: 10,
@@ -147,10 +147,11 @@ const styles = StyleSheet.create((theme, rt) => ({
 		alignItems: 'center',
 		justifyContent: 'space-between',
 		backgroundColor: theme.colors.background,
+		marginTop: -1 * STYLE_VARS.radius_3xl,
 		borderTopLeftRadius: STYLE_VARS.radius_3xl,
 		borderTopRightRadius: STYLE_VARS.radius_3xl,
 		borderCurve: 'continuous',
-		boxShadow: '0 0px 40px ' + theme.colors.shadow150
+		boxShadow: '0 0px 28px ' + theme.colors.shadow150
 	}
 }))
 
