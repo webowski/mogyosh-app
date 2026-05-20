@@ -237,10 +237,10 @@ const styles = StyleSheet.create((theme, rt) => ({
 		paddingTop: 40 + rt.insets.top,
 		paddingBottom: 40 + 20 + rt.insets.bottom,
 		paddingHorizontal: '16%',
-		gap: 8
+		gap: 6
 	},
 	menuItem: {
-		paddingVertical: 6,
+		paddingVertical: 4,
 		display: 'flex',
 		flexDirection: 'row',
 		alignItems: 'center',
