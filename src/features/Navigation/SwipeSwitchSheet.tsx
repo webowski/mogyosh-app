@@ -1,3 +1,4 @@
+import { useNavigation } from 'expo-router'
 import { useEffect } from 'react'
 import { Dimensions, Pressable, Text, View } from 'react-native'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
@@ -7,10 +8,10 @@ import Animated, {
 	withTiming
 } from 'react-native-reanimated'
 import { StyleSheet } from 'react-native-unistyles'
+import { scheduleOnRN } from 'react-native-worklets'
 
 import { useNavStore } from '@/features/Navigation/model/navStore'
 import { STYLE_VARS } from '@/shared/styles/common'
-import { scheduleOnRN } from 'react-native-worklets'
 
 const SHEET_HEIGHT = Dimensions.get('window').height * 0.4
 
@@ -19,9 +20,19 @@ export default function SwipeSwitchSheet() {
 	const swipeSheetItem = useNavStore((s) => s.swipeSheetItem)
 	const setSwipeSheetItem = useNavStore((s) => s.setSwipeSheetItem)
 	const swipeSwitchItems = useNavStore((s) => s.swipeSwitchItems)
+	const navigation = useNavigation()
 
 	const translateY = useSharedValue(SHEET_HEIGHT)
 	const isVisible = useSharedValue(false)
+
+	// Закрываем шит при переключении роута
+	useEffect(() => {
+		const unsubscribe = navigation.addListener('state', () => {
+			setSwipeSheetItem(null)
+		})
+
+		return unsubscribe
+	}, [navigation, setSwipeSheetItem])
 
 	useEffect(
 		() => {

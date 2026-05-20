@@ -52,6 +52,7 @@ interface SlideItemProps {
 	posX: SharedValue<number>
 	posY: SharedValue<number>
 	onPress?: (row: number, col: number) => void
+	isSwitchActive: boolean
 }
 
 const SlideItem: React.FC<SlideItemProps> = ({
@@ -60,7 +61,8 @@ const SlideItem: React.FC<SlideItemProps> = ({
 	col,
 	posX,
 	posY,
-	onPress
+	onPress,
+	isSwitchActive
 }) => {
 	const setSwipeSheetItem = useNavStore((s) => s.setSwipeSheetItem)
 
@@ -97,11 +99,13 @@ const SlideItem: React.FC<SlideItemProps> = ({
 
 	const handlePress = (row: number, col: number) => {
 		onPress?.(row, col)
+		if (isSwitchActive) {
+			setSwipeSheetItem({ row, col })
+		}
 	}
 
 	const gesture = Gesture.Tap().onEnd(() => {
 		'worklet'
-		scheduleOnRN(setSwipeSheetItem, { row, col })
 		scheduleOnRN(handlePress, row, col)
 	})
 
@@ -386,6 +390,7 @@ const SwipeSwitch: React.FC<SwipeSwitchProps> = ({
 								posX={posX}
 								posY={posY}
 								onPress={onPress}
+								isSwitchActive={isSwitchActive}
 							/>
 						))
 					)}
