@@ -131,45 +131,10 @@ export const darkTheme = {
 	statusBarColor: 'light'
 } as const
 
-// export const sunnyTheme = {
-// 	colors: {
-// 		major: 'hsl(224, 15%, 30%)',
-// 		minor: 'hsl(225, 28%, 68%)',
-// 		muted: 'hsl(225, 36%, 78%)',
-// 		muted600: 'hsl(225, 36%, 87%)',
-// 		muted700: 'hsl(224, 37%, 92%)',
-// 		inverse: 'hsl(0, 0%, 100%)',
-// 		surface: 'hsl(0, 0%, 100%)',
-// 		surfaceAlter: 'hsl(228, 56%, 98%)',
-// 		background: 'hsl(0, 0%, 0%)',
-// 		backgroundAlter: 'hsl(228, 56%, 98%)',
-// 		primary300: 'hsl(225, 60%, 55%)',
-// 		primary: 'hsl(60, 100%, 57%)',
-// 		primary800: 'hsl(225, 100%, 92%)',
-// 		brand: 'hsl(225, 100%, 70%)',
-// 		success: 'hsl(148, 100%, 66%)',
-// 		danger: 'hsl(355, 100%, 75%)',
-// 		border: 'hsl(240, 2%, 22%)',
-// 		border600: 'hsl(240, 5%, 87%)',
-// 		border700: 'hsl(240, 5%, 92%)',
-// 		shadow100: 'hsla(225, 74%, 40%, .09)',
-// 		shadow150: 'hsla(225, 74%, 40%, .12)',
-// 		shadow: 'hsla(225, 74%, 40%, .55)',
-// 		// gradient: {
-// 		// 	primary: ['', ''],
-// 		// 	surface: ['', '']
-// 		// }
-// 		buttonText: 'hsl(0, 0%, 100%)'
-// 	},
-// 	fontSize: lightTheme.fontSize,
-// 	spacing: lightTheme.spacing
-// } as const
-
 export const themes = {
 	light: lightTheme,
 	dark: darkTheme
 }
-// sunny: sunnyTheme
 
 // const breakpoints = {
 // 	xs: 0,
