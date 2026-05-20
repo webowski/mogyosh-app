@@ -11,7 +11,8 @@ export const STYLE_VARS = {
 	radius_lg: 12,
 	radius_xl: 16,
 	radius_2xl: 24,
-	radius_3xl: 32
+	radius_3xl: 32,
+	navPanelUnderlap: 32
 }
 
 export const commonStyles = StyleSheet.create((theme, rt) => ({
