@@ -64,7 +64,8 @@ const SlideItem: React.FC<SlideItemProps> = ({
 	onPress,
 	isSwitchActive
 }) => {
-	const setSwipeSheetItem = useNavStore((s) => s.setSwipeSheetItem)
+	const swipeSheetItem = useNavStore((state) => state.swipeSheetItem)
+	const setSwipeSheetItem = useNavStore((state) => state.setSwipeSheetItem)
 
 	const animatedStyle = useAnimatedStyle(() => {
 		// Raw distance from this cell to current position
@@ -100,7 +101,11 @@ const SlideItem: React.FC<SlideItemProps> = ({
 	const handlePress = (row: number, col: number) => {
 		onPress?.(row, col)
 		if (isSwitchActive) {
-			setSwipeSheetItem({ row, col })
+			if (swipeSheetItem !== null) {
+				setSwipeSheetItem(null)
+			} else {
+				setSwipeSheetItem({ row, col })
+			}
 		}
 	}
 
