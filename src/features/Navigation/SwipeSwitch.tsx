@@ -62,6 +62,8 @@ const SlideItem: React.FC<SlideItemProps> = ({
 	posY,
 	onPress
 }) => {
+	const setSwipeSheetItem = useNavStore((s) => s.setSwipeSheetItem)
+
 	const animatedStyle = useAnimatedStyle(() => {
 		// Raw distance from this cell to current position
 		const rawTransX = col * SLIDE_WIDTH - posX.value
@@ -99,6 +101,7 @@ const SlideItem: React.FC<SlideItemProps> = ({
 
 	const gesture = Gesture.Tap().onEnd(() => {
 		'worklet'
+		scheduleOnRN(setSwipeSheetItem, { row, col })
 		scheduleOnRN(handlePress, row, col)
 	})
 

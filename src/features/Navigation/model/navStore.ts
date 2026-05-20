@@ -38,6 +38,9 @@ interface NavStore {
 	getRoutePosition: (routeName: string) => SwipeSwitchPosition | null
 
 	setSwipeRoute: (route: string) => void
+
+	swipeSheetItem: SwipeSwitchPosition | null
+	setSwipeSheetItem: (item: SwipeSwitchPosition | null) => void
 }
 
 export const useNavStore = create<NavStore>((set, get) => ({
@@ -76,7 +79,10 @@ export const useNavStore = create<NavStore>((set, get) => ({
 		if (position) {
 			set({ swipePosition: position })
 		}
-	}
+	},
+
+	swipeSheetItem: null,
+	setSwipeSheetItem: (item) => set({ swipeSheetItem: item })
 }))
 
 i18n.on('languageChanged', () => {

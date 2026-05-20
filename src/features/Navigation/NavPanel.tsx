@@ -16,6 +16,7 @@ import { SwipeSwitchItems } from '@/features/Navigation/model/navTypes'
 import { useCalendarStore } from '@/shared/model/calendarStore'
 import { STYLE_VARS } from '@/shared/styles/common'
 import { useNavStore } from './model/navStore'
+import SwipeSwitchSheet from './SwipeSwitchSheet'
 
 type NavPanelProps = BottomTabBarProps
 
@@ -96,48 +97,58 @@ export default function NavPanel({
 	}
 
 	return (
-		<View
-			style={[
-				styles.NavPanel,
-				{
-					paddingBottom: insets.bottom > 0 ? insets.bottom : 24
-				}
-			]}
-		>
-			<NavButton
-				onPress={() => setIsDrawerShown(true)}
-				icon={<SVGIconBurger width={32} height={32} />}
-			/>
-			<NavButton
-				isFocused={isCurrentRoute('motivation', state)}
-				onPress={() => navigation.navigate('motivation')}
-				icon={<SVGIconTarget width={36} height={36} />}
-			/>
+		<View style={styles.NavPanelWrap}>
+			<SwipeSwitchSheet />
+			<View
+				style={[
+					styles.NavPanel,
+					{
+						paddingBottom: insets.bottom > 0 ? insets.bottom : 24
+					}
+				]}
+			>
+				<NavButton
+					onPress={() => setIsDrawerShown(true)}
+					icon={<SVGIconBurger width={32} height={32} />}
+				/>
+				<NavButton
+					isFocused={isCurrentRoute('motivation', state)}
+					onPress={() => navigation.navigate('motivation')}
+					icon={<SVGIconTarget width={36} height={36} />}
+				/>
 
-			<SwipeSwitch
-				currentRoute={currentRoute}
-				onIndexChange={handleSwipeSwitchChange}
-				onPress={handleSwipeSwitchPress}
-				isActive={isAnySwipeRouteActive(currentRoute, swipeSwitchItems)}
-				getSlideLabel={getSlideLabel}
-			/>
+				<SwipeSwitch
+					currentRoute={currentRoute}
+					onIndexChange={handleSwipeSwitchChange}
+					onPress={handleSwipeSwitchPress}
+					isActive={isAnySwipeRouteActive(currentRoute, swipeSwitchItems)}
+					getSlideLabel={getSlideLabel}
+				/>
 
-			<NavButton
-				isFocused={false}
-				onPress={() => {
-					setSwipeRoute('task')
-					navigation.navigate('task', {
-						mode: 'create',
-						returnTo: currentRoute
-					})
-				}}
-				icon={<SVGIconPlus width={32} height={32} />}
-			/>
+				<NavButton
+					isFocused={false}
+					onPress={() => {
+						setSwipeRoute('task')
+						navigation.navigate('task', {
+							mode: 'create',
+							returnTo: currentRoute
+						})
+					}}
+					icon={<SVGIconPlus width={32} height={32} />}
+				/>
+			</View>
 		</View>
 	)
 }
 
 const styles = StyleSheet.create((theme, rt) => ({
+	NavPanelWrap: {
+		borderTopLeftRadius: STYLE_VARS.radius_3xl,
+		borderTopRightRadius: STYLE_VARS.radius_3xl,
+		borderCurve: 'continuous',
+		boxShadow: '0 0px 32px ' + theme.colors.shadow150,
+		marginTop: -1 * STYLE_VARS.radius_3xl
+	},
 	NavPanel: {
 		height: 70,
 		paddingHorizontal: 18,
@@ -147,11 +158,10 @@ const styles = StyleSheet.create((theme, rt) => ({
 		alignItems: 'center',
 		justifyContent: 'space-between',
 		backgroundColor: theme.colors.surface,
-		marginTop: -1 * STYLE_VARS.radius_3xl,
 		borderTopLeftRadius: STYLE_VARS.radius_3xl,
 		borderTopRightRadius: STYLE_VARS.radius_3xl,
 		borderCurve: 'continuous',
-		boxShadow: '0 0px 32px ' + theme.colors.shadow150
+		boxShadow: '0 0px 4px ' + theme.colors.shadow150
 	}
 }))
 
