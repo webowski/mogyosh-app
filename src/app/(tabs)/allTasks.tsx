@@ -219,11 +219,11 @@ const styles = StyleSheet.create((theme, rt) => ({
 	SubPanel: {
 		paddingHorizontal: STYLE_VARS.sidePadding,
 		paddingTop: 14,
-		paddingBottom: 18,
+		// paddingBottom: 18,
+		paddingBottom: 18 + STYLE_VARS.radius_3xl, // добавить radius_3xl
+		marginBottom: -STYLE_VARS.radius_3xl, // уйти под NavPanel
 		flexDirection: 'row',
 		backgroundColor: theme.colors.surface,
 		boxShadow: '0 0px 6px ' + theme.colors.shadow100
-		// borderTopLeftRadius: STYLE_VARS.radius_lg,
-		// borderTopRightRadius: STYLE_VARS.radius_lg
 	}
 }))
