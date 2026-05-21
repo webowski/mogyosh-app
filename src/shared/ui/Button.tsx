@@ -12,8 +12,8 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-type Variant = 'default' | 'secondary' | 'pill'
-type Size = 'default' | 'sm' | 'lg' | 'icon' | 'round'
+type Variant = 'default' | 'secondary' | 'pill' | 'chip'
+type Size = 'default' | 'sm' | 'lg' | 'icon' | 'round' | 'chip'
 
 interface ButtonProps {
 	children: React.ReactNode
@@ -24,6 +24,7 @@ interface ButtonProps {
 	style?: ViewStyle
 	textStyle?: TextStyle
 	indicator?: boolean
+	active?: boolean
 }
 
 interface Ripple {
@@ -76,6 +77,11 @@ const getVariantStyles = (
 	pill: {
 		text: { color: theme.colors.major },
 		rippleColor: 'rgba(99,125,255,0.15)'
+	},
+
+	chip: {
+		text: { color: theme.colors.major },
+		rippleColor: 'rgba(99,125,255,0.15)'
 	}
 })
 
@@ -113,6 +119,11 @@ const sizeStyles: Record<Size, { container: ViewStyle; text: TextStyle }> = {
 			paddingHorizontal: 0
 		},
 		text: { fontSize: 15, fontWeight: '600' }
+	},
+
+	chip: {
+		container: { height: 32, paddingHorizontal: 14, borderRadius: 999 },
+		text: { fontSize: 13, fontWeight: '500' }
 	}
 }
 
@@ -126,7 +137,8 @@ export const Button: React.FC<ButtonProps> = ({
 	disabled = false,
 	style,
 	textStyle,
-	indicator = false
+	indicator = false,
+	active = false
 }) => {
 	const { theme } = useUnistyles()
 	const [ripples, setRipples] = React.useState<Ripple[]>([])
@@ -134,7 +146,9 @@ export const Button: React.FC<ButtonProps> = ({
 	const variantStyle = getVariantStyles(theme)[variant]
 	const sizeStyle = sizeStyles[size]
 	const borderRadius =
-		variant === 'pill' ? 999 : ((sizeStyle.container as any).borderRadius ?? 8)
+		variant === 'pill' || variant === 'chip'
+			? 999
+			: ((sizeStyle.container as any).borderRadius ?? 8)
 
 	const handlePressIn = (event: any) => {
 		const { locationX, locationY } = event.nativeEvent
@@ -161,7 +175,7 @@ export const Button: React.FC<ButtonProps> = ({
 				styles.base,
 				sizeStyle.container,
 				disabled && styles.disabled,
-				variant === 'pill' && styles.noShadow,
+				(variant === 'pill' || variant === 'chip') && styles.noShadow,
 				style
 			]}
 		>
@@ -184,6 +198,20 @@ export const Button: React.FC<ButtonProps> = ({
 						{
 							borderRadius,
 							backgroundColor: theme.colors.surface
+						}
+					]}
+				/>
+			) : variant === 'chip' ? (
+				<View
+					style={[
+						StyleSheet.absoluteFill,
+						{
+							borderRadius,
+							borderWidth: 1,
+							borderColor: active ? theme.colors.primary : theme.colors.border,
+							backgroundColor: active
+								? theme.colors.primary
+								: theme.colors.surface
 						}
 					]}
 				/>
@@ -236,7 +264,13 @@ export const Button: React.FC<ButtonProps> = ({
 			{/* Layer 3: content */}
 			{typeof children === 'string' ? (
 				<Text
-					style={[styles.text, variantStyle.text, sizeStyle.text, textStyle]}
+					style={[
+						styles.text,
+						variantStyle.text,
+						sizeStyle.text,
+						variant === 'chip' && active && { color: theme.colors.buttonText },
+						textStyle
+					]}
 				>
 					{children}
 				</Text>
