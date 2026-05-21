@@ -1,6 +1,11 @@
 import { MaterialIcons } from '@expo/vector-icons'
-import { useRef } from 'react'
-import { Pressable, TextInput, View } from 'react-native'
+import type { RefObject } from 'react'
+import { useCallback, useRef } from 'react'
+import { Platform, Pressable, TextInput, View } from 'react-native'
+import {
+	EnrichedMarkdownTextInput,
+	type EnrichedMarkdownTextInputInstance
+} from 'react-native-enriched-markdown'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 interface TodoItem {
@@ -15,7 +20,19 @@ interface Props {
 
 export function TodoListEditor({ items, onChange }: Props) {
 	const { theme } = useUnistyles()
-	const inputRefs = useRef<Record<string, TextInput | null>>({})
+	const inputRefs = useRef<
+		Map<string, RefObject<EnrichedMarkdownTextInputInstance | null>>
+	>(new Map())
+
+	const getRefForItem = useCallback(
+		(id: string): RefObject<EnrichedMarkdownTextInputInstance | null> => {
+			if (!inputRefs.current.has(id)) {
+				inputRefs.current.set(id, { current: null })
+			}
+			return inputRefs.current.get(id)!
+		},
+		[]
+	)
 
 	const addItemAfter = (index: number) => {
 		const newItem: TodoItem = { id: Date.now().toString(), text: '' }
@@ -23,30 +40,36 @@ export function TodoListEditor({ items, onChange }: Props) {
 		next.splice(index + 1, 0, newItem)
 		onChange(next)
 
-		// Focus new item after state update
 		setTimeout(() => {
-			inputRefs.current[newItem.id]?.focus()
+			getRefForItem(newItem.id).current?.focus()
 		}, 50)
 	}
 
 	const removeItem = (index: number) => {
 		if (items.length <= 1) {
-			// Keep at least one item, just clear it
 			onChange([{ ...items[0], text: '' }])
 			return
 		}
 		const next = items.filter((_, i) => i !== index)
 		onChange(next)
 
-		// Focus previous item
 		const focusIndex = Math.max(0, index - 1)
 		setTimeout(() => {
-			inputRefs.current[next[focusIndex].id]?.focus()
+			getRefForItem(next[focusIndex].id).current?.focus()
 		}, 50)
 	}
 
 	const updateItem = (id: string, text: string) => {
-		onChange(items.map((item) => (item.id === id ? { ...item, text } : item)))
+		const itemIndex = items.findIndex((item) => item.id === id)
+		const updatedItems = items.map((item) =>
+			item.id === id ? { ...item, text } : item
+		)
+		onChange(updatedItems)
+
+		// Auto-remove empty item when field is cleared (except the last one)
+		if (text === '' && items.length > 1) {
+			removeItem(itemIndex)
+		}
 	}
 
 	return (
@@ -54,24 +77,29 @@ export function TodoListEditor({ items, onChange }: Props) {
 			{items.map((item, index) => (
 				<View key={item.id} style={styles.row}>
 					<View style={styles.checkbox} />
-					<TextInput
-						ref={(ref) => {
-							inputRefs.current[item.id] = ref
-						}}
-						style={styles.input}
-						value={item.text}
-						onChangeText={(text) => updateItem(item.id, text)}
-						placeholderTextColor={theme.colors.minor}
-						placeholder={index === 0 ? 'Список задач...' : ''}
-						returnKeyType='next'
-						onSubmitEditing={() => addItemAfter(index)}
-						blurOnSubmit={false}
-						onKeyPress={({ nativeEvent }) => {
-							if (nativeEvent.key === 'Backspace' && item.text === '') {
-								removeItem(index)
-							}
-						}}
-					/>
+					{Platform.OS === 'web' ? (
+						<TextInput
+							ref={inputRefs.current.get(item.id) as any}
+							style={styles.input}
+							value={item.text}
+							onChangeText={(text) => updateItem(item.id, text)}
+							placeholderTextColor={theme.colors.minor}
+							placeholder={index === 0 ? 'Список задач...' : ''}
+						/>
+					) : (
+						<>
+							<EnrichedMarkdownTextInput
+								ref={getRefForItem(item.id)}
+								style={styles.input}
+								defaultValue={item.text}
+								onChangeMarkdown={(markdown) => updateItem(item.id, markdown)}
+								placeholderTextColor={theme.colors.minor}
+								placeholder={index === 0 ? 'Список задач...' : ''}
+								scrollEnabled={false}
+								multiline
+							/>
+						</>
+					)}
 					{items.length > 1 && (
 						<Pressable onPress={() => removeItem(index)} hitSlop={8}>
 							<MaterialIcons
