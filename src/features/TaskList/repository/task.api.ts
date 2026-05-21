@@ -215,6 +215,7 @@ const getTaskById = async (taskId: TaskId): Promise<TaskEntity | null> => {
 type CreateTaskPayload = {
 	info: string
 	parent_id?: string | null
+	category_id?: string | null
 }
 
 const createTask = async (payload: CreateTaskPayload): Promise<TaskEntity> => {
@@ -226,7 +227,8 @@ const createTask = async (payload: CreateTaskPayload): Promise<TaskEntity> => {
 		.insert({
 			info: payload.info,
 			user_id: userId,
-			parent_id: payload.parent_id ?? null
+			parent_id: payload.parent_id ?? null,
+			category_id: payload.category_id ?? null
 		})
 		.select()
 		.single()

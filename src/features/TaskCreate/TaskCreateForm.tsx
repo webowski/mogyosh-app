@@ -8,7 +8,7 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 import { z } from 'zod'
 
 import { ActionsPanel } from '@/features/ActionsPanel/ActionsPanel'
-import { useCreateTask } from '@/features/TaskList'
+import { useCategories, useCreateTask } from '@/features/TaskList'
 import { useTaskStore } from '@/shared/model/taskStore'
 import { STYLE_VARS } from '@/shared/styles/common'
 import { Button } from '@/shared/ui/Button'
@@ -29,6 +29,11 @@ export function TaskCreateForm({ onClose }: Props) {
 	const createTask = useCreateTask()
 	const setDraftTitle = useTaskStore((store) => store.setDraftTitle)
 	const clearDraftTitle = useTaskStore((store) => store.clearDraftTitle)
+
+	const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
+		null
+	)
+	const { data: categories = [] } = useCategories()
 
 	const [subtasks, setSubtasks] = useState<{ id: string; text: string }[]>([
 		{ id: 'initial', text: '' }
@@ -59,7 +64,10 @@ export function TaskCreateForm({ onClose }: Props) {
 	}, [clearDraftTitle])
 
 	const onSubmit = async (data: TaskFormData) => {
-		const parentTask = await createTask.mutateAsync({ info: data.title })
+		const parentTask = await createTask.mutateAsync({
+			info: data.title,
+			category_id: selectedCategoryId
+		})
 
 		const filledSubtasks = subtasks.filter((subtask) => subtask.text.trim())
 		if (filledSubtasks.length > 0 && parentTask.id) {
@@ -111,6 +119,32 @@ export function TaskCreateForm({ onClose }: Props) {
 					{errors.title && (
 						<Text style={styles.errorText}>{errors.title.message}</Text>
 					)}
+				</View>
+
+				<View style={styles.fieldGroup}>
+					<ScrollView horizontal showsHorizontalScrollIndicator={false}>
+						<View style={styles.categoryList}>
+							<Button
+								variant='chip'
+								size='chip'
+								active={selectedCategoryId === null}
+								onPress={() => setSelectedCategoryId(null)}
+							>
+								Без категории
+							</Button>
+							{categories.map((category) => (
+								<Button
+									key={category.id}
+									variant='chip'
+									size='chip'
+									active={selectedCategoryId === category.id}
+									onPress={() => setSelectedCategoryId(category.id)}
+								>
+									{category.name}
+								</Button>
+							))}
+						</View>
+					</ScrollView>
 				</View>
 
 				<View style={styles.fieldGroup}>
@@ -170,5 +204,30 @@ const styles = StyleSheet.create((theme) => ({
 	errorText: {
 		fontSize: 12,
 		color: theme.colors.danger
+	},
+
+	categoryList: {
+		flexDirection: 'row',
+		gap: theme.spacing.xs,
+		paddingVertical: theme.spacing.xs
+	},
+	categoryChip: {
+		paddingHorizontal: theme.spacing.md,
+		paddingVertical: theme.spacing.xs,
+		borderRadius: 100,
+		borderWidth: 1,
+		borderColor: theme.colors.border,
+		backgroundColor: theme.colors.surface
+	},
+	categoryChip__active: {
+		borderColor: theme.colors.primary,
+		backgroundColor: theme.colors.primary
+	},
+	categoryChip__text: {
+		fontSize: 14,
+		color: theme.colors.major
+	},
+	categoryChip__textActive: {
+		color: theme.colors.buttonText
 	}
 }))
