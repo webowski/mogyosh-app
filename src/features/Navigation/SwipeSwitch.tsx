@@ -13,8 +13,8 @@ import { StyleSheet } from 'react-native-unistyles'
 import { scheduleOnRN } from 'react-native-worklets'
 
 import { useNavStore } from '@/features/Navigation/model/navStore'
-import SVGSwipeSwitchBg from '@/shared/images/swipe-switch-bg.svg'
 import { SwipeSwitchPosition } from './model/navTypes'
+import SwipeSwitchFigure from './SwipeSwitchFigure'
 
 // ─── Imports ───────────────────────────────────────────────────────────────
 
@@ -378,7 +378,7 @@ const SwipeSwitch: React.FC<SwipeSwitchProps> = ({
 	return (
 		<View style={[styles.wrapper, style]}>
 			<View style={styles.bgPolygon}>
-				<SVGSwipeSwitchBg />
+				<SwipeSwitchFigure />
 			</View>
 
 			<GestureDetector gesture={pan}>
