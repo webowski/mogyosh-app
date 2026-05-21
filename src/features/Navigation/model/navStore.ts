@@ -39,6 +39,8 @@ interface NavStore {
 
 	setSwipeRoute: (route: string) => void
 
+	isSwipeSheetOpen: boolean
+	setIsSwipeSheetOpen: (isOpen: boolean) => void
 	swipeSheetItem: SwipeSwitchPosition | null
 	setSwipeSheetItem: (item: SwipeSwitchPosition | null) => void
 }
@@ -81,6 +83,8 @@ export const useNavStore = create<NavStore>((set, get) => ({
 		}
 	},
 
+	isSwipeSheetOpen: false,
+	setIsSwipeSheetOpen: (isOpen) => set({ isSwipeSheetOpen: isOpen }),
 	swipeSheetItem: null,
 	setSwipeSheetItem: (item) => set({ swipeSheetItem: item })
 }))

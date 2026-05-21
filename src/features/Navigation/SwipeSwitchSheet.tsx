@@ -1,5 +1,5 @@
 import { useNavigation } from 'expo-router'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Dimensions, Pressable, Text, View } from 'react-native'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import Animated, {
@@ -16,38 +16,54 @@ import { STYLE_VARS } from '@/shared/styles/common'
 const SHEET_HEIGHT = Dimensions.get('window').height * 0.4
 
 export default function SwipeSwitchSheet() {
+	const [isMounted, setIsMounted] = useState(false)
 	// const { theme } = useUnistyles()
-	const swipeSheetItem = useNavStore((s) => s.swipeSheetItem)
-	const setSwipeSheetItem = useNavStore((s) => s.setSwipeSheetItem)
-	const swipeSwitchItems = useNavStore((s) => s.swipeSwitchItems)
+
+	const isSwipeSheetOpen = useNavStore((state) => state.isSwipeSheetOpen)
+	const setIsSwipeSheetOpen = useNavStore((state) => state.setIsSwipeSheetOpen)
+	const swipeSheetItem = useNavStore((state) => state.swipeSheetItem)
+	const setSwipeSheetItem = useNavStore((state) => state.setSwipeSheetItem)
+
+	const swipeSwitchItems = useNavStore((state) => state.swipeSwitchItems)
 	const navigation = useNavigation()
 
 	const translateY = useSharedValue(SHEET_HEIGHT)
-	const isVisible = useSharedValue(false)
+	// const isVisible = useSharedValue(false)
 
 	// Закрываем шит при переключении роута
-	useEffect(() => {
-		const unsubscribe = navigation.addListener('state', () => {
-			setSwipeSheetItem(null)
-		})
+	useEffect(
+		() => {
+			const unsubscribe = navigation.addListener('state', () => {
+				setIsSwipeSheetOpen(false)
+				setSwipeSheetItem(null)
+			})
 
-		return unsubscribe
-	}, [navigation, setSwipeSheetItem])
+			return unsubscribe
+		},
+		// eslint-disable-next-line
+		[navigation, setSwipeSheetItem]
+	)
 
 	useEffect(
 		() => {
-			if (swipeSheetItem !== null) {
-				isVisible.value = true
+			if (isSwipeSheetOpen) {
+				setIsMounted(true)
 				translateY.value = withTiming(0, { duration: 300 })
-			} else {
-				translateY.value = withTiming(SHEET_HEIGHT, { duration: 250 })
+			} else if (isMounted) {
+				translateY.value = withTiming(
+					SHEET_HEIGHT,
+					{ duration: 250 },
+					(finished) => {
+						if (finished) scheduleOnRN(setIsMounted, false)
+					}
+				)
 			}
 		},
 		// eslint-disable-next-line
-		[swipeSheetItem]
+		[isSwipeSheetOpen]
 	)
 
-	const dismiss = () => setSwipeSheetItem(null)
+	const dismiss = () => setIsSwipeSheetOpen(false)
 
 	const dragGesture = Gesture.Pan()
 		.onUpdate((e) => {
@@ -72,7 +88,8 @@ export default function SwipeSwitchSheet() {
 		: null
 	const label = item ? item[Object.keys(item)[0]]! : ''
 
-	if (swipeSheetItem === null && translateY.value === SHEET_HEIGHT) return null
+	// if (swipeSheetItem === null && translateY.value === SHEET_HEIGHT) return null
+	if (!isMounted) return null
 
 	return (
 		<>
@@ -115,7 +132,7 @@ const styles = StyleSheet.create((theme) => ({
 		paddingHorizontal: STYLE_VARS.sidePadding,
 		paddingTop: 12,
 		boxShadow: '0 0px 20px ' + theme.colors.shadow150,
-		borderColor: theme.colors.muted700,
+		borderColor: theme.colors.muted800,
 		borderWidth: 1
 	},
 	grabber: {

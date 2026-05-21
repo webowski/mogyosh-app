@@ -64,7 +64,8 @@ const SlideItem: React.FC<SlideItemProps> = ({
 	onPress,
 	isSwitchActive
 }) => {
-	const swipeSheetItem = useNavStore((state) => state.swipeSheetItem)
+	const isSwipeSheetOpen = useNavStore((state) => state.isSwipeSheetOpen)
+	const setIsSwipeSheetOpen = useNavStore((state) => state.setIsSwipeSheetOpen)
 	const setSwipeSheetItem = useNavStore((state) => state.setSwipeSheetItem)
 
 	const animatedStyle = useAnimatedStyle(() => {
@@ -101,10 +102,11 @@ const SlideItem: React.FC<SlideItemProps> = ({
 	const handlePress = (row: number, col: number) => {
 		onPress?.(row, col)
 		if (isSwitchActive) {
-			if (swipeSheetItem !== null) {
-				setSwipeSheetItem(null)
+			if (isSwipeSheetOpen) {
+				setIsSwipeSheetOpen(false)
 			} else {
 				setSwipeSheetItem({ row, col })
+				setIsSwipeSheetOpen(true)
 			}
 		}
 	}
