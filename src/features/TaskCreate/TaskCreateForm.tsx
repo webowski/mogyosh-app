@@ -10,7 +10,11 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 import { z } from 'zod'
 
 import { ActionsPanel } from '@/features/ActionsPanel/ActionsPanel'
-import { useCategories, useCreateTask } from '@/features/TaskList'
+import {
+	useCategories,
+	useCreateCategory,
+	useCreateTask
+} from '@/features/TaskList'
 import { useTaskStore } from '@/shared/model/taskStore'
 import { STYLE_VARS } from '@/shared/styles/common'
 import { formStyles } from '@/shared/styles/form'
@@ -41,7 +45,10 @@ export function TaskCreateForm({ onClose }: Props) {
 	const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
 		null
 	)
+	const [isCreatingCategory, setIsCreatingCategory] = useState(false)
+	const [newCategoryName, setNewCategoryName] = useState('')
 	const { data: categories = [] } = useCategories()
+	const createCategory = useCreateCategory()
 
 	const categoryItems = useMemo(
 		() => {
@@ -82,6 +89,21 @@ export function TaskCreateForm({ onClose }: Props) {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[categories]
 	)
+
+	const handleCreateCategory = async () => {
+		const name = newCategoryName.trim()
+		if (!name) return
+
+		try {
+			const category = await createCategory.mutateAsync({ name })
+			setSelectedCategoryId(category.id)
+			setNewCategoryName('')
+			setIsCreatingCategory(false)
+			sheetRef.current?.dismiss()
+		} catch (error) {
+			console.error('Failed to create category:', error)
+		}
+	}
 
 	const [subtasks, setSubtasks] = useState<{ id: string; text: string }[]>([
 		{ id: 'initial', text: '' }
@@ -268,20 +290,75 @@ export function TaskCreateForm({ onClose }: Props) {
 				cornerRadius={STYLE_VARS.radius_2xl}
 				backgroundColor={theme.colors.surface}
 				grabberOptions={{ color: theme.colors.minor }}
+				onDidDismiss={() => {
+					setIsCreatingCategory(false)
+					setNewCategoryName('')
+				}}
 			>
 				<View style={{ padding: STYLE_VARS.sidePadding_xl, gap: 12 }}>
-					{categoryItems.map((item) => (
-						<RadioButton
-							key={String(item.id)}
-							title={item.name}
-							checked={selectedCategoryId === item.id}
-							onPress={() => {
-								setSelectedCategoryId(item.id)
-								sheetRef.current?.dismiss()
-							}}
-							style={{ marginLeft: 26 * item.depth }}
-						/>
-					))}
+					{isCreatingCategory ? (
+						<View style={{ gap: theme.spacing.md }}>
+							<TextInput
+								style={styles.input}
+								placeholder='Название категории'
+								placeholderTextColor={theme.colors.minor}
+								value={newCategoryName}
+								onChangeText={setNewCategoryName}
+								autoFocus
+								onSubmitEditing={handleCreateCategory}
+								returnKeyType='done'
+							/>
+							<View
+								style={{
+									flexDirection: 'row',
+									gap: theme.spacing.sm
+								}}
+							>
+								<Button
+									variant='secondary'
+									style={{ flex: 1 }}
+									onPress={() => {
+										setIsCreatingCategory(false)
+										setNewCategoryName('')
+									}}
+								>
+									Отмена
+								</Button>
+								<Button
+									style={{ flex: 1 }}
+									onPress={handleCreateCategory}
+									disabled={!newCategoryName.trim() || createCategory.isPending}
+								>
+									Создать
+								</Button>
+							</View>
+						</View>
+					) : (
+						<>
+							{categoryItems.map((item) => (
+								<RadioButton
+									key={String(item.id)}
+									title={item.name}
+									checked={selectedCategoryId === item.id}
+									onPress={() => {
+										setSelectedCategoryId(item.id)
+										sheetRef.current?.dismiss()
+									}}
+									style={{ marginLeft: 26 * item.depth }}
+								/>
+							))}
+							<Button
+								variant='secondary'
+								style={{
+									marginTop: theme.spacing.sm,
+									alignSelf: 'flex-start'
+								}}
+								onPress={() => setIsCreatingCategory(true)}
+							>
+								+ Создать категорию
+							</Button>
+						</>
+					)}
 				</View>
 			</TrueSheet>
 		</>

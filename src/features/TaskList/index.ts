@@ -11,6 +11,7 @@ export { useTaskSubtasks } from './model/useTaskSubtasks'
 export { useUpdateTaskState } from './model/useUpdateTaskState'
 
 export { useCategories } from './model/useCategories'
+export { useCreateCategory } from './model/useCreateCategory'
 
 export { calculateProgress, useTaskProgress } from './model/useTaskProgress'
 
