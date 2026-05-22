@@ -33,6 +33,7 @@ const TASKS_SELECT = `
 const makeTaskObject = (task: TaskRow): TaskEntity => ({
 	id: task.id,
 	info: task.info,
+	type: task.type,
 	status: task.status,
 	state: task.states?.[0]?.state ?? null,
 	priority: task.priority,
@@ -75,6 +76,10 @@ const getTasks = async (filters?: TaskFilters) => {
 
 	if (filters?.searchQuery) {
 		query = query.ilike('info', `%${filters.searchQuery}%`)
+	}
+
+	if (filters?.type) {
+		query = query.eq('type', filters.type)
 	}
 
 	const { data, error } = await query
@@ -173,6 +178,34 @@ const getTasksCountByPeriod = async (
 	})
 
 	return countByDate
+}
+
+/**
+ * Get motivation task (special task with type = 'motivation')
+ */
+const getMotivationTask = async (): Promise<TaskEntity | null> => {
+	try {
+		const { data, error } = await supabaseClient
+			.from('tasks')
+			.select(TASKS_SELECT)
+			.eq('type', 'motivation')
+			.is('parent_id', null)
+			.order('created_at', { ascending: false })
+			.limit(1)
+			.single()
+
+		if (error) {
+			if (error.code === 'PGRST116') {
+				return null
+			}
+			throw error
+		}
+
+		return data ? makeTaskObject(data) : null
+	} catch (error) {
+		console.error('getMotivationTask error:', error)
+		throw error
+	}
 }
 
 /**
@@ -333,6 +366,7 @@ export const taskAPI = {
 	getTaskSubtasks,
 	getTasksCountByPeriod,
 	getTaskById,
+	getMotivationTask,
 	createTask,
 	updateTaskState,
 	deleteTask

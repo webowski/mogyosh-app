@@ -1,5 +1,6 @@
 export { useCreateTask } from './model/useCreateTask'
 export { useDeleteTask } from './model/useDeleteTask'
+export { useMotivationTask } from './model/useMotivationTask'
 export { useTaskById } from './model/useTaskById'
 export { useTasks } from './model/useTasks'
 export { useTasksByCategory } from './model/useTasksByCategory'

@@ -35,9 +35,12 @@ export type StateEntity = {
 	created_at: string
 }
 
+export type TaskType = 'task' | 'motivation'
+
 export type TaskEntity = {
 	id: TaskId
 	info: string
+	type: TaskType
 	status?: TaskStatus
 	state?: TaskState | null
 	priority?: number | null
@@ -51,6 +54,7 @@ export type TaskEntity = {
 export type TaskRow = {
 	id: string
 	info: string
+	type: TaskType
 	status: TaskStatus
 	priority: number
 	categories: any

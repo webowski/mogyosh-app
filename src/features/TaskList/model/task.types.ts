@@ -6,6 +6,7 @@ export type TaskFilters = {
 	categoryId?: string | string[] | 'uncategorized'
 	status?: TaskStatus
 	priority?: number
+	type?: 'task' | 'motivation'
 }
 
 export type TaskSection = {
