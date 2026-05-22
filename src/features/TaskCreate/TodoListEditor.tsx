@@ -87,18 +87,16 @@ export function TodoListEditor({ items, onChange }: Props) {
 							placeholder={index === 0 ? 'Список задач...' : ''}
 						/>
 					) : (
-						<>
-							<EnrichedMarkdownTextInput
-								ref={getRefForItem(item.id)}
-								style={styles.input}
-								defaultValue={item.text}
-								onChangeMarkdown={(markdown) => updateItem(item.id, markdown)}
-								placeholderTextColor={theme.colors.minor}
-								placeholder={index === 0 ? 'Список задач...' : ''}
-								scrollEnabled={false}
-								multiline
-							/>
-						</>
+						<EnrichedMarkdownTextInput
+							ref={getRefForItem(item.id)}
+							style={styles.input}
+							defaultValue={item.text}
+							onChangeMarkdown={(markdown) => updateItem(item.id, markdown)}
+							placeholderTextColor={theme.colors.minor}
+							placeholder={index === 0 ? 'Список задач...' : ''}
+							scrollEnabled={false}
+							multiline
+						/>
 					)}
 					{items.length > 1 && (
 						<Pressable onPress={() => removeItem(index)} hitSlop={8}>

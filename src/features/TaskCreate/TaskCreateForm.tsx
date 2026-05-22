@@ -1,7 +1,9 @@
 import { MaterialIcons } from '@expo/vector-icons'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect, useState } from 'react'
+import { TrueSheet } from '@lodev09/react-native-true-sheet'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { Text, TextInput, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
@@ -11,7 +13,9 @@ import { ActionsPanel } from '@/features/ActionsPanel/ActionsPanel'
 import { useCategories, useCreateTask } from '@/features/TaskList'
 import { useTaskStore } from '@/shared/model/taskStore'
 import { STYLE_VARS } from '@/shared/styles/common'
+import { formStyles } from '@/shared/styles/form'
 import { Button } from '@/shared/ui/Button'
+import RadioButton from '@/shared/ui/RadioButton'
 import { TodoListEditor } from './TodoListEditor'
 
 const schema = z.object({
@@ -26,14 +30,58 @@ interface Props {
 
 export function TaskCreateForm({ onClose }: Props) {
 	const { theme } = useUnistyles()
+	const { t } = useTranslation()
+
 	const createTask = useCreateTask()
 	const setDraftTitle = useTaskStore((store) => store.setDraftTitle)
 	const clearDraftTitle = useTaskStore((store) => store.clearDraftTitle)
+
+	const sheetRef = useRef<TrueSheet>(null)
 
 	const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
 		null
 	)
 	const { data: categories = [] } = useCategories()
+
+	const categoryItems = useMemo(
+		() => {
+			const noCategory = {
+				id: null,
+				name: t('Uncategorized'),
+				depth: 0
+			}
+
+			if (categories.length === 0) {
+				return [noCategory]
+			}
+
+			const visited = new Set<string>()
+			const result: { id: string | null; name: string; depth: number }[] = []
+
+			const buildCategoriesTree = (parentId: string | null, depth: number) => {
+				for (const category of categories) {
+					if (category.parent_id !== parentId || visited.has(category.id)) {
+						continue
+					}
+					visited.add(category.id)
+
+					result.push({
+						id: category.id,
+						name: category.name,
+						depth
+					})
+
+					buildCategoriesTree(category.id, depth + 1)
+				}
+			}
+
+			buildCategoriesTree(null, 0)
+
+			return [noCategory, ...result]
+		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[categories]
+	)
 
 	const [subtasks, setSubtasks] = useState<{ id: string; text: string }[]>([
 		{ id: 'initial', text: '' }
@@ -92,10 +140,7 @@ export function TaskCreateForm({ onClose }: Props) {
 				}}
 				contentContainerStyle={{
 					flex: 1,
-					paddingHorizontal: STYLE_VARS.sidePadding,
-					paddingTop: STYLE_VARS.sidePadding,
-					paddingBottom: STYLE_VARS.sidePadding + STYLE_VARS.navPanelUnderlap,
-					gap: 6
+					gap: 12
 				}}
 				keyboardShouldPersistTaps='handled'
 			>
@@ -121,8 +166,54 @@ export function TaskCreateForm({ onClose }: Props) {
 					)}
 				</View>
 
-				<View style={styles.fieldGroup}>
-					<ScrollView horizontal showsHorizontalScrollIndicator={false}>
+				<View
+					style={{
+						paddingHorizontal: STYLE_VARS.sidePadding,
+						paddingTop: STYLE_VARS.sidePadding
+					}}
+				>
+					<View style={[formStyles.formRow, formStyles.formRow_first]}>
+						<Text style={{ marginBottom: 0 }}>Категория</Text>
+						<Button
+							variant='chip'
+							size='chip'
+							arrow
+							onPress={() => sheetRef.current?.present()}
+						>
+							{selectedCategoryId
+								? (categories.find((c) => c.id === selectedCategoryId)?.name ??
+									t('Uncategorized'))
+								: t('Uncategorized')}
+						</Button>
+					</View>
+					<View style={[formStyles.formRow]}>
+						<Text style={{ marginBottom: 0 }}>Метки</Text>
+						<Button variant='chip' size='chip' arrow>
+							Без метки
+						</Button>
+					</View>
+					<View style={[formStyles.formRow]}>
+						<Text style={{ marginBottom: 0 }}>Повтор</Text>
+						<Button variant='chip' size='chip' arrow>
+							Вт, Чт, Сб
+						</Button>
+					</View>
+					<View style={[formStyles.formRow, formStyles.formRow_last]}>
+						<Text style={{ marginBottom: 0 }}>Уведомление</Text>
+						<Button variant='chip' size='chip' arrow>
+							за 1 час
+						</Button>
+					</View>
+
+					{/* <ScrollView
+						overScrollMode='never'
+						horizontal
+						showsHorizontalScrollIndicator={false}
+						style={{
+							marginHorizontal: -1 * STYLE_VARS.sidePadding,
+							paddingHorizontal: STYLE_VARS.sidePadding
+						}}
+					>
 						<View style={styles.categoryList}>
 							<Button
 								variant='chip'
@@ -144,7 +235,7 @@ export function TaskCreateForm({ onClose }: Props) {
 								</Button>
 							))}
 						</View>
-					</ScrollView>
+					</ScrollView> */}
 				</View>
 
 				<View style={styles.fieldGroup}>
@@ -170,20 +261,45 @@ export function TaskCreateForm({ onClose }: Props) {
 					/>
 				</Button>
 			</ActionsPanel>
+
+			<TrueSheet
+				ref={sheetRef}
+				detents={['auto']}
+				cornerRadius={STYLE_VARS.radius_2xl}
+				backgroundColor={theme.colors.surface}
+				grabberOptions={{ color: theme.colors.minor }}
+			>
+				<View style={{ padding: STYLE_VARS.sidePadding_xl, gap: 12 }}>
+					{categoryItems.map((item) => (
+						<RadioButton
+							key={String(item.id)}
+							title={item.name}
+							checked={selectedCategoryId === item.id}
+							onPress={() => {
+								setSelectedCategoryId(item.id)
+								sheetRef.current?.dismiss()
+							}}
+							style={{ marginLeft: 26 * item.depth }}
+						/>
+					))}
+				</View>
+			</TrueSheet>
 		</>
 	)
 }
 
 const styles = StyleSheet.create((theme) => ({
 	fieldGroup: {
-		marginBottom: theme.spacing.md,
-		gap: theme.spacing.xs
+		gap: theme.spacing.xs,
+		paddingHorizontal: STYLE_VARS.sidePadding
 	},
+
 	label: {
 		fontSize: 14,
 		fontWeight: '500',
 		color: theme.colors.minor
 	},
+
 	input: {
 		backgroundColor: theme.colors.surface,
 		borderWidth: 1,
@@ -201,6 +317,7 @@ const styles = StyleSheet.create((theme) => ({
 		minHeight: 100,
 		paddingTop: theme.spacing.sm
 	},
+
 	errorText: {
 		fontSize: 12,
 		color: theme.colors.danger
@@ -210,24 +327,5 @@ const styles = StyleSheet.create((theme) => ({
 		flexDirection: 'row',
 		gap: theme.spacing.xs,
 		paddingVertical: theme.spacing.xs
-	},
-	categoryChip: {
-		paddingHorizontal: theme.spacing.md,
-		paddingVertical: theme.spacing.xs,
-		borderRadius: 100,
-		borderWidth: 1,
-		borderColor: theme.colors.border,
-		backgroundColor: theme.colors.surface
-	},
-	categoryChip__active: {
-		borderColor: theme.colors.primary,
-		backgroundColor: theme.colors.primary
-	},
-	categoryChip__text: {
-		fontSize: 14,
-		color: theme.colors.major
-	},
-	categoryChip__textActive: {
-		color: theme.colors.buttonText
 	}
 }))

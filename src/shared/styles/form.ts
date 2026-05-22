@@ -10,5 +10,24 @@ export const formStyles = StyleSheet.create((theme, rt) => ({
 		border: 0,
 		fontSize: 15 * rt.fontScale,
 		lineHeight: 15 * 1.25 * rt.fontScale
+	},
+
+	formRow: {
+		paddingBlock: 9,
+		paddingInline: 12,
+		backgroundColor: theme.colors.surface,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		borderRadius: 4,
+		marginBlock: 1
+	},
+	formRow_first: {
+		borderTopLeftRadius: 12,
+		borderTopRightRadius: 12
+	},
+	formRow_last: {
+		borderBottomLeftRadius: 12,
+		borderBottomRightRadius: 12
 	}
 }))

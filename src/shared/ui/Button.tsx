@@ -1,3 +1,4 @@
+import { MaterialIcons } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
 import React from 'react'
 import {
@@ -25,6 +26,7 @@ interface ButtonProps {
 	textStyle?: TextStyle
 	indicator?: boolean
 	active?: boolean
+	arrow?: boolean
 }
 
 interface Ripple {
@@ -122,7 +124,7 @@ const sizeStyles: Record<Size, { container: ViewStyle; text: TextStyle }> = {
 	},
 
 	chip: {
-		container: { height: 32, paddingHorizontal: 14, borderRadius: 999 },
+		container: { height: 32, paddingHorizontal: 16, borderRadius: 999 },
 		text: { fontSize: 13, fontWeight: '500' }
 	}
 }
@@ -138,7 +140,8 @@ export const Button: React.FC<ButtonProps> = ({
 	style,
 	textStyle,
 	indicator = false,
-	active = false
+	active = false,
+	arrow = false
 }) => {
 	const { theme } = useUnistyles()
 	const [ripples, setRipples] = React.useState<Ripple[]>([])
@@ -263,19 +266,39 @@ export const Button: React.FC<ButtonProps> = ({
 
 			{/* Layer 3: content */}
 			{typeof children === 'string' ? (
-				<Text
-					style={[
-						styles.text,
-						variantStyle.text,
-						sizeStyle.text,
-						variant === 'chip' && active && { color: theme.colors.buttonText },
-						textStyle
-					]}
-				>
-					{children}
-				</Text>
+				<>
+					<Text
+						style={[
+							styles.text,
+							variantStyle.text,
+							sizeStyle.text,
+							variant === 'chip' &&
+								active && { color: theme.colors.buttonText },
+							textStyle
+						]}
+					>
+						{children}
+					</Text>
+					{arrow && (
+						<MaterialIcons
+							name='arrow-drop-down'
+							size={18}
+							color={theme.colors.major}
+							style={{ marginLeft: 2, marginRight: -6 }}
+						/>
+					)}
+				</>
 			) : (
-				children
+				<>
+					{children}
+					{arrow && (
+						<MaterialIcons
+							name='arrow-drop-down'
+							size={18}
+							style={{ marginLeft: 2, marginRight: -6 }}
+						/>
+					)}
+				</>
 			)}
 
 			{/* Layer 3.5: indicator */}
