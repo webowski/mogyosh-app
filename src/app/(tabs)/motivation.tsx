@@ -1,29 +1,35 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { ActivityIndicator, Text, View } from 'react-native'
 
-import { useMotivationTask, useTaskSubtasks } from '@/features/TaskList'
+import { useMotivationSubitems } from '@/features/Motivation'
 import { ChecklistItem } from '@/features/TaskList/ChecklistItem'
-import { useUpdateTaskState } from '@/features/TaskList/model/useUpdateTaskState'
+import { supabaseClient } from '@/shared/api/supabaseClient'
 import { commonStyles } from '@/shared/styles/common'
 import ScrollBox from '@/shared/ui/ScrollBox'
 
 export default function MotivationScreen() {
-	const { data, isLoading, error } = useMotivationTask()
+	const queryClient = useQueryClient()
+	const { data: subitems, isLoading, error } = useMotivationSubitems()
 
-	const { data: subtasks, isLoading: isLoadingSubtasks } = useTaskSubtasks(
-		data?.id ?? null
-	)
+	const handleToggle = async (id: string, currentType: string) => {
+		const newType = currentType === 'done' ? 'active' : 'done'
 
-	const updateTaskState = useUpdateTaskState()
+		try {
+			const { error } = await supabaseClient
+				.from('motivation_subitems')
+				.update({ type: newType })
+				.eq('id', id)
 
-	const handleToggleSubtask = (taskId: string, completed: boolean) => {
-		updateTaskState.mutate({
-			taskId,
-			state: completed ? 'done' : 'active'
-		})
+			if (error) throw error
+
+			queryClient.invalidateQueries({ queryKey: ['motivation-subitems'] })
+		} catch (err) {
+			console.error('Failed to toggle motivation subitem:', err)
+		}
 	}
 
-	// Show loading state when waiting for task data
-	if (isLoading || isLoadingSubtasks)
+	// Show loading state
+	if (isLoading)
 		return (
 			<View style={commonStyles.mainArea}>
 				<ActivityIndicator />
@@ -35,28 +41,20 @@ export default function MotivationScreen() {
 		return (
 			<View style={commonStyles.mainArea}>
 				<Text>
-					Ошибка загрузки задачи:{' '}
+					Ошибка загрузки:{' '}
 					{error instanceof Error ? error.message : 'Неизвестная ошибка'}
 				</Text>
 			</View>
 		)
 
-	// Show not found state when no task data and not loading
-	if (!data)
-		return (
-			<View style={commonStyles.mainArea}>
-				<Text>Мотивационная задача не найдена</Text>
-			</View>
-		)
-
 	return (
 		<ScrollBox>
-			{subtasks?.map((subtask) => (
+			{subitems?.map((subitem) => (
 				<ChecklistItem
-					key={subtask.id}
-					checked={subtask.state === 'done'}
-					text={subtask.info}
-					onToggle={(value) => handleToggleSubtask(subtask.id, value)}
+					key={subitem.id}
+					checked={subitem.type === 'done'}
+					text={subitem.info}
+					onToggle={(_value) => handleToggle(subitem.id, subitem.type)}
 				/>
 			))}
 		</ScrollBox>

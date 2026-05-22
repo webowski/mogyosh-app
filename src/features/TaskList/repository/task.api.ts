@@ -78,10 +78,6 @@ const getTasks = async (filters?: TaskFilters) => {
 		query = query.ilike('info', `%${filters.searchQuery}%`)
 	}
 
-	if (filters?.type) {
-		query = query.eq('type', filters.type)
-	}
-
 	const { data, error } = await query
 
 	if (error) {
@@ -178,34 +174,6 @@ const getTasksCountByPeriod = async (
 	})
 
 	return countByDate
-}
-
-/**
- * Get motivation task (special task with type = 'motivation')
- */
-const getMotivationTask = async (): Promise<TaskEntity | null> => {
-	try {
-		const { data, error } = await supabaseClient
-			.from('tasks')
-			.select(TASKS_SELECT)
-			.eq('type', 'motivation')
-			.is('parent_id', null)
-			.order('created_at', { ascending: false })
-			.limit(1)
-			.single()
-
-		if (error) {
-			if (error.code === 'PGRST116') {
-				return null
-			}
-			throw error
-		}
-
-		return data ? makeTaskObject(data) : null
-	} catch (error) {
-		console.error('getMotivationTask error:', error)
-		throw error
-	}
 }
 
 /**
@@ -366,7 +334,6 @@ export const taskAPI = {
 	getTaskSubtasks,
 	getTasksCountByPeriod,
 	getTaskById,
-	getMotivationTask,
 	createTask,
 	updateTaskState,
 	deleteTask
