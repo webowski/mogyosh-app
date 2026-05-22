@@ -164,7 +164,9 @@ export default function AllTasksScreen() {
 						<ActivityIndicator />
 					) : error ? (
 						<Text>Ошибка загрузки</Text>
-					) : null
+					) : (
+						<Text>Нет задач, соответствующих выбранным параметрам</Text>
+					)
 				}
 			/>
 
