@@ -233,7 +233,8 @@ const styles = StyleSheet.create((theme, rt) => ({
 	},
 
 	card: {
-		padding: 14,
+		paddingHorizontal: 13,
+		paddingVertical: 13,
 		backgroundColor: theme.colors.surface,
 		boxShadow: '0px 2px 4px rgba(102, 140, 255, 0.08)',
 		borderRadius: STYLE_VARS.radius_sm,
@@ -257,7 +258,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 	},
 	card__title: {
 		color: theme.colors.major,
-		fontSize: 16 * rt.fontScale,
+		fontSize: 15 * rt.fontScale,
 		fontWeight: 600
 		// letterSpacing: (16 / 100) * -1
 	},
