@@ -8,6 +8,8 @@ import {
 } from 'react-native-enriched-markdown'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
+import Checkbox from '@/shared/ui/Checkbox'
+
 interface TodoItem {
 	id: string
 	text: string
@@ -76,7 +78,6 @@ export function TodoListEditor({ items, onChange }: Props) {
 		<View style={styles.container}>
 			{items.map((item, index) => (
 				<View key={item.id} style={styles.row}>
-					<View style={styles.checkbox} />
 					{Platform.OS === 'web' ? (
 						<TextInput
 							ref={inputRefs.current.get(item.id) as any}
@@ -107,6 +108,7 @@ export function TodoListEditor({ items, onChange }: Props) {
 							/>
 						</Pressable>
 					)}
+					<Checkbox checked={false} />
 				</View>
 			))}
 			<Pressable
@@ -127,14 +129,6 @@ const styles = StyleSheet.create((theme) => ({
 		flexDirection: 'row',
 		alignItems: 'center',
 		gap: theme.spacing.sm
-	},
-	checkbox: {
-		width: 18,
-		height: 18,
-		borderRadius: 4,
-		borderWidth: 2,
-		borderColor: theme.colors.border,
-		backgroundColor: 'transparent'
 	},
 	input: {
 		flex: 1,
