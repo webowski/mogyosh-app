@@ -24,7 +24,7 @@ export default function NavButton({
 				style
 			]}
 			android_ripple={{
-				color: theme.colors.muted700,
+				color: theme.colors.muted800,
 				radius: 24
 			}}
 			// onPressIn={() => setPressed(true)}
@@ -33,7 +33,7 @@ export default function NavButton({
 		>
 			{({ pressed }) =>
 				React.cloneElement(icon, {
-					fill: isFocused || pressed ? theme.colors.primary : theme.colors.minor
+					fill: isFocused || pressed ? theme.colors.primary500 : theme.colors.minor500
 				} as any)
 			}
 		</Pressable>

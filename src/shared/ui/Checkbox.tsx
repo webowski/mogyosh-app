@@ -19,12 +19,12 @@ export default function Checkbox({ checked }: CheckboxProps) {
 		backgroundColor: interpolateColor(
 			animationProgress.value,
 			[0, 1],
-			['transparent', theme.colors.primary]
+			['transparent', theme.colors.primary500]
 		),
 		borderColor: interpolateColor(
 			animationProgress.value,
 			[0, 1],
-			['#D1D5DB', theme.colors.primary]
+			['#D1D5DB', theme.colors.primary500]
 		)
 	}))
 
@@ -45,7 +45,7 @@ const styles = StyleSheet.create((theme) => ({
 		justifyContent: 'center'
 	},
 	checkmark: {
-		color: theme.colors.bright,
+		color: theme.colors.inverse,
 		fontSize: 14,
 		lineHeight: 16,
 		fontWeight: 700

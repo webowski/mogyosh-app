@@ -20,7 +20,7 @@ export default function NavPanelLayout() {
 				tabBar={(props) => <NavPanel {...props} />}
 				screenOptions={{
 					tabBarShowLabel: false,
-					tabBarActiveTintColor: theme.colors.primary,
+					tabBarActiveTintColor: theme.colors.primary500,
 					headerShown: false,
 					// tabBarButton: HapticTab,
 					sceneStyle: {

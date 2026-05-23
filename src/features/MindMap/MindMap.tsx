@@ -7,6 +7,7 @@ import {
 } from 'react-native-gesture-handler'
 import { useSharedValue } from 'react-native-reanimated'
 
+import { useUnistyles } from 'react-native-unistyles'
 import { scheduleOnRN } from 'react-native-worklets'
 import { MindMapCanvas } from './MindMapCanvas'
 import {
@@ -14,7 +15,6 @@ import {
 	getDefaultMeasureWidth,
 	getLayoutBounds
 } from './model/layout'
-import { COLORS } from './model/theme'
 import type { LayoutNode, MindMapNode } from './model/types'
 
 interface MindMapProps {
@@ -54,6 +54,7 @@ function computeFitTransform(
 }
 
 export function MindMap({ data, width, height, onTaskPress }: MindMapProps) {
+	const { theme } = useUnistyles()
 	const measureWidth = useMemo(() => getDefaultMeasureWidth(), [])
 
 	const layout = useMemo(
@@ -175,7 +176,7 @@ export function MindMap({ data, width, height, onTaskPress }: MindMapProps) {
 				<View
 					style={[
 						styles.canvas,
-						{ width, height, backgroundColor: COLORS.canvasBg }
+						{ width, height, backgroundColor: theme.colors.backgroundAlter }
 					]}
 				>
 					<MindMapCanvas

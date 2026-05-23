@@ -186,9 +186,9 @@ export const Button: React.FC<ButtonProps> = ({
 			{variant === 'default' ? (
 				<LinearGradient
 					colors={[
-						'hsl(225, 100%, 74%)',
-						'hsl(225, 100%, 70%)',
-						'hsl(225, 85%, 65%)'
+						theme.colors.primary600,
+						theme.colors.primary500,
+						theme.colors.primary300
 					]}
 					start={{ x: 0, y: 0 }}
 					end={{ x: 1, y: 1 }}
@@ -211,9 +211,11 @@ export const Button: React.FC<ButtonProps> = ({
 						{
 							borderRadius,
 							borderWidth: 1,
-							borderColor: active ? theme.colors.primary : theme.colors.border,
+							borderColor: active
+								? theme.colors.primary500
+								: theme.colors.border,
 							backgroundColor: active
-								? theme.colors.primary
+								? theme.colors.primary500
 								: theme.colors.surface
 						}
 					]}

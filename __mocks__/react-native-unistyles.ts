@@ -3,8 +3,8 @@ export const StyleSheet = {
 		typeof styles === 'function'
 			? styles({
 					colors: {
-						primary: '#000',
-						bright: '#fff',
+						primary500: '#000',
+						inverse: '#fff',
 						major: '#000'
 					}
 				})
@@ -14,8 +14,8 @@ export const StyleSheet = {
 export const useUnistyles = () => ({
 	theme: {
 		colors: {
-			primary: '#000',
-			bright: '#fff',
+			primary500: '#000',
+			inverse: '#fff',
 			major: '#000'
 		}
 	}

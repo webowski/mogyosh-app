@@ -30,7 +30,7 @@ export default function ThemeScreen() {
 								styles.radioItem,
 								{
 									borderColor:
-										key === currentTheme ? theme.colors.primary : 'transparent'
+										key === currentTheme ? theme.colors.primary500 : 'transparent'
 								}
 							]}
 							onPress={() => setCurrentTheme(key as keyof UnistylesThemes)}
@@ -76,6 +76,6 @@ const styles = StyleSheet.create((theme) => ({
 		width: 20,
 		height: 20,
 		borderRadius: 10,
-		backgroundColor: theme.colors.primary
+		backgroundColor: theme.colors.primary500
 	}
 }))

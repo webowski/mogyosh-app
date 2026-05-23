@@ -251,7 +251,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		justifyContent: 'space-between'
 	},
 	card__category: {
-		color: theme.colors.minor,
+		color: theme.colors.minor500,
 		fontSize: 13 * rt.fontScale,
 		lineHeight: 13 * rt.fontScale * 1.2
 		// letterSpacing: (14 / 100) * -1
@@ -269,7 +269,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		top: 0,
 		right: 0,
 		color: theme.colors.minor400,
-		backgroundColor: theme.colors.muted700,
+		backgroundColor: theme.colors.muted800,
 		borderTopRightRadius: STYLE_VARS.radius_sm,
 		borderBottomLeftRadius: STYLE_VARS.radius_sm,
 		paddingVertical: 3,

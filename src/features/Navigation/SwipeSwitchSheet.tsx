@@ -132,14 +132,14 @@ const styles = StyleSheet.create((theme) => ({
 		paddingHorizontal: STYLE_VARS.sidePadding,
 		paddingTop: 12,
 		boxShadow: '0 0px 20px ' + theme.colors.shadow150,
-		borderColor: theme.colors.muted800,
+		borderColor: theme.colors.muted900,
 		borderWidth: 1
 	},
 	grabber: {
 		width: 36,
 		height: 4,
 		borderRadius: 2,
-		backgroundColor: theme.colors.minor,
+		backgroundColor: theme.colors.minor500,
 		alignSelf: 'center',
 		marginBottom: 12
 	},

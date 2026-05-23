@@ -32,7 +32,7 @@ export default function TimeFormatScreen() {
 								{
 									borderColor:
 										format.value === hourFormat
-											? theme.colors.primary
+											? theme.colors.primary500
 											: 'transparent'
 								}
 							]}
@@ -79,6 +79,6 @@ const styles = StyleSheet.create((theme) => ({
 		width: 20,
 		height: 20,
 		borderRadius: 10,
-		backgroundColor: theme.colors.primary
+		backgroundColor: theme.colors.primary500
 	}
 }))

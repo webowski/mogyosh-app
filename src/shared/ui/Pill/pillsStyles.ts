@@ -15,11 +15,11 @@ export const pillStyles = StyleSheet.create((theme, rt) => ({
 		paddingHorizontal: 14,
 		borderRadius: 20,
 		borderWidth: 1,
-		borderColor: theme.colors.primary
+		borderColor: theme.colors.primary500
 	},
 	pill__active: {
 		color: theme.colors.inverse,
-		backgroundColor: theme.colors.primary
+		backgroundColor: theme.colors.primary500
 	},
 	pill__text: {
 		fontSize: 14,

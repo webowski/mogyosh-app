@@ -10,7 +10,7 @@ import React, { useMemo } from 'react'
 import { SharedValue, useDerivedValue } from 'react-native-reanimated'
 
 import { flattenLayout, FONT_SIZE, NODE_HEIGHT } from './model/layout'
-import { COLORS, getNodeColors } from './model/theme'
+import { EDGE_COLOR, getNodeColors, LINE_MINOR_COLOR } from './model/theme'
 import type { LayoutNode, LayoutNodeWithText } from './model/types'
 import { useCanvasFont } from './model/useСanvasFont'
 
@@ -100,7 +100,7 @@ export function MindMapCanvas({
 						key={`edge-${i}`}
 						p1={vec(from.x, from.y)}
 						p2={vec(to.x, to.y)}
-						color={COLORS.edge}
+						color={EDGE_COLOR}
 						strokeWidth={2}
 						style='stroke'
 					/>
@@ -111,7 +111,7 @@ export function MindMapCanvas({
 						key={`vline-${i}`}
 						p1={vec(line.x, line.y1)}
 						p2={vec(line.x, line.y2)}
-						color={COLORS.lineMinor}
+						color={LINE_MINOR_COLOR}
 						strokeWidth={2}
 						style='stroke'
 					/>

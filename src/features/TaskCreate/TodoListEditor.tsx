@@ -84,7 +84,7 @@ export function TodoListEditor({ items, onChange }: Props) {
 							style={styles.input}
 							value={item.text}
 							onChangeText={(text) => updateItem(item.id, text)}
-							placeholderTextColor={theme.colors.minor}
+							placeholderTextColor={theme.colors.minor500}
 							placeholder={index === 0 ? 'Список задач...' : ''}
 						/>
 					) : (
@@ -93,7 +93,7 @@ export function TodoListEditor({ items, onChange }: Props) {
 							style={styles.input}
 							defaultValue={item.text}
 							onChangeMarkdown={(markdown) => updateItem(item.id, markdown)}
-							placeholderTextColor={theme.colors.minor}
+							placeholderTextColor={theme.colors.minor500}
 							placeholder={index === 0 ? 'Список задач...' : ''}
 							scrollEnabled={false}
 							multiline
@@ -104,7 +104,7 @@ export function TodoListEditor({ items, onChange }: Props) {
 							<MaterialIcons
 								name='close'
 								size={18}
-								color={theme.colors.minor}
+								color={theme.colors.minor500}
 							/>
 						</Pressable>
 					)}
@@ -115,7 +115,7 @@ export function TodoListEditor({ items, onChange }: Props) {
 				style={styles.addButton}
 				onPress={() => addItemAfter(items.length - 1)}
 			>
-				<MaterialIcons name='add' size={18} color={theme.colors.minor} />
+				<MaterialIcons name='add' size={18} color={theme.colors.minor500} />
 			</Pressable>
 		</View>
 	)

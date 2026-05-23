@@ -21,7 +21,7 @@ export default function RadioButton({
 				[
 					styles.RadioItem,
 					{
-						borderColor: checked ? theme.colors.primary : 'transparent'
+						borderColor: checked ? theme.colors.primary500 : 'transparent'
 					},
 					props.style
 				] as PressableProps['style']
@@ -62,9 +62,9 @@ const styles = StyleSheet.create((theme, rt) => ({
 		width: 18,
 		height: 18,
 		borderRadius: 9,
-		backgroundColor: checked ? theme.colors.primary : 'transparent',
+		backgroundColor: checked ? theme.colors.primary500 : 'transparent',
 		borderWidth: checked ? 0 : 2,
-		borderColor: theme.colors.muted600,
+		borderColor: theme.colors.muted700,
 		alignItems: 'center',
 		justifyContent: 'center'
 	})

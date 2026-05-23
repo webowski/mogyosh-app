@@ -57,7 +57,7 @@ export function Toggle({ value, onChange, disabled = false }: Props) {
 
 	const trackColor = colorAnim.interpolate({
 		inputRange: [0, 1],
-		outputRange: [theme.colors.muted600, theme.colors.primary]
+		outputRange: [theme.colors.muted700, theme.colors.primary500]
 	})
 
 	return (

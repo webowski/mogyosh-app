@@ -322,8 +322,8 @@ const styles = StyleSheet.create((theme) => ({
 		fontSize: 11,
 		lineHeight: 11 * 1,
 		fontWeight: '500',
-		// color: theme.colors.minor,
-		color: theme.colors.muted,
+		// color: theme.colors.minor500,
+		color: theme.colors.muted600,
 		marginBottom: 3
 	},
 	dayNumber: {
@@ -331,16 +331,16 @@ const styles = StyleSheet.create((theme) => ({
 		lineHeight: 14 * 1,
 		fontWeight: '600',
 		// color: theme.colors.major
-		color: theme.colors.muted
+		color: theme.colors.muted600
 	},
 	day_selected: {
-		backgroundColor: theme.colors.primary
+		backgroundColor: theme.colors.primary500
 	},
 	selectedText: {
 		// color: theme.colors.major,
 		color: theme.colors.inverse
 	},
 	todayText: {
-		color: theme.colors.primary
+		color: theme.colors.primary500
 	}
 }))

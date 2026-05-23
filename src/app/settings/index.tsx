@@ -39,7 +39,7 @@ export default function SettingsScreen() {
 								<Text
 									style={{
 										fontSize: 16,
-										color: theme.colors.minor
+										color: theme.colors.minor500
 									}}
 								>
 									{t('languageName')}
@@ -66,7 +66,7 @@ export default function SettingsScreen() {
 								<Text
 									style={{
 										fontSize: 16,
-										color: theme.colors.minor
+										color: theme.colors.minor500
 									}}
 								>
 									{t(`theme.${currentTheme}`)}

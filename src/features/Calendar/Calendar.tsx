@@ -361,14 +361,14 @@ const styles = StyleSheet.create((theme, rt) => ({
 		alignItems: 'center',
 		justifyContent: 'center',
 		paddingVertical: 4,
-		backgroundColor: theme.colors.muted700,
+		backgroundColor: theme.colors.muted800,
 		borderRadius: 4
 	},
 	weekdayHeaderText: {
 		fontSize: 12,
 		lineHeight: 12,
 		fontWeight: '600',
-		color: theme.colors.minor
+		color: theme.colors.minor500
 	},
 
 	month: (calendarWidth: number) => ({
@@ -398,7 +398,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		backgroundColor: theme.colors.primary800
 	},
 	day_selected: {
-		backgroundColor: theme.colors.primary
+		backgroundColor: theme.colors.primary500
 	},
 
 	dayNumber: {
@@ -408,7 +408,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		color: theme.colors.major
 	},
 	dayNumber_otherMonth: {
-		color: theme.colors.muted600
+		color: theme.colors.muted700
 	},
 
 	day__counter: {
@@ -416,18 +416,18 @@ const styles = StyleSheet.create((theme, rt) => ({
 		fontSize: 11 * rt.fontScale,
 		lineHeight: 11 * rt.fontScale,
 		fontWeight: '500',
-		color: theme.colors.muted500,
+		color: theme.colors.muted600,
 		textAlign: 'center'
 	},
 
 	text_muted: {
-		color: theme.colors.muted700
+		color: theme.colors.muted800
 	},
 
 	selectedText: {
 		color: theme.colors.inverse
 	},
 	text_today: {
-		color: theme.colors.primary
+		color: theme.colors.primary500
 	}
 }))
