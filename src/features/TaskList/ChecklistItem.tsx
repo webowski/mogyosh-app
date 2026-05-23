@@ -55,10 +55,10 @@ export const ChecklistItem = ({
 
 	return (
 		<Pressable onPress={handlePress} style={styles.container}>
+			<Animated.Text style={[styles.text, textStyle]}>{text}</Animated.Text>
 			<Animated.View style={[styles.checkbox, checkboxStyle]}>
 				{checked && <Text style={styles.checkmark}>✓</Text>}
 			</Animated.View>
-			<Animated.Text style={[styles.text, textStyle]}>{text}</Animated.Text>
 		</Pressable>
 	)
 }
@@ -66,7 +66,7 @@ export const ChecklistItem = ({
 const styles = StyleSheet.create((theme) => ({
 	container: {
 		flexDirection: 'row',
-		alignItems: 'center',
+		alignItems: 'flex-start',
 		gap: 8,
 		paddingVertical: 6
 	},
