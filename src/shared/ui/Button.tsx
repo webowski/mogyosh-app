@@ -68,21 +68,25 @@ const getVariantStyles = (
 ): Record<Variant, { text: TextStyle; rippleColor: string }> => ({
 	default: {
 		text: { color: theme.colors.inverse },
+		// deprecated: ripple opacity requires manual rgba string
 		rippleColor: 'rgba(255,255,255,0.35)'
 	},
 
 	secondary: {
 		text: { color: theme.colors.major },
+		// deprecated: ripple opacity requires manual rgba string
 		rippleColor: 'rgba(99,125,255,0.15)'
 	},
 
 	pill: {
 		text: { color: theme.colors.major },
+		// deprecated: ripple opacity requires manual rgba string
 		rippleColor: 'rgba(99,125,255,0.15)'
 	},
 
 	chip: {
 		text: { color: theme.colors.major },
+		// deprecated: ripple opacity requires manual rgba string
 		rippleColor: 'rgba(99,125,255,0.15)'
 	}
 })

@@ -5,7 +5,7 @@ import { useNavStore } from '@/features/Navigation/model/navStore'
 import { TaskEntity } from '@/shared/domain/task'
 import { useTaskStore } from '@/shared/model/taskStore'
 import { STYLE_VARS } from '@/shared/styles/common'
-import { StyleSheet } from 'react-native-unistyles'
+import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 type TaskListItemProps = {
 	data: TaskEntity
@@ -13,6 +13,7 @@ type TaskListItemProps = {
 
 export default function TaskListItem({ data }: TaskListItemProps) {
 	const router = useRouter()
+	const { theme } = useUnistyles()
 
 	const setSelectedTaskId = useTaskStore((store) => store.setSelectedTaskId)
 	const setSwipeRoute = useNavStore((store) => store.setSwipeRoute)
@@ -25,14 +26,22 @@ export default function TaskListItem({ data }: TaskListItemProps) {
 
 	return (
 		<Pressable onPress={handlePress} style={styles.taskListItem}>
-			<Text style={{ fontSize: 14, fontWeight: '500' }}>{data.info}</Text>
+			<Text
+				style={{ fontSize: 14, fontWeight: '500', color: theme.colors.major }}
+			>
+				{data.info}
+			</Text>
 			{data.priority !== null && data.priority !== undefined && (
-				<Text style={{ fontSize: 12, color: '#888', marginTop: 4 }}>
+				<Text
+					style={{ fontSize: 12, color: theme.colors.minor500, marginTop: 4 }}
+				>
 					Priority: {data.priority}
 				</Text>
 			)}
 			{data.state && (
-				<Text style={{ fontSize: 12, color: '#888', marginTop: 2 }}>
+				<Text
+					style={{ fontSize: 12, color: theme.colors.minor500, marginTop: 2 }}
+				>
 					State: {data.state}
 				</Text>
 			)}
@@ -43,8 +52,8 @@ export default function TaskListItem({ data }: TaskListItemProps) {
 const styles = StyleSheet.create((theme, rt) => ({
 	taskListItem: {
 		padding: 12,
-		backgroundColor: '#ffffff',
+		backgroundColor: theme.colors.surface,
 		borderRadius: STYLE_VARS.radius_md,
-		boxShadow: '0px 2px 4px rgba(102, 140, 255, 0.08)'
+		boxShadow: '0px 2px 4px ' + theme.colors.shadow100
 	}
 }))

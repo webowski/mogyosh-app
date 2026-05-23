@@ -7,7 +7,7 @@ export const pillStyles = StyleSheet.create((theme, rt) => ({
 		flexDirection: 'row',
 		gap: 8,
 		paddingHorizontal: STYLE_VARS.sidePadding,
-		backgroundColor: 'black'
+		backgroundColor: theme.colors.backgroundAlter
 	},
 	pill: {
 		backgroundColor: theme.colors.primary800,

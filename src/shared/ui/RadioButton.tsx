@@ -34,7 +34,7 @@ export default function RadioButton({
 							width: 6,
 							height: 6,
 							borderRadius: 4,
-							backgroundColor: 'white'
+							backgroundColor: theme.colors.inverse
 						}}
 					/>
 				)}

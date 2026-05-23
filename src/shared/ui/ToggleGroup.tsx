@@ -64,7 +64,11 @@ function ToggleItem({
 	}))
 
 	const animatedTextStyle = useAnimatedStyle(() => ({
-		color: interpolateColor(progress.value, [0, 1], ['#374151', '#FFFFFF'])
+		color: interpolateColor(
+			progress.value,
+			[0, 1],
+			[theme.colors.major, theme.colors.inverse]
+		)
 	}))
 
 	return (

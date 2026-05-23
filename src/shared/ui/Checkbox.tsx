@@ -24,7 +24,7 @@ export default function Checkbox({ checked }: CheckboxProps) {
 		borderColor: interpolateColor(
 			animationProgress.value,
 			[0, 1],
-			['#D1D5DB', theme.colors.primary500]
+			[theme.colors.border, theme.colors.primary500]
 		)
 	}))
 

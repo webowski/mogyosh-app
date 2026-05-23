@@ -218,7 +218,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		marginLeft: '27%',
 		paddingTop: 3,
 		borderTopWidth: 11,
-		borderColor: '#E6F4FF',
+		borderColor: theme.colors.primary900,
 		color: theme.colors.muted600,
 		fontSize: 13,
 		fontWeight: '400'
@@ -230,7 +230,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		top: -300,
 		left: -430,
 		borderRadius: 600,
-		backgroundColor: '#E6F4FF'
+		backgroundColor: theme.colors.primary900
 	},
 
 	menu: {
@@ -262,6 +262,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 	backdrop: {
 		...StyleSheet.absoluteFillObject,
 		flex: 1,
+		// deprecated: backdrop overlay uses solid black for modal dimming effect
 		backgroundColor: 'black',
 		zIndex: 51
 	},

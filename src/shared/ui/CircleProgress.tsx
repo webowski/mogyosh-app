@@ -105,6 +105,6 @@ const styles = StyleSheet.create((theme, rt) => ({
 		fontSize: 13 * rt.fontScale,
 		lineHeight: 13 * rt.fontScale,
 		fontWeight: '600',
-		color: '#111827'
+		color: theme.colors.major
 	}
 }))
