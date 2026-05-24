@@ -1,7 +1,7 @@
 import { MaterialIcons } from '@expo/vector-icons'
 import type { RefObject } from 'react'
 import { useCallback, useRef } from 'react'
-import { Platform, Pressable, TextInput, View } from 'react-native'
+import { Platform, Pressable, View } from 'react-native'
 import {
 	EnrichedMarkdownTextInput,
 	type EnrichedMarkdownTextInputInstance
@@ -22,9 +22,12 @@ interface Props {
 
 export function TodoListEditor({ items, onChange }: Props) {
 	const { theme } = useUnistyles()
+
 	const inputRefs = useRef<
 		Map<string, RefObject<EnrichedMarkdownTextInputInstance | null>>
 	>(new Map())
+
+	const webInputRefs = useRef<Map<string, HTMLDivElement>>(new Map())
 
 	const getRefForItem = useCallback(
 		(id: string): RefObject<EnrichedMarkdownTextInputInstance | null> => {
@@ -36,6 +39,17 @@ export function TodoListEditor({ items, onChange }: Props) {
 		[]
 	)
 
+	const focusItem = useCallback(
+		(id: string) => {
+			if (Platform.OS === 'web') {
+				webInputRefs.current.get(id)?.focus()
+			} else {
+				getRefForItem(id).current?.focus()
+			}
+		},
+		[getRefForItem]
+	)
+
 	const addItemAfter = (index: number) => {
 		const newItem: TodoItem = { id: Date.now().toString(), text: '' }
 		const next = [...items]
@@ -43,7 +57,7 @@ export function TodoListEditor({ items, onChange }: Props) {
 		onChange(next)
 
 		setTimeout(() => {
-			getRefForItem(newItem.id).current?.focus()
+			focusItem(newItem.id)
 		}, 50)
 	}
 
@@ -57,7 +71,7 @@ export function TodoListEditor({ items, onChange }: Props) {
 
 		const focusIndex = Math.max(0, index - 1)
 		setTimeout(() => {
-			getRefForItem(next[focusIndex].id).current?.focus()
+			focusItem(next[focusIndex].id)
 		}, 50)
 	}
 
@@ -79,13 +93,44 @@ export function TodoListEditor({ items, onChange }: Props) {
 			{items.map((item, index) => (
 				<View key={item.id} style={styles.row}>
 					{Platform.OS === 'web' ? (
-						<TextInput
-							ref={inputRefs.current.get(item.id) as any}
-							style={styles.input}
-							value={item.text}
-							onChangeText={(text) => updateItem(item.id, text)}
-							placeholderTextColor={theme.colors.minor}
-							placeholder={index === 0 ? 'Список задач...' : ''}
+						<div
+							ref={(element) => {
+								if (element) {
+									webInputRefs.current.set(item.id, element)
+								} else {
+									webInputRefs.current.delete(item.id)
+								}
+							}}
+							contentEditable
+							suppressContentEditableWarning
+							data-placeholder={index === 0 ? 'Список задач...' : ''}
+							onInput={(event) => {
+								const text = (event.currentTarget as HTMLDivElement).innerText
+								updateItem(item.id, text)
+							}}
+							onKeyDown={(event) => {
+								if (event.key === 'Enter') {
+									event.preventDefault()
+									addItemAfter(index)
+								} else if (event.key === 'Backspace') {
+									const text = (event.currentTarget as HTMLDivElement).innerText
+									if (text === '') {
+										event.preventDefault()
+										removeItem(index)
+									}
+								}
+							}}
+							// @ts-ignore - web-only inline styles
+							style={{
+								flex: 1,
+								fontSize: 15,
+								color: theme.colors.major,
+								paddingTop: theme.spacing.xs,
+								paddingBottom: theme.spacing.xs,
+								outline: 'none',
+								minHeight: 22,
+								wordBreak: 'break-word'
+							}}
 						/>
 					) : (
 						<EnrichedMarkdownTextInput
