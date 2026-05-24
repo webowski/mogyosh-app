@@ -37,7 +37,6 @@ export default function NavPanel({
 	const insets = useSafeAreaInsets()
 
 	const setIsDrawerShown = useNavStore((state) => state.setIsDrawerShown)
-	const setSwipeRoute = useNavStore((state) => state.setSwipeRoute)
 	const setIsSwipeSheetOpen = useNavStore((state) => state.setIsSwipeSheetOpen)
 
 	// Get selected date and swipe switch items from store
@@ -115,6 +114,7 @@ export default function NavPanel({
 					}}
 					icon={<SVGIconBurger width={32} height={32} />}
 				/>
+
 				<NavButton
 					isFocused={isCurrentRoute('motivation', state)}
 					onPress={() => navigation.navigate('motivation')}
@@ -130,13 +130,10 @@ export default function NavPanel({
 				/>
 
 				<NavButton
-					isFocused={false}
+					isFocused={isCurrentRoute('createTask', state)}
 					onPress={() => {
-						setSwipeRoute('task')
-						navigation.navigate('task', {
-							mode: 'create',
-							returnTo: currentRoute
-						})
+						navigation.navigate('createTask')
+						// setSwipeRoute('task')
 					}}
 					icon={<SVGIconPlus width={32} height={32} />}
 				/>

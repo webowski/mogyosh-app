@@ -1,8 +1,5 @@
-import { useLocalSearchParams, useNavigation } from 'expo-router'
 import { ActivityIndicator, Text, View } from 'react-native'
 
-import { useNavStore } from '@/features/Navigation/model/navStore'
-import { TaskCreateForm } from '@/features/TaskCreate/TaskCreateForm'
 import { useTaskById, useTaskSubtasks } from '@/features/TaskList'
 import { ChecklistItem } from '@/features/TaskList/ChecklistItem'
 import { useUpdateTaskState } from '@/features/TaskList/model/useUpdateTaskState'
@@ -11,16 +8,7 @@ import { commonStyles } from '@/shared/styles/common'
 import ScrollBox from '@/shared/ui/ScrollBox'
 
 export default function TaskScreen() {
-	const { mode, returnTo } = useLocalSearchParams<{
-		mode?: string
-		returnTo?: string
-	}>()
-
-	const navigation = useNavigation()
-	const isCreateMode = mode === 'create'
-
 	const selectedTaskId = useTaskStore((state) => state.selectedTaskId)
-	const setSwipeRoute = useNavStore((store) => store.setSwipeRoute)
 
 	const { data, isLoading, error } = useTaskById(selectedTaskId)
 
@@ -34,17 +22,6 @@ export default function TaskScreen() {
 			taskId,
 			state: completed ? 'done' : 'active'
 		})
-	}
-
-	if (isCreateMode) {
-		return (
-			<TaskCreateForm
-				onClose={() => {
-					navigation.navigate((returnTo || 'index') as never)
-					setSwipeRoute(returnTo || 'index')
-				}}
-			/>
-		)
 	}
 
 	// Show loading state when waiting for task data

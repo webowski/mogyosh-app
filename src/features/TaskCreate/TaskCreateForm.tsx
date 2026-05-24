@@ -266,9 +266,9 @@ export function TaskCreateForm({ onClose }: Props) {
 			</ScrollView>
 
 			<ActionsPanel style={{ paddingBottom: STYLE_VARS.navPanelUnderlap }}>
-				<Button size='round' variant='secondary' onPress={onClose}>
+				{/* <Button size='round' variant='secondary' onPress={onClose}>
 					<MaterialIcons name='clear' size={28} color={theme.colors.primary} />
-				</Button>
+				</Button> */}
 
 				<Button
 					size='round'

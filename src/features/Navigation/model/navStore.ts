@@ -27,6 +27,12 @@ const buildSwipeSwitchItems = (selectedDate: Date): SwipeSwitchItems => {
 }
 
 interface NavStore {
+	currentRoute: string | null
+	previousRoute: string | null
+	updateRoutes: (route: string) => void
+	// previousRoute: string | null
+	// setPreviousRoute: (route: string) => void
+
 	swipeSwitchItems: SwipeSwitchItems
 	updateSwitchItems: (selectedDate?: Date) => void
 
@@ -46,6 +52,21 @@ interface NavStore {
 }
 
 export const useNavStore = create<NavStore>((set, get) => ({
+	// previousRoute: null,
+	// setPreviousRoute: (route) => {
+	// 	const current = get().previousRoute
+	// 	if (current !== route) {
+	// 		set({ previousRoute: route })
+	// 	}
+	// },
+	currentRoute: null,
+	previousRoute: null,
+	updateRoutes: (route) =>
+		set({
+			previousRoute: get().currentRoute,
+			currentRoute: route
+		}),
+
 	isDrawerShown: false,
 	setIsDrawerShown: (isShown: boolean) => {
 		set({ isDrawerShown: isShown })

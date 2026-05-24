@@ -1,6 +1,6 @@
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { Stack } from 'expo-router'
+import { Stack, usePathname } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -11,6 +11,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { useUnistyles } from 'react-native-unistyles'
 
 import Header from '@/features/Header/Header'
+import { useNavStore } from '@/features/Navigation/model/navStore'
 import { login } from '@/shared/api/auth'
 
 export const unstable_settings = {
@@ -25,6 +26,17 @@ export default function RootLayout() {
 
 	const [isLoggedIn, setLoggedIn] = useState(false)
 	const [loginError, setLoginError] = useState<string | null>(null)
+
+	const pathname = usePathname()
+	const updateRoutes = useNavStore((state) => state.updateRoutes)
+
+	useEffect(
+		() => {
+			updateRoutes(pathname)
+		},
+		// eslint-disable-next-line
+		[pathname]
+	)
 
 	useEffect(
 		function effectDatabaseRelated() {
