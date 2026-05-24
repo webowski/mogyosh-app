@@ -162,7 +162,9 @@ export function TaskCreateForm({ onClose }: Props) {
 				}}
 				contentContainerStyle={{
 					flex: 1,
-					gap: 12
+					gap: 12,
+					paddingVertical: STYLE_VARS.sidePadding,
+					paddingHorizontal: STYLE_VARS.sidePadding
 				}}
 				keyboardShouldPersistTaps='handled'
 			>
@@ -188,12 +190,7 @@ export function TaskCreateForm({ onClose }: Props) {
 					)}
 				</View>
 
-				<View
-					style={{
-						paddingHorizontal: STYLE_VARS.sidePadding,
-						paddingTop: STYLE_VARS.sidePadding
-					}}
-				>
+				<View style={{}}>
 					<View style={[formStyles.formRow, formStyles.formRow_first]}>
 						<Text style={{ marginBottom: 0 }}>Категория</Text>
 						<Button
@@ -367,8 +364,7 @@ export function TaskCreateForm({ onClose }: Props) {
 
 const styles = StyleSheet.create((theme) => ({
 	fieldGroup: {
-		gap: theme.spacing.xs,
-		paddingHorizontal: STYLE_VARS.sidePadding
+		gap: theme.spacing.xs
 	},
 
 	label: {

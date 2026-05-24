@@ -134,7 +134,8 @@ const styles = StyleSheet.create((theme) => ({
 		flex: 1,
 		fontSize: 15,
 		color: theme.colors.major,
-		paddingVertical: theme.spacing.xs
+		paddingVertical: theme.spacing.xs,
+		outline: 'none'
 	},
 	addButton: {
 		flexDirection: 'row',
