@@ -87,17 +87,23 @@ export const lightTheme = {
 		borderLight: 'hsl(240, 5%, 92%)',
 		borderLightest: 'hsl(225, 37%, 96%)',
 
-		shadow100: 'hsla(225, 74%, 40%, .09)',
-		shadow150: 'hsla(225, 74%, 40%, .12)',
-		shadow200: 'hsla(225, 74%, 40%, .16)',
-		shadow: 'hsla(225, 74%, 40%, .55)',
-
 		// table
 		thFill: 'hsl(224, 37%, 93%)',
 		thText: 'hsl(225, 28%, 68%)',
 
 		ripple: 'rgba(99,125,255,0.15)',
-		rippleLight: 'rgba(255,255,255,0.35)'
+		rippleLight: 'rgba(255,255,255,0.35)',
+
+		shadow100: 'hsla(225, 74%, 40%, .09)',
+		shadow150: 'hsla(225, 74%, 40%, .12)',
+		shadow200: 'hsla(225, 74%, 40%, .16)',
+		shadow: 'hsla(225, 74%, 40%, .55)',
+
+		gradient: [
+			'hsl(225, 100%, 75%)',
+			'hsl(225, 100%, 70%)',
+			'hsl(225, 60%, 55%)'
+		]
 	},
 	spacing: {
 		xs: 4,

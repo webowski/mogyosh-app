@@ -189,11 +189,7 @@ export const Button: React.FC<ButtonProps> = ({
 			{/* Layer 1: background */}
 			{variant === 'default' ? (
 				<LinearGradient
-					colors={[
-						theme.colors.primaryLighter,
-						theme.colors.primary,
-						theme.colors.primaryDarker
-					]}
+					colors={theme.colors.gradient}
 					start={{ x: 0, y: 0 }}
 					end={{ x: 1, y: 1 }}
 					style={[StyleSheet.absoluteFill, { borderRadius }]}
