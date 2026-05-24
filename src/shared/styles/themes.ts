@@ -94,13 +94,15 @@ export const lightTheme = {
 		ripple: 'rgba(99,125,255,0.15)',
 		rippleLight: 'rgba(255,255,255,0.35)',
 
-		shadeToggleThumb: '0px 2px 4px rgba(0, 0, 0, 0.18)',
+		shadeHeader: '0 0px 6px hsla(225, 74%, 40%, .09)',
 		shadeDrawer: '0 0px 40px hsla(225, 74%, 40%, .55)',
 		shadeNavPanelWrap: '0 0px 32px hsla(225, 74%, 40%, .12)',
 		shadeNavPanel: '0 0px 4px hsla(225, 74%, 40%, .12)',
 		shadeSwipeSwitchSheet: '0 0px 20px hsla(225, 74%, 40%, .12)',
+
 		shadeCard: '0px 2px 4px hsla(225, 74%, 40%, .09)',
-		shadeHeader: '0 0px 6px hsla(225, 74%, 40%, .09)',
+
+		shadeToggleThumb: '0px 2px 4px rgba(0, 0, 0, 0.18)',
 		shadeButton: '0px 5px 10px rgba(26, 35, 126, 0.16)',
 		shadeButtonIndicator: '0 0px 0px 3px hsla(225, 74%, 40%, .09)',
 
@@ -131,45 +133,60 @@ export const darkTheme = {
 	colors: {
 		...lightTheme.colors,
 
-		// Tertiary / disabled text and subtle backgrounds
-		muted500: 'hsl(225, 20%, 45%)',
-		muted600: 'hsl(225, 18%, 35%)',
-		muted700: 'hsl(225, 16%, 28%)',
-		muted800: 'hsl(225, 14%, 20%)',
-		muted900: 'hsl(225, 14%, 15%)',
-
-		// Primary scale: 100-400 darker → 500 base → 600-900 lighter (dark theme)
-		primary300: 'hsl(225, 80%, 75%)',
-		primary: 'hsl(225, 100%, 70%)',
-		primary600: 'hsl(225, 70%, 60%)',
-		primary700: 'hsl(225, 50%, 40%)',
-		primary800: 'hsl(225, 40%, 25%)',
-		primary900: 'hsl(225, 35%, 18%)',
-
-		// surface
-		surface: 'hsl(225, 16%, 14%)',
-		surfaceAlter: 'hsl(225, 16%, 8%)',
-
-		border: 'hsl(225, 14%, 28%)',
-		borderLight: 'hsl(225, 14%, 22%)',
-
-		// table
-		thFill: 'hsl(225, 16%, 20%)',
-		thText: 'hsl(225, 20%, 50%)',
+		brandLightest: 'hsl(225, 80%, 12%)',
 
 		// text
-		major: 'hsl(224, 20%, 85%)',
-		minor: 'hsl(225, 18%, 50%)',
-		mutedText: 'hsl(225, 18%, 45%)',
-		mutedLightText: 'hsl(225, 18%, 35%)',
+		primaryDarker: 'hsl(225, 100%, 78%)',
+		primary: 'hsl(225, 100%, 72%)',
+		primaryLight: 'hsl(225, 100%, 65%)',
+		primaryLighter: 'hsl(225, 60%, 45%)',
+
+		major: 'hsl(0, 0%, 98%)',
+		minor: 'hsl(225, 20%, 72%)',
+		mutedText: 'hsl(225, 15%, 62%)',
+		mutedLightText: 'hsl(225, 15%, 55%)',
+		mutedLighterText: 'hsl(225, 15%, 48%)',
+		mutedLightestText: 'hsl(225, 15%, 42%)',
 		buttonText: 'hsl(0, 0%, 100%)',
-		success: 'hsl(148, 80%, 50%)',
-		danger: 'hsl(355, 90%, 65%)',
-		inverse: 'hsl(224, 15%, 15%)',
-		currentFill: 'hsl(225, 40%, 25%)',
-		currentText: 'hsl(225, 100%, 70%)',
-		selectedFill: 'hsl(225, 100%, 70%)',
-		selectedText: 'hsl(0, 0%, 100%)'
+		success: 'hsl(148, 80%, 58%)',
+		danger: 'hsl(355, 85%, 68%)',
+		inverse: 'hsl(0, 0%, 8%)',
+		currentFill: 'hsl(225, 100%, 28%)',
+		currentText: 'hsl(225, 100%, 72%)',
+		selectedFill: 'hsl(225, 100%, 65%)',
+		selectedText: 'hsl(0, 0%, 100%)',
+
+		surface: 'hsl(225, 18%, 9%)',
+		surfaceAlter: 'hsl(225, 20%, 13%)',
+
+		border: 'hsl(225, 15%, 24%)',
+		borderLight: 'hsl(225, 15%, 19%)',
+		borderLightest: 'hsl(225, 20%, 16%)',
+
+		// table
+		thFill: 'hsl(225, 20%, 16%)',
+		thText: 'hsl(225, 20%, 65%)',
+
+		ripple: 'rgba(120, 140, 255, 0.18)',
+		rippleLight: 'rgba(255,255,255,0.08)',
+
+		shadeHeader: '0 0px 6px hsla(225, 0%, 0%, .3)',
+		shadeDrawer: '0 0px 40px hsla(225, 0%, 0%, .35)',
+		shadeNavPanelWrap: '0 0px 32px hsla(225, 0%, 0%, .2)',
+		shadeNavPanel: '0 0px 4px hsla(225, 0%, 0%, .12)',
+		shadeSwipeSwitchSheet: '0 0px 20px hsla(225, 0%, 0%, .12)',
+
+		shadeCard: '0px 2px 4px hsla(225, 0%, 0%, .12)',
+
+		shadeToggleThumb: '0px 2px 4px rgba(0, 0, 0, 0.18)',
+		shadeButton: '0px 5px 10px rgba(26, 35, 126, 0.16)',
+		shadeButtonIndicator: '0 0px 0px 3px hsla(225, 74%, 40%, .09)',
+
+		gradient: [
+			'hsl(225, 100%, 68%)',
+			'hsl(225, 100%, 62%)',
+			'hsl(225, 90%, 52%)'
+		]
 	},
 	fontSize: lightTheme.fontSize,
 	spacing: lightTheme.spacing,
