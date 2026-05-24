@@ -94,11 +94,6 @@ export const lightTheme = {
 		ripple: 'rgba(99,125,255,0.15)',
 		rippleLight: 'rgba(255,255,255,0.35)',
 
-		shadow100: 'hsla(225, 74%, 40%, .09)',
-		shadow150: 'hsla(225, 74%, 40%, .12)',
-		shadow200: 'hsla(225, 74%, 40%, .16)',
-		shadow: 'hsla(225, 74%, 40%, .55)',
-
 		shadeToggleThumb: '0px 2px 4px rgba(0, 0, 0, 0.18)',
 		shadeDrawer: '0 0px 40px hsla(225, 74%, 40%, .55)',
 		shadeNavPanelWrap: '0 0px 32px hsla(225, 74%, 40%, .12)',
@@ -157,11 +152,6 @@ export const darkTheme = {
 
 		border: 'hsl(225, 14%, 28%)',
 		borderLight: 'hsl(225, 14%, 22%)',
-
-		// shadow100: 'hsla(225, 74%, 5%, .20)',
-		// shadow150: 'hsla(225, 74%, 5%, .30)',
-		// shadow200: 'hsla(225, 74%, 5%, .40)',
-		// shadow: 'hsla(225, 74%, 5%, .70)',
 
 		// table
 		thFill: 'hsl(225, 16%, 20%)',
