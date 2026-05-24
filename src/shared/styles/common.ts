@@ -17,7 +17,7 @@ export const STYLE_VARS = {
 
 export const commonStyles = StyleSheet.create((theme, rt) => ({
 	scene: {
-		backgroundColor: theme.colors.backgroundAlter
+		backgroundColor: theme.colors.surfaceAlter
 	},
 
 	mainArea: {
@@ -52,7 +52,7 @@ export const commonStyles = StyleSheet.create((theme, rt) => ({
 		fontSize: 15,
 		lineHeight: 15 * 1.2,
 		letterSpacing: 15 * -0.01,
-		color: theme.colors.minor500,
+		color: theme.colors.minor,
 		marginBottom: 2
 	},
 

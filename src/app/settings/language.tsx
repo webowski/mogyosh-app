@@ -32,7 +32,7 @@ export default function LanguageScreen() {
 								{
 									borderColor:
 										language === lang.code
-											? theme.colors.primary500
+											? theme.colors.primary
 											: 'transparent'
 								}
 							]}
@@ -79,6 +79,6 @@ const styles = StyleSheet.create((theme) => ({
 		width: 20,
 		height: 20,
 		borderRadius: 10,
-		backgroundColor: theme.colors.primary500
+		backgroundColor: theme.colors.primary
 	}
 }))

@@ -20,7 +20,7 @@ export const textStyles = StyleSheet.create((theme, rt) => ({
 		fontSize: 12,
 		lineHeight: 12 * 1.2,
 		letterSpacing: 12 * 0.01,
-		color: theme.colors.muted600
+		color: theme.colors.mutedLightText
 	},
 
 	// text-align: center;
@@ -40,7 +40,7 @@ export const textStyles = StyleSheet.create((theme, rt) => ({
 	},
 
 	link: {
-		color: theme.colors.primary500
+		color: theme.colors.primary
 	}
 }))
 
@@ -63,7 +63,7 @@ export const textStyles = StyleSheet.create((theme, rt) => ({
 // 			medium: { fontWeight: '500' }
 // 		},
 // 		color: {
-// 			primary: { color: theme.colors.primary500 },
+// 			primary: { color: theme.colors.primary },
 // 			muted: { color: theme.colors.textSecondary }
 // 		}
 // 	}

@@ -47,7 +47,7 @@ export default function HeaderTask({
 					{draftTitle.trim() ? (
 						draftTitle.trim()
 					) : (
-						<Text style={{ color: theme.colors.minor500 }}>
+						<Text style={{ color: theme.colors.minor }}>
 							{t('screen.Create Task')}
 						</Text>
 					)}

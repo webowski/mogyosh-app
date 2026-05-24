@@ -361,14 +361,14 @@ const styles = StyleSheet.create((theme, rt) => ({
 		alignItems: 'center',
 		justifyContent: 'center',
 		paddingVertical: 4,
-		backgroundColor: theme.colors.muted800,
+		backgroundColor: theme.colors.thFill,
 		borderRadius: 4
 	},
 	weekdayHeaderText: {
 		fontSize: 12,
 		lineHeight: 12,
 		fontWeight: '600',
-		color: theme.colors.minor500
+		color: theme.colors.thText
 	},
 
 	month: (calendarWidth: number) => ({
@@ -394,11 +394,23 @@ const styles = StyleSheet.create((theme, rt) => ({
 		borderRadius: 4,
 		backgroundColor: theme.colors.surface
 	},
+
 	day_today: {
-		backgroundColor: theme.colors.primary800
+		backgroundColor: theme.colors.currentFill
 	},
+	text_today: {
+		color: theme.colors.currentText
+	},
+
 	day_selected: {
-		backgroundColor: theme.colors.primary500
+		backgroundColor: theme.colors.selectedFill
+	},
+	selectedText: {
+		color: theme.colors.selectedText
+	},
+
+	text_muted: {
+		color: theme.colors.mutedLightestText
 	},
 
 	dayNumber: {
@@ -408,7 +420,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		color: theme.colors.major
 	},
 	dayNumber_otherMonth: {
-		color: theme.colors.muted700
+		color: theme.colors.mutedLightText
 	},
 
 	day__counter: {
@@ -416,18 +428,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		fontSize: 11 * rt.fontScale,
 		lineHeight: 11 * rt.fontScale,
 		fontWeight: '500',
-		color: theme.colors.muted600,
+		color: theme.colors.mutedLightText,
 		textAlign: 'center'
-	},
-
-	text_muted: {
-		color: theme.colors.muted800
-	},
-
-	selectedText: {
-		color: theme.colors.inverse
-	},
-	text_today: {
-		color: theme.colors.primary500
 	}
 }))

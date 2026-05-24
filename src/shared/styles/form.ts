@@ -4,7 +4,7 @@ export const formStyles = StyleSheet.create((theme, rt) => ({
 	input: {
 		paddingHorizontal: 20,
 		paddingVertical: 10,
-		backgroundColor: theme.colors.background,
+		backgroundColor: theme.colors.surface,
 		borderRadius: 24,
 		borderWidth: 0,
 		border: 0,
@@ -23,11 +23,11 @@ export const formStyles = StyleSheet.create((theme, rt) => ({
 		marginBlock: 1
 	},
 	formRow_first: {
-		borderTopLeftRadius: 12,
-		borderTopRightRadius: 12
+		borderTopLeftRadius: 18,
+		borderTopRightRadius: 18
 	},
 	formRow_last: {
-		borderBottomLeftRadius: 12,
-		borderBottomRightRadius: 12
+		borderBottomLeftRadius: 18,
+		borderBottomRightRadius: 18
 	}
 }))

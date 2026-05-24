@@ -69,25 +69,25 @@ const getVariantStyles = (
 	default: {
 		text: { color: theme.colors.inverse },
 		// deprecated: ripple opacity requires manual rgba string
-		rippleColor: 'rgba(255,255,255,0.35)'
+		rippleColor: theme.colors.rippleLight
 	},
 
 	secondary: {
 		text: { color: theme.colors.major },
 		// deprecated: ripple opacity requires manual rgba string
-		rippleColor: 'rgba(99,125,255,0.15)'
+		rippleColor: theme.colors.ripple
 	},
 
 	pill: {
 		text: { color: theme.colors.major },
 		// deprecated: ripple opacity requires manual rgba string
-		rippleColor: 'rgba(99,125,255,0.15)'
+		rippleColor: theme.colors.ripple
 	},
 
 	chip: {
 		text: { color: theme.colors.major },
 		// deprecated: ripple opacity requires manual rgba string
-		rippleColor: 'rgba(99,125,255,0.15)'
+		rippleColor: theme.colors.ripple
 	}
 })
 
@@ -190,9 +190,9 @@ export const Button: React.FC<ButtonProps> = ({
 			{variant === 'default' ? (
 				<LinearGradient
 					colors={[
-						theme.colors.primary600,
-						theme.colors.primary500,
-						theme.colors.primary300
+						theme.colors.primaryLighter,
+						theme.colors.primary,
+						theme.colors.primaryDarker
 					]}
 					start={{ x: 0, y: 0 }}
 					end={{ x: 1, y: 1 }}
@@ -215,11 +215,9 @@ export const Button: React.FC<ButtonProps> = ({
 						{
 							borderRadius,
 							borderWidth: 1,
-							borderColor: active
-								? theme.colors.primary500
-								: theme.colors.border,
+							borderColor: active ? theme.colors.primary : theme.colors.border,
 							backgroundColor: active
-								? theme.colors.primary500
+								? theme.colors.primary
 								: theme.colors.surface
 						}
 					]}
@@ -232,8 +230,8 @@ export const Button: React.FC<ButtonProps> = ({
 						{
 							borderRadius,
 							borderWidth: 1.5,
-							borderColor: theme.colors.primary700,
-							backgroundColor: theme.colors.primary900
+							borderColor: theme.colors.primaryLight,
+							backgroundColor: theme.colors.primaryLighter
 						}
 					]}
 				/>
@@ -318,7 +316,7 @@ export const Button: React.FC<ButtonProps> = ({
 						height: 7,
 						boxShadow: '0 0px 0px 3px ' + theme.colors.shadow100,
 						borderRadius: 999,
-						backgroundColor: theme.colors.primary600
+						backgroundColor: theme.colors.primaryLight
 					}}
 					pointerEvents='none'
 				/>

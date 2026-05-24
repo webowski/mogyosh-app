@@ -73,14 +73,14 @@ export default function TaskCategoryGroup({
 							<MaterialIcons
 								name='play-arrow'
 								size={18}
-								color={theme.colors.primary500}
+								color={theme.colors.primary}
 							/>
 						</View>
 					) : (
 						<MaterialIcons
 							name='play-arrow'
 							size={18}
-							color={theme.colors.primary500}
+							color={theme.colors.primary}
 						/>
 					)}
 				</View>
@@ -114,6 +114,6 @@ export default function TaskCategoryGroup({
 
 // const styles = StyleSheet.create((theme, rt) => ({
 // 	group__arrow: {
-// 		color: theme.colors.primary500
+// 		color: theme.colors.primary
 // 	}
 // }))

@@ -315,32 +315,32 @@ const styles = StyleSheet.create((theme) => ({
 		paddingHorizontal: 6,
 		borderRadius: 7
 	}),
+
 	day_today: {
-		backgroundColor: theme.colors.primary800
+		backgroundColor: theme.colors.currentFill
 	},
+	todayText: {
+		color: theme.colors.currentText
+	},
+
 	weekday: {
 		fontSize: 11,
 		lineHeight: 11 * 1,
 		fontWeight: '500',
-		// color: theme.colors.minor500,
-		color: theme.colors.muted600,
+		color: theme.colors.mutedLightText,
 		marginBottom: 3
 	},
 	dayNumber: {
 		fontSize: 14,
 		lineHeight: 14 * 1,
 		fontWeight: '600',
-		// color: theme.colors.major
-		color: theme.colors.muted600
+		color: theme.colors.mutedLightText
 	},
+
 	day_selected: {
-		backgroundColor: theme.colors.primary500
+		backgroundColor: theme.colors.selectedFill
 	},
 	selectedText: {
-		// color: theme.colors.major,
-		color: theme.colors.inverse
-	},
-	todayText: {
-		color: theme.colors.primary500
+		color: theme.colors.selectedText
 	}
 }))

@@ -32,16 +32,12 @@ export default function TaskListItem({ data }: TaskListItemProps) {
 				{data.info}
 			</Text>
 			{data.priority !== null && data.priority !== undefined && (
-				<Text
-					style={{ fontSize: 12, color: theme.colors.minor500, marginTop: 4 }}
-				>
+				<Text style={{ fontSize: 12, color: theme.colors.minor, marginTop: 4 }}>
 					Priority: {data.priority}
 				</Text>
 			)}
 			{data.state && (
-				<Text
-					style={{ fontSize: 12, color: theme.colors.minor500, marginTop: 2 }}
-				>
+				<Text style={{ fontSize: 12, color: theme.colors.minor, marginTop: 2 }}>
 					State: {data.state}
 				</Text>
 			)}

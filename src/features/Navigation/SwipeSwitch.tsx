@@ -483,10 +483,10 @@ const styles = StyleSheet.create((theme) => ({
 		height: 8,
 		width: 8,
 		borderRadius: 4,
-		backgroundColor: theme.colors.primary500
+		backgroundColor: theme.colors.primary
 	},
 	dotInactive: {
-		backgroundColor: theme.colors.minor500
+		backgroundColor: theme.colors.minor
 	}
 }))
 

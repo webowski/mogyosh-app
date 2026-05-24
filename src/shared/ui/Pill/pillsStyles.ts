@@ -7,19 +7,19 @@ export const pillStyles = StyleSheet.create((theme, rt) => ({
 		flexDirection: 'row',
 		gap: 8,
 		paddingHorizontal: STYLE_VARS.sidePadding,
-		backgroundColor: theme.colors.backgroundAlter
+		backgroundColor: theme.colors.surfaceAlter
 	},
 	pill: {
-		backgroundColor: theme.colors.primary800,
 		paddingVertical: 5,
 		paddingHorizontal: 14,
 		borderRadius: 20,
 		borderWidth: 1,
-		borderColor: theme.colors.primary500
+		backgroundColor: theme.colors.primaryLighter,
+		borderColor: theme.colors.primaryLight
 	},
 	pill__active: {
 		color: theme.colors.inverse,
-		backgroundColor: theme.colors.primary500
+		backgroundColor: theme.colors.primaryLight
 	},
 	pill__text: {
 		fontSize: 14,

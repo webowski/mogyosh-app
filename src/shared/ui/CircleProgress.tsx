@@ -30,9 +30,9 @@ export default function CircleProgressBar({
 	showLabel = true
 }: CircleProgressBarProps) {
 	const { theme } = useUnistyles()
-	const color = theme.colors.primary500
+	const color = theme.colors.primary
 
-	const trackColor = theme.colors.backgroundAlter
+	const trackColor = theme.colors.surfaceAlter
 
 	const radius = (size - strokeWidth) / 2
 	const circumference = 2 * Math.PI * radius

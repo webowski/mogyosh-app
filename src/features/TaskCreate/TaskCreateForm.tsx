@@ -174,7 +174,7 @@ export function TaskCreateForm({ onClose }: Props) {
 							<TextInput
 								style={[styles.input, errors.title && styles.input__error]}
 								placeholder='Название задачи'
-								placeholderTextColor={theme.colors.minor500}
+								placeholderTextColor={theme.colors.minor}
 								value={value}
 								onChangeText={onChange}
 								onBlur={onBlur}
@@ -267,7 +267,7 @@ export function TaskCreateForm({ onClose }: Props) {
 
 			<ActionsPanel style={{ paddingBottom: STYLE_VARS.navPanelUnderlap }}>
 				<Button size='round' variant='secondary' onPress={onClose}>
-					<MaterialIcons name='clear' size={28} color={theme.colors.primary500} />
+					<MaterialIcons name='clear' size={28} color={theme.colors.primary} />
 				</Button>
 
 				<Button
@@ -289,7 +289,7 @@ export function TaskCreateForm({ onClose }: Props) {
 				detents={['auto']}
 				cornerRadius={STYLE_VARS.radius_2xl}
 				backgroundColor={theme.colors.surface}
-				grabberOptions={{ color: theme.colors.minor500 }}
+				grabberOptions={{ color: theme.colors.minor }}
 				onDidDismiss={() => {
 					setIsCreatingCategory(false)
 					setNewCategoryName('')
@@ -301,7 +301,7 @@ export function TaskCreateForm({ onClose }: Props) {
 							<TextInput
 								style={styles.input}
 								placeholder='Название категории'
-								placeholderTextColor={theme.colors.minor500}
+								placeholderTextColor={theme.colors.minor}
 								value={newCategoryName}
 								onChangeText={setNewCategoryName}
 								autoFocus
@@ -374,7 +374,7 @@ const styles = StyleSheet.create((theme) => ({
 	label: {
 		fontSize: 14,
 		fontWeight: '500',
-		color: theme.colors.minor500
+		color: theme.colors.minor
 	},
 
 	input: {

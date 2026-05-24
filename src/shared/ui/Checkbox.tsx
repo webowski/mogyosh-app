@@ -19,12 +19,12 @@ export default function Checkbox({ checked }: CheckboxProps) {
 		backgroundColor: interpolateColor(
 			animationProgress.value,
 			[0, 1],
-			['transparent', theme.colors.primary500]
+			['transparent', theme.colors.primary]
 		),
 		borderColor: interpolateColor(
 			animationProgress.value,
 			[0, 1],
-			[theme.colors.border, theme.colors.primary500]
+			[theme.colors.border, theme.colors.primary]
 		)
 	}))
 

@@ -176,7 +176,7 @@ export function MindMap({ data, width, height, onTaskPress }: MindMapProps) {
 				<View
 					style={[
 						styles.canvas,
-						{ width, height, backgroundColor: theme.colors.backgroundAlter }
+						{ width, height, backgroundColor: theme.colors.surfaceAlter }
 					]}
 				>
 					<MindMapCanvas

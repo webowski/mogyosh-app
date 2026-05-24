@@ -11,5 +11,5 @@ export function getNodeColors(type: NodeType) {
 
 export const LINE_MINOR_COLOR = '#97A2C4'
 export const EDGE_COLOR = '#6B8CFF'
-// deprecated: MindMap canvas background should use theme.colors.backgroundAlter
+// deprecated: MindMap canvas background should use theme.colors.surfaceAlter
 export const CANVAS_BG = '#F7F8FC'

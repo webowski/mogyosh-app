@@ -54,12 +54,12 @@ function ToggleItem({
 		backgroundColor: interpolateColor(
 			progress.value,
 			[0, 1],
-			[theme.colors.background, theme.colors.primary500]
+			[theme.colors.surface, theme.colors.primary]
 		),
 		borderColor: interpolateColor(
 			progress.value,
 			[0, 1],
-			[theme.colors.border700, theme.colors.primary500]
+			[theme.colors.borderLight, theme.colors.primary]
 		)
 	}))
 
