@@ -39,7 +39,7 @@ export const commonStyles = StyleSheet.create((theme, rt) => ({
 		paddingHorizontal: STYLE_VARS.sidePadding,
 		paddingTop: STYLE_VARS.insetPlus,
 		paddingBottom: 14,
-		boxShadow: '0 0px 6px ' + theme.colors.shadow100
+		boxShadow: theme.colors.shadeHeader
 	},
 	headerTitle: {
 		fontSize: 16,

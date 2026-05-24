@@ -94,11 +94,6 @@ const styles = StyleSheet.create((themes) => ({
 		height: 24,
 		borderRadius: 12,
 		backgroundColor: themes.colors.inverse,
-		// deprecated: shadowColor uses platform-native black for consistent shadow rendering
-		shadowColor: '#000',
-		shadowOpacity: 0.18,
-		shadowRadius: 4,
-		shadowOffset: { width: 0, height: 2 },
-		elevation: 3
+		boxShadow: themes.colors.shadeToggleThumb
 	}
 }))

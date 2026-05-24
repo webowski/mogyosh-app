@@ -50,6 +50,6 @@ const styles = StyleSheet.create((theme, rt) => ({
 		padding: 12,
 		backgroundColor: theme.colors.surface,
 		borderRadius: STYLE_VARS.radius_md,
-		boxShadow: '0px 2px 4px ' + theme.colors.shadow100
+		boxShadow: theme.colors.shadeCard
 	}
 }))

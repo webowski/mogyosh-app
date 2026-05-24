@@ -131,7 +131,7 @@ const styles = StyleSheet.create((theme) => ({
 		zIndex: 10,
 		paddingHorizontal: STYLE_VARS.sidePadding,
 		paddingTop: 12,
-		boxShadow: '0 0px 20px ' + theme.colors.shadow150,
+		boxShadow: theme.colors.shadeSwipeSwitchSheet,
 		borderColor: theme.colors.borderLightest,
 		borderWidth: 1
 	},

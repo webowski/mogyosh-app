@@ -225,7 +225,5 @@ const styles = StyleSheet.create((theme, rt) => ({
 		paddingTop: 20,
 		paddingBottom: 24 + STYLE_VARS.navPanelUnderlap,
 		flexDirection: 'row'
-		// backgroundColor: theme.colors.surface,
-		// boxShadow: '0 0px 6px ' + theme.colors.shadow100
 	}
 }))

@@ -43,14 +43,14 @@ const RIPPLE_SIZE = 120
 
 // ─── Styles ──────────────────────────────────────────────────────────────
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create((theme) => ({
 	base: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'center',
 		overflow: 'hidden',
 		position: 'relative',
-		boxShadow: '0px 5px 10px rgba(26, 35, 126, 0.16)'
+		boxShadow: theme.colors.shadeButton
 	},
 	disabled: {
 		opacity: 0.5
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
 	noShadow: {
 		boxShadow: 'none'
 	}
-})
+}))
 
 const getVariantStyles = (
 	theme: any
@@ -310,7 +310,7 @@ export const Button: React.FC<ButtonProps> = ({
 						right: 2,
 						width: 7,
 						height: 7,
-						boxShadow: '0 0px 0px 3px ' + theme.colors.shadow100,
+						boxShadow: theme.colors.shadeButtonIndicator,
 						borderRadius: 999,
 						backgroundColor: theme.colors.primaryLight
 					}}

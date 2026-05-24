@@ -236,7 +236,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		paddingHorizontal: 13,
 		paddingVertical: 13,
 		backgroundColor: theme.colors.surface,
-		boxShadow: '0px 2px 4px ' + theme.colors.shadow100,
+		boxShadow: theme.colors.shadeCard,
 		borderRadius: STYLE_VARS.radius_sm,
 		gap: 8
 	},

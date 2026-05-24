@@ -150,7 +150,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		borderTopLeftRadius: STYLE_VARS.radius_3xl,
 		borderTopRightRadius: STYLE_VARS.radius_3xl,
 		borderCurve: 'continuous',
-		boxShadow: '0 0px 32px ' + theme.colors.shadow150,
+		boxShadow: theme.colors.shadeNavPanelWrap,
 		marginTop: -1 * STYLE_VARS.radius_3xl
 	},
 	NavPanel: {
@@ -165,7 +165,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		borderTopLeftRadius: STYLE_VARS.radius_3xl,
 		borderTopRightRadius: STYLE_VARS.radius_3xl,
 		borderCurve: 'continuous',
-		boxShadow: '0 0px 4px ' + theme.colors.shadow150
+		boxShadow: theme.colors.shadeNavPanel
 	}
 }))
 

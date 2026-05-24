@@ -268,7 +268,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 	},
 	containerShadow: {
 		...StyleSheet.absoluteFillObject,
-		boxShadow: '0 0px 40px ' + theme.colors.shadow,
+		boxShadow: theme.colors.shadeDrawer,
 		backgroundColor: theme.colors.surface
 	},
 	container: {
