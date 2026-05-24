@@ -18,6 +18,7 @@ import {
 import { useTaskStore } from '@/shared/model/taskStore'
 import { STYLE_VARS } from '@/shared/styles/common'
 import { formStyles } from '@/shared/styles/form'
+import { textStyles } from '@/shared/styles/text'
 import { Button } from '@/shared/ui/Button'
 import RadioButton from '@/shared/ui/RadioButton'
 import { TodoListEditor } from './TodoListEditor'
@@ -162,7 +163,7 @@ export function TaskCreateForm({ onClose }: Props) {
 				}}
 				contentContainerStyle={{
 					flex: 1,
-					gap: 12,
+					gap: 18,
 					paddingVertical: STYLE_VARS.sidePadding,
 					paddingHorizontal: STYLE_VARS.sidePadding
 				}}
@@ -174,7 +175,10 @@ export function TaskCreateForm({ onClose }: Props) {
 						name='title'
 						render={({ field: { onChange, onBlur, value } }) => (
 							<TextInput
-								style={[styles.input, errors.title && styles.input__error]}
+								style={[
+									styles.InputHeading,
+									errors.title && styles.input__error
+								]}
 								placeholder='Название задачи'
 								placeholderTextColor={theme.colors.minor}
 								value={value}
@@ -182,6 +186,7 @@ export function TaskCreateForm({ onClose }: Props) {
 								onBlur={onBlur}
 								returnKeyType='next'
 								autoFocus
+								multiline
 							/>
 						)}
 					/>
@@ -258,6 +263,7 @@ export function TaskCreateForm({ onClose }: Props) {
 				</View>
 
 				<View style={styles.fieldGroup}>
+					<Text style={textStyles.heading5}>Task details</Text>
 					<TodoListEditor items={subtasks} onChange={setSubtasks} />
 				</View>
 			</ScrollView>
@@ -373,6 +379,19 @@ const styles = StyleSheet.create((theme) => ({
 		color: theme.colors.minor
 	},
 
+	InputHeading: {
+		// backgroundColor: theme.colors.surface,
+		// borderWidth: 1,
+		// borderColor: theme.colors.border,
+		// borderRadius: STYLE_VARS.radius_sm,
+		// paddingHorizontal: theme.spacing.md,
+		// paddingVertical: theme.spacing.sm,
+		fontSize: 22,
+		fontWeight: 600,
+		color: theme.colors.major,
+		outline: 'none'
+	},
+
 	input: {
 		backgroundColor: theme.colors.surface,
 		borderWidth: 1,
@@ -381,7 +400,8 @@ const styles = StyleSheet.create((theme) => ({
 		paddingHorizontal: theme.spacing.md,
 		paddingVertical: theme.spacing.sm,
 		fontSize: 16,
-		color: theme.colors.major
+		color: theme.colors.major,
+		outline: 'none'
 	},
 	input__error: {
 		borderColor: theme.colors.danger
