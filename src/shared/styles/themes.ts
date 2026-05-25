@@ -67,11 +67,15 @@ export const lightTheme = {
 
 		major: 'hsl(224, 15%, 30%)',
 		minor: 'hsl(225, 22%, 55%)', // Secondary text (subtitles, placeholders, icons)
+
 		mutedTextDark: 'hsl(225, 28%, 68%)',
 		mutedText: 'hsl(225, 36%, 75%)',
 		mutedLightText: 'hsl(225, 36%, 82%)',
 		mutedLighterText: 'hsl(225, 36%, 87%)',
 		mutedLightestText: 'hsl(225, 37%, 93%)',
+
+		mutedLightFill: 'hsl(225, 37%, 95%)',
+
 		buttonText: 'hsl(0, 0%, 100%)',
 		success: 'hsl(148, 100%, 66%)',
 		danger: 'hsl(355, 100%, 75%)',
@@ -85,8 +89,8 @@ export const lightTheme = {
 		surface: 'hsl(0, 0%, 100%)',
 		surfaceAlter: 'hsl(228, 56%, 98%)',
 
-		border: 'hsl(240, 5%, 79%)',
-		borderLight: 'hsl(240, 5%, 92%)',
+		border: 'hsl(225, 35%, 79%)',
+		borderLight: 'hsl(225, 35%, 92%)',
 		borderLightest: 'hsl(225, 37%, 96%)',
 
 		// table

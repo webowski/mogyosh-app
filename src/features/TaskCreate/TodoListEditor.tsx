@@ -8,6 +8,7 @@ import {
 } from 'react-native-enriched-markdown'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
+import { STYLE_VARS } from '@/shared/styles/common'
 import Checkbox from '@/shared/ui/Checkbox'
 
 interface TodoItem {
@@ -138,7 +139,8 @@ export function TodoListEditor({ items, onChange }: Props) {
 							// @ts-ignore - web-only inline styles
 							style={{
 								flex: 1,
-								fontSize: 15,
+								fontSize: 16,
+								fontWeight: 500,
 								color: theme.colors.major,
 								paddingTop: theme.spacing.xs,
 								paddingBottom: theme.spacing.xs,
@@ -193,11 +195,12 @@ export function TodoListEditor({ items, onChange }: Props) {
 					<Checkbox checked={false} style={{ marginTop: 3 }} />
 				</View>
 			))}
+
 			<Pressable
 				style={styles.addButton}
 				onPress={() => addItemAfter(items.length - 1)}
 			>
-				<MaterialIcons name='add' size={18} color={theme.colors.minor} />
+				<MaterialIcons name='add' size={24} color={theme.colors.minor} />
 			</Pressable>
 		</View>
 	)
@@ -215,15 +218,18 @@ const styles = StyleSheet.create((theme) => ({
 	input: {
 		flex: 1,
 		fontSize: 16,
+		fontWeight: 600,
 		color: theme.colors.major,
 		paddingVertical: theme.spacing.xs,
 		outline: 'none'
 	},
 	addButton: {
+		marginTop: 10,
 		flexDirection: 'row',
 		alignItems: 'center',
+		justifyContent: 'center',
 		paddingVertical: theme.spacing.xs,
-		paddingLeft: 26, // align with input (18px checkbox + 8px gap)
-		opacity: 0.5
+		backgroundColor: theme.colors.mutedLightFill,
+		borderRadius: STYLE_VARS.radius_sm
 	}
 }))

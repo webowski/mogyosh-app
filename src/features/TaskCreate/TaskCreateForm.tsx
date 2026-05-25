@@ -16,7 +16,7 @@ import {
 	useCreateTask
 } from '@/features/TaskList'
 import { useTaskStore } from '@/shared/model/taskStore'
-import { STYLE_VARS } from '@/shared/styles/common'
+import { commonStyles, STYLE_VARS } from '@/shared/styles/common'
 import { formStyles } from '@/shared/styles/form'
 import { textStyles } from '@/shared/styles/text'
 import { Button } from '@/shared/ui/Button'
@@ -163,9 +163,10 @@ export function TaskCreateForm({ onClose }: Props) {
 					flex: 1
 				}}
 				contentContainerStyle={{
-					flex: 1,
 					gap: 18,
-					paddingVertical: STYLE_VARS.sidePadding,
+					paddingTop: STYLE_VARS.sidePadding,
+					paddingBottom:
+						STYLE_VARS.sidePadding + STYLE_VARS.navPanelUnderlap + 12,
 					paddingHorizontal: STYLE_VARS.sidePadding
 				}}
 				keyboardShouldPersistTaps='handled'
@@ -258,7 +259,9 @@ export function TaskCreateForm({ onClose }: Props) {
 				</View>
 
 				<View style={styles.fieldGroup}>
-					<Text style={textStyles.heading5}>Task details</Text>
+					<View style={commonStyles.sectionHeader}>
+						<Text style={textStyles.heading5}>Task details</Text>
+					</View>
 					<TodoListEditor items={subtasks} onChange={setSubtasks} />
 				</View>
 			</ScrollView>
