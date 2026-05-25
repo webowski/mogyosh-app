@@ -176,11 +176,8 @@ export function TaskCreateForm({ onClose }: Props) {
 						name='title'
 						render={({ field: { onChange, onBlur, value } }) => (
 							<Textarea
-								style={[
-									styles.InputHeading,
-									errors.title ? styles.input__error : {}
-								]}
-								placeholder='Название задачи'
+								style={[styles.InputHeading]}
+								placeholder={t('forms.taskName')}
 								value={value}
 								onChange={onChange}
 								onBlur={onBlur}
@@ -382,7 +379,13 @@ const styles = StyleSheet.create((theme) => ({
 		fontWeight: 700,
 		padding: 0,
 		color: theme.colors.major,
-		outline: 'none'
+		outline: 'none',
+		backgroundColor: 'transparent',
+		border: 'none'
+	},
+
+	InputHeading_error: {
+		backgroundColor: theme.colors.dangerFill
 	},
 
 	input: {

@@ -52,5 +52,8 @@
 	"timeFormat": {
 		"12": "12-hour",
 		"24": "24-hour"
+	},
+	"forms": {
+		"taskName": "Task name"
 	}
 }

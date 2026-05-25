@@ -74,6 +74,7 @@ export const lightTheme = {
 		buttonText: 'hsl(0, 0%, 100%)',
 		success: 'hsl(148, 100%, 66%)',
 		danger: 'hsl(355, 100%, 75%)',
+		dangerFill: 'hsl(355, 100%, 94%)',
 		inverse: 'hsl(0, 0%, 100%)',
 		currentFill: 'hsl(225, 100%, 92%)',
 		currentText: 'hsl(225, 100%, 70%)',

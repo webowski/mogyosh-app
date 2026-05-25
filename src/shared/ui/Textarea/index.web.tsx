@@ -1,17 +1,23 @@
+import { StyleProp, ViewStyle } from 'react-native'
+import { useUnistyles } from 'react-native-unistyles'
+import { getWebProps } from 'react-native-unistyles/web'
 import TextareaAutosize from 'react-textarea-autosize'
 
 type TextareaProps = React.ComponentProps<typeof TextareaAutosize> & {
 	onChange?: any
-	style?: React.CSSProperties
+	style?: StyleProp<ViewStyle>
 }
 
 export default function Textarea({ onChange, style, ...props }: TextareaProps) {
-	const webStyle = Array.isArray(style)
-		? style.reduce(
-				(accumulator, styleBlock) => ({ ...accumulator, ...styleBlock }),
-				{}
-			)
-		: style
+	const { theme } = useUnistyles()
+	const { className } = getWebProps(style as any)
 
-	return <TextareaAutosize style={webStyle} onChange={onChange} {...props} />
+	return (
+		<TextareaAutosize
+			style={{ '--placeholder-color': theme.colors.mutedText } as any}
+			className={className}
+			onChange={onChange}
+			{...props}
+		/>
+	)
 }

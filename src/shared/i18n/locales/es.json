@@ -52,5 +52,8 @@
 	"timeFormat": {
 		"12": "12 horas",
 		"24": "24 horas"
+	},
+	"forms": {
+		"taskName": "Nombre de tarea"
 	}
 }
