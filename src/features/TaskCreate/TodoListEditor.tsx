@@ -61,19 +61,23 @@ export function TodoListEditor({ items, onChange }: Props) {
 		}, 50)
 	}
 
-	const removeItem = (index: number) => {
-		if (items.length <= 1) {
-			onChange([{ ...items[0], text: '' }])
-			return
-		}
-		const next = items.filter((_, i) => i !== index)
-		onChange(next)
+	const removeItem = useCallback(
+		(index: number) => {
+			if (items.length <= 1) {
+				onChange([{ ...items[0], text: '' }])
+				return
+			}
+			const next = items.filter((_, i) => i !== index)
+			onChange(next)
 
-		const focusIndex = Math.max(0, index - 1)
-		setTimeout(() => {
-			focusItem(next[focusIndex].id)
-		}, 50)
-	}
+			const focusIndex = Math.max(0, index - 1)
+			setTimeout(() => {
+				focusItem(next[focusIndex].id)
+			}, 50)
+		},
+		// eslint-disable-next-line
+		[]
+	)
 
 	const updateItem = (id: string, text: string) => {
 		const itemIndex = items.findIndex((item) => item.id === id)
