@@ -380,6 +380,7 @@ const styles = StyleSheet.create((theme) => ({
 	InputHeading: {
 		fontSize: 24,
 		fontWeight: 700,
+		padding: 0,
 		color: theme.colors.major,
 		outline: 'none'
 	},
