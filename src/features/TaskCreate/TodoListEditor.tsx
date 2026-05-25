@@ -153,23 +153,23 @@ export function TodoListEditor({ items, onChange }: Props) {
 						<EnrichedMarkdownTextInput
 							ref={getRefForItem(item.id)}
 							style={styles.input}
-							defaultValue={item.text}
-							placeholderTextColor={theme.colors.minor}
-							// placeholder={index === 0 ? 'Список задач...' : ''}
-							scrollEnabled={false}
-							multiline
+							// defaultValue={item.text}
+							// placeholderTextColor={theme.colors.minor}
+							// // placeholder={index === 0 ? 'Список задач...' : ''}
+							// scrollEnabled={false}
+							// multiline
 							// onChangeMarkdown={(markdown) => updateItem(item.id, markdown)}
-							onChangeText={(text) => {
-								if (text.includes('\n')) {
-									getRefForItem(item.id).current?.setValue(
-										items.find((i) => i.id === item.id)?.text ?? ''
-									)
-									addItemAfter(index)
-								}
-							}}
-							onChangeMarkdown={(markdown) => {
-								updateItem(item.id, markdown)
-							}}
+							// onChangeText={(text) => {
+							// 	if (text.includes('\n')) {
+							// 		getRefForItem(item.id).current?.setValue(
+							// 			items.find((i) => i.id === item.id)?.text ?? ''
+							// 		)
+							// 		addItemAfter(index)
+							// 	}
+							// }}
+							// onChangeMarkdown={(markdown) => {
+							// 	updateItem(item.id, markdown)
+							// }}
 							// onChangeMarkdown={(markdown) => {
 							// 	if (markdown.includes('\n')) {
 							// 		const cleanText = markdown.replace(/\n/g, '')
@@ -218,7 +218,7 @@ const styles = StyleSheet.create((theme) => ({
 	input: {
 		flex: 1,
 		fontSize: 16,
-		fontWeight: 600,
+		fontWeight: '600',
 		color: theme.colors.major,
 		paddingVertical: theme.spacing.xs,
 		outline: 'none'
