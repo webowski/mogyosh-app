@@ -21,6 +21,7 @@ import { formStyles } from '@/shared/styles/form'
 import { textStyles } from '@/shared/styles/text'
 import { Button } from '@/shared/ui/Button'
 import RadioButton from '@/shared/ui/RadioButton'
+import Textarea from '@/shared/ui/Textarea'
 import { TodoListEditor } from './TodoListEditor'
 
 const schema = z.object({
@@ -174,19 +175,16 @@ export function TaskCreateForm({ onClose }: Props) {
 						control={control}
 						name='title'
 						render={({ field: { onChange, onBlur, value } }) => (
-							<TextInput
+							<Textarea
 								style={[
 									styles.InputHeading,
-									errors.title && styles.input__error
+									errors.title ? styles.input__error : {}
 								]}
 								placeholder='Название задачи'
-								placeholderTextColor={theme.colors.minor}
 								value={value}
-								onChangeText={onChange}
+								onChange={onChange}
 								onBlur={onBlur}
-								returnKeyType='next'
 								autoFocus
-								multiline
 							/>
 						)}
 					/>
@@ -380,14 +378,8 @@ const styles = StyleSheet.create((theme) => ({
 	},
 
 	InputHeading: {
-		// backgroundColor: theme.colors.surface,
-		// borderWidth: 1,
-		// borderColor: theme.colors.border,
-		// borderRadius: STYLE_VARS.radius_sm,
-		// paddingHorizontal: theme.spacing.md,
-		// paddingVertical: theme.spacing.sm,
-		fontSize: 22,
-		fontWeight: 600,
+		fontSize: 24,
+		fontWeight: 700,
 		color: theme.colors.major,
 		outline: 'none'
 	},
