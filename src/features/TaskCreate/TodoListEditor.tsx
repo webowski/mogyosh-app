@@ -38,11 +38,23 @@ export function TodoListEditor({ items, onChange }: Props) {
 		},
 		[]
 	)
+	const moveCursorToEnd = (element: HTMLDivElement) => {
+		const range = document.createRange()
+		const selection = window.getSelection()
+		range.selectNodeContents(element)
+		range.collapse(false)
+		selection?.removeAllRanges()
+		selection?.addRange(range)
+	}
 
 	const focusItem = useCallback(
 		(id: string) => {
 			if (Platform.OS === 'web') {
-				webInputRefs.current.get(id)?.focus()
+				const element = webInputRefs.current.get(id)
+				if (element) {
+					element.focus()
+					moveCursorToEnd(element)
+				}
 			} else {
 				getRefForItem(id).current?.focus()
 			}
@@ -75,8 +87,7 @@ export function TodoListEditor({ items, onChange }: Props) {
 				focusItem(next[focusIndex].id)
 			}, 50)
 		},
-		// eslint-disable-next-line
-		[]
+		[items, onChange, focusItem]
 	)
 
 	const updateItem = (id: string, text: string) => {
@@ -118,7 +129,7 @@ export function TodoListEditor({ items, onChange }: Props) {
 									addItemAfter(index)
 								} else if (event.key === 'Backspace') {
 									const text = (event.currentTarget as HTMLDivElement).innerText
-									if (text === '') {
+									if (text === '' || text === '\n') {
 										event.preventDefault()
 										removeItem(index)
 									}
