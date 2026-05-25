@@ -103,7 +103,7 @@ export function TodoListEditor({ items, onChange }: Props) {
 							}}
 							contentEditable
 							suppressContentEditableWarning
-							data-placeholder={index === 0 ? 'Список задач...' : ''}
+							// data-placeholder={index === 0 ? 'Список задач...' : ''}
 							onInput={(event) => {
 								const text = (event.currentTarget as HTMLDivElement).innerText
 								updateItem(item.id, text)
@@ -139,7 +139,7 @@ export function TodoListEditor({ items, onChange }: Props) {
 							defaultValue={item.text}
 							onChangeMarkdown={(markdown) => updateItem(item.id, markdown)}
 							placeholderTextColor={theme.colors.minor}
-							placeholder={index === 0 ? 'Список задач...' : ''}
+							// placeholder={index === 0 ? 'Список задач...' : ''}
 							scrollEnabled={false}
 							multiline
 						/>
@@ -153,7 +153,7 @@ export function TodoListEditor({ items, onChange }: Props) {
 							/>
 						</Pressable>
 					)}
-					<Checkbox checked={false} />
+					<Checkbox checked={false} style={{ marginTop: 3 }} />
 				</View>
 			))}
 			<Pressable
@@ -172,12 +172,12 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	row: {
 		flexDirection: 'row',
-		alignItems: 'center',
+		alignItems: 'flex-start',
 		gap: theme.spacing.sm
 	},
 	input: {
 		flex: 1,
-		fontSize: 15,
+		fontSize: 16,
 		color: theme.colors.major,
 		paddingVertical: theme.spacing.xs,
 		outline: 'none'
