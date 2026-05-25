@@ -144,7 +144,7 @@ export function TodoListEditor({ items, onChange }: Props) {
 							multiline
 						/>
 					)}
-					{items.length > 1 && (
+					{/* {items.length > 1 && (
 						<Pressable onPress={() => removeItem(index)} hitSlop={8}>
 							<MaterialIcons
 								name='close'
@@ -152,7 +152,7 @@ export function TodoListEditor({ items, onChange }: Props) {
 								color={theme.colors.minor}
 							/>
 						</Pressable>
-					)}
+					)} */}
 					<Checkbox checked={false} style={{ marginTop: 3 }} />
 				</View>
 			))}
