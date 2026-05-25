@@ -153,7 +153,7 @@ export default function Drawer() {
 								<MaterialIcons
 									name='info-outline'
 									size={26}
-									color={theme.colors.minor}
+									color={theme.colors.mutedTextDark}
 								/>
 								<Text style={styles.menuItemText}>{t('screen.About')}</Text>
 							</Pressable>
@@ -167,7 +167,7 @@ export default function Drawer() {
 								<MaterialIcons
 									name='alternate-email'
 									size={26}
-									color={theme.colors.minor}
+									color={theme.colors.mutedTextDark}
 								/>
 								<Text style={styles.menuItemText}>{t('screen.Account')}</Text>
 							</Pressable>
@@ -181,7 +181,7 @@ export default function Drawer() {
 								<MaterialIcons
 									name='settings'
 									size={26}
-									color={theme.colors.minor}
+									color={theme.colors.mutedTextDark}
 								/>
 								<Text style={styles.menuItemText}>{t('screen.Settings')}</Text>
 							</Pressable>
@@ -256,7 +256,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		marginTop: 20,
 		marginLeft: 32,
 		fontSize: 12,
-		color: theme.colors.minor
+		color: theme.colors.mutedTextDark
 	},
 
 	backdrop: {

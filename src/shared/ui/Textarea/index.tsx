@@ -17,7 +17,7 @@ export default function Textarea({ onChange, style, ...props }: TextareaProps) {
 			onChangeText={onChange}
 			returnKeyType='next'
 			scrollEnabled={false}
-			placeholderTextColor={theme.colors.minor}
+			placeholderTextColor={theme.colors.mutedText}
 		/>
 	)
 }

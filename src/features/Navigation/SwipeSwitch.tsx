@@ -486,7 +486,7 @@ const styles = StyleSheet.create((theme) => ({
 		backgroundColor: theme.colors.primary
 	},
 	dotInactive: {
-		backgroundColor: theme.colors.minor
+		backgroundColor: theme.colors.mutedTextDark
 	}
 }))
 

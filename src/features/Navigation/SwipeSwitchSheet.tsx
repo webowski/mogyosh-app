@@ -139,7 +139,7 @@ const styles = StyleSheet.create((theme) => ({
 		width: 36,
 		height: 4,
 		borderRadius: 2,
-		backgroundColor: theme.colors.minor,
+		backgroundColor: theme.colors.mutedTextDark,
 		alignSelf: 'center',
 		marginBottom: 12
 	},

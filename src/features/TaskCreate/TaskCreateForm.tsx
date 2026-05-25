@@ -192,7 +192,7 @@ export function TaskCreateForm({ onClose }: Props) {
 
 				<View style={{}}>
 					<View style={[formStyles.formRow, formStyles.formRow_first]}>
-						<Text style={{ marginBottom: 0 }}>Категория</Text>
+						<Text style={textStyles.label}>Категория</Text>
 						<Button
 							variant='chip'
 							size='chip'
@@ -206,19 +206,19 @@ export function TaskCreateForm({ onClose }: Props) {
 						</Button>
 					</View>
 					<View style={[formStyles.formRow]}>
-						<Text style={{ marginBottom: 0 }}>Метки</Text>
+						<Text style={textStyles.label}>Метки</Text>
 						<Button variant='chip' size='chip' arrow>
 							Без метки
 						</Button>
 					</View>
 					<View style={[formStyles.formRow]}>
-						<Text style={{ marginBottom: 0 }}>Повтор</Text>
+						<Text style={textStyles.label}>Повтор</Text>
 						<Button variant='chip' size='chip' arrow>
 							Вт, Чт, Сб
 						</Button>
 					</View>
 					<View style={[formStyles.formRow, formStyles.formRow_last]}>
-						<Text style={{ marginBottom: 0 }}>Уведомление</Text>
+						<Text style={textStyles.label}>Уведомление</Text>
 						<Button variant='chip' size='chip' arrow>
 							за 1 час
 						</Button>
@@ -363,19 +363,20 @@ export function TaskCreateForm({ onClose }: Props) {
 	)
 }
 
-const styles = StyleSheet.create((theme) => ({
+const styles = StyleSheet.create((theme, rt) => ({
 	fieldGroup: {
 		gap: theme.spacing.xs
 	},
 
 	label: {
-		fontSize: 14,
+		fontSize: 14 * rt.fontScale,
 		fontWeight: '500',
 		color: theme.colors.minor
 	},
 
 	InputHeading: {
 		fontSize: 24,
+		lineHeight: 24 * 1.1,
 		fontWeight: 700,
 		padding: 0,
 		color: theme.colors.major,

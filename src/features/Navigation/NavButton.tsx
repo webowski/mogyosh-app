@@ -33,7 +33,10 @@ export default function NavButton({
 		>
 			{({ pressed }) =>
 				React.cloneElement(icon, {
-					fill: isFocused || pressed ? theme.colors.primary : theme.colors.minor
+					fill:
+						isFocused || pressed
+							? theme.colors.primary
+							: theme.colors.mutedTextDark
 				} as any)
 			}
 		</Pressable>

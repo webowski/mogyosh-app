@@ -29,6 +29,11 @@ export const textStyles = StyleSheet.create((theme, rt) => ({
 
 	// color: #BDC6E0;
 
+	label: {
+		fontWeight: 600,
+		color: theme.colors.major
+	},
+
 	textLarge: {
 		fontSize: rt.fontScale * 18,
 		color: theme.colors.major

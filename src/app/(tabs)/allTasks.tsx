@@ -124,7 +124,7 @@ export default function AllTasksScreen() {
 					<MaterialIcons
 						name='search'
 						size={20}
-						color={theme.colors.minor}
+						color={theme.colors.mutedTextDark}
 						style={{
 							position: 'absolute',
 							left: 12,
@@ -137,7 +137,7 @@ export default function AllTasksScreen() {
 						value={searchQuery}
 						onChangeText={setSearchQuery}
 						placeholder='Поиск'
-						placeholderTextColor={theme.colors.minor}
+						placeholderTextColor={theme.colors.mutedTextDark}
 						style={[formStyles.input, { paddingLeft: 38 }]}
 					/>
 				</View>
@@ -187,7 +187,7 @@ export default function AllTasksScreen() {
 				detents={['auto']}
 				cornerRadius={STYLE_VARS.radius_2xl}
 				backgroundColor={theme.colors.surface}
-				grabberOptions={{ color: theme.colors.minor }}
+				grabberOptions={{ color: theme.colors.mutedTextDark }}
 			>
 				<View
 					style={{
