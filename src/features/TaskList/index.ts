@@ -10,6 +10,7 @@ export { useTasksGrouped } from './model/useTasksGrouped'
 export { useUpdateTaskState } from './model/useUpdateTaskState'
 
 export { useSubitems } from './model/useSubitems'
+export { useUpdateSubitemState } from './model/useUpdateSubitemState'
 
 export { useCategories } from './model/useCategories'
 export { useCreateCategory } from './model/useCreateCategory'

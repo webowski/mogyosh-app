@@ -82,7 +82,6 @@ const updateSubitemState = async (
 			})
 			.eq('subitem_id', subitemId)
 
-		console.log({ updateSubitemState: updateError })
 		if (updateError) throw updateError
 	} else {
 		// Insert new state record
@@ -93,7 +92,7 @@ const updateSubitemState = async (
 				state,
 				state_date: new Date().toISOString()
 			})
-		console.log({ newSubitemState: insertError })
+
 		if (insertError) throw insertError
 	}
 
@@ -104,7 +103,6 @@ const updateSubitemState = async (
 		.eq('id', subitemId)
 		.single()
 
-	console.log({ fetchUpdateSubitemState: error })
 	if (error) throw error
 	return makeSubitemObject(data)
 }

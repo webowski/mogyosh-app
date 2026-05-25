@@ -1,8 +1,11 @@
 import { ActivityIndicator, Text, View } from 'react-native'
 
-import { useSubitems, useTaskById } from '@/features/TaskList'
+import {
+	useSubitems,
+	useTaskById,
+	useUpdateSubitemState
+} from '@/features/TaskList'
 import { ChecklistItem } from '@/features/TaskList/ChecklistItem'
-import { useUpdateTaskState } from '@/features/TaskList/model/useUpdateTaskState'
 import { useTaskStore } from '@/shared/model/taskStore'
 import { commonStyles } from '@/shared/styles/common'
 import ScrollBox from '@/shared/ui/ScrollBox'
@@ -15,10 +18,10 @@ export default function TaskScreen() {
 	const { data: subitems, isLoading: isLoadingSubitems } =
 		useSubitems(selectedTaskId)
 
-	const updateTaskState = useUpdateTaskState()
+	const updateSubitemState = useUpdateSubitemState()
 
 	const handleToggleSubitem = (taskId: string, completed: boolean) => {
-		updateTaskState.mutate({
+		updateSubitemState.mutate({
 			taskId,
 			state: completed ? 'done' : 'active'
 		})
