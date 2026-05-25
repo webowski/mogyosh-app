@@ -131,20 +131,6 @@ export const countTasksByDay = (
 	return countByDate
 }
 
-/**
- * Get subtasks from a list of tasks
- */
-export const getSubtasksFromList = (
-	tasks: TaskEntity[],
-	parentTaskId: string
-) => {
-	return tasks.filter((task) => {
-		// Assuming subtasks have parent_id or are linked via schedules
-		// This may need adjustment based on your actual data structure
-		return task.schedules?.some((s) => s.id === parentTaskId) || false
-	})
-}
-
 export const isByTime = (task: TaskEntity): boolean => {
 	return typeof task.schedules?.[0]?.start_time === 'string'
 }

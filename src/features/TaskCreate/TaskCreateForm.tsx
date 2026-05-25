@@ -107,9 +107,9 @@ export function TaskCreateForm({ onClose }: Props) {
 		}
 	}
 
-	const [subtasks, setSubtasks] = useState<{ id: string; text: string }[]>([
-		{ id: 'initial', text: '' }
-	])
+	const [subitemsChecklist, setSubitemsChecklist] = useState<
+		{ id: string; text: string }[]
+	>([{ id: 'initial', text: '' }])
 
 	const {
 		control,
@@ -141,12 +141,14 @@ export function TaskCreateForm({ onClose }: Props) {
 			category_id: selectedCategoryId
 		})
 
-		const filledSubtasks = subtasks.filter((subtask) => subtask.text.trim())
-		if (filledSubtasks.length > 0 && parentTask.id) {
+		const filledSubitemsChecklist = subitemsChecklist.filter((checklistItem) =>
+			checklistItem.text.trim()
+		)
+		if (filledSubitemsChecklist.length > 0 && parentTask.id) {
 			await Promise.all(
-				filledSubtasks.map((subtask) =>
+				filledSubitemsChecklist.map((checklistItem) =>
 					createTask.mutateAsync({
-						info: subtask.text,
+						info: checklistItem.text,
 						parent_id: parentTask.id
 					})
 				)
@@ -262,7 +264,10 @@ export function TaskCreateForm({ onClose }: Props) {
 					<View style={commonStyles.sectionHeader}>
 						<Text style={textStyles.heading5}>Task details</Text>
 					</View>
-					<TodoListEditor items={subtasks} onChange={setSubtasks} />
+					<TodoListEditor
+						items={subitemsChecklist}
+						onChange={setSubitemsChecklist}
+					/>
 				</View>
 			</ScrollView>
 

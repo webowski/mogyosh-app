@@ -1,6 +1,6 @@
 import { ActivityIndicator, Text, View } from 'react-native'
 
-import { useTaskById, useTaskSubtasks } from '@/features/TaskList'
+import { useSubitems, useTaskById } from '@/features/TaskList'
 import { ChecklistItem } from '@/features/TaskList/ChecklistItem'
 import { useUpdateTaskState } from '@/features/TaskList/model/useUpdateTaskState'
 import { useTaskStore } from '@/shared/model/taskStore'
@@ -12,12 +12,12 @@ export default function TaskScreen() {
 
 	const { data, isLoading, error } = useTaskById(selectedTaskId)
 
-	const { data: subtasks, isLoading: isLoadingSubtasks } =
-		useTaskSubtasks(selectedTaskId)
+	const { data: subitems, isLoading: isLoadingSubitems } =
+		useSubitems(selectedTaskId)
 
 	const updateTaskState = useUpdateTaskState()
 
-	const handleToggleSubtask = (taskId: string, completed: boolean) => {
+	const handleToggleSubitem = (taskId: string, completed: boolean) => {
 		updateTaskState.mutate({
 			taskId,
 			state: completed ? 'done' : 'active'
@@ -25,7 +25,7 @@ export default function TaskScreen() {
 	}
 
 	// Show loading state when waiting for task data
-	if (isLoading || isLoadingSubtasks)
+	if (isLoading || isLoadingSubitems)
 		return (
 			<View style={commonStyles.mainArea}>
 				<ActivityIndicator />
@@ -53,12 +53,12 @@ export default function TaskScreen() {
 
 	return (
 		<ScrollBox>
-			{subtasks?.map((subtask) => (
+			{subitems?.map((subitem) => (
 				<ChecklistItem
-					key={subtask.id}
-					checked={subtask.state === 'done'}
-					text={subtask.info}
-					onToggle={(value) => handleToggleSubtask(subtask.id, value)}
+					key={subitem.id}
+					checked={subitem.state === 'done'}
+					text={subitem.info}
+					onToggle={(value) => handleToggleSubitem(subitem.id, value)}
 				/>
 			))}
 		</ScrollBox>

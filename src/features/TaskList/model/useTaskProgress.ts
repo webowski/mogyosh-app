@@ -1,13 +1,13 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { TaskId } from '@/shared/domain/ids'
-import { TaskEntity } from '@/shared/domain/task'
-import { taskAPI } from '../repository/task.api'
+import { SubitemEntity } from '@/shared/domain/task'
+import { subitemAPI } from '../repository/subitem.api'
 
 /**
- * Get subtasks and calculate completion progress for a task
+ * Get subitems and calculate completion progress for a task
  * @param taskId - Parent task ID
- * @returns Object with subtasks, completed count, total count, and progress (0-1)
+ * @returns Object with subitems, completed count, total count, and progress (0-1)
  */
 export const useTaskProgress = (taskId: TaskId | null) => {
 	return useQuery({
@@ -15,23 +15,23 @@ export const useTaskProgress = (taskId: TaskId | null) => {
 		queryFn: async () => {
 			if (!taskId) {
 				return {
-					subtasks: [],
+					subitems: [],
 					completedCount: 0,
 					totalCount: 0,
 					progress: 0
 				}
 			}
 
-			const subtasks = await taskAPI.getTaskSubtasks(taskId)
+			const subitems = await subitemAPI.getSubitems(taskId)
 
-			const completedCount = subtasks.filter((task) => {
-				return task.state === 'done'
+			const completedCount = subitems.filter((subitem) => {
+				return subitem.state === 'done'
 			}).length
-			const totalCount = subtasks.length
+			const totalCount = subitems.length
 			const progress = totalCount > 0 ? completedCount / totalCount : 0
 
 			return {
-				subtasks,
+				subitems,
 				completedCount,
 				totalCount,
 				progress
@@ -42,16 +42,18 @@ export const useTaskProgress = (taskId: TaskId | null) => {
 }
 
 /**
- * Calculate progress from subtasks array directly
- * Useful when you already have subtasks data
+ * Calculate progress from subitems array directly
+ * Useful when you already have subitems data
  */
-export const calculateProgress = (subtasks: TaskEntity[]) => {
-	if (subtasks.length === 0) {
+export const calculateProgress = (subitems: SubitemEntity[]) => {
+	if (subitems.length === 0) {
 		return { completedCount: 0, totalCount: 0, progress: 0 }
 	}
 
-	const completedCount = subtasks.filter((task) => task.state === 'done').length
-	const totalCount = subtasks.length
+	const completedCount = subitems.filter(
+		(subitem) => subitem.state === 'done'
+	).length
+	const totalCount = subitems.length
 	const progress = completedCount / totalCount
 
 	return { completedCount, totalCount, progress }

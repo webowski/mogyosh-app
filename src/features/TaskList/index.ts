@@ -7,8 +7,9 @@ export { useTasksByDate } from './model/useTasksByDate'
 export { useTasksCountByDay } from './model/useTasksCountByDay'
 export { useTasksCountByPeriod } from './model/useTasksCountByPeriod'
 export { useTasksGrouped } from './model/useTasksGrouped'
-export { useTaskSubtasks } from './model/useTaskSubtasks'
 export { useUpdateTaskState } from './model/useUpdateTaskState'
+
+export { useSubitems } from './model/useSubitems'
 
 export { useCategories } from './model/useCategories'
 export { useCreateCategory } from './model/useCreateCategory'

@@ -25,13 +25,13 @@ export const useTasksByCategory = () => {
 /**
  * Group tasks by categories and subcategories
  * Returns a hierarchical structure of categories with their tasks
- * Includes all tasks without parent_id (root tasks and tasks with subtasks)
+ * Includes all tasks without parent_id (root tasks and tasks with subitems)
  */
 const groupTasksByCategory = (
 	tasks: TaskEntity[],
 	categories: CategoryEntity[]
 ): TaskCategoryGroupEntity[] => {
-	// Filter tasks without parent_id (includes root tasks and tasks that have subtasks)
+	// Filter tasks without parent_id (includes root tasks and tasks that have subitems)
 	const tasksWithoutParent = tasks.filter(
 		(task) => task.parent_id === null || task.parent_id === undefined
 	)

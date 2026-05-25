@@ -1,24 +1,24 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { TaskId } from '@/shared/domain/ids'
-import { TaskEntity, TaskState } from '@/shared/domain/task'
-import { taskAPI } from '../repository/task.api'
+import { SubitemId } from '@/shared/domain/ids'
+import { SubitemEntity, SubitemState } from '@/shared/domain/task'
+import { subitemAPI } from '../repository/subitem.api'
 
-type TaskStateMutationParams = {
-	taskId: TaskId
-	state: TaskState
+type SubitemStateMutationParams = {
+	taskId: SubitemId
+	state: SubitemState
 }
 
 /**
  * Update task state mutation
  * Used for toggling subitem completion status
  */
-export const useUpdateTaskState = () => {
+export const useUpdateSubitemState = () => {
 	const queryClient = useQueryClient()
 
 	return useMutation({
-		mutationFn: async ({ taskId, state }: TaskStateMutationParams) => {
-			return await taskAPI.updateTaskState(taskId, state)
+		mutationFn: async ({ taskId, state }: SubitemStateMutationParams) => {
+			return await subitemAPI.updateSubitemState(taskId, state)
 		},
 		onSuccess: (_, variables) => {
 			queryClient.invalidateQueries({ queryKey: ['task', variables.taskId] })
@@ -38,7 +38,7 @@ export const useUpdateTaskState = () => {
 				{
 					queryKey: ['subitems']
 				},
-				(old: TaskEntity[] | undefined) => {
+				(old: SubitemEntity[] | undefined) => {
 					return old?.map((task) => {
 						return task.id === taskId ? { ...task, state } : task
 					})

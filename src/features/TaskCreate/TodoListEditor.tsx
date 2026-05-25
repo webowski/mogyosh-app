@@ -200,7 +200,7 @@ export function TodoListEditor({ items, onChange }: Props) {
 				style={styles.addButton}
 				onPress={() => addItemAfter(items.length - 1)}
 			>
-				<MaterialIcons name='add' size={24} color={theme.colors.minor} />
+				<MaterialIcons name='add' size={28} color={theme.colors.minor} />
 			</Pressable>
 		</View>
 	)
@@ -230,6 +230,9 @@ const styles = StyleSheet.create((theme) => ({
 		justifyContent: 'center',
 		paddingVertical: theme.spacing.xs,
 		backgroundColor: theme.colors.mutedLightFill,
-		borderRadius: STYLE_VARS.radius_sm
+		borderTopLeftRadius: STYLE_VARS.radius_sm,
+		borderTopRightRadius: STYLE_VARS.radius_sm,
+		borderBottomLeftRadius: STYLE_VARS.radius_lg,
+		borderBottomRightRadius: STYLE_VARS.radius_lg
 	}
 }))

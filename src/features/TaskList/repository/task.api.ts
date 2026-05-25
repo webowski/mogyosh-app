@@ -2,6 +2,7 @@ import { supabaseClient } from '@/shared/api/supabaseClient'
 import { TaskId } from '@/shared/domain/ids'
 import { TaskEntity, TaskRow } from '@/shared/domain/task'
 import { TaskFilters } from '../model/task.types'
+import { subitemAPI } from './subitem.api'
 
 const TASKS_SELECT = `
 	*,
@@ -115,34 +116,6 @@ const getTasksByDate = async (date: string): Promise<TaskEntity[]> => {
 	if (error) throw error
 
 	return (data ?? []).map(makeTaskObject)
-}
-
-/**
- * Get subtasks for a specific task
- * @param taskId - Parent task ID
- */
-const getTaskSubtasks = async (taskId: TaskId): Promise<TaskEntity[]> => {
-	try {
-		// console.log('Fetching subtasks for task ID:', taskId)
-
-		const { data, error } = await supabaseClient
-			.from('tasks')
-			.select(TASKS_SELECT)
-			.eq('parent_id', taskId)
-			.order('created_at', { ascending: true })
-
-		if (error) {
-			console.error('Error fetching subtasks:', error)
-			throw error
-		}
-
-		const subtasks = (data ?? []).map(makeTaskObject)
-		// console.log('Subtasks fetched successfully:', subtasks.length)
-		return subtasks
-	} catch (error) {
-		console.error('getTaskSubtasks caught error:', error)
-		throw error
-	}
 }
 
 /**
@@ -312,10 +285,10 @@ const deleteTask = async (taskId: TaskId): Promise<void> => {
 
 	if (schedulesError) throw schedulesError
 
-	// Delete subtasks recursively
-	const subtasks = await getTaskSubtasks(taskId)
-	for (const subtask of subtasks) {
-		await deleteTask(subtask.id)
+	// Delete subitems recursively
+	const subitems = await subitemAPI.getSubitems(taskId)
+	for (const subitem of subitems) {
+		await deleteTask(subitem.id)
 	}
 
 	// Delete the task itself
@@ -331,7 +304,6 @@ export const taskAPI = {
 	getTasks,
 	getAllTasks,
 	getTasksByDate,
-	getTaskSubtasks,
 	getTasksCountByPeriod,
 	getTaskById,
 	createTask,
