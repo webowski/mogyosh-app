@@ -1,11 +1,12 @@
 import { ActivityIndicator, Text, View } from 'react-native'
 
+import { buildSubitemTree } from '@/features/Subitem/model/subitem.utils'
+import { SubitemTree } from '@/features/Subitem/SubitemTree'
 import {
 	useSubitems,
 	useTaskById,
 	useUpdateSubitemState
 } from '@/features/TaskList'
-import { ChecklistItem } from '@/features/TaskList/ChecklistItem'
 import { useTaskStore } from '@/shared/model/taskStore'
 import { commonStyles } from '@/shared/styles/common'
 import ScrollBox from '@/shared/ui/ScrollBox'
@@ -26,6 +27,8 @@ export default function TaskScreen() {
 			state: completed ? 'done' : 'active'
 		})
 	}
+
+	const subitemTree = buildSubitemTree(subitems ?? [])
 
 	// Show loading state when waiting for task data
 	if (isLoading || isLoadingSubitems)
@@ -56,14 +59,7 @@ export default function TaskScreen() {
 
 	return (
 		<ScrollBox>
-			{subitems?.map((subitem) => (
-				<ChecklistItem
-					key={subitem.id}
-					checked={subitem.state === 'done'}
-					text={subitem.info}
-					onToggle={(value) => handleToggleSubitem(subitem.id, value)}
-				/>
-			))}
+			<SubitemTree treeData={subitemTree} onToggle={handleToggleSubitem} />
 		</ScrollBox>
 	)
 }

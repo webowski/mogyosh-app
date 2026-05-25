@@ -65,7 +65,7 @@ export const lightTheme = {
 		primaryLight: 'hsl(225, 100%, 75%)',
 		primaryLighter: 'hsl(225, 100%, 92%)',
 
-		major: 'hsl(224, 15%, 30%)',
+		major: 'hsl(224, 20%, 28%)',
 		minor: 'hsl(225, 22%, 55%)', // Secondary text (subtitles, placeholders, icons)
 
 		mutedTextDark: 'hsl(225, 28%, 68%)',
