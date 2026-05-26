@@ -229,38 +229,6 @@ export function TaskCreateForm({ onClose }: Props) {
 							за 1 час
 						</Button>
 					</View>
-
-					{/* <ScrollView
-						overScrollMode='never'
-						horizontal
-						showsHorizontalScrollIndicator={false}
-						style={{
-							marginHorizontal: -1 * STYLE_VARS.sidePadding,
-							paddingHorizontal: STYLE_VARS.sidePadding
-						}}
-					>
-						<View style={styles.categoryList}>
-							<Button
-								variant='chip'
-								size='chip'
-								active={selectedCategoryId === null}
-								onPress={() => setSelectedCategoryId(null)}
-							>
-								Без категории
-							</Button>
-							{categories.map((category) => (
-								<Button
-									key={category.id}
-									variant='chip'
-									size='chip'
-									active={selectedCategoryId === category.id}
-									onPress={() => setSelectedCategoryId(category.id)}
-								>
-									{category.name}
-								</Button>
-							))}
-						</View>
-					</ScrollView> */}
 				</View>
 
 				<View style={styles.fieldGroup}>
@@ -275,7 +243,7 @@ export function TaskCreateForm({ onClose }: Props) {
 			</ScrollView>
 
 			<ActionsPanel style={{ paddingBottom: STYLE_VARS.navPanelUnderlap }}>
-				{/* <Button size='round' variant='secondary' onPress={onClose}>
+				{/* <Button size='round' variant='secondary' onPress={handleClearForm}>
 					<MaterialIcons name='clear' size={28} color={theme.colors.primary} />
 				</Button> */}
 
