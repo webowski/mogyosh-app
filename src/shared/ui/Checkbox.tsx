@@ -1,8 +1,10 @@
+import { useEffect } from 'react'
 import { Pressable, PressableProps, Text, ViewStyle } from 'react-native'
 import Animated, {
 	interpolateColor,
 	useAnimatedStyle,
-	useSharedValue
+	useSharedValue,
+	withTiming
 } from 'react-native-reanimated'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
@@ -23,6 +25,14 @@ export default function Checkbox({
 	const { theme } = useUnistyles()
 
 	const animationProgress = useSharedValue(checked ? 1 : 0)
+
+	useEffect(
+		() => {
+			animationProgress.value = withTiming(checked ? 1 : 0, { duration: 120 })
+		},
+		// eslint-disable-next-line
+		[checked]
+	)
 
 	const checkboxStyle = useAnimatedStyle(() => ({
 		backgroundColor: interpolateColor(
