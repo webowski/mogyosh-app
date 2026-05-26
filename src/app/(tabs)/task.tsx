@@ -59,7 +59,14 @@ export default function TaskScreen() {
 
 	return (
 		<ScrollBox>
-			<SubitemTree treeData={subitemTree} onToggle={handleToggleSubitem} />
+			{/* <SubitemTree treeData={subitemTree} onToggle={handleToggleSubitem} /> */}
+			<SubitemTree
+				treeData={subitemTree}
+				onToggle={handleToggleSubitem}
+				// variant='default'
+				// variant='bulleted'
+				variant='collapsible'
+			/>
 		</ScrollBox>
 	)
 }
