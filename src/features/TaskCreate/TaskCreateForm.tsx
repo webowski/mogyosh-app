@@ -283,6 +283,7 @@ export function TaskCreateForm({ onClose }: Props) {
 					size='round'
 					onPress={handleSubmit(onSubmit)}
 					disabled={isSubmitting || createTask.isPending}
+					loading={isSubmitting || createTask.isPending}
 					style={{ marginLeft: 'auto' }}
 				>
 					<MaterialIcons

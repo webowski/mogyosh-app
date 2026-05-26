@@ -2,6 +2,7 @@ import { MaterialIcons } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
 import React from 'react'
 import {
+	ActivityIndicator,
 	Animated,
 	Pressable,
 	Text,
@@ -27,6 +28,7 @@ interface ButtonProps {
 	indicator?: boolean
 	active?: boolean
 	arrow?: boolean
+	loading?: boolean
 }
 
 interface Ripple {
@@ -145,10 +147,34 @@ export const Button: React.FC<ButtonProps> = ({
 	textStyle,
 	indicator = false,
 	active = false,
-	arrow = false
+	arrow = false,
+	loading = false
 }) => {
 	const { theme } = useUnistyles()
 	const [ripples, setRipples] = React.useState<Ripple[]>([])
+
+	// const rotation = useSharedValue(0)
+
+	// useEffect(
+	// 	() => {
+	// 		if (loading) {
+	// 			rotation.value = withRepeat(
+	// 				withTiming(360, { duration: 800, easing: Easing.linear }),
+	// 				-1,
+	// 				false
+	// 			)
+	// 		} else {
+	// 			cancelAnimation(rotation)
+	// 			rotation.value = 0
+	// 		}
+	// 	},
+	// 	// eslint-disable-next-line
+	// 	[loading]
+	// )
+
+	// const spinnerAnimatedStyle = useAnimatedStyle(() => ({
+	// 	transform: [{ rotate: `${rotation.value}deg` }]
+	// }))
 
 	const variantStyle = getVariantStyles(theme)[variant]
 	const sizeStyle = sizeStyles[size]
@@ -267,19 +293,33 @@ export const Button: React.FC<ButtonProps> = ({
 			{/* Layer 3: content */}
 			{typeof children === 'string' ? (
 				<>
-					<Text
-						style={[
-							styles.text,
-							variantStyle.text,
-							sizeStyle.text,
-							variant === 'chip' &&
-								active && { color: theme.colors.buttonText },
-							textStyle
-						]}
-					>
-						{children}
-					</Text>
-					{arrow && (
+					{loading ? (
+						// <Reanimated.View style={spinnerAnimatedStyle}>
+						// 	<MaterialIcons
+						// 		name='refresh'
+						// 		size={(sizeStyle.text.fontSize as number) ?? 15}
+						// 		color={variantStyle.text.color as string}
+						// 	/>
+						// </Reanimated.View>
+						<ActivityIndicator
+							size='small'
+							color={variantStyle.text.color as string}
+						/>
+					) : (
+						<Text
+							style={[
+								styles.text,
+								variantStyle.text,
+								sizeStyle.text,
+								variant === 'chip' &&
+									active && { color: theme.colors.buttonText },
+								textStyle
+							]}
+						>
+							{children}
+						</Text>
+					)}
+					{!loading && arrow && (
 						<MaterialIcons
 							name='arrow-drop-down'
 							size={18}
@@ -290,8 +330,22 @@ export const Button: React.FC<ButtonProps> = ({
 				</>
 			) : (
 				<>
-					{children}
-					{arrow && (
+					{loading ? (
+						// <Reanimated.View style={spinnerAnimatedStyle}>
+						// 	<MaterialIcons
+						// 		name='refresh'
+						// 		size={20}
+						// 		color={variantStyle.text.color as string}
+						// 	/>
+						// </Reanimated.View>
+						<ActivityIndicator
+							size='small'
+							color={variantStyle.text.color as string}
+						/>
+					) : (
+						children
+					)}
+					{!loading && arrow && (
 						<MaterialIcons
 							name='arrow-drop-down'
 							size={18}
