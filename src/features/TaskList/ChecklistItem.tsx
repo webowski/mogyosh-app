@@ -1,6 +1,6 @@
 import Checkbox from '@/shared/ui/Checkbox'
 import { useEffect } from 'react'
-import { Pressable } from 'react-native'
+import { View } from 'react-native'
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
@@ -21,7 +21,6 @@ export const ChecklistItem = ({
 }: ChecklistItemProps) => {
 	const animationProgress = useSharedValue(checked ? 1 : 0)
 
-	// Синхронизируем анимацию с prop checked
 	useEffect(
 		() => {
 			animationProgress.value = withTiming(checked ? 1 : 0, { duration: 250 })
@@ -31,8 +30,7 @@ export const ChecklistItem = ({
 	)
 
 	const handlePress = () => {
-		const newValue = !checked
-		onToggle(newValue)
+		onToggle(!checked)
 	}
 
 	const textStyle = useAnimatedStyle(() => ({
@@ -40,10 +38,10 @@ export const ChecklistItem = ({
 	}))
 
 	return (
-		<Pressable onPress={handlePress} style={styles.container}>
+		<View style={styles.container}>
 			<Animated.Text style={[styles.text, textStyle]}>{text}</Animated.Text>
-			<Checkbox checked={checked} />
-		</Pressable>
+			<Checkbox checked={checked} onPress={handlePress} />
+		</View>
 	)
 }
 

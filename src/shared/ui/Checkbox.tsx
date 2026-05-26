@@ -1,4 +1,4 @@
-import { Text, ViewProps, ViewStyle } from 'react-native'
+import { Pressable, PressableProps, Text, ViewStyle } from 'react-native'
 import Animated, {
 	interpolateColor,
 	useAnimatedStyle,
@@ -9,9 +9,17 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 type CheckboxProps = {
 	checked: boolean
 	style?: ViewStyle | ViewStyle[]
-} & ViewProps
+	onPress?: () => void
+} & Omit<PressableProps, 'style' | 'onPress'>
 
-export default function Checkbox({ checked, style, ...props }: CheckboxProps) {
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
+
+export default function Checkbox({
+	checked,
+	style,
+	onPress,
+	...props
+}: CheckboxProps) {
 	const { theme } = useUnistyles()
 
 	const animationProgress = useSharedValue(checked ? 1 : 0)
@@ -30,9 +38,13 @@ export default function Checkbox({ checked, style, ...props }: CheckboxProps) {
 	}))
 
 	return (
-		<Animated.View style={[styles.checkbox, checkboxStyle, style]} {...props}>
+		<AnimatedPressable
+			onPress={onPress}
+			style={[styles.checkbox, checkboxStyle, style]}
+			{...props}
+		>
 			{checked && <Text style={styles.checkmark}>✓</Text>}
-		</Animated.View>
+		</AnimatedPressable>
 	)
 }
 
