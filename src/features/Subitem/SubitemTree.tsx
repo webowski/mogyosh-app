@@ -1,9 +1,14 @@
 import { useState } from 'react'
 import { Pressable, Text, View } from 'react-native'
+import Animated, {
+	useAnimatedStyle,
+	useSharedValue,
+	withTiming
+} from 'react-native-reanimated'
 
+import { ChecklistItem } from '@/features/TaskList/ChecklistItem'
 import { MaterialIcons } from '@expo/vector-icons'
 import { useUnistyles } from 'react-native-unistyles'
-import { ChecklistItem } from '../TaskList/ChecklistItem'
 import type { SubitemWithChildren } from './model/subitem.types'
 
 export type SubitemTreeVariant = 'default' | 'bulleted' | 'collapsible'
@@ -27,27 +32,34 @@ function SubitemNode({ subitem, depth, onToggle, variant }: SubitemNodeProps) {
 	const [isExpanded, setIsExpanded] = useState(true)
 	const hasChildren = subitem.children.length > 0
 
-	const toggleExpand = () => setIsExpanded((prev) => !prev)
+	const rotationProgress = useSharedValue(1) // 1 = expanded (90deg), 0 = collapsed
+
+	const animatedIconStyle = useAnimatedStyle(() => ({
+		transform: [{ rotate: `${rotationProgress.value * 90}deg` }]
+	}))
+
+	const toggleExpand = () => {
+		const nextExpanded = !isExpanded
+		rotationProgress.value = withTiming(nextExpanded ? 1 : 0, { duration: 100 })
+		setIsExpanded(nextExpanded)
+	}
 
 	return (
 		<View style={{ paddingLeft: depth * 16 }}>
 			{variant === 'collapsible' ? (
 				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 					{hasChildren && (
-						<Pressable onPress={toggleExpand} style={{ marginRight: 4 }}>
-							{isExpanded ? (
+						<Pressable
+							onPress={toggleExpand}
+							style={{ marginRight: 4, marginTop: 2 }}
+						>
+							<Animated.View style={animatedIconStyle}>
 								<MaterialIcons
 									name='play-arrow'
-									size={18}
+									size={20}
 									color={theme.colors.major}
 								/>
-							) : (
-								<MaterialIcons
-									name='play-arrow'
-									size={18}
-									color={theme.colors.major}
-								/>
-							)}
+							</Animated.View>
 						</Pressable>
 					)}
 					{!hasChildren && <View style={{ width: 16 }} />}
