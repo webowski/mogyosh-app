@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Pressable, Text, View } from 'react-native'
 
+import { MaterialIcons } from '@expo/vector-icons'
+import { useUnistyles } from 'react-native-unistyles'
 import { ChecklistItem } from '../TaskList/ChecklistItem'
 import type { SubitemWithChildren } from './model/subitem.types'
 
@@ -21,6 +23,7 @@ interface SubitemNodeProps {
 }
 
 function SubitemNode({ subitem, depth, onToggle, variant }: SubitemNodeProps) {
+	const { theme } = useUnistyles()
 	const [isExpanded, setIsExpanded] = useState(true)
 	const hasChildren = subitem.children.length > 0
 
@@ -32,7 +35,19 @@ function SubitemNode({ subitem, depth, onToggle, variant }: SubitemNodeProps) {
 				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 					{hasChildren && (
 						<Pressable onPress={toggleExpand} style={{ marginRight: 4 }}>
-							<Text style={{ fontSize: 20 }}>{isExpanded ? '▾' : '▸'}</Text>
+							{isExpanded ? (
+								<MaterialIcons
+									name='play-arrow'
+									size={18}
+									color={theme.colors.major}
+								/>
+							) : (
+								<MaterialIcons
+									name='play-arrow'
+									size={18}
+									color={theme.colors.major}
+								/>
+							)}
 						</Pressable>
 					)}
 					{!hasChildren && <View style={{ width: 16 }} />}
