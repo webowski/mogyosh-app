@@ -107,7 +107,29 @@ const updateSubitemState = async (
 	return makeSubitemObject(data)
 }
 
+type CreateSubitemPayload = {
+	info: string
+	task_id?: string | null
+}
+
+const createSubitem = async (
+	payload: CreateSubitemPayload
+): Promise<SubitemEntity> => {
+	const { data, error } = await supabaseClient
+		.from('subitems')
+		.insert({
+			info: payload.info,
+			task_id: payload.task_id ?? null
+		})
+		.select()
+		.single()
+
+	if (error) throw error
+	return data
+}
+
 export const subitemAPI = {
 	getSubitems,
-	updateSubitemState
+	updateSubitemState,
+	createSubitem
 }

@@ -13,6 +13,7 @@ import { ActionsPanel } from '@/features/ActionsPanel/ActionsPanel'
 import {
 	useCategories,
 	useCreateCategory,
+	useCreateSubitem,
 	useCreateTask
 } from '@/features/TaskList'
 import { useTaskStore } from '@/shared/model/taskStore'
@@ -39,6 +40,7 @@ export function TaskCreateForm({ onClose }: Props) {
 	const { t } = useTranslation()
 
 	const createTask = useCreateTask()
+	const createSubitem = useCreateSubitem()
 	const setDraftTitle = useTaskStore((store) => store.setDraftTitle)
 	const clearDraftTitle = useTaskStore((store) => store.clearDraftTitle)
 
@@ -145,11 +147,12 @@ export function TaskCreateForm({ onClose }: Props) {
 			checklistItem.text.trim()
 		)
 		if (filledSubitemsChecklist.length > 0 && parentTask.id) {
+			// возможно надо оптимизировать чтобы создавать subitems пачкой а не по одному
 			await Promise.all(
 				filledSubitemsChecklist.map((checklistItem) =>
-					createTask.mutateAsync({
+					createSubitem.mutateAsync({
 						info: checklistItem.text,
-						parent_id: parentTask.id
+						task_id: parentTask.id
 					})
 				)
 			)

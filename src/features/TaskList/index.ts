@@ -9,6 +9,7 @@ export { useTasksCountByPeriod } from './model/useTasksCountByPeriod'
 export { useTasksGrouped } from './model/useTasksGrouped'
 export { useUpdateTaskState } from './model/useUpdateTaskState'
 
+export { useCreateSubitem } from './model/useCreateSubitem'
 export { useSubitems } from './model/useSubitems'
 export { useUpdateSubitemState } from './model/useUpdateSubitemState'
 
