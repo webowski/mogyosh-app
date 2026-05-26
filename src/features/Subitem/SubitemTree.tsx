@@ -1,3 +1,4 @@
+import { MaterialIcons } from '@expo/vector-icons'
 import { useState } from 'react'
 import { Pressable, Text, View } from 'react-native'
 import Animated, {
@@ -5,13 +6,12 @@ import Animated, {
 	useSharedValue,
 	withTiming
 } from 'react-native-reanimated'
+import { useUnistyles } from 'react-native-unistyles'
 
 import { ChecklistItem } from '@/features/TaskList/ChecklistItem'
-import { MaterialIcons } from '@expo/vector-icons'
-import { useUnistyles } from 'react-native-unistyles'
 import type { SubitemWithChildren } from './model/subitem.types'
 
-export type SubitemTreeVariant = 'default' | 'bulleted' | 'collapsible'
+export type SubitemTreeVariant = 'text' | 'bulleted' | 'collapsible'
 
 interface SubitemTreeProps {
 	treeData: SubitemWithChildren[]
@@ -110,7 +110,7 @@ export function SubitemTree({
 	treeData,
 	depth = 0,
 	onToggle,
-	variant = 'default'
+	variant = 'text'
 }: SubitemTreeProps) {
 	return (
 		<>
