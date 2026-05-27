@@ -7,7 +7,9 @@
     "icon": "./assets/images/icon.png",
     "scheme": "mogyosh",
     "userInterfaceStyle": "automatic",
+    "backgroundColor": "#668cff",
     "ios": {
+      "backgroundColor": "#668cff",
       "icon": "./assets/expo.icon",
       "infoPlist": {
         "CFBundleLocalizations": [
@@ -18,6 +20,7 @@
     },
     "android": {
       "package": "com.okwebowski.mogyosh",
+      "backgroundColor": "#668cff",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",

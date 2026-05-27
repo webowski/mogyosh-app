@@ -55,7 +55,6 @@ export default function RootLayout() {
 			login()
 				.then(() => setLoggedIn(true))
 				.catch((err) => setLoginError(err.message))
-				.finally(() => SplashScreen.hide())
 		},
 		//
 		[]
@@ -64,6 +63,7 @@ export default function RootLayout() {
 	if (!isLoggedIn && !loginError)
 		return (
 			<View
+				onLayout={() => SplashScreen.hideAsync()}
 				style={{
 					flex: 1,
 					justifyContent: 'center',
