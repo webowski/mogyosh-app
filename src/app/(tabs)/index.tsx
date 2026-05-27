@@ -1,10 +1,4 @@
-import {
-	ActivityIndicator,
-	RefreshControl,
-	SectionList,
-	Text,
-	View
-} from 'react-native'
+import { RefreshControl, SectionList, Text, View } from 'react-native'
 
 import { useTasksGrouped } from '@/features/TaskList'
 import { useCategories } from '@/features/TaskList/model/useCategories'
@@ -16,7 +10,7 @@ export default function DayScreen() {
 	const { data, isLoading, error, refetch } = useTasksGrouped()
 	const { isLoading: catLoading, error: catError } = useCategories()
 
-	if (isLoading || catLoading) return <ActivityIndicator />
+	// if (isLoading || catLoading) return <ActivityIndicator />
 	if (error || catError) return <Text>Ошибка загрузки</Text>
 
 	return (

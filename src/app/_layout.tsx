@@ -2,7 +2,7 @@ import { Stack, usePathname } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ActivityIndicator, Text } from 'react-native'
+import { ActivityIndicator, Text, View } from 'react-native'
 import { useUnistyles } from 'react-native-unistyles'
 
 import Header from '@/features/Header/Header'
@@ -54,7 +54,13 @@ export default function RootLayout() {
 	)
 
 	if (loginError) return <Text>Ошибка логина: {loginError}</Text>
-	if (!isLoggedIn) return <ActivityIndicator />
+
+	if (!isLoggedIn)
+		return (
+			<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+				<ActivityIndicator />
+			</View>
+		)
 
 	return (
 		<Providers>

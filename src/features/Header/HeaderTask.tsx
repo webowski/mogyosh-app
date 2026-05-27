@@ -1,6 +1,6 @@
 import { BottomTabHeaderProps } from '@react-navigation/bottom-tabs'
 import { NativeStackHeaderProps } from '@react-navigation/native-stack'
-import { ActivityIndicator, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { useTaskById } from '@/features/TaskList'
@@ -23,7 +23,7 @@ export default function HeaderTask({
 
 	const { data, isLoading, error } = useTaskById(selectedTaskId)
 
-	if (isLoading) return <ActivityIndicator />
+	// if (isLoading) return <ActivityIndicator />
 
 	return (
 		<View
@@ -35,7 +35,9 @@ export default function HeaderTask({
 			]}
 		>
 			<Text style={commonStyles.headerSubtitle}>
-				{data?.category && makeCategoryPath(data?.category?.id, categoryMap)}
+				{data?.category
+					? makeCategoryPath(data?.category?.id, categoryMap)
+					: ' '}
 			</Text>
 			<Text style={commonStyles.headerTitle}>{!error && data?.info}</Text>
 		</View>
