@@ -1,4 +1,5 @@
 import { Stack, usePathname } from 'expo-router'
+import * as SplashScreen from 'expo-splash-screen'
 import { StatusBar } from 'expo-status-bar'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -9,6 +10,12 @@ import Header from '@/features/Header/Header'
 import { useNavStore } from '@/features/Navigation/model/navStore'
 import { Providers } from '@/features/Providers'
 import { login } from '@/shared/api/auth'
+
+SplashScreen.preventAutoHideAsync()
+SplashScreen.setOptions({
+	duration: 500,
+	fade: true
+})
 
 export const unstable_settings = {
 	anchor: '(tabs)'
@@ -48,19 +55,26 @@ export default function RootLayout() {
 			login()
 				.then(() => setLoggedIn(true))
 				.catch((err) => setLoginError(err.message))
+				.finally(() => SplashScreen.hide())
 		},
 		//
 		[]
 	)
 
-	if (loginError) return <Text>Ошибка логина: {loginError}</Text>
-
-	if (!isLoggedIn)
+	if (!isLoggedIn && !loginError)
 		return (
-			<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-				<ActivityIndicator />
+			<View
+				style={{
+					flex: 1,
+					justifyContent: 'center',
+					alignItems: 'center',
+					backgroundColor: theme.colors.primary
+				}}
+			>
+				<ActivityIndicator color={theme.colors.inverse} size={32} />
 			</View>
 		)
+	if (loginError) return <Text>Ошибка логина: {loginError}</Text>
 
 	return (
 		<Providers>
