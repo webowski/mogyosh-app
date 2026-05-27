@@ -153,34 +153,22 @@ export function TodoListEditor({ items, onChange }: Props) {
 						<EnrichedMarkdownTextInput
 							ref={getRefForItem(item.id)}
 							style={styles.input}
-							// defaultValue={item.text}
-							// placeholderTextColor={theme.colors.minor}
-							// // placeholder={index === 0 ? 'Список задач...' : ''}
-							// scrollEnabled={false}
-							// multiline
-							// onChangeMarkdown={(markdown) => updateItem(item.id, markdown)}
-							// onChangeText={(text) => {
-							// 	if (text.includes('\n')) {
-							// 		getRefForItem(item.id).current?.setValue(
-							// 			items.find((i) => i.id === item.id)?.text ?? ''
-							// 		)
-							// 		addItemAfter(index)
-							// 	}
-							// }}
-							// onChangeMarkdown={(markdown) => {
-							// 	updateItem(item.id, markdown)
-							// }}
-							// onChangeMarkdown={(markdown) => {
-							// 	if (markdown.includes('\n')) {
-							// 		const cleanText = markdown.replace(/\n/g, '')
-							// 		const updatedItems = items.map((i) =>
-							// 			i.id === item.id ? { ...i, text: cleanText } : i
-							// 		)
-							// 		onChange(updatedItems)
-							// 		addItemAfter(index)
-							// 		return false
-							// 	}
-							// }}
+							defaultValue={item.text}
+							placeholderTextColor={theme.colors.minor}
+							// placeholder={index === 0 ? 'Список задач...' : ''}
+							scrollEnabled={false}
+							multiline
+							onChangeText={(text) => {
+								if (text.includes('\n')) {
+									getRefForItem(item.id).current?.setValue(
+										items.find((i) => i.id === item.id)?.text ?? ''
+									)
+									addItemAfter(index)
+								}
+							}}
+							onChangeMarkdown={(markdown) => {
+								updateItem(item.id, markdown)
+							}}
 						/>
 					)}
 					{/* {items.length > 1 && (
