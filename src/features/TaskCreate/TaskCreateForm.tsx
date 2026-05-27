@@ -5,7 +5,6 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { Text, TextInput, View } from 'react-native'
-import { ScrollView } from 'react-native-gesture-handler'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 import { z } from 'zod'
 
@@ -21,6 +20,7 @@ import { commonStyles, STYLE_VARS } from '@/shared/styles/common'
 import { formStyles } from '@/shared/styles/form'
 import { textStyles } from '@/shared/styles/text'
 import { Button } from '@/shared/ui/Button'
+import KeyboardAwareScrollBox from '@/shared/ui/KeyboardAwareScrollBox'
 import RadioButton from '@/shared/ui/RadioButton'
 import Textarea from '@/shared/ui/Textarea'
 import { TodoListEditor } from './TodoListEditor'
@@ -163,19 +163,7 @@ export function TaskCreateForm({ onClose }: Props) {
 
 	return (
 		<>
-			<ScrollView
-				style={{
-					flex: 1
-				}}
-				contentContainerStyle={{
-					gap: 18,
-					paddingTop: STYLE_VARS.sidePadding,
-					paddingBottom:
-						STYLE_VARS.sidePadding + STYLE_VARS.navPanelUnderlap + 12,
-					paddingHorizontal: STYLE_VARS.sidePadding
-				}}
-				keyboardShouldPersistTaps='handled'
-			>
+			<KeyboardAwareScrollBox>
 				<View style={styles.fieldGroup}>
 					<Controller
 						control={control}
@@ -240,7 +228,7 @@ export function TaskCreateForm({ onClose }: Props) {
 						onChange={setSubitemsChecklist}
 					/>
 				</View>
-			</ScrollView>
+			</KeyboardAwareScrollBox>
 
 			<ActionsPanel style={{ paddingBottom: STYLE_VARS.navPanelUnderlap }}>
 				{/* <Button size='round' variant='secondary' onPress={handleClearForm}>
