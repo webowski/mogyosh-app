@@ -1,6 +1,7 @@
 import { MaterialIcons } from '@expo/vector-icons'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { TrueSheet } from '@lodev09/react-native-true-sheet'
+import { t } from 'i18next'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -26,7 +27,7 @@ import Textarea from '@/shared/ui/Textarea'
 import { TodoListEditor } from './TodoListEditor'
 
 const schema = z.object({
-	title: z.string().min(1, 'Введите название задачи').max(100)
+	title: z.string().min(1, t('error.Enter the task title')).max(100)
 })
 
 type TaskFormData = z.infer<typeof schema>
@@ -171,7 +172,7 @@ export function TaskCreateForm({ onClose }: Props) {
 						render={({ field: { onChange, onBlur, value } }) => (
 							<Textarea
 								style={[styles.InputHeading]}
-								placeholder={t('forms.taskName')}
+								placeholder={t('form.title')}
 								value={value}
 								onChange={onChange}
 								onBlur={onBlur}

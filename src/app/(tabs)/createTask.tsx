@@ -11,7 +11,6 @@ export default function CreateTaskScreen() {
 	return (
 		<TaskCreateForm
 			onClose={() => {
-				console.log({ previousRoute })
 				router.push((previousRoute || 'index') as never)
 				setSwipeRoute(previousRoute || 'index')
 			}}

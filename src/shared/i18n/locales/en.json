@@ -53,7 +53,10 @@
 		"12": "12-hour",
 		"24": "24-hour"
 	},
-	"forms": {
-		"taskName": "Task name"
+	"form": {
+		"title": "Title"
+	},
+	"error": {
+		"Enter the task title": "Enter the task title"
 	}
 }
