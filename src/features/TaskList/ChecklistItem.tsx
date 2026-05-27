@@ -34,7 +34,7 @@ export const ChecklistItem = ({
 	}
 
 	const textStyle = useAnimatedStyle(() => ({
-		opacity: withTiming(checked ? 0.6 : 1, { duration: 250 })
+		opacity: withTiming(checked ? 0.38 : 1, { duration: 120 })
 	}))
 
 	return (
