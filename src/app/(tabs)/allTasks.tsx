@@ -224,6 +224,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		paddingHorizontal: STYLE_VARS.sidePadding,
 		paddingTop: 20,
 		paddingBottom: 24 + STYLE_VARS.navPanelUnderlap,
-		flexDirection: 'row'
+		flexDirection: 'row',
+		justifyContent: 'center'
 	}
 }))
