@@ -4,7 +4,6 @@ import { Text, View } from 'react-native'
 import { useUnistyles } from 'react-native-unistyles'
 
 import { ActionsPanel } from '@/features/ActionsPanel/ActionsPanel'
-import { SettingsItem } from '@/features/Settings/SettingsItem'
 import { textStyles } from '@/shared/styles/text'
 import { Button } from '@/shared/ui/Button'
 import ScrollBox from '@/shared/ui/ScrollBox'
@@ -18,8 +17,6 @@ export default function AccountScreen() {
 				<View>
 					<Text style={textStyles.heading5}>Account</Text>
 				</View>
-
-				<SettingsItem label='Logout' control={<Text>...</Text>} />
 			</ScrollBox>
 
 			<ActionsPanel>
