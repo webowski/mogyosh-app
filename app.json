@@ -8,10 +8,15 @@
     "scheme": "mogyosh",
     "userInterfaceStyle": "automatic",
     "backgroundColor": "#668cff",
+    "locales": {
+      "en": "./locales/en.json",
+      "ru": "./locales/ru.json"
+    },
     "ios": {
       "backgroundColor": "#668cff",
       "icon": "./assets/expo.icon",
       "infoPlist": {
+        "CFBundleAllowMixedLocalizations": true,
         "CFBundleLocalizations": [
           "en",
           "ru"
@@ -63,7 +68,7 @@
           "resizeMode": "contain",
           "android": {
             "image": "./assets/images/splash-icon.png",
-            "imageWidth": 76
+            "imageWidth": 100
           },
           "ios": {
             "image": "./assets/images/splash-icon.png",
