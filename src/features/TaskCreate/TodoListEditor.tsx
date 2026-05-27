@@ -206,7 +206,7 @@ const styles = StyleSheet.create((theme) => ({
 	input: {
 		flex: 1,
 		fontSize: 16,
-		fontWeight: '600',
+		fontWeight: '400',
 		color: theme.colors.major,
 		paddingVertical: theme.spacing.xs,
 		outline: 'none'

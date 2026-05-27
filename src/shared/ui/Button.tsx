@@ -131,7 +131,7 @@ const sizeStyles: Record<Size, { container: ViewStyle; text: TextStyle }> = {
 
 	chip: {
 		container: { height: 32, paddingHorizontal: 16, borderRadius: 999 },
-		text: { fontSize: 13, fontWeight: '500' }
+		text: { fontSize: 15, fontWeight: '500' }
 	}
 }
 

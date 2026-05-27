@@ -27,7 +27,7 @@ export default function TaskListItem({ data }: TaskListItemProps) {
 	return (
 		<Pressable onPress={handlePress} style={styles.taskListItem}>
 			<Text
-				style={{ fontSize: 14, fontWeight: '500', color: theme.colors.major }}
+				style={{ fontSize: 15, fontWeight: '500', color: theme.colors.major }}
 			>
 				{data.info}
 			</Text>

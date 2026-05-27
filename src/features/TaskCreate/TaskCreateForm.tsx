@@ -189,6 +189,7 @@ export function TaskCreateForm({ onClose }: Props) {
 					<View style={[formStyles.formRow, formStyles.formRow_first]}>
 						<Text style={textStyles.label}>Категория</Text>
 						<Button
+							textStyle={{ fontWeight: 400 }}
 							variant='chip'
 							size='chip'
 							arrow
@@ -202,19 +203,34 @@ export function TaskCreateForm({ onClose }: Props) {
 					</View>
 					<View style={[formStyles.formRow]}>
 						<Text style={textStyles.label}>Метки</Text>
-						<Button variant='chip' size='chip' arrow>
+						<Button
+							textStyle={{ fontWeight: 400 }}
+							variant='chip'
+							size='chip'
+							arrow
+						>
 							Без метки
 						</Button>
 					</View>
 					<View style={[formStyles.formRow]}>
 						<Text style={textStyles.label}>Повтор</Text>
-						<Button variant='chip' size='chip' arrow>
+						<Button
+							textStyle={{ fontWeight: 400 }}
+							variant='chip'
+							size='chip'
+							arrow
+						>
 							Вт, Чт, Сб
 						</Button>
 					</View>
 					<View style={[formStyles.formRow, formStyles.formRow_last]}>
 						<Text style={textStyles.label}>Уведомление</Text>
-						<Button variant='chip' size='chip' arrow>
+						<Button
+							textStyle={{ fontWeight: 400 }}
+							variant='chip'
+							size='chip'
+							arrow
+						>
 							за 1 час
 						</Button>
 					</View>

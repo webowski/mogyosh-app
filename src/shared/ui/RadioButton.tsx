@@ -53,9 +53,9 @@ const styles = StyleSheet.create((theme, rt) => ({
 		gap: 10
 	},
 	RadioItem__text: {
-		fontSize: 15 * rt.fontScale,
+		fontSize: 16 * rt.fontScale,
 		color: theme.colors.major,
-		fontWeight: '500'
+		fontWeight: '400'
 	},
 	RadioItem__indicator: (checked: boolean) => ({
 		marginTop: 2 * rt.fontScale,
