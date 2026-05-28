@@ -1,5 +1,5 @@
-import { BottomTabHeaderProps } from '@react-navigation/bottom-tabs'
-import { NativeStackHeaderProps } from '@react-navigation/native-stack'
+import { NativeStackHeaderProps } from 'expo-router/build/react-navigation/native-stack'
+import { BottomTabHeaderProps } from 'expo-router/js-tabs'
 import { Text, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 

@@ -1,7 +1,7 @@
-import { BottomTabBarProps } from '@react-navigation/bottom-tabs'
+import { BottomTabBarProps } from 'expo-router/js-tabs'
 import { View } from 'react-native'
 
-import { ParamListBase, TabNavigationState } from '@react-navigation/native'
+import { ParamListBase, TabNavigationState } from 'expo-router/react-navigation'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { StyleSheet } from 'react-native-unistyles'
 
