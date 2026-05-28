@@ -10,7 +10,7 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    npm install
    ```
 
-2. Для Web нужно выполнить `bunx setup-skia-web public`
+2. Для Web нужно выполнить `setup-skia-web`
 
 3. Start the app
 

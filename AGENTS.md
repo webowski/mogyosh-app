@@ -101,7 +101,7 @@ src/
 
 ## Development Workflow
 
-- используется пакетный менеджер bun
+- используется пакетный менеджер npm
 
 ## Code Quality
 
