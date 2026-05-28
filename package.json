@@ -20,6 +20,7 @@
     "@gorhom/bottom-sheet": "^5.2.14",
     "@hookform/resolvers": "^5.4.0",
     "@lodev09/react-native-true-sheet": "^3.10.1",
+    "@react-navigation/bottom-tabs": "^7.16.2",
     "@shopify/react-native-skia": "2.6.2",
     "@supabase/supabase-js": "^2.106.2",
     "@tanstack/react-query": "^5.100.14",
