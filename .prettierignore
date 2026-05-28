@@ -1,3 +1,5 @@
 app.json
 bun.lock
 eas.json
+package.json
+package-lock.json
