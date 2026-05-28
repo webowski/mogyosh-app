@@ -71,5 +71,12 @@
   "trustedDependencies": [
     "@shopify/react-native-skia"
   ],
+	"jest": {
+		"preset": "jest-expo",
+		"moduleNameMapper": {
+			"react-native-reanimated": "<rootDir>/__mocks__/react-native-reanimated.ts",
+			"react-native-worklets": "<rootDir>/__mocks__/react-native-worklets.ts"
+		}
+	},
   "private": true
 }
