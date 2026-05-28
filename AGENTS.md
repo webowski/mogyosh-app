@@ -8,7 +8,6 @@
 ## Общие правила
 
 - ВАЖНО! Не изменяй и не добавляй стили, если я тебя об этом не просил.
-- Database: op-sqlite + drizzle-orm (local storage)
 - НЕ ДЕЛАЙ самостоятельно тестирование и проверки кода, такие как `bun run tsc`
 - Комментарии в коде писать только на английском языке
 - Use Dependency Inversion programming principle
