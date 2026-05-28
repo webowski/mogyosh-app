@@ -38,13 +38,11 @@ yarn-error.*
 *.tsbuildinfo
 
 app-example
+example
 
 # generated native folders
 /ios
 /android
-
-# bkp
-/src_bkp
 
 # symlinks
 /QWEN.md

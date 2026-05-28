@@ -36,7 +36,7 @@ This is a React Native mobile application built with Expo 55 and TypeScript. The
 
 ## Technology Stack
 
-- Framework: React Native with Expo (react-native 0.83.4, expo 55.0.9)
+- Framework: Expo SDK 56 (docs at https://docs.expo.dev/versions/v56.0.0/)
 - Language: TypeScript
 - Build Tool: Bun
 - Routing: Expo Router
