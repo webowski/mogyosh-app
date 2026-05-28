@@ -11,13 +11,14 @@
     "prebuild": "expo prebuild --clean",
     "run:android": "expo run:android",
     "test": "jest",
-		"test:watch": "jest --watch",
-		"test:coverage": "jest --coverage"
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
     "@expo/ui": "~56.0.14",
     "@expo/vector-icons": "^15.0.2",
     "@gorhom/bottom-sheet": "^5.2.14",
+    "@hookform/resolvers": "^5.4.0",
     "@lodev09/react-native-true-sheet": "^3.10.1",
     "@shopify/react-native-skia": "2.6.2",
     "@supabase/supabase-js": "^2.106.2",
@@ -73,12 +74,12 @@
   "trustedDependencies": [
     "@shopify/react-native-skia"
   ],
-	"jest": {
-		"preset": "jest-expo",
-		"moduleNameMapper": {
-			"react-native-reanimated": "<rootDir>/__mocks__/react-native-reanimated.ts",
-			"react-native-worklets": "<rootDir>/__mocks__/react-native-worklets.ts"
-		}
-	},
+  "jest": {
+    "preset": "jest-expo",
+    "moduleNameMapper": {
+      "react-native-reanimated": "<rootDir>/__mocks__/react-native-reanimated.ts",
+      "react-native-worklets": "<rootDir>/__mocks__/react-native-worklets.ts"
+    }
+  },
   "private": true
 }
