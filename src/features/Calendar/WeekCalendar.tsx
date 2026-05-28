@@ -1,5 +1,5 @@
 import { format, isSameDay, isToday } from 'date-fns'
-import React, { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
 	Dimensions,
 	Pressable,
@@ -25,7 +25,6 @@ import { capitalize } from '@/shared/lib/string'
 import { getWeekStartDate } from '@/shared/lib/time'
 import { useCalendarStore } from '@/shared/model/calendarStore'
 import { STYLE_VARS } from '@/shared/styles/common'
-import { Squircle } from '@/shared/ui/Squircle'
 
 const BASE_SCREEN_WIDTH = Dimensions.get('window').width
 const BASE_WEEK_WIDTH = BASE_SCREEN_WIDTH - STYLE_VARS.sidePadding * 2
@@ -72,13 +71,12 @@ function Day({ day, dayWidth }: DayProps) {
 				useCalendarStore.getState().setSelectedDate(day.date)
 			}}
 		>
-			<Squircle
+			<View
 				style={[
 					styles.day(dayWidth),
 					isDaySelected && styles.day_selected,
 					isDayToday && !isDaySelected && styles.day_today
 				]}
-				cornerSmoothing={0.6}
 			>
 				<Text
 					style={[
@@ -99,7 +97,7 @@ function Day({ day, dayWidth }: DayProps) {
 				>
 					{day.dayNumber}
 				</Text>
-			</Squircle>
+			</View>
 		</Pressable>
 	)
 }
