@@ -82,18 +82,12 @@
     ],
     "experiments": {
       "typedRoutes": true,
-      "reactCompiler": true,
-      "reactStrictMode": false
+      "reactCompiler": true
     },
     "extra": {
       "router": {},
       "eas": {
         "projectId": "4d07af6f-6371-4f5c-ad59-c27de0c08c03"
-      }
-    },
-    "development": {
-      "android": {
-        "buildType": "apk"
       }
     }
   }
