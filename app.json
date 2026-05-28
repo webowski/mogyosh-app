@@ -62,15 +62,15 @@
         {
           "backgroundColor": "#668cff",
           "image": "./assets/images/splash-icon.png",
-          "imageWidth": 100,
+          "imageWidth": 120,
           "resizeMode": "contain",
           "android": {
             "image": "./assets/images/splash-icon.png",
-            "imageWidth": 100
+            "imageWidth": 120
           },
           "ios": {
             "image": "./assets/images/splash-icon.png",
-            "imageWidth": 100
+            "imageWidth": 120
           }
         }
       ],
