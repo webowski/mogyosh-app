@@ -14,8 +14,7 @@
 		"add": "bunx expo install",
 		"test": "jest",
 		"test:watch": "jest --watch",
-		"test:coverage": "jest --coverage",
-		"postinstall": "bunx setup-skia-web public"
+		"test:coverage": "jest --coverage"
 	},
 	"dependencies": {
 		"@expo/vector-icons": "^15.0.2",
