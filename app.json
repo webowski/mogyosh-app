@@ -6,6 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "mogyosh",
+    "entryPoint": "./index.ts",
     "userInterfaceStyle": "automatic",
     "backgroundColor": "#668cff",
     "locales": {
