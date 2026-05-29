@@ -8,7 +8,7 @@
 ## Общие правила
 
 - ВАЖНО! Не изменяй и не добавляй стили, если я тебя об этом не просил.
-- НЕ ДЕЛАЙ самостоятельно тестирование и проверки кода, такие как `bun run tsc`
+- НЕ ДЕЛАЙ самостоятельно тестирование и проверки кода, такие как `npm run tsc`
 - Комментарии в коде писать только на английском языке
 - Use Dependency Inversion programming principle
 - Придерживаться принципов программирования SOLID
@@ -37,7 +37,6 @@ This is a React Native mobile application built with Expo 55 and TypeScript. The
 
 - Framework: Expo SDK 56 (docs at https://docs.expo.dev/versions/v56.0.0/)
 - Language: TypeScript
-- Build Tool: Bun
 - Routing: Expo Router
 - State Management: Zustand
 - Local Storage: react-native-mmkv
