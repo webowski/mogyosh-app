@@ -61,6 +61,19 @@ jobs:
     if: (github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')) || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
+      - name: 🔍 Check Android SDK size
+        run: |
+          echo "=== /usr/local/lib/android ==="
+          du -sh /usr/local/lib/android/* | sort -h
+          echo "=== /usr/local/lib/android/sdk ==="
+          du -sh /usr/local/lib/android/sdk/* | sort -h
+          echo "=== ndk ==="
+          du -sh /usr/local/lib/android/sdk/ndk/* | sort -h
+          echo "=== build-tools ==="
+          du -sh /usr/local/lib/android/sdk/build-tools/* | sort -h
+          echo "=== platforms ==="
+          du -sh /usr/local/lib/android/sdk/platforms/* | sort -h
+
       - name: 🧹 Free disk space
         run: |
           echo "Before cleanup:"
