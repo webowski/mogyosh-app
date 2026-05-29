@@ -64,15 +64,15 @@ jobs:
       - name: 🔍 Check Android SDK size
         run: |
           echo "=== /usr/local/lib/android ==="
-          du -sh /usr/local/lib/android/* | sort -h
+          [ -d /usr/local/lib/android ] && du -sh /usr/local/lib/android/* 2>/dev/null | sort -h || echo "not found"
           echo "=== /usr/local/lib/android/sdk ==="
-          du -sh /usr/local/lib/android/sdk/* | sort -h
+          [ -d /usr/local/lib/android/sdk ] && du -sh /usr/local/lib/android/sdk/* 2>/dev/null | sort -h || echo "not found"
           echo "=== ndk ==="
-          du -sh /usr/local/lib/android/sdk/ndk/* | sort -h
+          [ -d /usr/local/lib/android/sdk/ndk ] && du -sh /usr/local/lib/android/sdk/ndk/* 2>/dev/null | sort -h || echo "not found"
           echo "=== build-tools ==="
-          du -sh /usr/local/lib/android/sdk/build-tools/* | sort -h
+          [ -d /usr/local/lib/android/sdk/build-tools ] && du -sh /usr/local/lib/android/sdk/build-tools/* 2>/dev/null | sort -h || echo "not found"
           echo "=== platforms ==="
-          du -sh /usr/local/lib/android/sdk/platforms/* | sort -h
+          [ -d /usr/local/lib/android/sdk/platforms ] && du -sh /usr/local/lib/android/sdk/platforms/* 2>/dev/null | sort -h || echo "not found"
 
       - name: 🧹 Free disk space
         run: |
