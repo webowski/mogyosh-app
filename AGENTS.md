@@ -44,7 +44,7 @@ This is a React Native mobile application built with Expo 55 and TypeScript. The
 - Backend State Management: Tanstack Query
 - Authentication: None (local app), но в дальнейшем планируется использование Supabase
 - Styling: CSS-in-JS with Unistyles
-- Navigation: React Navigation
+- Navigation: expo-router
 - React Native Skia для canvas графики
 
 ## Components and deps
