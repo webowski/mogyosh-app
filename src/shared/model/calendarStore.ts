@@ -13,6 +13,7 @@ const zustandStorage = createZustandStorage(storage)
 
 interface CalendarStore {
 	today: Date
+	refreshTodayDate: () => void
 
 	selectedDate: Date
 	setSelectedDate: (date: Date) => void
@@ -26,6 +27,9 @@ export const useCalendarStore = create<CalendarStore>()(
 		persist(
 			(set) => ({
 				today: new Date(),
+				refreshTodayDate: () => {
+					set({ today: new Date() })
+				},
 
 				selectedDate: new Date(),
 				setSelectedDate: (date: Date) => {

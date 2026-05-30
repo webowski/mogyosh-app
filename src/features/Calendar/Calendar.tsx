@@ -210,8 +210,9 @@ const Month = React.memo(function Month({
 })
 
 export default function Calendar() {
-	// const today = useCalendarStore((state) => state.today)
-	const today = useCalendarStore.getState().today
+	const today = useCalendarStore((state) => state.today)
+	const refreshTodayDate = useCalendarStore((state) => state.refreshTodayDate)
+
 	const [dimensions, setDimensions] = useState(() => Dimensions.get('window'))
 
 	const weekStartDayIndex = useSettingsStore((state) => state.weekStartDayIndex)
@@ -263,8 +264,9 @@ export default function Calendar() {
 		setMonthsDataArray(makeMonthsDataArray())
 	})
 
-	const updateMonthList = (targetDelta: number, todayTimestamp: number) => {
-		const today = new Date(todayTimestamp)
+	const updateMonthList = (targetDelta: number) => {
+		refreshTodayDate()
+
 		setMonthsDataArray((currentList) => {
 			const weekStartDayIndex = useSettingsStore.getState().weekStartDayIndex
 			const newList = [...currentList]
@@ -302,14 +304,13 @@ export default function Calendar() {
 			}
 
 			const targetOffset = targetDelta * calendarWidth
-			const todayTimestamp = today.getTime() // вычисляем до входа в worklet
 
 			swipeTranslationValue.value = withTiming(
 				targetOffset,
 				{ duration: SWIPE_END_DURATION, reduceMotion: ReduceMotion.Never },
 				(finished) => {
 					if (!finished || targetDelta === 0) return
-					scheduleOnRN(updateMonthList, targetDelta, todayTimestamp)
+					scheduleOnRN(updateMonthList, targetDelta)
 				}
 			)
 		})

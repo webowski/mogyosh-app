@@ -165,6 +165,8 @@ function makeWeeksDataArray(): WeekData[] {
 
 export default function WeekCalendar() {
 	const today = useCalendarStore((state) => state.today)
+	const refreshTodayDate = useCalendarStore((state) => state.refreshTodayDate)
+
 	const { width: windowWidth } = useWindowDimensions()
 
 	const weekStartDayIndex = useSettingsStore((state) => state.weekStartDayIndex)
@@ -214,8 +216,9 @@ export default function WeekCalendar() {
 		setWeeksDataArray(makeWeeksDataArray())
 	})
 
-	const updateWeekList = (targetDelta: number, todayTimestamp: number) => {
-		const today = new Date(todayTimestamp)
+	const updateWeekList = (targetDelta: number) => {
+		refreshTodayDate()
+
 		setWeeksDataArray((currentList) => {
 			const newList = [...currentList]
 
@@ -258,14 +261,13 @@ export default function WeekCalendar() {
 			}
 
 			const targetOffset = targetDelta * weekWidth
-			const todayTimestamp = today.getTime() // вычисляем до входа в worklet
 
 			swipeTranslationValue.value = withTiming(
 				targetOffset,
 				{ duration: SWIPE_END_DURATION, reduceMotion: ReduceMotion.Never },
 				(finished) => {
 					if (!finished || targetDelta === 0) return
-					scheduleOnRN(updateWeekList, targetDelta, todayTimestamp)
+					scheduleOnRN(updateWeekList, targetDelta)
 				}
 			)
 		})
@@ -337,7 +339,8 @@ const styles = StyleSheet.create((theme) => ({
 	},
 
 	day_selected: {
-		backgroundColor: theme.colors.selectedFill
+		backgroundColor: theme.colors.selectedFill,
+		borderRadius: 7
 	},
 	selectedText: {
 		color: theme.colors.selectedText
