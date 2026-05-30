@@ -42,8 +42,8 @@ This is a React Native mobile application built with Expo 55 and TypeScript. The
 - Local Storage: react-native-mmkv
 - Backend: Supabase
 - Backend State Management: Tanstack Query
-- Authentication: None (local app), но в дальнейшем планируется использование Supabase
-- Styling: CSS-in-JS with Unistyles
+- Authentication: Supabase
+- Styling: Unistyles
 - Navigation: expo-router
 - React Native Skia для canvas графики
 
@@ -67,7 +67,7 @@ This is a React Native mobile application built with Expo 55 and TypeScript. The
 - если пишешь стили, то используй Unistyles.
   - названия стилей должны быть в `PascalCase`, например `SomeElement`.
   - А дочерние элементы в стилях должны быть в `PascalCase__camelCase`, например `SomeElement__childElement`. Неправильно `Element__child__grandchild`, правильно `Element__grandchild`.
-  - Модификаторы `_modificatorName`.
+  - Модификаторы `Element_modificatorName`.
 
 ## Folder Structure
 
