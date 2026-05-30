@@ -13,7 +13,7 @@ import { login } from '@/shared/api/auth'
 
 SplashScreen.preventAutoHideAsync()
 SplashScreen.setOptions({
-	duration: 200,
+	duration: 500,
 	fade: true
 })
 
