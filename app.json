@@ -26,6 +26,8 @@
     },
     "android": {
       "package": "com.okwebowski.mogyosh",
+      "minSdkVersion": 26,
+      "targetSdkVersion": 34,
       "backgroundColor": "#668cff",
       "adaptiveIcon": {
         "backgroundColor": "#668cff",
