@@ -1,4 +1,3 @@
-import { NavigationBar } from 'expo-navigation-bar'
 import { Stack, usePathname } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import { StatusBar } from 'expo-status-bar'
@@ -80,7 +79,6 @@ export default function RootLayout() {
 	return (
 		<Providers>
 			<StatusBar style={theme.statusBarColor} />
-			<NavigationBar style='light' hidden={false} />
 			<Stack
 				screenOptions={{
 					contentStyle: {

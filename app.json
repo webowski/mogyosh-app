@@ -50,13 +50,6 @@
     "plugins": [
       "expo-router",
       [
-        "expo-navigation-bar",
-        {
-          "hidden": false,
-          "style": "light"
-        }
-      ],
-      [
         "expo-localization",
         {
           "supportedLocales": [
