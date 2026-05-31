@@ -37,7 +37,9 @@ export default function NavPanel({
 	const insets = useSafeAreaInsets()
 
 	const setIsDrawerShown = useNavStore((state) => state.setIsDrawerShown)
-	const setIsSwipeSheetOpen = useNavStore((state) => state.setIsSwipeSheetOpen)
+	const setIsActionSheetOpen = useNavStore(
+		(state) => state.setIsActionSheetOpen
+	)
 
 	// Get selected date and swipe switch items from store
 	const selectedDate = useCalendarStore((state) => state.selectedDate)
@@ -109,7 +111,7 @@ export default function NavPanel({
 			>
 				<NavButton
 					onPress={() => {
-						setIsSwipeSheetOpen(false)
+						setIsActionSheetOpen(false)
 						setIsDrawerShown(true)
 					}}
 					icon={<SVGIconBurger width={32} height={32} />}

@@ -19,10 +19,12 @@ export default function SwipeSwitchSheet() {
 	const [isMounted, setIsMounted] = useState(false)
 	// const { theme } = useUnistyles()
 
-	const isSwipeSheetOpen = useNavStore((state) => state.isSwipeSheetOpen)
-	const setIsSwipeSheetOpen = useNavStore((state) => state.setIsSwipeSheetOpen)
-	const swipeSheetItem = useNavStore((state) => state.swipeSheetItem)
-	const setSwipeSheetItem = useNavStore((state) => state.setSwipeSheetItem)
+	const isActionSheetOpen = useNavStore((state) => state.isActionSheetOpen)
+	const setIsActionSheetOpen = useNavStore(
+		(state) => state.setIsActionSheetOpen
+	)
+	const actionSheetItem = useNavStore((state) => state.actionSheetItem)
+	const setActionSheetItem = useNavStore((state) => state.setActionSheetItem)
 
 	const swipeSwitchItems = useNavStore((state) => state.swipeSwitchItems)
 	const navigation = useNavigation()
@@ -34,19 +36,19 @@ export default function SwipeSwitchSheet() {
 	useEffect(
 		() => {
 			const unsubscribe = navigation.addListener('state', () => {
-				setIsSwipeSheetOpen(false)
-				setSwipeSheetItem(null)
+				setIsActionSheetOpen(false)
+				setActionSheetItem(null)
 			})
 
 			return unsubscribe
 		},
 		// eslint-disable-next-line
-		[navigation, setSwipeSheetItem]
+		[navigation, setActionSheetItem]
 	)
 
 	useEffect(
 		() => {
-			if (isSwipeSheetOpen) {
+			if (isActionSheetOpen) {
 				setIsMounted(true)
 				translateY.value = withTiming(0, { duration: 300 })
 			} else if (isMounted) {
@@ -60,10 +62,10 @@ export default function SwipeSwitchSheet() {
 			}
 		},
 		// eslint-disable-next-line
-		[isSwipeSheetOpen]
+		[isActionSheetOpen]
 	)
 
-	const dismiss = () => setIsSwipeSheetOpen(false)
+	const dismiss = () => setIsActionSheetOpen(false)
 
 	const dragGesture = Gesture.Pan()
 		.onUpdate((e) => {
@@ -83,12 +85,12 @@ export default function SwipeSwitchSheet() {
 		transform: [{ translateY: translateY.value }]
 	}))
 
-	const item = swipeSheetItem
-		? swipeSwitchItems[swipeSheetItem.row]?.[swipeSheetItem.col]
+	const item = actionSheetItem
+		? swipeSwitchItems[actionSheetItem.row]?.[actionSheetItem.col]
 		: null
 	const label = item ? item[Object.keys(item)[0]]! : ''
 
-	// if (swipeSheetItem === null && translateY.value === SHEET_HEIGHT) return null
+	// if (actionSheetItem === null && translateY.value === SHEET_HEIGHT) return null
 	if (!isMounted) return null
 
 	return (

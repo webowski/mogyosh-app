@@ -45,10 +45,10 @@ interface NavStore {
 
 	setSwipeRoute: (route: string) => void
 
-	isSwipeSheetOpen: boolean
-	setIsSwipeSheetOpen: (isOpen: boolean) => void
-	swipeSheetItem: SwipeSwitchPosition | null
-	setSwipeSheetItem: (item: SwipeSwitchPosition | null) => void
+	isActionSheetOpen: boolean
+	setIsActionSheetOpen: (isOpen: boolean) => void
+	actionSheetItem: SwipeSwitchPosition | null
+	setActionSheetItem: (item: SwipeSwitchPosition | null) => void
 }
 
 export const useNavStore = create<NavStore>((set, get) => ({
@@ -104,10 +104,10 @@ export const useNavStore = create<NavStore>((set, get) => ({
 		}
 	},
 
-	isSwipeSheetOpen: false,
-	setIsSwipeSheetOpen: (isOpen) => set({ isSwipeSheetOpen: isOpen }),
-	swipeSheetItem: null,
-	setSwipeSheetItem: (item) => set({ swipeSheetItem: item })
+	isActionSheetOpen: false,
+	setIsActionSheetOpen: (isOpen) => set({ isActionSheetOpen: isOpen }),
+	actionSheetItem: null,
+	setActionSheetItem: (item) => set({ actionSheetItem: item })
 }))
 
 i18n.on('languageChanged', () => {
