@@ -1,7 +1,7 @@
 import { ActivityIndicator, Text, View } from 'react-native'
 
 import { buildSubitemTree } from '@/features/Subitem/model/subitem.utils'
-import { SubitemTree } from '@/features/Subitem/SubitemTree'
+import SubitemNode from '@/features/Subitem/SubitemNode'
 import {
 	useSubitems,
 	useTaskById,
@@ -59,14 +59,17 @@ export default function TaskScreen() {
 
 	return (
 		<ScrollBox>
-			{/* <SubitemTree treeData={subitemTree} onToggle={handleToggleSubitem} /> */}
-			<SubitemTree
-				treeData={subitemTree}
-				onToggle={handleToggleSubitem}
-				// variant='default'
-				// variant='bulleted'
-				variant='collapsible'
-			/>
+			{subitemTree.map((subitemData) => (
+				<SubitemNode
+					key={subitemData.id}
+					data={subitemData}
+					onToggle={handleToggleSubitem}
+					depth={0}
+					// variant='default'
+					// variant='bulleted'
+					variant='collapsible'
+				/>
+			))}
 		</ScrollBox>
 	)
 }

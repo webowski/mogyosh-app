@@ -9,28 +9,30 @@ import Animated, {
 import { useUnistyles } from 'react-native-unistyles'
 
 import { ChecklistItem } from '@/features/TaskList/ChecklistItem'
-import type { SubitemWithChildren } from './model/subitem.types'
-
-export type SubitemTreeVariant = 'text' | 'bulleted' | 'collapsible'
-
-interface SubitemTreeProps {
-	treeData: SubitemWithChildren[]
-	depth?: number
-	onToggle: (taskId: string, completed: boolean) => void
-	variant?: SubitemTreeVariant
-}
+import type { SubitemType, SubitemWithChildren } from './model/subitem.types'
 
 interface SubitemNodeProps {
-	subitem: SubitemWithChildren
+	data: SubitemWithChildren
 	depth: number
 	onToggle: (taskId: string, completed: boolean) => void
-	variant: SubitemTreeVariant
+	variant: SubitemType
 }
 
-function SubitemNode({ subitem, depth, onToggle, variant }: SubitemNodeProps) {
+// Returns bullet symbol based on nesting depth
+function getBullet(depth: number): string {
+	const bullets = ['•', '◦', '▪']
+	return bullets[depth % bullets.length]
+}
+
+export default function SubitemNode({
+	data,
+	variant = 'text',
+	depth = 0,
+	onToggle
+}: SubitemNodeProps) {
 	const { theme } = useUnistyles()
 	const [isExpanded, setIsExpanded] = useState(true)
-	const hasChildren = subitem.children.length > 0
+	const hasChildren = data.children.length > 0
 
 	const rotationProgress = useSharedValue(1) // 1 = expanded (90deg), 0 = collapsed
 
@@ -65,9 +67,9 @@ function SubitemNode({ subitem, depth, onToggle, variant }: SubitemNodeProps) {
 					{!hasChildren && <View style={{ width: 16 }} />}
 					<View style={{ flex: 1 }}>
 						<ChecklistItem
-							checked={subitem.state === 'done'}
-							text={subitem.info}
-							onToggle={(value) => onToggle(subitem.id, value)}
+							checked={data.state === 'done'}
+							text={data.info}
+							onToggle={(value) => onToggle(data.id, value)}
 						/>
 					</View>
 				</View>
@@ -80,49 +82,27 @@ function SubitemNode({ subitem, depth, onToggle, variant }: SubitemNodeProps) {
 					)}
 					<View style={{ flex: 1 }}>
 						<ChecklistItem
-							checked={subitem.state === 'done'}
-							text={subitem.info}
-							onToggle={(value) => onToggle(subitem.id, value)}
+							checked={data.state === 'done'}
+							text={data.info}
+							onToggle={(value) => onToggle(data.id, value)}
 						/>
 					</View>
 				</View>
 			)}
 
 			{hasChildren && (variant !== 'collapsible' || isExpanded) && (
-				<SubitemTree
-					treeData={subitem.children}
-					depth={depth + 1}
-					onToggle={onToggle}
-					variant={variant}
-				/>
+				<>
+					{data.children.map((child) => (
+						<SubitemNode
+							key={child.id}
+							data={child}
+							depth={depth + 1}
+							onToggle={onToggle}
+							variant={variant}
+						/>
+					))}
+				</>
 			)}
 		</View>
-	)
-}
-
-// Returns bullet symbol based on nesting depth
-function getBullet(depth: number): string {
-	const bullets = ['•', '◦', '▪']
-	return bullets[depth % bullets.length]
-}
-
-export function SubitemTree({
-	treeData,
-	depth = 0,
-	onToggle,
-	variant = 'text'
-}: SubitemTreeProps) {
-	return (
-		<>
-			{treeData.map((subitem) => (
-				<SubitemNode
-					key={subitem.id}
-					subitem={subitem}
-					depth={depth}
-					onToggle={onToggle}
-					variant={variant}
-				/>
-			))}
-		</>
 	)
 }
