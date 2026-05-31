@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { SubitemId } from '@/shared/domain/ids'
-import { SubitemEntity, SubitemState } from '@/shared/domain/task'
+import { SubitemEntity, SubitemState } from '@/shared/domain/subitem'
 import { subitemAPI } from '../repository/subitem.api'
 
 type SubitemStateMutationParams = {

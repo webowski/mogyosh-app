@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { TaskId } from '@/shared/domain/ids'
-import { SubitemEntity } from '@/shared/domain/task'
+import { SubitemEntity } from '@/shared/domain/subitem'
 import { subitemAPI } from '../repository/subitem.api'
 
 /**

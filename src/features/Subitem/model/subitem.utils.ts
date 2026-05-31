@@ -1,5 +1,5 @@
 import { SubitemId } from '@/shared/domain/ids'
-import { SubitemEntity } from '@/shared/domain/task'
+import { SubitemEntity } from '@/shared/domain/subitem'
 import { SubitemWithChildren } from './subitem.types'
 
 // Helper: build tree from flat list

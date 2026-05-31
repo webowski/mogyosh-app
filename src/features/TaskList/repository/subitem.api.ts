@@ -1,6 +1,6 @@
 import { supabaseClient } from '@/shared/api/supabaseClient'
 import { SubitemId, TaskId } from '@/shared/domain/ids'
-import { SubitemEntity, SubitemRow } from '@/shared/domain/task'
+import { SubitemEntity, SubitemRow } from '@/shared/domain/subitem'
 
 const SUBITEMS_SELECT = `
 	*,

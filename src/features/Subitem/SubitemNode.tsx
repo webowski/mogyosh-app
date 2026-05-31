@@ -9,7 +9,8 @@ import Animated, {
 import { useUnistyles } from 'react-native-unistyles'
 
 import { ChecklistItem } from '@/features/TaskList/ChecklistItem'
-import type { SubitemType, SubitemWithChildren } from './model/subitem.types'
+import { SubitemType } from '@/shared/domain/subitem'
+import type { SubitemWithChildren } from './model/subitem.types'
 
 interface SubitemNodeProps {
 	data: SubitemWithChildren
