@@ -4,12 +4,13 @@ import { Text, View } from 'react-native'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import Animated, {
 	useAnimatedStyle,
-	useSharedValue
+	useSharedValue,
+	withTiming
 } from 'react-native-reanimated'
 import { StyleSheet } from 'react-native-unistyles'
 
 import { useNavStore } from '@/features/Navigation/model/navStore'
-import { useTaskProgress } from '@/features/TaskList'
+import { useDeleteTask, useTaskProgress } from '@/features/TaskList'
 import { useCategoriesStore } from '@/features/TaskList/model/categoriesStore'
 import {
 	isByTime,
@@ -47,7 +48,7 @@ export default function TaskItem({
 	const setSwipeRoute = useNavStore((store) => store.setSwipeRoute)
 	const hourFormat = useSettingsStore((store) => store.hourFormat)
 	const { data: progressData } = useTaskProgress(data.id)
-	// const deleteTaskMutation = useDeleteTask()
+	const deleteTaskMutation = useDeleteTask()
 
 	const isByTimeBool = isByTime(data)
 
@@ -57,50 +58,50 @@ export default function TaskItem({
 	const deleteOpacity = useSharedValue(0)
 	const completeOpacity = useSharedValue(0)
 
-	// const deleteTask = () => {
-	// 	deleteTaskMutation.mutate(data.id)
-	// 	onDelete?.(data.id)
-	// }
+	const deleteTask = () => {
+		deleteTaskMutation.mutate(data.id)
+		onDelete?.(data.id)
+	}
 
-	// const completeTask = () => {
-	// 	onComplete?.(data.id)
-	// }
+	const completeTask = () => {
+		onComplete?.(data.id)
+	}
 
 	const panGesture = Gesture.Pan()
 		.activeOffsetX([-10, 10])
 		.onUpdate((event) => {
-			// translateX.value = event.translationX
-			// if (event.translationX < 0) {
-			// 	// Swipe left — delete zone
-			// 	deleteOpacity.value = Math.min(
-			// 		1,
-			// 		Math.abs(event.translationX) / Math.abs(DELETE_THRESHOLD)
-			// 	)
-			// 	completeOpacity.value = 0
-			// } else {
-			// 	// Swipe right — complete zone
-			// 	completeOpacity.value = Math.min(
-			// 		1,
-			// 		event.translationX / COMPLETE_THRESHOLD
-			// 	)
-			// 	deleteOpacity.value = 0
-			// }
+			translateX.value = event.translationX
+			if (event.translationX < 0) {
+				// Swipe left — delete zone
+				deleteOpacity.value = Math.min(
+					1,
+					Math.abs(event.translationX) / Math.abs(DELETE_THRESHOLD)
+				)
+				completeOpacity.value = 0
+			} else {
+				// Swipe right — complete zone
+				completeOpacity.value = Math.min(
+					1,
+					event.translationX / COMPLETE_THRESHOLD
+				)
+				deleteOpacity.value = 0
+			}
 		})
 		.onEnd((event) => {
-			// if (event.translationX < DELETE_THRESHOLD) {
-			// 	translateX.value = withTiming(-500, { duration: 300 })
-			// 	itemHeight.value = withTiming(0, { duration: 300 })
-			// 	scheduleOnRN(deleteTask)
-			// } else if (event.translationX > COMPLETE_THRESHOLD) {
-			// 	translateX.value = withTiming(500, { duration: 300 })
-			// 	itemHeight.value = withTiming(0, { duration: 300 })
-			// 	scheduleOnRN(completeTask)
-			// } else {
-			// 	// Snap back
-			// 	translateX.value = withTiming(0, { duration: 250 })
-			// 	deleteOpacity.value = withTiming(0, { duration: 250 })
-			// 	completeOpacity.value = withTiming(0, { duration: 250 })
-			// }
+			if (event.translationX < DELETE_THRESHOLD) {
+				translateX.value = withTiming(-500, { duration: 300 })
+				itemHeight.value = withTiming(0, { duration: 300 })
+				scheduleOnRN(deleteTask)
+			} else if (event.translationX > COMPLETE_THRESHOLD) {
+				translateX.value = withTiming(500, { duration: 300 })
+				itemHeight.value = withTiming(0, { duration: 300 })
+				scheduleOnRN(completeTask)
+			} else {
+				// Snap back
+				translateX.value = withTiming(0, { duration: 250 })
+				deleteOpacity.value = withTiming(0, { duration: 250 })
+				completeOpacity.value = withTiming(0, { duration: 250 })
+			}
 		})
 
 	const goTaskScreen = () => {
