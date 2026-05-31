@@ -8,13 +8,13 @@
     "scheme": "mogyosh",
     "entryPoint": "./index.ts",
     "userInterfaceStyle": "automatic",
-    "backgroundColor": "#668cff",
+    "backgroundColor": "#f7f8fd",
     "locales": {
       "en": "./locales/en.json",
       "ru": "./locales/ru.json"
     },
     "ios": {
-      "backgroundColor": "#668cff",
+      "backgroundColor": "#f7f8fd",
       "icon": "./assets/expo.icon",
       "infoPlist": {
         "CFBundleAllowMixedLocalizations": true,
@@ -28,7 +28,7 @@
       "package": "com.okwebowski.mogyosh",
       "minSdkVersion": 26,
       "targetSdkVersion": 34,
-      "backgroundColor": "#668cff",
+      "backgroundColor": "#f7f8fd",
       "adaptiveIcon": {
         "backgroundColor": "#668cff",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
