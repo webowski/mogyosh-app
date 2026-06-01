@@ -220,7 +220,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		borderTopWidth: 11,
 		borderColor: theme.colors.brandLightest,
 		color: theme.colors.mutedLightText,
-		fontSize: 13,
+		fontSize: 13 * rt.fontScale,
 		fontWeight: '400'
 	},
 	brandFigure__decor: {
