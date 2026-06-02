@@ -1,5 +1,4 @@
-import Checkbox from '@/shared/ui/Checkbox'
-import { useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { View } from 'react-native'
 import Animated, {
 	useAnimatedStyle,
@@ -8,17 +7,12 @@ import Animated, {
 } from 'react-native-reanimated'
 import { StyleSheet } from 'react-native-unistyles'
 
-type ChecklistItemProps = {
-	checked: boolean
-	text: string
-	onToggle: (checked: boolean) => void
-}
+import Checkbox from '@/shared/ui/Checkbox'
+import { SubitemProps } from '../index'
 
-export const ChecklistItem = ({
-	checked,
-	text,
-	onToggle
-}: ChecklistItemProps) => {
+export default function TextSubitem({ data, onCheckToggle }: SubitemProps) {
+	const [checked, setChecked] = useState(data.state === 'done')
+
 	const animationProgress = useSharedValue(checked ? 1 : 0)
 
 	useEffect(
@@ -29,9 +23,14 @@ export const ChecklistItem = ({
 		[checked]
 	)
 
-	const handlePress = () => {
-		onToggle(!checked)
-	}
+	const handlePress = useCallback(
+		() => {
+			setChecked(!checked)
+			onCheckToggle?.(!checked)
+		},
+		// eslint-disable-next-line
+		[checked]
+	)
 
 	const textStyle = useAnimatedStyle(() => ({
 		opacity: withTiming(checked ? 0.38 : 1, { duration: 120 })
@@ -39,8 +38,10 @@ export const ChecklistItem = ({
 
 	return (
 		<View style={styles.container}>
-			<Animated.Text style={[styles.text, textStyle]}>{text}</Animated.Text>
-			<Checkbox checked={checked} onPress={handlePress} />
+			<Animated.Text style={[styles.text, textStyle]}>
+				{data.info}
+			</Animated.Text>
+			{onCheckToggle && <Checkbox checked={checked} onPress={handlePress} />}
 		</View>
 	)
 }

@@ -1,104 +1,71 @@
-import { MaterialIcons } from '@expo/vector-icons'
-import { useState } from 'react'
-import { Pressable, Text, View } from 'react-native'
-import Animated, {
-	useAnimatedStyle,
-	useSharedValue,
-	withTiming
-} from 'react-native-reanimated'
-import { useUnistyles } from 'react-native-unistyles'
+import { View } from 'react-native'
 
-import { ChecklistItem } from '@/features/TaskList/ChecklistItem'
 import { SubitemType } from '@/shared/domain/subitem'
-import type { SubitemWithChildren } from './model/subitem.types'
+import { useState } from 'react'
+import type { SubitemData } from './model/subitem.types'
+import TextSubitem from './variants/TextSubitem'
 
 interface SubitemNodeProps {
-	data: SubitemWithChildren
+	data: SubitemData
 	depth: number
-	onToggle: (taskId: string, completed: boolean) => void
+	onCheckToggle: (checked: boolean) => void
 	variant: SubitemType
-}
-
-// Returns bullet symbol based on nesting depth
-function getBullet(depth: number): string {
-	const bullets = ['•', '◦', '▪']
-	return bullets[depth % bullets.length]
 }
 
 export default function SubitemNode({
 	data,
 	variant = 'text',
 	depth = 0,
-	onToggle
+	onCheckToggle
 }: SubitemNodeProps) {
-	const { theme } = useUnistyles()
-	const [isExpanded, setIsExpanded] = useState(true)
-	const hasChildren = data.children.length > 0
+	const [isChildShown, setIsChildShown] = useState(true)
+	// const hasChildren = data.children.length > 0
 
-	const rotationProgress = useSharedValue(1) // 1 = expanded (90deg), 0 = collapsed
+	let HAS_CHECKBOX = true
 
-	const animatedIconStyle = useAnimatedStyle(() => ({
-		transform: [{ rotate: `${rotationProgress.value * 90}deg` }]
-	}))
+	let content = <TextSubitem data={data} onCheckToggle={onCheckToggle} />
+	// let content = <TextSubitem data={data} />
 
-	const toggleExpand = () => {
-		const nextExpanded = !isExpanded
-		rotationProgress.value = withTiming(nextExpanded ? 1 : 0, { duration: 100 })
-		setIsExpanded(nextExpanded)
-	}
+	// switch (variant) {
+	// 	case 'collapsible':
+	// 		content = (
+	// 			<CollapsibleSubitem
+	// 				data={data}
+	// 				depth={depth}
+	// 				onCheckToggle={onCheckToggle}
+	// 				onExpandToggle={(value) => setIsChildShown(value)}
+	// 			/>
+	// 		)
+	// 		break
+
+	// 	case 'bulleted':
+	// 		content = (
+	// 			<BulletedSubitem
+	// 				data={data}
+	// 				depth={depth}
+	// 				onCheckToggle={onCheckToggle}
+	// 			/>
+	// 		)
+	// 		break
+
+	// 	case 'text':
+	// 		content = (
+	// 			<TextSubitem data={data} depth={depth} onCheckToggle={onCheckToggle} />
+	// 		)
+	// }
 
 	return (
 		<View style={{ paddingLeft: depth * 16 }}>
-			{variant === 'collapsible' ? (
-				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-					{hasChildren && (
-						<Pressable
-							onPress={toggleExpand}
-							style={{ marginRight: 4, marginTop: 2 }}
-						>
-							<Animated.View style={animatedIconStyle}>
-								<MaterialIcons
-									name='play-arrow'
-									size={20}
-									color={theme.colors.major}
-								/>
-							</Animated.View>
-						</Pressable>
-					)}
-					{!hasChildren && <View style={{ width: 16 }} />}
-					<View style={{ flex: 1 }}>
-						<ChecklistItem
-							checked={data.state === 'done'}
-							text={data.info}
-							onToggle={(value) => onToggle(data.id, value)}
-						/>
-					</View>
-				</View>
-			) : (
-				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-					{variant === 'bulleted' && (
-						<Text style={{ marginRight: 6, fontSize: 16 }}>
-							{getBullet(depth)}
-						</Text>
-					)}
-					<View style={{ flex: 1 }}>
-						<ChecklistItem
-							checked={data.state === 'done'}
-							text={data.info}
-							onToggle={(value) => onToggle(data.id, value)}
-						/>
-					</View>
-				</View>
-			)}
+			{content}
 
-			{hasChildren && (variant !== 'collapsible' || isExpanded) && (
+			{isChildShown && (
 				<>
 					{data.children.map((child) => (
 						<SubitemNode
 							key={child.id}
 							data={child}
 							depth={depth + 1}
-							onToggle={onToggle}
+							onCheckToggle={onCheckToggle}
 							variant={variant}
 						/>
 					))}

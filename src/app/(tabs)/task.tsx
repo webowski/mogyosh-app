@@ -22,6 +22,7 @@ export default function TaskScreen() {
 	const updateSubitemState = useUpdateSubitemState()
 
 	const handleToggleSubitem = (taskId: string, completed: boolean) => {
+		console.log({ taskId, completed })
 		updateSubitemState.mutate({
 			taskId,
 			state: completed ? 'done' : 'active'
@@ -63,7 +64,9 @@ export default function TaskScreen() {
 				<SubitemNode
 					key={subitemData.id}
 					data={subitemData}
-					onToggle={handleToggleSubitem}
+					onCheckToggle={(checked) =>
+						handleToggleSubitem(subitemData.id, checked)
+					}
 					depth={0}
 					// variant='default'
 					// variant='bulleted'
