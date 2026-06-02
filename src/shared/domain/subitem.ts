@@ -26,6 +26,10 @@ export type SubitemStateEntity = {
 	created_at: string
 }
 
+export type SubitemSettings = {
+	checkable?: boolean
+}
+
 export type SubitemEntity = {
 	id: SubitemId
 	task_id: TaskId
@@ -33,6 +37,7 @@ export type SubitemEntity = {
 	type: SubitemType
 	info: string
 	status?: SubitemStatus
+	settings?: SubitemSettings | null
 	priority?: number | null
 	sort_order: any
 	state?: SubitemState | null
@@ -47,6 +52,7 @@ export type SubitemRow = {
 	parent_id: string | null
 	type: SubitemType
 	info: string
+	settings: SubitemSettings
 	status: SubitemStatus
 	priority: number
 	sort_order: any
