@@ -1,30 +1,46 @@
 import { View } from 'react-native'
 
-import { SubitemType } from '@/shared/domain/subitem'
+import type { SubitemId } from '@/shared/domain/ids'
+import type { SubitemType } from '@/shared/domain/subitem'
 import { useState } from 'react'
+import { useUpdateSubitemState } from '../TaskList'
 import type { SubitemData } from './model/subitem.types'
 import TextSubitem from './variants/TextSubitem'
 
 interface SubitemNodeProps {
 	data: SubitemData
 	depth: number
-	onCheckToggle: (checked: boolean) => void
+	// onCheckToggle: (subitemId: SubitemId, checked: boolean) => void
 	variant: SubitemType
 }
 
 export default function SubitemNode({
 	data,
 	variant = 'text',
-	depth = 0,
-	onCheckToggle
+	depth = 0
 }: SubitemNodeProps) {
 	const [isChildShown, setIsChildShown] = useState(true)
 	// const hasChildren = data.children.length > 0
 
 	let HAS_CHECKBOX = true
 
-	let content = <TextSubitem data={data} onCheckToggle={onCheckToggle} />
-	// let content = <TextSubitem data={data} />
+	const updateSubitemState = useUpdateSubitemState()
+
+	const handleToggleSubitem = (subitemId: SubitemId, completed: boolean) => {
+		updateSubitemState.mutate({
+			subitemId,
+			state: completed ? 'done' : 'active'
+		})
+	}
+
+	let content = (
+		<TextSubitem
+			data={data}
+			onCheckToggle={(checked) => handleToggleSubitem(data.id, checked)}
+		/>
+	)
+
+	// let content = undefined
 
 	// switch (variant) {
 	// 	case 'collapsible':
@@ -65,7 +81,6 @@ export default function SubitemNode({
 							key={child.id}
 							data={child}
 							depth={depth + 1}
-							onCheckToggle={onCheckToggle}
 							variant={variant}
 						/>
 					))}
