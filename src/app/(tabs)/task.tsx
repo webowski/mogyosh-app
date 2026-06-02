@@ -7,6 +7,7 @@ import {
 	useTaskById,
 	useUpdateSubitemState
 } from '@/features/TaskList'
+import { SubitemId } from '@/shared/domain/ids'
 import { useTaskStore } from '@/shared/model/taskStore'
 import { commonStyles } from '@/shared/styles/common'
 import ScrollBox from '@/shared/ui/ScrollBox'
@@ -21,10 +22,10 @@ export default function TaskScreen() {
 
 	const updateSubitemState = useUpdateSubitemState()
 
-	const handleToggleSubitem = (taskId: string, completed: boolean) => {
-		console.log({ taskId, completed })
+	const handleToggleSubitem = (subitemId: SubitemId, completed: boolean) => {
+		console.log({ subitemId, completed })
 		updateSubitemState.mutate({
-			taskId,
+			subitemId,
 			state: completed ? 'done' : 'active'
 		})
 	}

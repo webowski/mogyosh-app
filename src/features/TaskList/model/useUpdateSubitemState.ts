@@ -5,7 +5,7 @@ import { SubitemEntity, SubitemState } from '@/shared/domain/subitem'
 import { subitemAPI } from '../repository/subitem.api'
 
 type SubitemStateMutationParams = {
-	taskId: SubitemId
+	subitemId: SubitemId
 	state: SubitemState
 }
 
@@ -17,17 +17,19 @@ export const useUpdateSubitemState = () => {
 	const queryClient = useQueryClient()
 
 	return useMutation({
-		mutationFn: async ({ taskId, state }: SubitemStateMutationParams) => {
-			return await subitemAPI.updateSubitemState(taskId, state)
+		mutationFn: async ({ subitemId, state }: SubitemStateMutationParams) => {
+			return await subitemAPI.updateSubitemState(subitemId, state)
 		},
 		onSuccess: (_, variables) => {
-			queryClient.invalidateQueries({ queryKey: ['task', variables.taskId] })
+			queryClient.invalidateQueries({
+				queryKey: ['subitem', variables.subitemId]
+			})
 			queryClient.invalidateQueries({ queryKey: ['subitems'] })
 			queryClient.invalidateQueries({ queryKey: ['task-progress'] })
 			queryClient.invalidateQueries({ queryKey: ['tasks'] })
 			queryClient.invalidateQueries({ queryKey: ['tasks-grouped'] })
 		},
-		onMutate: async ({ taskId, state }) => {
+		onMutate: async ({ subitemId, state }) => {
 			await queryClient.cancelQueries({ queryKey: ['subitems'] })
 
 			const previous = queryClient.getQueriesData({
@@ -39,8 +41,8 @@ export const useUpdateSubitemState = () => {
 					queryKey: ['subitems']
 				},
 				(old: SubitemEntity[] | undefined) => {
-					return old?.map((task) => {
-						return task.id === taskId ? { ...task, state } : task
+					return old?.map((subitem) => {
+						return subitem.id === subitemId ? { ...subitem, state } : subitem
 					})
 				}
 			)
