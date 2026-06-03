@@ -20,7 +20,7 @@ interface SubitemNodeProps {
 
 export default function SubitemNode({
 	data,
-	variant = 'text',
+	variant = 'p',
 	depth = 0
 }: SubitemNodeProps) {
 	const [isChildShown, setIsChildShown] = useState(true)
@@ -40,7 +40,7 @@ export default function SubitemNode({
 	let content
 
 	switch (variant) {
-		case 'collapsible':
+		case 'details':
 			content = (
 				<CollapsibleSubitem
 					data={data}
@@ -63,7 +63,7 @@ export default function SubitemNode({
 			)
 			break
 
-		case 'bulleted':
+		case 'ul':
 			content = (
 				<BulletedSubitem
 					data={data}
@@ -73,7 +73,7 @@ export default function SubitemNode({
 			)
 			break
 
-		case 'ordered':
+		case 'ol':
 			content = (
 				<OrderedSubitem
 					data={data}
