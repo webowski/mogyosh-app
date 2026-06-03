@@ -7,6 +7,7 @@ import Animated, {
 } from 'react-native-reanimated'
 import { StyleSheet } from 'react-native-unistyles'
 
+import { STYLE_VARS } from '@/shared/styles/common'
 import Checkbox from '@/shared/ui/Checkbox'
 import { SubitemProps } from '../index'
 
@@ -23,7 +24,7 @@ export default function TextSubitem({ data, onCheckToggle }: SubitemProps) {
 		[checked]
 	)
 
-	const handlePress = useCallback(
+	const handlePressCheckbox = useCallback(
 		() => {
 			setChecked(!checked)
 			onCheckToggle?.(!checked)
@@ -33,7 +34,9 @@ export default function TextSubitem({ data, onCheckToggle }: SubitemProps) {
 	)
 
 	const textStyle = useAnimatedStyle(() => ({
-		opacity: withTiming(checked ? 0.38 : 1, { duration: 120 })
+		opacity: withTiming(checked ? STYLE_VARS.checkedOpacity : 1, {
+			duration: STYLE_VARS.duration.md
+		})
 	}))
 
 	return (
@@ -41,7 +44,9 @@ export default function TextSubitem({ data, onCheckToggle }: SubitemProps) {
 			<Animated.Text style={[styles.text, textStyle]}>
 				{data.info}
 			</Animated.Text>
-			{onCheckToggle && <Checkbox checked={checked} onPress={handlePress} />}
+			{data.settings?.checkable && (
+				<Checkbox checked={checked} onPress={handlePressCheckbox} />
+			)}
 		</View>
 	)
 }

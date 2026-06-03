@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
@@ -11,20 +11,24 @@ import { STYLE_VARS } from '@/shared/styles/common'
 import Checkbox from '@/shared/ui/Checkbox'
 import { SubitemProps } from '../index'
 
-type OrderedSubitemProps = SubitemProps & {
-	depth: number
+type HeadingLevel = 'h1' | 'h2' | 'h3' | 'h4'
+
+type HeadingProps = SubitemProps & {
+	level: HeadingLevel
 }
 
-export default function OrderedSubitem({
-	data,
-	depth,
-	onCheckToggle
-}: OrderedSubitemProps) {
-	function getBullet(depth: number): string {
-		const bullets = ['1.', 'a.', '.i', '1.', 'a.', 'i.']
-		return bullets[depth % bullets.length]
-	}
+const HEADING_SIZES: Record<HeadingLevel, number> = {
+	h1: 30,
+	h2: 26,
+	h3: 22,
+	h4: 18
+}
 
+export default function HeadingSubitem({
+	data,
+	level,
+	onCheckToggle
+}: HeadingProps) {
 	const [checked, setChecked] = useState(data.state === 'done')
 
 	const animationProgress = useSharedValue(checked ? 1 : 0)
@@ -54,8 +58,7 @@ export default function OrderedSubitem({
 
 	return (
 		<View style={styles.container}>
-			<Text style={{ marginRight: 6, fontSize: 20 }}>{getBullet(depth)}</Text>
-			<Animated.Text style={[styles.text, textStyle]}>
+			<Animated.Text style={[styles.heading(HEADING_SIZES[level]), textStyle]}>
 				{data.info}
 			</Animated.Text>
 			{data.settings?.checkable && (
@@ -72,10 +75,11 @@ const styles = StyleSheet.create((theme) => ({
 		gap: 8,
 		paddingVertical: 6
 	},
-	text: {
+
+	heading: (headingFontSize: number) => ({
 		flex: 1,
-		fontSize: 16,
-		fontWeight: 500,
+		fontSize: headingFontSize,
+		fontWeight: 700,
 		color: theme.colors.major
-	}
+	})
 }))

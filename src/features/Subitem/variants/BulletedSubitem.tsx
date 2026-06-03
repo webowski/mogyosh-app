@@ -1,6 +1,14 @@
+import { useCallback, useEffect, useState } from 'react'
 import { Text, View } from 'react-native'
+import Animated, {
+	useAnimatedStyle,
+	useSharedValue,
+	withTiming
+} from 'react-native-reanimated'
+import { StyleSheet } from 'react-native-unistyles'
 
-import { ChecklistItem } from '@/features/TaskList/ChecklistItem'
+import { STYLE_VARS } from '@/shared/styles/common'
+import Checkbox from '@/shared/ui/Checkbox'
 import { SubitemProps } from '../index'
 
 type BulletedSubitemProps = SubitemProps & {
@@ -17,14 +25,57 @@ export default function BulletedSubitem({
 		return bullets[depth % bullets.length]
 	}
 
+	const [checked, setChecked] = useState(data.state === 'done')
+
+	const animationProgress = useSharedValue(checked ? 1 : 0)
+
+	useEffect(
+		() => {
+			animationProgress.value = withTiming(checked ? 1 : 0, { duration: 250 })
+		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[checked]
+	)
+
+	const handlePressCheckbox = useCallback(
+		() => {
+			setChecked(!checked)
+			onCheckToggle?.(!checked)
+		},
+		// eslint-disable-next-line
+		[checked]
+	)
+
+	const textStyle = useAnimatedStyle(() => ({
+		opacity: withTiming(checked ? STYLE_VARS.checkedOpacity : 1, {
+			duration: STYLE_VARS.duration.md
+		})
+	}))
+
 	return (
-		<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-			<Text style={{ marginRight: 6, fontSize: 16 }}>{getBullet(depth)}</Text>
-			<ChecklistItem
-				checked={data.state === 'done'}
-				text={data.info}
-				onToggle={(value) => onCheckToggle?.(value)}
-			/>
+		<View style={styles.container}>
+			<Text style={{ marginRight: 6, fontSize: 20 }}>{getBullet(depth)}</Text>
+			<Animated.Text style={[styles.text, textStyle]}>
+				{data.info}
+			</Animated.Text>
+			{data.settings?.checkable && (
+				<Checkbox checked={checked} onPress={handlePressCheckbox} />
+			)}
 		</View>
 	)
 }
+
+const styles = StyleSheet.create((theme) => ({
+	container: {
+		flexDirection: 'row',
+		alignItems: 'flex-start',
+		gap: 8,
+		paddingVertical: 6
+	},
+	text: {
+		flex: 1,
+		fontSize: 16,
+		fontWeight: 500,
+		color: theme.colors.major
+	}
+}))

@@ -51,9 +51,7 @@ export default function TaskScreen() {
 					key={subitemData.id}
 					data={subitemData}
 					depth={0}
-					// variant='default'
-					// variant='bulleted'
-					variant='collapsible'
+					variant={subitemData.type}
 				/>
 			))}
 		</ScrollBox>

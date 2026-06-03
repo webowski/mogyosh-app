@@ -1,27 +1,56 @@
 import { MaterialIcons } from '@expo/vector-icons'
+import { useCallback, useEffect, useState } from 'react'
 import { Pressable, View } from 'react-native'
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
 	withTiming
 } from 'react-native-reanimated'
-import { useUnistyles } from 'react-native-unistyles'
+import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
-import { ChecklistItem } from '@/features/TaskList/ChecklistItem'
+import { STYLE_VARS } from '@/shared/styles/common'
+import Checkbox from '@/shared/ui/Checkbox'
 import { SubitemProps } from '../index'
 
 type CollapsibleSubitemProps = SubitemProps & {
-	onExpandToggle: (value) => void
+	onExpandToggle: (expanded: boolean) => void
 }
 
 export default function CollapsibleSubitem({
 	data,
-	depth,
-	onCheckToggle,
-	onExpandToggle
+	onExpandToggle,
+	onCheckToggle
 }: CollapsibleSubitemProps) {
 	const { theme } = useUnistyles()
 	const rotationProgress = useSharedValue(1) // 1 = expanded (90deg), 0 = collapsed
+
+	const [checked, setChecked] = useState(data.state === 'done')
+	const [isExpanded, setIsExpanded] = useState(false)
+
+	const animationProgress = useSharedValue(checked ? 1 : 0)
+
+	useEffect(
+		() => {
+			animationProgress.value = withTiming(checked ? 1 : 0, { duration: 250 })
+		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[checked]
+	)
+
+	const handlePressCheckbox = useCallback(
+		() => {
+			setChecked(!checked)
+			onCheckToggle?.(!checked)
+		},
+		// eslint-disable-next-line
+		[checked]
+	)
+
+	const textStyle = useAnimatedStyle(() => ({
+		opacity: withTiming(checked ? STYLE_VARS.checkedOpacity : 1, {
+			duration: STYLE_VARS.duration.md
+		})
+	}))
 
 	const animatedIconStyle = useAnimatedStyle(() => ({
 		transform: [{ rotate: `${rotationProgress.value * 90}deg` }]
@@ -31,11 +60,11 @@ export default function CollapsibleSubitem({
 		const nextExpanded = !isExpanded
 		rotationProgress.value = withTiming(nextExpanded ? 1 : 0, { duration: 100 })
 		setIsExpanded(nextExpanded)
+		onExpandToggle(nextExpanded)
 	}
 
 	return (
-		<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-			{/* {hasChildren && ( */}
+		<View style={styles.container}>
 			<Pressable
 				onPress={toggleExpand}
 				style={{ marginRight: 4, marginTop: 2 }}
@@ -43,20 +72,34 @@ export default function CollapsibleSubitem({
 				<Animated.View style={animatedIconStyle}>
 					<MaterialIcons
 						name='play-arrow'
-						size={20}
+						size={16}
 						color={theme.colors.major}
 					/>
 				</Animated.View>
 			</Pressable>
-			{/* )} */}
-			{/* {!hasChildren && <View style={{ width: 16 }} />} */}
-			<View style={{ flex: 1 }}>
-				<ChecklistItem
-					checked={data.state === 'done'}
-					text={data.info}
-					onToggle={(value) => onCheckToggle(data.id, value)}
-				/>
-			</View>
+
+			<Animated.Text style={[styles.text, textStyle]}>
+				{data.info}
+			</Animated.Text>
+
+			{data.settings?.checkable && (
+				<Checkbox checked={checked} onPress={handlePressCheckbox} />
+			)}
 		</View>
 	)
 }
+
+const styles = StyleSheet.create((theme) => ({
+	container: {
+		flexDirection: 'row',
+		alignItems: 'flex-start',
+		gap: 8,
+		paddingVertical: 6
+	},
+	text: {
+		flex: 1,
+		fontSize: 16,
+		fontWeight: 500,
+		color: theme.colors.major
+	}
+}))

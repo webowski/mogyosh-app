@@ -12,8 +12,14 @@ export const STYLE_VARS = {
 	radius_xl: 16,
 	radius_2xl: 24,
 	radius_3xl: 32,
-	navPanelUnderlap: 32
-}
+	navPanelUnderlap: 32,
+
+	checkedOpacity: 0.45,
+
+	duration: {
+		md: 120
+	}
+} as const
 
 export const commonStyles = StyleSheet.create((theme, rt) => ({
 	scene: {

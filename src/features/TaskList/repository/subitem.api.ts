@@ -19,6 +19,7 @@ const makeSubitemObject = (subitemRow: SubitemRow): SubitemEntity => ({
 	type: subitemRow.type,
 	info: subitemRow.info,
 	status: subitemRow.status,
+	settings: subitemRow.settings,
 	state: subitemRow.subitem_states?.[0]?.state ?? null,
 	priority: subitemRow.priority,
 	sort_order: subitemRow.sort_order,
