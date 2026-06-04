@@ -15,7 +15,7 @@ import { STYLE_VARS } from '@/shared/styles/common'
 
 const SHEET_HEIGHT = Dimensions.get('window').height * 0.4
 
-export default function SwipeSwitchSheet() {
+export default function ActionSheet() {
 	const [isMounted, setIsMounted] = useState(false)
 	// const { theme } = useUnistyles()
 
@@ -133,7 +133,7 @@ const styles = StyleSheet.create((theme) => ({
 		zIndex: 10,
 		paddingHorizontal: STYLE_VARS.sidePadding,
 		paddingTop: 12,
-		boxShadow: theme.colors.shadeSwipeSwitchSheet,
+		boxShadow: theme.colors.shadeActionSheet,
 		borderColor: theme.colors.borderLightest,
 		borderWidth: 1
 	},

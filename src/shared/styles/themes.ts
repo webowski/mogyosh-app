@@ -104,7 +104,7 @@ export const lightTheme = {
 		shadeDrawer: '0 0px 40px hsla(225, 74%, 40%, .55)',
 		shadeNavPanelWrap: '0 0px 32px hsla(225, 74%, 40%, .12)',
 		shadeNavPanel: '0 0px 4px hsla(225, 74%, 40%, .12)',
-		shadeSwipeSwitchSheet: '0 0px 20px hsla(225, 74%, 40%, .12)',
+		shadeActionSheet: '0 0px 20px hsla(225, 74%, 40%, .12)',
 
 		shadeCard: '0px 2px 4px hsla(225, 74%, 40%, .09)',
 
@@ -180,7 +180,7 @@ export const darkTheme = {
 		shadeDrawer: '0 0px 40px hsla(225, 0%, 0%, .35)',
 		shadeNavPanelWrap: '0 0px 32px hsla(225, 0%, 0%, .2)',
 		shadeNavPanel: '0 0px 4px hsla(225, 0%, 0%, .12)',
-		shadeSwipeSwitchSheet: '0 0px 20px hsla(225, 0%, 0%, .12)',
+		shadeActionSheet: '0 0px 20px hsla(225, 0%, 0%, .12)',
 
 		shadeCard: '0px 2px 4px hsla(225, 0%, 0%, .12)',
 

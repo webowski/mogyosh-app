@@ -15,8 +15,8 @@ import SVGIconTarget from '@/shared/images/icons/target.svg'
 import { SwipeSwitchItems } from '@/features/Navigation/model/navTypes'
 import { useCalendarStore } from '@/shared/model/calendarStore'
 import { STYLE_VARS } from '@/shared/styles/common'
+import ActionSheet from './ActionSheet'
 import { useNavStore } from './model/navStore'
-import SwipeSwitchSheet from './SwipeSwitchSheet'
 
 type NavPanelProps = BottomTabBarProps
 
@@ -100,7 +100,7 @@ export default function NavPanel({
 
 	return (
 		<View style={styles.NavPanelWrap}>
-			<SwipeSwitchSheet />
+			<ActionSheet />
 			<View
 				style={[
 					styles.NavPanel,
