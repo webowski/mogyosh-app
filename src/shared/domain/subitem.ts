@@ -12,6 +12,7 @@ export type SubitemType =
 	| 'details'
 	| 'progress'
 	| 'timer'
+	| 'stopwatch'
 	| 'counter'
 	| 'image'
 
@@ -28,6 +29,7 @@ export type SubitemStateEntity = {
 
 export type SubitemSettings = {
 	checkable?: boolean
+	duration?: number
 }
 
 export type SubitemEntity = {
@@ -37,9 +39,9 @@ export type SubitemEntity = {
 	type: SubitemType
 	info: string
 	status?: SubitemStatus
-	settings?: SubitemSettings | null
+	settings: SubitemSettings
 	priority?: number | null
-	sort_order: any
+	sort_order: any | null
 	state?: SubitemState | null
 	// schedules?: SubitemScheduleEntity[]
 	created_at: string

@@ -10,6 +10,7 @@ import CollapsibleSubitem from './variants/CollapsibleSubitem'
 import HeadingSubitem from './variants/HeadingSubitem'
 import OrderedSubitem from './variants/OrderedSubitem'
 import TextSubitem from './variants/TextSubitem'
+import TimerSubitem from './variants/TimerSubitem'
 
 interface SubitemNodeProps {
 	data: SubitemData
@@ -83,6 +84,17 @@ export default function SubitemNode({
 			)
 			break
 
+		case 'timer':
+			content = (
+				<TimerSubitem
+					data={data}
+					// depth={depth}
+					onCheckToggle={(checked) => handleToggleSubitem(data.id, checked)}
+				/>
+			)
+			break
+
+		// case 'p':
 		default:
 			content = (
 				<TextSubitem

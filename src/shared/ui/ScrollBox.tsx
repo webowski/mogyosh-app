@@ -21,7 +21,8 @@ export default function ScrollBox({
 			}}
 			contentContainerStyle={[
 				{
-					flex: 1,
+					flexGrow: 1,
+					flexShrink: 0,
 					paddingHorizontal: STYLE_VARS.sidePadding,
 					paddingTop: STYLE_VARS.sidePadding,
 					paddingBottom: STYLE_VARS.sidePadding + STYLE_VARS.navPanelUnderlap,

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { Text, View } from 'react-native'
 import Animated, {
 	Easing,
@@ -11,7 +11,7 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle)
 
-interface CircleProgressBarProps {
+interface CircleProgressProps {
 	progress: number
 	value: string
 	size?: number
@@ -21,14 +21,14 @@ interface CircleProgressBarProps {
 	showLabel?: boolean
 }
 
-export default function CircleProgressBar({
+export default function CircleProgress({
 	progress,
 	value,
 	size = 52,
 	strokeWidth = 4,
 	duration = 600,
 	showLabel = true
-}: CircleProgressBarProps) {
+}: CircleProgressProps) {
 	const { theme } = useUnistyles()
 	const color = theme.colors.primary
 
@@ -104,7 +104,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 	label: {
 		fontSize: 13 * rt.fontScale,
 		lineHeight: 13 * rt.fontScale,
-		fontWeight: '600',
+		fontWeight: '500',
 		color: theme.colors.major
 	}
 }))
