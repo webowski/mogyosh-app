@@ -1,21 +1,25 @@
 import { useNavigation } from 'expo-router'
 import { useEffect, useState } from 'react'
-import { Dimensions, Pressable, Text, View } from 'react-native'
+import { Pressable, Text, View } from 'react-native'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import Animated, {
+	Easing,
 	useAnimatedStyle,
 	useSharedValue,
 	withTiming
 } from 'react-native-reanimated'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { StyleSheet } from 'react-native-unistyles'
 import { scheduleOnRN } from 'react-native-worklets'
 
 import { useNavStore } from '@/features/Navigation/model/navStore'
 import { STYLE_VARS } from '@/shared/styles/common'
 
-const SHEET_HEIGHT = Dimensions.get('window').height * 0.4
+// const SHEET_HEIGHT = Dimensions.get('window').height * 0.4
+const SHEET_HEIGHT = 220
 
 export default function ActionSheet() {
+	const insets = useSafeAreaInsets()
 	const [isMounted, setIsMounted] = useState(false)
 	// const { theme } = useUnistyles()
 
@@ -50,11 +54,17 @@ export default function ActionSheet() {
 		() => {
 			if (isActionSheetOpen) {
 				setIsMounted(true)
-				translateY.value = withTiming(0, { duration: 300 })
+				translateY.value = withTiming(0, {
+					duration: 200,
+					easing: Easing.inOut(Easing.quad)
+				})
 			} else if (isMounted) {
 				translateY.value = withTiming(
 					SHEET_HEIGHT,
-					{ duration: 250 },
+					{
+						duration: 200,
+						easing: Easing.inOut(Easing.quad)
+					},
 					(finished) => {
 						if (finished) scheduleOnRN(setIsMounted, false)
 					}
@@ -100,7 +110,15 @@ export default function ActionSheet() {
 
 			{/* Sheet */}
 			<GestureDetector gesture={dragGesture}>
-				<Animated.View style={[styles.sheet, sheetStyle]}>
+				<Animated.View
+					style={[
+						styles.sheet,
+						{
+							bottom: insets.bottom > 0 ? 70 + insets.bottom - 6 : 70 + 24 - 6
+						},
+						sheetStyle
+					]}
+				>
 					<View style={styles.grabber} />
 					<View style={styles.content}>
 						<Text>{label}</Text>
@@ -111,7 +129,7 @@ export default function ActionSheet() {
 	)
 }
 
-const styles = StyleSheet.create((theme) => ({
+const styles = StyleSheet.create((theme, rt) => ({
 	backdrop: {
 		position: 'absolute',
 		top: 0,
@@ -122,7 +140,6 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	sheet: {
 		position: 'absolute',
-		bottom: 0,
 		left: STYLE_VARS.sidePadding,
 		right: STYLE_VARS.sidePadding,
 		height: SHEET_HEIGHT,

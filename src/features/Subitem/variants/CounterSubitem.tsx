@@ -36,7 +36,7 @@ const styles = StyleSheet.create((theme) => ({
 		backgroundColor: theme.colors.surface,
 		borderRadius: 100,
 		padding: 6,
-		boxShadow: '0 1px 3px rgba(0,0,0,.18)'
+		boxShadow: '0 1px 3px rgba(0,0,0,.14)'
 	},
 	Timer__label: {
 		fontSize: 15,
