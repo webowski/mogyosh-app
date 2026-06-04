@@ -10,6 +10,7 @@ export type SubitemType =
 	| 'ul'
 	| 'ol'
 	| 'details'
+	| 'table'
 	| 'progress'
 	| 'timer'
 	| 'stopwatch'

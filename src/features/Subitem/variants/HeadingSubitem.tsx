@@ -11,13 +11,13 @@ import { STYLE_VARS } from '@/shared/styles/common'
 import Checkbox from '@/shared/ui/Checkbox'
 import { SubitemProps } from '../index'
 
-type HeadingLevel = 'h1' | 'h2' | 'h3' | 'h4'
+type HeadingVariant = 'h1' | 'h2' | 'h3' | 'h4'
 
 type HeadingProps = SubitemProps & {
-	level: HeadingLevel
+	variant: HeadingVariant
 }
 
-const HEADING_SIZES: Record<HeadingLevel, number> = {
+const HEADING_SIZES: Record<HeadingVariant, number> = {
 	h1: 30,
 	h2: 26,
 	h3: 22,
@@ -26,7 +26,7 @@ const HEADING_SIZES: Record<HeadingLevel, number> = {
 
 export default function HeadingSubitem({
 	data,
-	level,
+	variant,
 	onCheckToggle
 }: HeadingProps) {
 	const [checked, setChecked] = useState(data.state === 'done')
@@ -58,7 +58,9 @@ export default function HeadingSubitem({
 
 	return (
 		<View style={styles.container}>
-			<Animated.Text style={[styles.heading(HEADING_SIZES[level]), textStyle]}>
+			<Animated.Text
+				style={[styles.heading(HEADING_SIZES[variant]), textStyle]}
+			>
 				{data.info}
 			</Animated.Text>
 			{data.settings?.checkable && (

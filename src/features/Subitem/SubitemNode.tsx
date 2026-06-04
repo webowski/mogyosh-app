@@ -7,6 +7,7 @@ import { useUpdateSubitemState } from '../TaskList'
 import type { SubitemData } from './model/subitem.types'
 import BulletedSubitem from './variants/BulletedSubitem'
 import CollapsibleSubitem from './variants/CollapsibleSubitem'
+import CounterSubitem from './variants/CounterSubitem'
 import HeadingSubitem from './variants/HeadingSubitem'
 import OrderedSubitem from './variants/OrderedSubitem'
 import TextSubitem from './variants/TextSubitem'
@@ -57,7 +58,7 @@ export default function SubitemNode({
 		case 'h4':
 			content = (
 				<HeadingSubitem
-					level={variant}
+					variant={variant}
 					data={data}
 					onCheckToggle={(checked) => handleToggleSubitem(data.id, checked)}
 				/>
@@ -87,6 +88,16 @@ export default function SubitemNode({
 		case 'timer':
 			content = (
 				<TimerSubitem
+					data={data}
+					// depth={depth}
+					onCheckToggle={(checked) => handleToggleSubitem(data.id, checked)}
+				/>
+			)
+			break
+
+		case 'counter':
+			content = (
+				<CounterSubitem
 					data={data}
 					// depth={depth}
 					onCheckToggle={(checked) => handleToggleSubitem(data.id, checked)}
