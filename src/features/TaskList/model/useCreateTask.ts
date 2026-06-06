@@ -9,6 +9,7 @@ export const useCreateTask = () => {
 		mutationFn: taskAPI.createTask,
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['tasks'] })
+			queryClient.invalidateQueries({ queryKey: ['tasks-grouped'] })
 			queryClient.invalidateQueries({ queryKey: ['tasks-flat'] })
 			queryClient.invalidateQueries({ queryKey: ['tasks-by-date'] })
 			queryClient.invalidateQueries({ queryKey: ['tasks-count-period'] })
