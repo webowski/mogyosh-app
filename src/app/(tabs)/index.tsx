@@ -40,7 +40,8 @@ export default function DayScreen() {
 				// flexShrink: 0,
 				paddingHorizontal: STYLE_VARS.sidePadding,
 				paddingTop: STYLE_VARS.sidePadding,
-				paddingBottom: STYLE_VARS.sidePadding + STYLE_VARS.navPanelUnderlap
+				paddingBottom:
+					STYLE_VARS.sidePadding * 1.5 + STYLE_VARS.navPanelUnderlap
 			}}
 			sections={sections}
 			extraData={undefined}
