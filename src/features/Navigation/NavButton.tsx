@@ -18,6 +18,7 @@ export default function NavButton({
 
 	return (
 		<Pressable
+			hitSlop={2}
 			style={({ pressed }) => [
 				styles.navButton,
 				pressed && styles.navButtonPressed,
