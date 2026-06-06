@@ -90,11 +90,11 @@ export default function TaskItem({
 		.onEnd((event) => {
 			if (event.translationX < DELETE_THRESHOLD) {
 				translateX.value = withTiming(-500, { duration: 300 })
-				itemHeight.value = withTiming(0, { duration: 300 })
+				// itemHeight.value = withTiming(0, { duration: 300 })
 				scheduleOnRN(deleteTask)
 			} else if (event.translationX > COMPLETE_THRESHOLD) {
 				translateX.value = withTiming(500, { duration: 300 })
-				itemHeight.value = withTiming(0, { duration: 300 })
+				// itemHeight.value = withTiming(0, { duration: 300 })
 				scheduleOnRN(completeTask)
 			} else {
 				// Snap back
@@ -150,9 +150,9 @@ export default function TaskItem({
 			<GestureDetector gesture={composedGesture}>
 				<Animated.View
 					style={[styles.card, cardAnimatedStyle]}
-					onLayout={(e) => {
-						itemHeight.value = e.nativeEvent.layout.height
-					}}
+					// onLayout={(e) => {
+					// 	itemHeight.value = e.nativeEvent.layout.height
+					// }}
 				>
 					{isByTimeBool && (
 						<Text style={styles.card__time}>

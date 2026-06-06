@@ -144,20 +144,27 @@ export default function AllTasksScreen() {
 			</View>
 
 			<FlatList
-				data={tasks}
-				keyExtractor={(item) => item.id}
-				scrollEventThrottle={16}
-				bounces={true}
-				style={{
-					flex: 1
-				}}
+				style={
+					{
+						// flex: 1
+					}
+				}
 				contentContainerStyle={{
-					flexGrow: 1,
+					// flexGrow: 1,
 					paddingHorizontal: STYLE_VARS.sidePadding,
 					// paddingTop: STYLE_VARS.sidePadding / 2,
 					paddingBottom: STYLE_VARS.sidePadding / 2,
 					gap: 4
 				}}
+				data={tasks}
+				keyExtractor={(item) => item.id}
+				alwaysBounceVertical={false}
+				bounces={false}
+				contentInsetAdjustmentBehavior='never'
+				overScrollMode='never'
+				refreshing={false}
+				scrollEventThrottle={16}
+				showsVerticalScrollIndicator={false}
 				renderItem={({ item }) => <TaskListItem data={item} />}
 				ListEmptyComponent={
 					isLoading ? (

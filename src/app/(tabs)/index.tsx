@@ -1,4 +1,5 @@
-import { RefreshControl, SectionList, Text, View } from 'react-native'
+import { useMemo } from 'react'
+import { SectionList, Text, View } from 'react-native'
 
 import { useTasksGrouped } from '@/features/TaskList'
 import { useCategories } from '@/features/TaskList/model/useCategories'
@@ -11,7 +12,15 @@ export default function DayScreen() {
 	const { data, isLoading, error, refetch } = useTasksGrouped()
 	const { isLoading: catLoading, error: catError } = useCategories()
 
-	if (error || catError) return <Text>Ошибка загрузки</Text>
+	const sections = useMemo(() => data ?? [], [data])
+
+	if (error || catError)
+		return (
+			<View style={commonStyles.mainArea}>
+				<Text>Ошибка загрузки</Text>
+			</View>
+		)
+
 	if (isLoading || catLoading) {
 		return (
 			<View style={commonStyles.mainArea}>
@@ -22,17 +31,26 @@ export default function DayScreen() {
 
 	return (
 		<SectionList
-			sections={data ?? []}
 			style={{
-				flex: 1,
+				// flex: 1
+				gap: 26
+			}}
+			contentContainerStyle={{
+				gap: 4,
+				// flexShrink: 0,
 				paddingHorizontal: STYLE_VARS.sidePadding,
 				paddingTop: STYLE_VARS.sidePadding,
-				paddingBottom: STYLE_VARS.sidePadding + STYLE_VARS.navPanelUnderlap,
-				gap: 6
+				paddingBottom: STYLE_VARS.sidePadding + STYLE_VARS.navPanelUnderlap
 			}}
+			sections={sections}
+			extraData={undefined}
+			alwaysBounceVertical={false}
+			bounces={false}
+			contentInsetAdjustmentBehavior='never'
 			overScrollMode='never'
-			bounces={true}
-			contentContainerStyle={{ gap: 4, flexShrink: 0 }}
+			refreshing={false}
+			scrollEventThrottle={16}
+			showsVerticalScrollIndicator={false}
 			keyExtractor={(item) => item.id}
 			renderItem={({ item }) => <TaskItem data={item} />}
 			renderSectionHeader={({ section: { title } }) => (
@@ -40,9 +58,6 @@ export default function DayScreen() {
 					<Text style={textStyles.heading5}>{title}</Text>
 				</View>
 			)}
-			refreshControl={
-				<RefreshControl refreshing={isLoading} onRefresh={refetch} />
-			}
 		/>
 	)
 }
