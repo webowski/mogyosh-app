@@ -1,44 +1,36 @@
 import { MaterialIcons } from '@expo/vector-icons'
-import type { RefObject } from 'react'
-import { useCallback, useRef } from 'react'
+import { useRef } from 'react'
 import { Platform, Pressable, View } from 'react-native'
-import {
-	EnrichedMarkdownTextInput,
-	type EnrichedMarkdownTextInputInstance
-} from 'react-native-enriched-markdown'
+import { type EnrichedMarkdownTextInputInstance } from 'react-native-enriched-markdown'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 import { STYLE_VARS } from '@/shared/styles/common'
 import Checkbox from '@/shared/ui/Checkbox'
+import { TodoItem } from './create.types'
+import { SubitemMarkdownInput } from './SubitemMarkdownInput'
 
-interface TodoItem {
-	id: string
-	text: string
-}
-
-interface Props {
+interface TodoListEditorProps {
 	items: TodoItem[]
 	onChange: (items: TodoItem[]) => void
 }
 
-export function TodoListEditor({ items, onChange }: Props) {
+export function TodoListEditor({ items, onChange }: TodoListEditorProps) {
 	const { theme } = useUnistyles()
 
 	const inputRefs = useRef<
-		Map<string, RefObject<EnrichedMarkdownTextInputInstance | null>>
+		Map<
+			string,
+			React.RefObject<EnrichedMarkdownTextInputInstance | HTMLDivElement | null>
+		>
 	>(new Map())
 
-	const webInputRefs = useRef<Map<string, HTMLDivElement>>(new Map())
+	const getRefForItem = (id: string) => {
+		if (!inputRefs.current.has(id)) {
+			inputRefs.current.set(id, { current: null })
+		}
+		return inputRefs.current.get(id)!
+	}
 
-	const getRefForItem = useCallback(
-		(id: string): RefObject<EnrichedMarkdownTextInputInstance | null> => {
-			if (!inputRefs.current.has(id)) {
-				inputRefs.current.set(id, { current: null })
-			}
-			return inputRefs.current.get(id)!
-		},
-		[]
-	)
 	const moveCursorToEnd = (element: HTMLDivElement) => {
 		const range = document.createRange()
 		const selection = window.getSelection()
@@ -48,20 +40,18 @@ export function TodoListEditor({ items, onChange }: Props) {
 		selection?.addRange(range)
 	}
 
-	const focusItem = useCallback(
-		(id: string) => {
-			if (Platform.OS === 'web') {
-				const element = webInputRefs.current.get(id)
-				if (element) {
-					element.focus()
-					moveCursorToEnd(element)
-				}
-			} else {
-				getRefForItem(id).current?.focus()
-			}
-		},
-		[getRefForItem]
-	)
+	const focusItem = (id: string) => {
+		const ref = inputRefs.current.get(id)?.current
+		if (!ref) return
+
+		if (Platform.OS === 'web') {
+			const element = ref as HTMLDivElement
+			element.focus()
+			moveCursorToEnd(element)
+		} else {
+			;(ref as EnrichedMarkdownTextInputInstance).focus()
+		}
+	}
 
 	const addItemAfter = (index: number) => {
 		const newItem: TodoItem = { id: Date.now().toString(), text: '' }
@@ -74,22 +64,19 @@ export function TodoListEditor({ items, onChange }: Props) {
 		}, 50)
 	}
 
-	const removeItem = useCallback(
-		(index: number) => {
-			if (items.length <= 1) {
-				onChange([{ ...items[0], text: '' }])
-				return
-			}
-			const next = items.filter((_, i) => i !== index)
-			onChange(next)
+	const removeItem = (index: number) => {
+		if (items.length <= 1) {
+			onChange([{ ...items[0], text: '' }])
+			return
+		}
+		const next = items.filter((_, i) => i !== index)
+		onChange(next)
 
-			const focusIndex = Math.max(0, index - 1)
-			setTimeout(() => {
-				focusItem(next[focusIndex].id)
-			}, 50)
-		},
-		[items, onChange, focusItem]
-	)
+		const focusIndex = Math.max(0, index - 1)
+		setTimeout(() => {
+			focusItem(next[focusIndex].id)
+		}, 50)
+	}
 
 	const updateItem = (id: string, text: string) => {
 		const itemIndex = items.findIndex((item) => item.id === id)
@@ -108,78 +95,14 @@ export function TodoListEditor({ items, onChange }: Props) {
 		<View style={styles.container}>
 			{items.map((item, index) => (
 				<View key={item.id} style={styles.row}>
-					{Platform.OS === 'web' ? (
-						<div
-							ref={(element) => {
-								if (element) {
-									webInputRefs.current.set(item.id, element)
-								} else {
-									webInputRefs.current.delete(item.id)
-								}
-							}}
-							contentEditable
-							suppressContentEditableWarning
-							// data-placeholder={index === 0 ? 'Список задач...' : ''}
-							onInput={(event) => {
-								const text = (event.currentTarget as HTMLDivElement).innerText
-								updateItem(item.id, text)
-							}}
-							onKeyDown={(event) => {
-								if (event.key === 'Enter') {
-									event.preventDefault()
-									addItemAfter(index)
-								} else if (event.key === 'Backspace') {
-									const text = (event.currentTarget as HTMLDivElement).innerText
-									if (text === '' || text === '\n') {
-										event.preventDefault()
-										removeItem(index)
-									}
-								}
-							}}
-							// @ts-ignore - web-only inline styles
-							style={{
-								flex: 1,
-								fontSize: 16,
-								fontWeight: 500,
-								color: theme.colors.major,
-								paddingTop: theme.spacing.xs,
-								paddingBottom: theme.spacing.xs,
-								outline: 'none',
-								minHeight: 22,
-								wordBreak: 'break-word'
-							}}
-						/>
-					) : (
-						<EnrichedMarkdownTextInput
-							ref={getRefForItem(item.id)}
-							style={styles.input}
-							defaultValue={item.text}
-							placeholderTextColor={theme.colors.minor}
-							// placeholder={index === 0 ? 'Список задач...' : ''}
-							scrollEnabled={false}
-							multiline
-							onChangeText={(text) => {
-								if (text.includes('\n')) {
-									getRefForItem(item.id).current?.setValue(
-										items.find((i) => i.id === item.id)?.text ?? ''
-									)
-									addItemAfter(index)
-								}
-							}}
-							onChangeMarkdown={(markdown) => {
-								updateItem(item.id, markdown)
-							}}
-						/>
-					)}
-					{/* {items.length > 1 && (
-						<Pressable onPress={() => removeItem(index)} hitSlop={8}>
-							<MaterialIcons
-								name='close'
-								size={18}
-								color={theme.colors.minor}
-							/>
-						</Pressable>
-					)} */}
+					<SubitemMarkdownInput
+						ref={getRefForItem(item.id)}
+						itemText={item.text}
+						onChangeText={(text) => updateItem(item.id, text)}
+						onChangeMarkdown={(markdown) => updateItem(item.id, markdown)}
+						onEnterPress={() => addItemAfter(index)}
+						onBackspaceOnEmpty={() => removeItem(index)}
+					/>
 					<Checkbox checked={false} style={{ marginTop: 3 }} />
 				</View>
 			))}
@@ -202,14 +125,6 @@ const styles = StyleSheet.create((theme) => ({
 		flexDirection: 'row',
 		alignItems: 'flex-start',
 		gap: theme.spacing.sm
-	},
-	input: {
-		flex: 1,
-		fontSize: 16,
-		fontWeight: '400',
-		color: theme.colors.major,
-		paddingVertical: theme.spacing.xs,
-		outline: 'none'
 	},
 	addButton: {
 		marginTop: 10,
