@@ -83,6 +83,8 @@ export const SubitemMarkdownInput = forwardRef<
 							ref as React.RefObject<EnrichedMarkdownTextInputInstance>
 						).current?.setValue(itemText)
 						onEnterPress()
+					} else if (text === '') {
+						onBackspaceOnEmpty()
 					}
 				}}
 				onChangeMarkdown={onChangeMarkdown}
