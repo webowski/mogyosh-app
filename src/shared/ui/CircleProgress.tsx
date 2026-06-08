@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { PropsWithChildren, useEffect } from 'react'
 import { Text, View } from 'react-native'
 import Animated, {
 	Easing,
@@ -11,7 +11,7 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle)
 
-interface CircleProgressProps {
+type CircleProgressProps = PropsWithChildren & {
 	progress: number
 	value: string
 	size?: number
@@ -27,7 +27,8 @@ export default function CircleProgress({
 	size = 52,
 	strokeWidth = 4,
 	duration = 600,
-	showLabel = true
+	showLabel = true,
+	children
 }: CircleProgressProps) {
 	const { theme } = useUnistyles()
 	const color = theme.colors.primary
@@ -84,7 +85,9 @@ export default function CircleProgress({
 			</Svg>
 			{showLabel && (
 				<View style={[StyleSheet.absoluteFill, styles.labelContainer]}>
+					{/* <Text style={styles.label}> d</Text> */}
 					<Text style={styles.label}>{value}</Text>
+					{children}
 				</View>
 			)}
 		</View>
@@ -105,6 +108,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		fontSize: 13 * rt.fontScale,
 		lineHeight: 13 * rt.fontScale,
 		fontWeight: '500',
+		fontVariantNumeric: 'tabular-nums',
 		color: theme.colors.major
 	}
 }))

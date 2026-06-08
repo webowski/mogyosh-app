@@ -10,6 +10,7 @@ import CollapsibleSubitem from './variants/CollapsibleSubitem'
 import CounterSubitem from './variants/CounterSubitem'
 import HeadingSubitem from './variants/HeadingSubitem'
 import OrderedSubitem from './variants/OrderedSubitem'
+import StopwatchSubitem from './variants/StopwatchSubitem'
 import TextSubitem from './variants/TextSubitem'
 import TimerSubitem from './variants/TimerSubitem'
 
@@ -88,6 +89,16 @@ export default function SubitemNode({
 		case 'timer':
 			content = (
 				<TimerSubitem
+					data={data}
+					// depth={depth}
+					onCheckToggle={(checked) => handleToggleSubitem(data.id, checked)}
+				/>
+			)
+			break
+
+		case 'stopwatch':
+			content = (
+				<StopwatchSubitem
 					data={data}
 					// depth={depth}
 					onCheckToggle={(checked) => handleToggleSubitem(data.id, checked)}
