@@ -112,7 +112,7 @@ export function TaskCreateForm({ onClose }: Props) {
 
 	const [subitemsChecklist, setSubitemsChecklist] = useState<
 		{ id: string; text: string }[]
-	>([{ id: 'initial', text: '' }])
+	>([])
 
 	const {
 		control,
@@ -241,7 +241,7 @@ export function TaskCreateForm({ onClose }: Props) {
 						<Text style={textStyles.heading5}>Task details</Text>
 					</View>
 					<TodoListEditor
-						items={subitemsChecklist}
+						subitems={subitemsChecklist}
 						onChange={setSubitemsChecklist}
 					/>
 				</View>

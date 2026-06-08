@@ -10,11 +10,11 @@ import { TodoItem } from './create.types'
 import { SubitemMarkdownInput } from './SubitemMarkdownInput'
 
 interface TodoListEditorProps {
-	items: TodoItem[]
-	onChange: (items: TodoItem[]) => void
+	subitems: TodoItem[]
+	onChange: (subitems: TodoItem[]) => void
 }
 
-export function TodoListEditor({ items, onChange }: TodoListEditorProps) {
+export function TodoListEditor({ subitems, onChange }: TodoListEditorProps) {
 	const { theme } = useUnistyles()
 
 	const inputRefs = useRef<
@@ -24,7 +24,7 @@ export function TodoListEditor({ items, onChange }: TodoListEditorProps) {
 		>
 	>(new Map())
 
-	const getRefForItem = (id: string) => {
+	const getRefForSubitemInput = (id: string) => {
 		if (!inputRefs.current.has(id)) {
 			inputRefs.current.set(id, { current: null })
 		}
@@ -40,7 +40,7 @@ export function TodoListEditor({ items, onChange }: TodoListEditorProps) {
 		selection?.addRange(range)
 	}
 
-	const focusItem = (id: string) => {
+	const focusSubitem = (id: string) => {
 		const ref = inputRefs.current.get(id)?.current
 		if (!ref) return
 
@@ -53,55 +53,55 @@ export function TodoListEditor({ items, onChange }: TodoListEditorProps) {
 		}
 	}
 
-	const addItemAfter = (index: number) => {
+	const addSubitemAfter = (index: number) => {
 		const newItem: TodoItem = { id: Date.now().toString(), text: '' }
-		const next = [...items]
+		const next = [...subitems]
 		next.splice(index + 1, 0, newItem)
 		onChange(next)
 
 		setTimeout(() => {
-			focusItem(newItem.id)
+			focusSubitem(newItem.id)
 		}, 50)
 	}
 
-	const removeItem = (index: number) => {
-		if (items.length <= 1) {
-			onChange([{ ...items[0], text: '' }])
+	const removeSubitem = (index: number) => {
+		if (subitems.length <= 1) {
+			onChange([{ ...subitems[0], text: '' }])
 			return
 		}
-		const next = items.filter((_, i) => i !== index)
+		const next = subitems.filter((_, i) => i !== index)
 		onChange(next)
 
 		const focusIndex = Math.max(0, index - 1)
 		setTimeout(() => {
-			focusItem(next[focusIndex].id)
+			focusSubitem(next[focusIndex].id)
 		}, 50)
 	}
 
-	const updateItem = (id: string, text: string) => {
-		const itemIndex = items.findIndex((item) => item.id === id)
-		const updatedItems = items.map((item) =>
-			item.id === id ? { ...item, text } : item
+	const updateSubitem = (id: string, text: string) => {
+		const subitemIndex = subitems.findIndex((subitem) => subitem.id === id)
+		const updatedItems = subitems.map((subitem) =>
+			subitem.id === id ? { ...subitem, text } : subitem
 		)
 		onChange(updatedItems)
 
-		// Auto-remove empty item when field is cleared (except the last one)
-		if (text === '' && items.length > 1) {
-			removeItem(itemIndex)
+		// Auto-remove empty subitem when field is cleared (except the last one)
+		if (text === '' && subitems.length > 1) {
+			removeSubitem(subitemIndex)
 		}
 	}
 
 	return (
 		<View style={styles.container}>
-			{items.map((item, index) => (
-				<View key={item.id} style={styles.row}>
+			{subitems.map((subitem, index) => (
+				<View key={subitem.id} style={styles.row}>
 					<SubitemMarkdownInput
-						ref={getRefForItem(item.id)}
-						itemText={item.text}
-						onChangeText={(text) => updateItem(item.id, text)}
-						onChangeMarkdown={(markdown) => updateItem(item.id, markdown)}
-						onEnterPress={() => addItemAfter(index)}
-						onBackspaceOnEmpty={() => removeItem(index)}
+						ref={getRefForSubitemInput(subitem.id)}
+						subitemText={subitem.text}
+						onChangeText={(text) => updateSubitem(subitem.id, text)}
+						onChangeMarkdown={(markdown) => updateSubitem(subitem.id, markdown)}
+						onEnterPress={() => addSubitemAfter(index)}
+						onBackspaceOnEmpty={() => removeSubitem(index)}
 					/>
 					<Checkbox checked={false} style={{ marginTop: 3 }} />
 				</View>
@@ -109,7 +109,7 @@ export function TodoListEditor({ items, onChange }: TodoListEditorProps) {
 
 			<Pressable
 				style={styles.addButton}
-				onPress={() => addItemAfter(items.length - 1)}
+				onPress={() => addSubitemAfter(subitems.length - 1)}
 			>
 				<MaterialIcons name='add' size={28} color={theme.colors.minor} />
 			</Pressable>

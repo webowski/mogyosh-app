@@ -7,7 +7,7 @@ import {
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 interface SubitemMarkdownInputProps {
-	itemText: string
+	subitemText: string
 	onChangeText: (text: string) => void
 	onChangeMarkdown: (markdown: string) => void
 	onEnterPress: () => void
@@ -20,7 +20,7 @@ export const SubitemMarkdownInput = forwardRef<
 >(
 	(
 		{
-			itemText,
+			subitemText,
 			onChangeText,
 			onChangeMarkdown,
 			onEnterPress,
@@ -73,7 +73,7 @@ export const SubitemMarkdownInput = forwardRef<
 					ref as unknown as React.RefObject<EnrichedMarkdownTextInputInstance>
 				}
 				style={styles.Input}
-				defaultValue={itemText}
+				defaultValue={subitemText}
 				placeholderTextColor={theme.colors.minor}
 				scrollEnabled={false}
 				multiline
@@ -81,7 +81,7 @@ export const SubitemMarkdownInput = forwardRef<
 					if (text.includes('\n')) {
 						;(
 							ref as React.RefObject<EnrichedMarkdownTextInputInstance>
-						).current?.setValue(itemText)
+						).current?.setValue(subitemText)
 						onEnterPress()
 					} else if (text === '') {
 						onBackspaceOnEmpty()
