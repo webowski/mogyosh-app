@@ -65,16 +65,19 @@ export function TodoListEditor({ subitems, onChange }: TodoListEditorProps) {
 	}
 
 	const removeSubitem = (index: number) => {
-		if (subitems.length <= 1) {
+		if (subitems.length < 1) {
 			onChange([{ ...subitems[0], text: '' }])
 			return
 		}
-		const next = subitems.filter((_, i) => i !== index)
-		onChange(next)
+
+		const updatedSubitems = subitems.filter((_, i) => i !== index)
+		onChange(updatedSubitems)
+
+		if (updatedSubitems.length === 0) return
 
 		const focusIndex = Math.max(0, index - 1)
 		setTimeout(() => {
-			focusSubitem(next[focusIndex].id)
+			focusSubitem(updatedSubitems[focusIndex].id)
 		}, 50)
 	}
 
@@ -85,8 +88,9 @@ export function TodoListEditor({ subitems, onChange }: TodoListEditorProps) {
 		)
 		onChange(updatedItems)
 
-		// Auto-remove empty subitem when field is cleared (except the last one)
-		if (text === '' && subitems.length > 1) {
+		// Auto-remove empty subitem when field is cleared
+		// if (text === '' && subitems.length > 1) {
+		if (text === '') {
 			removeSubitem(subitemIndex)
 		}
 	}
