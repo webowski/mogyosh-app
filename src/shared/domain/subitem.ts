@@ -1,4 +1,4 @@
-import { SubitemId, TaskId } from './ids'
+import { SubitemId, SubitemStateId, TaskId } from './ids'
 import { TaskState } from './task'
 
 export type SubitemType =
@@ -21,7 +21,7 @@ export type SubitemStatus = 'active' | 'completed' | 'archived'
 export type SubitemState = 'done' | 'active' | 'archived'
 
 export type SubitemStateEntity = {
-	id: string
+	id: SubitemStateId
 	task_id: TaskId
 	state: TaskState
 	state_date?: string | null
@@ -50,9 +50,9 @@ export type SubitemEntity = {
 }
 
 export type SubitemRow = {
-	id: string
+	id: SubitemId
 	task_id: TaskId
-	parent_id: string | null
+	parent_id: SubitemId | null
 	type: SubitemType
 	info: string
 	settings: SubitemSettings
