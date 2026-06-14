@@ -8,6 +8,7 @@ import Animated, {
 import { StyleSheet } from 'react-native-unistyles'
 
 import { STYLE_VARS } from '@/shared/styles/common'
+import { TEXT_VARS } from '@/shared/styles/text'
 import Checkbox from '@/shared/ui/Checkbox'
 import { SubitemProps } from '../index'
 
@@ -18,10 +19,10 @@ type HeadingProps = SubitemProps & {
 }
 
 const HEADING_SIZES: Record<HeadingVariant, number> = {
-	h1: 30,
-	h2: 26,
-	h3: 22,
-	h4: 18
+	h1: TEXT_VARS.h1,
+	h2: TEXT_VARS.h2,
+	h3: TEXT_VARS.h3,
+	h4: TEXT_VARS.h4
 }
 
 export default function HeadingSubitem({

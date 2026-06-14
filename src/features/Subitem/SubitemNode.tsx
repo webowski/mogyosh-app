@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { View } from 'react-native'
 
+import { useUpdateSubitemState } from '@/features/TaskList'
 import type { SubitemId } from '@/shared/domain/ids'
 import type { SubitemType } from '@/shared/domain/subitem'
-import { useUpdateSubitemState } from '../TaskList'
 import type { SubitemData } from './model/subitem.types'
 import BulletedSubitem from './variants/BulletedSubitem'
 import CollapsibleSubitem from './variants/CollapsibleSubitem'

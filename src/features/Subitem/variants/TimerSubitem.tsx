@@ -1,26 +1,92 @@
-import { Text, View } from 'react-native'
-import { StyleSheet } from 'react-native-unistyles'
+import { MaterialIcons } from '@expo/vector-icons'
+import { useEffect, useRef, useState } from 'react'
+import { Pressable, Text, View } from 'react-native'
+import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
+import { useTimerStore } from '@/shared/model/timer.store'
 import CircleProgress from '@/shared/ui/CircleProgress'
-import { SubitemProps } from '../model/subitem.types'
+import type { SubitemProps } from '../model/subitem.types'
 
-type TimerSubitemProps = SubitemProps & {
-	// onExpandToggle: (expanded: boolean) => void
-}
+type TimerSubitemProps = SubitemProps & {}
 
 export default function TimerSubitem({ data }: TimerSubitemProps) {
-	const durationString = data.settings.duration
-		? formatDuration(data.settings.duration)
-		: '0'
+	const { theme } = useUnistyles()
+
+	const durationMs = data.settings.duration ?? 0
+	const { start, pause, reset, getRemaining, entries } = useTimerStore()
+
+	const entry = entries.get(data.id)
+	const isRunning = entry?.isRunning ?? false
+	const isFinished = (entry?.remainingMs ?? durationMs) === 0
+
+	const [displayMs, setDisplayMs] = useState(() =>
+		getRemaining(data.id, durationMs)
+	)
+
+	const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+	useEffect(
+		() => {
+			if (isRunning) {
+				intervalRef.current = setInterval(() => {
+					const remaining = getRemaining(data.id, durationMs)
+					setDisplayMs(remaining)
+					// Auto-stop when finished
+					if (remaining === 0) pause(data.id)
+				}, 500)
+			} else {
+				if (intervalRef.current) clearInterval(intervalRef.current)
+				setDisplayMs(getRemaining(data.id, durationMs))
+			}
+			return () => {
+				if (intervalRef.current) clearInterval(intervalRef.current)
+			}
+		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[isRunning]
+	)
+
+	const handleToggle = () => {
+		if (durationMs === 0) return
+		if (isRunning) {
+			pause(data.id)
+		} else {
+			start(data.id, durationMs)
+		}
+	}
+
+	const progress = durationMs > 0 ? displayMs / durationMs : 1
+	const durationString = durationMs > 0 ? formatTime(displayMs) : '--:--:--'
 
 	return (
 		<View style={styles.Timer}>
-			<View style={styles.Timer__round}>
-				<CircleProgress size={68} progress={0.5} value={durationString} />
-			</View>
-			<View>
+			<View style={styles.Timer__body}>
 				<Text style={styles.Timer__label}>{data.info}</Text>
-				<Text style={styles.Timer__note}>Какой-то текст</Text>
+				<View style={{}}>
+					<Text style={styles.Timer__note}>{durationString}</Text>
+				</View>
+			</View>
+			<View style={styles.Timer__actions}>
+				<Pressable
+					onPress={handleToggle}
+					onLongPress={() => reset(data.id, durationMs)}
+				>
+					<CircleProgress size={40} progress={progress}>
+						{isRunning ? (
+							<MaterialIcons
+								name='pause'
+								size={22}
+								color={theme.colors.primary}
+							/>
+						) : (
+							<MaterialIcons
+								name={isFinished ? 'replay' : 'play-arrow'}
+								size={24}
+								color={theme.colors.primary}
+							/>
+						)}
+					</CircleProgress>
+				</Pressable>
 			</View>
 		</View>
 	)
@@ -30,14 +96,19 @@ const styles = StyleSheet.create((theme) => ({
 	Timer: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		gap: 10
-	},
-	Timer__round: {
+		gap: 10,
 		backgroundColor: theme.colors.surface,
-		borderRadius: 100,
-		padding: 6,
-		boxShadow: '0 1px 3px rgba(0,0,0,.14)'
+		borderRadius: 6,
+		borderWidth: 1,
+		borderColor: theme.colors.borderLightest
 	},
+
+	Timer__body: {
+		flex: 1,
+		paddingHorizontal: 12,
+		paddingVertical: 6
+	},
+
 	Timer__label: {
 		fontSize: 15,
 		fontWeight: '500',
@@ -47,14 +118,23 @@ const styles = StyleSheet.create((theme) => ({
 		fontSize: 14,
 		fontWeight: '400',
 		color: theme.colors.minor
+	},
+
+	Timer__actions: {
+		padding: 8,
+		borderLeftWidth: 1,
+		borderColor: theme.colors.borderLightest,
+		justifyContent: 'center',
+		alignItems: 'center'
 	}
 }))
 
-const formatDuration = (ms: number): string => {
+const formatTime = (ms: number): string => {
 	const totalSeconds = Math.floor(ms / 1000)
 	const hrs = Math.floor(totalSeconds / 3600)
 	const mins = Math.floor((totalSeconds % 3600) / 60)
 	const secs = totalSeconds % 60
 
 	return [hrs, mins, secs].map((v) => String(v).padStart(2, '0')).join(':')
+	// return [mins, secs].map((v) => String(v).padStart(2, '0')).join(':')
 }

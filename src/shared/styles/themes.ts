@@ -91,6 +91,7 @@ export const lightTheme = {
 
 		border: 'hsl(225, 35%, 79%)',
 		borderLight: 'hsl(225, 35%, 92%)',
+		borderLighter: 'hsl(225, 35%, 94%)',
 		borderLightest: 'hsl(225, 37%, 96%)',
 
 		// table

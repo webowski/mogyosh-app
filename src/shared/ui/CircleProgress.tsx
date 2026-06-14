@@ -13,7 +13,7 @@ const AnimatedCircle = Animated.createAnimatedComponent(Circle)
 
 type CircleProgressProps = PropsWithChildren & {
 	progress: number
-	value: string
+	value?: string
 	size?: number
 	strokeWidth?: number
 	trackColor?: string
@@ -25,15 +25,15 @@ export default function CircleProgress({
 	progress,
 	value,
 	size = 52,
-	strokeWidth = 4,
-	duration = 600,
+	strokeWidth = 3,
+	duration = 500,
 	showLabel = true,
 	children
 }: CircleProgressProps) {
 	const { theme } = useUnistyles()
 	const color = theme.colors.primary
 
-	const trackColor = theme.colors.surfaceAlter
+	const trackColor = theme.colors.mutedLightFill
 
 	const radius = (size - strokeWidth) / 2
 	const circumference = 2 * Math.PI * radius
@@ -44,7 +44,7 @@ export default function CircleProgress({
 		() => {
 			animatedProgress.value = withTiming(Math.min(Math.max(progress, 0), 1), {
 				duration,
-				easing: Easing.out(Easing.cubic)
+				easing: Easing.linear
 			})
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -105,8 +105,8 @@ const styles = StyleSheet.create((theme, rt) => ({
 		paddingBottom: 1
 	},
 	label: {
-		fontSize: 13 * rt.fontScale,
-		lineHeight: 13 * rt.fontScale,
+		fontSize: 14 * rt.fontScale,
+		lineHeight: 14 * rt.fontScale,
 		fontWeight: '500',
 		fontVariantNumeric: 'tabular-nums',
 		color: theme.colors.major

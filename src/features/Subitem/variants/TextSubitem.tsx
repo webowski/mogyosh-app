@@ -60,7 +60,7 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	text: {
 		flex: 1,
-		fontSize: 16,
+		fontSize: 15,
 		fontWeight: 500,
 		color: theme.colors.major
 	}
