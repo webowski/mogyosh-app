@@ -5,6 +5,7 @@ import { StyleSheet } from 'react-native-unistyles'
 import Checkbox from '@/shared/ui/Checkbox'
 import { useSharedValue, withTiming } from 'react-native-reanimated'
 import { SubitemProps } from '../model/subitem.types'
+import { SUBITEM_VARS } from '../style'
 
 type CounterSubitemProps = SubitemProps & {
 	// onExpandToggle: (expanded: boolean) => void
@@ -105,7 +106,7 @@ const styles = StyleSheet.create((theme) => ({
 	},
 
 	Timer__actions: {
-		width: 58,
+		width: SUBITEM_VARS.actionWidth,
 		padding: 8,
 		borderLeftWidth: 1,
 		borderColor: theme.colors.borderLightest,

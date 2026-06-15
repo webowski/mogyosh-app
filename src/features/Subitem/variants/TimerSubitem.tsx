@@ -6,6 +6,7 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 import { useTimerStore } from '@/shared/model/timer.store'
 import CircleProgress from '@/shared/ui/CircleProgress'
 import type { SubitemProps } from '../model/subitem.types'
+import { SUBITEM_VARS } from '../style'
 
 type TimerSubitemProps = SubitemProps & {}
 
@@ -70,7 +71,7 @@ export default function TimerSubitem({ data }: TimerSubitemProps) {
 					onPress={handleToggle}
 					onLongPress={() => reset(data.id, durationMs)}
 				>
-					<CircleProgress size={40} progress={progress}>
+					<CircleProgress size={40} progress={progress} decreasing>
 						{isRunning ? (
 							<MaterialIcons
 								name='pause'
@@ -123,11 +124,13 @@ const styles = StyleSheet.create((theme) => ({
 	},
 
 	Timer__actions: {
+		width: SUBITEM_VARS.actionWidth,
 		padding: 8,
 		borderLeftWidth: 1,
 		borderColor: theme.colors.borderLightest,
 		justifyContent: 'center',
-		alignItems: 'center'
+		alignItems: 'center',
+		alignSelf: 'stretch'
 	}
 }))
 
