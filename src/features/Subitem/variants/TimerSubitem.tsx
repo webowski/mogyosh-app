@@ -55,7 +55,6 @@ export default function TimerSubitem({ data }: TimerSubitemProps) {
 		}
 	}
 	const progress = durationMs > 0 ? 1 - displayMs / durationMs : 0
-	// const progress = durationMs > 0 ? displayMs / durationMs : 1
 	const durationString = durationMs > 0 ? formatTime(displayMs) : '--:--:--'
 
 	return (

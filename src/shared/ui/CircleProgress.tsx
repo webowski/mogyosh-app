@@ -19,6 +19,7 @@ type CircleProgressProps = PropsWithChildren & {
 	trackColor?: string
 	duration?: number
 	showLabel?: boolean
+	decreasing?: boolean
 }
 
 export default function CircleProgress({
@@ -28,7 +29,8 @@ export default function CircleProgress({
 	strokeWidth = 3,
 	duration = 500,
 	showLabel = true,
-	children
+	children,
+	decreasing = false
 }: CircleProgressProps) {
 	const { theme } = useUnistyles()
 	const color = theme.colors.primary
@@ -52,7 +54,9 @@ export default function CircleProgress({
 	)
 
 	const animatedProps = useAnimatedProps(() => ({
-		strokeDashoffset: circumference * (1 - animatedProgress.value)
+		strokeDashoffset: decreasing
+			? circumference * animatedProgress.value
+			: circumference * (1 - animatedProgress.value)
 	}))
 
 	const center = size / 2
@@ -80,12 +84,15 @@ export default function CircleProgress({
 					strokeDasharray={circumference}
 					animatedProps={animatedProps}
 					strokeLinecap='round'
-					transform={`rotate(-90, ${center}, ${center})`}
+					transform={
+						decreasing
+							? `scale(-1, 1) translate(-${size}, 0) rotate(-90, ${center}, ${center})`
+							: `rotate(-90, ${center}, ${center})`
+					}
 				/>
 			</Svg>
 			{showLabel && (
 				<View style={[StyleSheet.absoluteFill, styles.labelContainer]}>
-					{/* <Text style={styles.label}> d</Text> */}
 					<Text style={styles.label}>{value}</Text>
 					{children}
 				</View>
