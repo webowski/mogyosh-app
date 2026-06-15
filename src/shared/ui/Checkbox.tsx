@@ -1,4 +1,4 @@
-import Fontisto from '@expo/vector-icons/Fontisto'
+import { MaterialIcons } from '@expo/vector-icons'
 import { useEffect } from 'react'
 import { Pressable, PressableProps, ViewStyle } from 'react-native'
 import Animated, {
@@ -55,7 +55,7 @@ export default function Checkbox({
 			{...props}
 		>
 			{checked && (
-				<Fontisto name='check' size={10} color={theme.colors.inverse} />
+				<MaterialIcons name='check' size={16} color={theme.colors.inverse} />
 			)}
 		</AnimatedPressable>
 	)
@@ -63,8 +63,8 @@ export default function Checkbox({
 
 const styles = StyleSheet.create((theme) => ({
 	checkbox: {
-		width: 22,
-		height: 22,
+		width: 20,
+		height: 20,
 		borderRadius: 4,
 		borderWidth: 2,
 		alignItems: 'center',

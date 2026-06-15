@@ -63,7 +63,7 @@ export default function TimerSubitem({ data }: TimerSubitemProps) {
 			<View style={styles.Timer__body}>
 				<Text style={styles.Timer__label}>{data.info}</Text>
 				<View style={{}}>
-					<Text style={styles.Timer__note}>{durationString}</Text>
+					<Text style={styles.Timer__time}>{durationString}</Text>
 				</View>
 			</View>
 			<View style={styles.Timer__actions}>
@@ -105,8 +105,9 @@ const styles = StyleSheet.create((theme) => ({
 
 	Timer__body: {
 		flex: 1,
+		gap: 0,
 		paddingHorizontal: 12,
-		paddingVertical: 6
+		paddingVertical: 8
 	},
 
 	Timer__label: {
@@ -114,10 +115,12 @@ const styles = StyleSheet.create((theme) => ({
 		fontWeight: '500',
 		color: theme.colors.major
 	},
-	Timer__note: {
-		fontSize: 14,
+
+	Timer__time: {
+		fontSize: 17,
 		fontWeight: '400',
-		color: theme.colors.minor
+		color: theme.colors.minor,
+		fontVariantNumeric: 'tabular-nums'
 	},
 
 	Timer__actions: {

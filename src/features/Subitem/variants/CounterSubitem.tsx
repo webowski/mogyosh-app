@@ -39,9 +39,15 @@ export default function CounterSubitem({
 		<View style={styles.Timer}>
 			<View style={styles.Timer__body}>
 				<Text style={styles.Timer__label}>{data.info}</Text>
-				<View style={{ flexDirection: 'row', gap: 4 }}>
-					<Text style={styles.Timer__note}>50</Text>
-					<Text style={styles.Timer__note}>кг</Text>
+				<View style={styles.CounterSet}>
+					<View style={styles.Counter}>
+						<Text style={styles.Counter__value}>50</Text>
+						<Text style={styles.Counter__units}>кг</Text>
+					</View>
+					<View style={styles.Counter}>
+						<Text style={styles.Counter__value}>10</Text>
+						<Text style={styles.Counter__units}>пвт.</Text>
+					</View>
 				</View>
 			</View>
 			<View style={styles.Timer__actions}>
@@ -66,8 +72,9 @@ const styles = StyleSheet.create((theme) => ({
 
 	Timer__body: {
 		flex: 1,
+		gap: 0,
 		paddingHorizontal: 12,
-		paddingVertical: 6
+		paddingVertical: 8
 	},
 
 	Timer__label: {
@@ -75,10 +82,26 @@ const styles = StyleSheet.create((theme) => ({
 		fontWeight: '500',
 		color: theme.colors.major
 	},
-	Timer__note: {
-		fontSize: 14,
+
+	CounterSet: {
+		flexDirection: 'row',
+		gap: 10
+	},
+	Counter: {
+		flexDirection: 'row',
+		gap: 2,
+		alignItems: 'baseline'
+	},
+	Counter__value: {
+		fontSize: 17,
 		fontWeight: '400',
-		color: theme.colors.minor
+		color: theme.colors.minor,
+		fontVariantNumeric: 'tabular-nums'
+	},
+	Counter__units: {
+		fontSize: 13,
+		fontWeight: '400',
+		color: theme.colors.mutedText
 	},
 
 	Timer__actions: {
@@ -87,6 +110,7 @@ const styles = StyleSheet.create((theme) => ({
 		borderLeftWidth: 1,
 		borderColor: theme.colors.borderLightest,
 		justifyContent: 'center',
-		alignItems: 'center'
+		alignItems: 'center',
+		alignSelf: 'stretch'
 	}
 }))

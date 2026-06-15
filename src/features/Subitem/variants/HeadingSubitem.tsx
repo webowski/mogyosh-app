@@ -65,7 +65,11 @@ export default function HeadingSubitem({
 				{data.info}
 			</Animated.Text>
 			{data.settings?.checkable && (
-				<Checkbox checked={checked} onPress={handlePressCheckbox} />
+				<Checkbox
+					style={styles.SubitemCheckbox}
+					checked={checked}
+					onPress={handlePressCheckbox}
+				/>
 			)}
 		</View>
 	)
@@ -74,9 +78,13 @@ export default function HeadingSubitem({
 const styles = StyleSheet.create((theme) => ({
 	container: {
 		flexDirection: 'row',
-		alignItems: 'flex-start',
+		alignItems: 'center',
 		gap: 8,
 		paddingVertical: 6
+	},
+
+	SubitemCheckbox: {
+		marginBottom: -2
 	},
 
 	heading: (headingFontSize: number) => ({

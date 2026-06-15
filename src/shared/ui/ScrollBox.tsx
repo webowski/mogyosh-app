@@ -26,7 +26,7 @@ export default function ScrollBox({
 					paddingHorizontal: STYLE_VARS.sidePadding,
 					paddingTop: STYLE_VARS.sidePadding,
 					paddingBottom: STYLE_VARS.sidePadding + STYLE_VARS.navPanelUnderlap,
-					gap: 6
+					gap: 4
 				},
 				scrollIndent && {
 					paddingBottom: rt.insets.bottom + STYLE_VARS.sidePadding + 70
