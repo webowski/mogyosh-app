@@ -4,7 +4,9 @@ import { Pressable, Text, View } from 'react-native'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 import { useTimerStore } from '@/shared/model/timer.store'
-import CircleProgress from '@/shared/ui/CircleProgress'
+import CircleProgress, {
+	type CircleProgressRef
+} from '@/shared/ui/CircleProgress'
 import type { SubitemProps } from '../model/subitem.types'
 import { SUBITEM_VARS } from '../style'
 
@@ -12,6 +14,8 @@ type TimerSubitemProps = SubitemProps & {}
 
 export default function TimerSubitem({ data }: TimerSubitemProps) {
 	const { theme } = useUnistyles()
+
+	const circleRef = useRef<CircleProgressRef>(null)
 
 	const durationMs = data.settings.duration ?? 0
 	const { start, pause, reset, getRemaining, entries } = useTimerStore()
@@ -47,8 +51,21 @@ export default function TimerSubitem({ data }: TimerSubitemProps) {
 		[isRunning]
 	)
 
+	const handleReset = () => {
+		circleRef.current?.snapTo(0)
+		reset(data.id, durationMs)
+	}
+
 	const handleToggle = () => {
 		if (durationMs === 0) return
+
+		if (isFinished) {
+			circleRef.current?.snapTo(0)
+			reset(data.id, durationMs)
+			start(data.id, durationMs)
+			return
+		}
+
 		if (isRunning) {
 			pause(data.id)
 		} else {
@@ -67,11 +84,8 @@ export default function TimerSubitem({ data }: TimerSubitemProps) {
 				</View>
 			</View>
 			<View style={styles.Timer__actions}>
-				<Pressable
-					onPress={handleToggle}
-					onLongPress={() => reset(data.id, durationMs)}
-				>
-					<CircleProgress size={40} progress={progress} decreasing>
+				<Pressable onPress={handleToggle} onLongPress={handleReset}>
+					<CircleProgress ref={circleRef} size={40} progress={progress}>
 						{isRunning ? (
 							<MaterialIcons
 								name='pause'
@@ -80,7 +94,7 @@ export default function TimerSubitem({ data }: TimerSubitemProps) {
 							/>
 						) : (
 							<MaterialIcons
-								name={isFinished ? 'replay' : 'play-arrow'}
+								name={isFinished ? 'check' : 'play-arrow'}
 								size={24}
 								color={theme.colors.primary}
 							/>
