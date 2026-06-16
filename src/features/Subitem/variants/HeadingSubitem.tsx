@@ -84,7 +84,7 @@ const styles = StyleSheet.create((theme) => ({
 	},
 
 	SubitemCheckbox: {
-		marginBottom: -2
+		marginBottom: -3
 	},
 
 	heading: (headingFontSize: number) => ({
