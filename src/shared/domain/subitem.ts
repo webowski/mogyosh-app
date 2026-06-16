@@ -64,3 +64,9 @@ export type SubitemRow = {
 	created_at: string
 	updated_at: string
 }
+
+export type SubitemInsert = {
+	id: SubitemId
+	info: string
+	type: SubitemType
+}

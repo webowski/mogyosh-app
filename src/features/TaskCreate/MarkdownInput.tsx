@@ -6,7 +6,7 @@ import {
 } from 'react-native-enriched-markdown'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
-interface SubitemMarkdownInputProps {
+interface MarkdownInputProps {
 	subitemText: string
 	onChangeText: (text: string) => void
 	onChangeMarkdown: (markdown: string) => void
@@ -14,9 +14,9 @@ interface SubitemMarkdownInputProps {
 	onBackspaceOnEmpty: () => void
 }
 
-export const SubitemMarkdownInput = forwardRef<
+export const MarkdownInput = forwardRef<
 	EnrichedMarkdownTextInputInstance | HTMLDivElement,
-	SubitemMarkdownInputProps
+	MarkdownInputProps
 >(
 	(
 		{
@@ -93,7 +93,7 @@ export const SubitemMarkdownInput = forwardRef<
 	}
 )
 
-SubitemMarkdownInput.displayName = 'SubitemMarkdownInput'
+MarkdownInput.displayName = 'MarkdownInput'
 
 const styles = StyleSheet.create((theme) => ({
 	Input: {

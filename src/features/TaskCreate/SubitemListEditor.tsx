@@ -4,17 +4,20 @@ import { Platform, Pressable, View } from 'react-native'
 import { type EnrichedMarkdownTextInputInstance } from 'react-native-enriched-markdown'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
+import { type SubitemInsert } from '@/shared/domain/subitem'
 import { STYLE_VARS } from '@/shared/styles/common'
 import Checkbox from '@/shared/ui/Checkbox'
-import { TodoItem } from './create.types'
-import { SubitemMarkdownInput } from './SubitemMarkdownInput'
+import { MarkdownInput } from './MarkdownInput'
 
-interface TodoListEditorProps {
-	subitems: TodoItem[]
-	onChange: (subitems: TodoItem[]) => void
+interface SubitemListEditorProps {
+	subitems: SubitemInsert[]
+	onChange: (subitems: SubitemInsert[]) => void
 }
 
-export function TodoListEditor({ subitems, onChange }: TodoListEditorProps) {
+export function SubitemListEditor({
+	subitems,
+	onChange
+}: SubitemListEditorProps) {
 	const { theme } = useUnistyles()
 
 	const inputRefs = useRef<
@@ -54,19 +57,23 @@ export function TodoListEditor({ subitems, onChange }: TodoListEditorProps) {
 	}
 
 	const addSubitemAfter = (index: number) => {
-		const newItem: TodoItem = { id: Date.now().toString(), text: '' }
+		const newSubitem: SubitemInsert = {
+			id: Date.now().toString(),
+			info: '',
+			type: 'p'
+		}
 		const next = [...subitems]
-		next.splice(index + 1, 0, newItem)
+		next.splice(index + 1, 0, newSubitem)
 		onChange(next)
 
 		setTimeout(() => {
-			focusSubitem(newItem.id)
+			focusSubitem(newSubitem.id)
 		}, 50)
 	}
 
 	const removeSubitem = (index: number) => {
 		if (subitems.length < 1) {
-			onChange([{ ...subitems[0], text: '' }])
+			onChange([{ ...subitems[0], info: '' }])
 			return
 		}
 
@@ -81,16 +88,16 @@ export function TodoListEditor({ subitems, onChange }: TodoListEditorProps) {
 		}, 50)
 	}
 
-	const updateSubitem = (id: string, text: string) => {
+	const updateSubitem = (id: string, info: string) => {
 		const subitemIndex = subitems.findIndex((subitem) => subitem.id === id)
 		const updatedItems = subitems.map((subitem) =>
-			subitem.id === id ? { ...subitem, text } : subitem
+			subitem.id === id ? { ...subitem, info } : subitem
 		)
 		onChange(updatedItems)
 
 		// Auto-remove empty subitem when field is cleared
-		// if (text === '' && subitems.length > 1) {
-		if (text === '') {
+		// if (info === '' && subitems.length > 1) {
+		if (info === '') {
 			removeSubitem(subitemIndex)
 		}
 	}
@@ -99,10 +106,10 @@ export function TodoListEditor({ subitems, onChange }: TodoListEditorProps) {
 		<View style={styles.container}>
 			{subitems.map((subitem, index) => (
 				<View key={subitem.id} style={styles.row}>
-					<SubitemMarkdownInput
+					<MarkdownInput
 						ref={getRefForSubitemInput(subitem.id)}
-						subitemText={subitem.text}
-						onChangeText={(text) => updateSubitem(subitem.id, text)}
+						subitemText={subitem.info}
+						onChangeText={(info) => updateSubitem(subitem.id, info)}
 						onChangeMarkdown={(markdown) => updateSubitem(subitem.id, markdown)}
 						onEnterPress={() => addSubitemAfter(index)}
 						onBackspaceOnEmpty={() => removeSubitem(index)}

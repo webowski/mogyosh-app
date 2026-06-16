@@ -16,6 +16,7 @@ import {
 	useCreateSubitem,
 	useCreateTask
 } from '@/features/TaskList'
+import { type SubitemInsert } from '@/shared/domain/subitem'
 import { useTaskStore } from '@/shared/model/taskStore'
 import { commonStyles, STYLE_VARS } from '@/shared/styles/common'
 import { formStyles } from '@/shared/styles/form'
@@ -24,7 +25,7 @@ import { Button } from '@/shared/ui/Button'
 import KeyboardAwareScrollBox from '@/shared/ui/KeyboardAwareScrollBox'
 import RadioButton from '@/shared/ui/RadioButton'
 import Textarea from '@/shared/ui/Textarea'
-import { TodoListEditor } from './TodoListEditor'
+import { SubitemListEditor } from './SubitemListEditor'
 
 const schema = z.object({
 	title: z.string().min(1, t('error.Enter the task title')).max(100)
@@ -110,9 +111,9 @@ export function TaskCreateForm({ onClose }: Props) {
 		}
 	}
 
-	const [subitemsChecklist, setSubitemsChecklist] = useState<
-		{ id: string; text: string }[]
-	>([])
+	const [subitemsChecklist, setSubitemsChecklist] = useState<SubitemInsert[]>(
+		[]
+	)
 
 	const {
 		control,
@@ -145,14 +146,14 @@ export function TaskCreateForm({ onClose }: Props) {
 		})
 
 		const filledSubitemsChecklist = subitemsChecklist.filter((checklistItem) =>
-			checklistItem.text.trim()
+			checklistItem.info.trim()
 		)
 		if (filledSubitemsChecklist.length > 0 && parentTask.id) {
 			// возможно надо оптимизировать чтобы создавать subitems пачкой а не по одному
 			await Promise.all(
 				filledSubitemsChecklist.map((checklistItem) =>
 					createSubitem.mutateAsync({
-						info: checklistItem.text,
+						info: checklistItem.info,
 						task_id: parentTask.id
 					})
 				)
@@ -240,7 +241,7 @@ export function TaskCreateForm({ onClose }: Props) {
 					<View style={commonStyles.sectionHeader}>
 						<Text style={textStyles.heading5}>Task details</Text>
 					</View>
-					<TodoListEditor
+					<SubitemListEditor
 						subitems={subitemsChecklist}
 						onChange={setSubitemsChecklist}
 					/>
