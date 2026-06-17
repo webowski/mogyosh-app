@@ -73,7 +73,6 @@ export default function BulletedSubitem({
 						// removeSubitem(index)
 					}}
 				/>
-				{data.info}
 			</Animated.Text>
 			{data.settings?.checkable && (
 				<Checkbox checked={checked} onPress={handlePressCheckbox} />
