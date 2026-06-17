@@ -7,7 +7,7 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 import { type SubitemInsert } from '@/shared/domain/subitem'
 import { STYLE_VARS } from '@/shared/styles/common'
 import Checkbox from '@/shared/ui/Checkbox'
-import { MarkdownInput } from './MarkdownInput'
+import { MarkdownInput } from '@/shared/ui/MarkdownInput'
 
 interface SubitemListEditorProps {
 	subitems: SubitemInsert[]

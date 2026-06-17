@@ -8,10 +8,10 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 interface MarkdownInputProps {
 	subitemText: string
-	onChangeText: (text: string) => void
-	onChangeMarkdown: (markdown: string) => void
-	onEnterPress: () => void
-	onBackspaceOnEmpty: () => void
+	onChangeText?: (text: string) => void
+	onChangeMarkdown?: (markdown: string) => void
+	onEnterPress?: () => void
+	onBackspaceOnEmpty?: () => void
 }
 
 export const MarkdownInput = forwardRef<
@@ -37,17 +37,17 @@ export const MarkdownInput = forwardRef<
 					contentEditable
 					suppressContentEditableWarning
 					onInput={(event) => {
-						onChangeText((event.currentTarget as HTMLDivElement).innerText)
+						onChangeText?.((event.currentTarget as HTMLDivElement).innerText)
 					}}
 					onKeyDown={(event) => {
 						if (event.key === 'Enter') {
 							event.preventDefault()
-							onEnterPress()
+							onEnterPress?.()
 						} else if (event.key === 'Backspace') {
 							const text = (event.currentTarget as HTMLDivElement).innerText
 							if (text === '' || text === '\n') {
 								event.preventDefault()
-								onBackspaceOnEmpty()
+								onBackspaceOnEmpty?.()
 							}
 						}
 					}}
@@ -82,9 +82,9 @@ export const MarkdownInput = forwardRef<
 						;(
 							ref as React.RefObject<EnrichedMarkdownTextInputInstance>
 						).current?.setValue(subitemText)
-						onEnterPress()
+						onEnterPress?.()
 					} else if (text === '') {
-						onBackspaceOnEmpty()
+						onBackspaceOnEmpty?.()
 					}
 				}}
 				onChangeMarkdown={onChangeMarkdown}

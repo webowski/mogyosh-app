@@ -9,6 +9,7 @@ import { StyleSheet } from 'react-native-unistyles'
 
 import { STYLE_VARS } from '@/shared/styles/common'
 import Checkbox from '@/shared/ui/Checkbox'
+import { MarkdownInput } from '@/shared/ui/MarkdownInput'
 import { SubitemProps } from '../index'
 
 type BulletedSubitemProps = SubitemProps & {
@@ -56,6 +57,22 @@ export default function BulletedSubitem({
 		<View style={styles.container}>
 			<Text style={{ marginRight: 6, fontSize: 20 }}>{getBullet(depth)}</Text>
 			<Animated.Text style={[styles.text, textStyle]}>
+				<MarkdownInput
+					subitemText={data.info}
+					// ref={getRefForSubitemInput(subitem.id)}
+					onChangeText={(info) => {
+						// updateSubitem(data.id, info)
+					}}
+					onChangeMarkdown={(markdown) => {
+						// updateSubitem(data.id, markdown)
+					}}
+					onEnterPress={() => {
+						// addSubitemAfter(index)
+					}}
+					onBackspaceOnEmpty={() => {
+						// removeSubitem(index)
+					}}
+				/>
 				{data.info}
 			</Animated.Text>
 			{data.settings?.checkable && (

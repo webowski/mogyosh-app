@@ -9,6 +9,7 @@ import { StyleSheet } from 'react-native-unistyles'
 
 import { STYLE_VARS } from '@/shared/styles/common'
 import Checkbox from '@/shared/ui/Checkbox'
+import { MarkdownInput } from '@/shared/ui/MarkdownInput'
 import { SubitemProps } from '../index'
 
 export default function TextSubitem({ data, onCheckToggle }: SubitemProps) {
@@ -42,6 +43,14 @@ export default function TextSubitem({ data, onCheckToggle }: SubitemProps) {
 	return (
 		<View style={styles.container}>
 			<Animated.Text style={[styles.text, textStyle]}>
+				<MarkdownInput
+					// ref={getRefForSubitemInput(subitem.id)}
+					subitemText={data.info}
+					// onChangeText={(info) => updateSubitem(data.id, info)}
+					// onChangeMarkdown={(markdown) => updateSubitem(data.id, markdown)}
+					// onEnterPress={() => addSubitemAfter(index)}
+					// onBackspaceOnEmpty={() => removeSubitem(index)}
+				/>
 				{data.info}
 			</Animated.Text>
 			{data.settings?.checkable && (
