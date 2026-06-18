@@ -4,6 +4,7 @@ import { Platform, Pressable, View } from 'react-native'
 import { type EnrichedMarkdownTextInputInstance } from 'react-native-enriched-markdown'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
+import { SubitemId } from '@/shared/domain/ids'
 import { type SubitemInsert } from '@/shared/domain/subitem'
 import { STYLE_VARS } from '@/shared/styles/common'
 import Checkbox from '@/shared/ui/Checkbox'
@@ -67,7 +68,7 @@ export function SubitemListEditor({
 		onChange(next)
 
 		setTimeout(() => {
-			focusSubitem(newSubitem.id)
+			focusSubitem(newSubitem.id as SubitemId)
 		}, 50)
 	}
 
@@ -84,7 +85,7 @@ export function SubitemListEditor({
 
 		const focusIndex = Math.max(0, index - 1)
 		setTimeout(() => {
-			focusSubitem(updatedSubitems[focusIndex].id)
+			focusSubitem(updatedSubitems[focusIndex].id as SubitemId)
 		}, 50)
 	}
 
@@ -108,7 +109,7 @@ export function SubitemListEditor({
 				<View key={subitem.id} style={styles.row}>
 					<MarkdownInput
 						ref={getRefForSubitemInput(subitem.id)}
-						subitemText={subitem.info}
+						subitemText={subitem.info as string}
 						onChangeText={(info) => updateSubitem(subitem.id, info)}
 						onChangeMarkdown={(markdown) => updateSubitem(subitem.id, markdown)}
 						onEnterPress={() => addSubitemAfter(index)}

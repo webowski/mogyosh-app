@@ -66,7 +66,13 @@ export type SubitemRow = {
 }
 
 export type SubitemInsert = {
-	id?: SubitemId
+	id: SubitemId
+	info: string
+	type: SubitemType
+}
+
+export type SubitemUpdate = {
+	id: SubitemId
 	info?: string
 	type?: SubitemType
 }
