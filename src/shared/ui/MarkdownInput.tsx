@@ -63,7 +63,9 @@ export const MarkdownInput = forwardRef<
 						minHeight: 22,
 						wordBreak: 'break-word'
 					}}
-				/>
+				>
+					{subitemText}
+				</div>
 			)
 		}
 
