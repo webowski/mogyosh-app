@@ -11,6 +11,7 @@ import { STYLE_VARS } from '@/shared/styles/common'
 import Checkbox from '@/shared/ui/Checkbox'
 import { MarkdownInput } from '@/shared/ui/MarkdownInput'
 import { SubitemProps } from '../index'
+import { useUpdateSubitem } from '../model/useUpdateSubitem'
 
 type BulletedSubitemProps = SubitemProps & {
 	depth: number
@@ -21,6 +22,8 @@ export default function BulletedSubitem({
 	depth,
 	onCheckToggle
 }: BulletedSubitemProps) {
+	const updateSubitem = useUpdateSubitem()
+
 	function getBullet(depth: number): string {
 		const bullets = ['•', '◦', '▪', '•', '◦', '▪']
 		return bullets[depth % bullets.length]
@@ -59,13 +62,13 @@ export default function BulletedSubitem({
 			<Animated.Text style={[styles.text, textStyle]}>
 				<MarkdownInput
 					subitemText={data.info}
-					// ref={getRefForSubitemInput(subitem.id)}
 					onChangeText={(info) => {
-						// updateSubitem(data.id, info)
+						updateSubitem.mutate({ id: data.id, info })
 					}}
 					onChangeMarkdown={(markdown) => {
-						// updateSubitem(data.id, markdown)
+						updateSubitem.mutate({ id: data.id, info: markdown })
 					}}
+					// ref={getRefForSubitemInput(subitem.id)}
 					onEnterPress={() => {
 						// addSubitemAfter(index)
 					}}
