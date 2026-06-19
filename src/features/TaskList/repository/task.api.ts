@@ -1,8 +1,8 @@
+import { subitemAPI } from '@/features/Subitem/repository/subitem.api'
 import { supabaseClient } from '@/shared/api/supabaseClient'
 import { TaskId } from '@/shared/domain/ids'
 import { TaskEntity, TaskRow } from '@/shared/domain/task'
 import { TaskFilters } from '../model/task.types'
-import { subitemAPI } from './subitem.api'
 
 const TASKS_SELECT = `
 	*,

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { subitemAPI } from '@/features/TaskList/repository/subitem.api'
+import { subitemAPI } from '../repository/subitem.api'
 
 export const useRemoveSubitem = () => {
 	const queryClient = useQueryClient()

@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { subitemAPI } from '@/features/Subitem'
 import { TaskId } from '@/shared/domain/ids'
 import { SubitemEntity } from '@/shared/domain/subitem'
-import { subitemAPI } from '../repository/subitem.api'
 
 /**
  * Get subitems and calculate completion progress for a task

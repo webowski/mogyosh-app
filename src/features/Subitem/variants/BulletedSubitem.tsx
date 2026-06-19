@@ -8,12 +8,13 @@ import Animated, {
 } from 'react-native-reanimated'
 import { StyleSheet } from 'react-native-unistyles'
 
-import { useCreateSubitem, useRemoveSubitem } from '@/features/TaskList'
 import { STYLE_VARS } from '@/shared/styles/common'
 import Checkbox from '@/shared/ui/Checkbox'
 import { MarkdownInput } from '@/shared/ui/MarkdownInput'
-import type { SubitemProps } from '../index'
+import type { SubitemProps } from '../model/subitem.types'
 import { SubitemInputRefsMap } from '../model/subitem.types'
+import { useCreateSubitem } from '../model/useCreateSubitem'
+import { useRemoveSubitem } from '../model/useRemoveSubitem'
 import { useUpdateSubitem } from '../model/useUpdateSubitem'
 
 type BulletedSubitemProps = SubitemProps & {

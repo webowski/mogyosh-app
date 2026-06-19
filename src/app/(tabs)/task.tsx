@@ -10,10 +10,11 @@ import {
 import type { EnrichedMarkdownTextInputInstance } from 'react-native-enriched-markdown'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
+import { useCreateSubitem, useSubitems } from '@/features/Subitem'
 import type { SubitemInputRefsMap } from '@/features/Subitem/model/subitem.types'
 import { buildSubitemTree } from '@/features/Subitem/model/subitem.utils'
 import SubitemNode from '@/features/Subitem/SubitemNode'
-import { useCreateSubitem, useSubitems, useTaskById } from '@/features/TaskList'
+import { useTaskById } from '@/features/TaskList'
 import { SubitemId } from '@/shared/domain/ids'
 import { useTaskStore } from '@/shared/model/taskStore'
 import { commonStyles, STYLE_VARS } from '@/shared/styles/common'

@@ -10,10 +10,10 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 import { z } from 'zod'
 
 import { ActionsPanel } from '@/features/ActionsPanel/ActionsPanel'
+import { useCreateSubitem } from '@/features/Subitem'
 import {
 	useCategories,
 	useCreateCategory,
-	useCreateSubitem,
 	useCreateTask
 } from '@/features/TaskList'
 import { type SubitemInsert } from '@/shared/domain/subitem'
