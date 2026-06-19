@@ -8,7 +8,7 @@ import Animated, {
 } from 'react-native-reanimated'
 import { StyleSheet } from 'react-native-unistyles'
 
-import { useCreateSubitem } from '@/features/TaskList'
+import { useCreateSubitem, useRemoveSubitem } from '@/features/TaskList'
 import { STYLE_VARS } from '@/shared/styles/common'
 import Checkbox from '@/shared/ui/Checkbox'
 import { MarkdownInput } from '@/shared/ui/MarkdownInput'
@@ -31,6 +31,7 @@ export default function BulletedSubitem({
 }: BulletedSubitemProps) {
 	const updateSubitem = useUpdateSubitem()
 	const createSubitem = useCreateSubitem()
+	const removeSubitem = useRemoveSubitem()
 
 	// const newSubitemInputRef = useRef<
 	// 	EnrichedMarkdownTextInputInstance | HTMLDivElement | null
@@ -134,7 +135,7 @@ export default function BulletedSubitem({
 						}}
 						onEnterPress={handleAddAfter}
 						onBackspaceOnEmpty={() => {
-							// removeSubitem — to be implemented
+							removeSubitem.mutate(data.id)
 						}}
 					/>
 				</Animated.Text>

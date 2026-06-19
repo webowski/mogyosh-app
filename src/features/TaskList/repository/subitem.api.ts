@@ -137,8 +137,18 @@ const createSubitem = async (
 	return data
 }
 
+const deleteSubitem = async (subitemId: SubitemId): Promise<void> => {
+	const { error } = await supabaseClient
+		.from('subitems')
+		.delete()
+		.eq('id', subitemId)
+
+	if (error) throw error
+}
+
 export const subitemAPI = {
 	getSubitems,
 	updateSubitemState,
-	createSubitem
+	createSubitem,
+	deleteSubitem
 }
