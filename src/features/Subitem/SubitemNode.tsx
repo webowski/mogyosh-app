@@ -4,7 +4,7 @@ import { View } from 'react-native'
 import { useUpdateSubitemState } from '@/features/TaskList'
 import type { SubitemId } from '@/shared/domain/ids'
 import type { SubitemType } from '@/shared/domain/subitem'
-import type { SubitemData } from './model/subitem.types'
+import type { SubitemData, SubitemInputRefsMap } from './model/subitem.types'
 import BulletedSubitem from './variants/BulletedSubitem'
 import CollapsibleSubitem from './variants/CollapsibleSubitem'
 import CounterSubitem from './variants/CounterSubitem'
@@ -19,12 +19,16 @@ interface SubitemNodeProps {
 	depth: number
 	// onCheckToggle: (subitemId: SubitemId, checked: boolean) => void
 	variant: SubitemType
+	inputRefs?: SubitemInputRefsMap
+	onAddAfter?: (afterId: SubitemId) => void
 }
 
 export default function SubitemNode({
 	data,
 	variant = 'p',
-	depth = 0
+	depth = 0,
+	inputRefs,
+	onAddAfter
 }: SubitemNodeProps) {
 	const [isChildShown, setIsChildShown] = useState(true)
 	// const hasChildren = data.children.length > 0
@@ -71,7 +75,9 @@ export default function SubitemNode({
 				<BulletedSubitem
 					data={data}
 					depth={depth}
+					inputRefs={inputRefs}
 					onCheckToggle={(checked) => handleToggleSubitem(data.id, checked)}
+					onAddAfter={() => onAddAfter?.(data.id)}
 				/>
 			)
 			break
@@ -133,10 +139,12 @@ export default function SubitemNode({
 			{isChildShown &&
 				data.children.map((child) => (
 					<SubitemNode
+						inputRefs={inputRefs}
 						key={child.id}
 						data={child}
 						depth={depth + 1}
-						variant={variant}
+						variant={child.type}
+						onAddAfter={onAddAfter}
 					/>
 				))}
 		</View>

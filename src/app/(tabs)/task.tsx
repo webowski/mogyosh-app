@@ -1,14 +1,29 @@
-import { ActivityIndicator, Text, View } from 'react-native'
+import { MaterialIcons } from '@expo/vector-icons'
+import { useRef } from 'react'
+import {
+	ActivityIndicator,
+	Platform,
+	Pressable,
+	Text,
+	View
+} from 'react-native'
+import type { EnrichedMarkdownTextInputInstance } from 'react-native-enriched-markdown'
+import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
+import type { SubitemInputRefsMap } from '@/features/Subitem/model/subitem.types'
 import { buildSubitemTree } from '@/features/Subitem/model/subitem.utils'
 import SubitemNode from '@/features/Subitem/SubitemNode'
-import { useSubitems, useTaskById } from '@/features/TaskList'
+import { useCreateSubitem, useSubitems, useTaskById } from '@/features/TaskList'
+import { SubitemId } from '@/shared/domain/ids'
 import { useTaskStore } from '@/shared/model/taskStore'
-import { commonStyles } from '@/shared/styles/common'
+import { commonStyles, STYLE_VARS } from '@/shared/styles/common'
 import ScrollBox from '@/shared/ui/ScrollBox'
 
 export default function TaskScreen() {
+	const { theme } = useUnistyles()
 	const selectedTaskId = useTaskStore((state) => state.selectedTaskId)
+	const inputRefs = useRef<SubitemInputRefsMap>(new Map())
+	const createSubitem = useCreateSubitem()
 
 	const { data, isLoading, error } = useTaskById(selectedTaskId)
 
@@ -16,6 +31,61 @@ export default function TaskScreen() {
 		useSubitems(selectedTaskId)
 
 	const subitemTree = buildSubitemTree(subitems ?? [])
+
+	const focusSubitem = (id: SubitemId) => {
+		const ref = inputRefs.current.get(id)?.current
+		if (!ref) return
+
+		if (Platform.OS === 'web') {
+			const element = ref as HTMLDivElement
+			element.focus()
+			const range = document.createRange()
+			const selection = window.getSelection()
+			range.selectNodeContents(element)
+			range.collapse(false)
+			selection?.removeAllRanges()
+			selection?.addRange(range)
+		} else {
+			;(ref as EnrichedMarkdownTextInputInstance).focus()
+		}
+	}
+
+	const handleAddAfter = (afterId: SubitemId) => {
+		// Find the subitem to get task_id, parent_id, type
+		const afterSubitem = subitems?.find((s) => s.id === afterId)
+		if (!afterSubitem) return
+
+		createSubitem.mutate(
+			{
+				info: '',
+				task_id: selectedTaskId,
+				parent_id: afterSubitem.parent_id ?? null,
+				type: 'ul'
+			},
+			{
+				onSuccess: (newSubitem) => {
+					setTimeout(() => focusSubitem(newSubitem.id), 50)
+				}
+			}
+		)
+	}
+
+	const handleAddAfterLast = () => {
+		const lastSubitem = subitems?.[subitems.length - 1]
+		createSubitem.mutate(
+			{
+				info: '',
+				task_id: selectedTaskId,
+				parent_id: null,
+				type: 'ul'
+			},
+			{
+				onSuccess: (newSubitem) => {
+					setTimeout(() => focusSubitem(newSubitem.id), 50)
+				}
+			}
+		)
+	}
 
 	// Show loading state when waiting for task data
 	if (isLoading || isLoadingSubitems)
@@ -52,8 +122,28 @@ export default function TaskScreen() {
 					data={subitemData}
 					depth={0}
 					variant={subitemData.type}
+					inputRefs={inputRefs.current}
+					onAddAfter={handleAddAfter}
 				/>
 			))}
+			<Pressable style={styles.addButton} onPress={() => handleAddAfterLast()}>
+				<MaterialIcons name='add' size={28} color={theme.colors.minor} />
+			</Pressable>
 		</ScrollBox>
 	)
 }
+
+const styles = StyleSheet.create((theme) => ({
+	addButton: {
+		marginTop: 4,
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'center',
+		paddingVertical: theme.spacing.xs,
+		backgroundColor: theme.colors.mutedLightFill,
+		borderTopLeftRadius: STYLE_VARS.radius_sm,
+		borderTopRightRadius: STYLE_VARS.radius_sm,
+		borderBottomLeftRadius: STYLE_VARS.radius_lg,
+		borderBottomRightRadius: STYLE_VARS.radius_lg
+	}
+}))

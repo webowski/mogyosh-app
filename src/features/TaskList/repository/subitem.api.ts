@@ -1,6 +1,10 @@
 import { supabaseClient } from '@/shared/api/supabaseClient'
 import { SubitemId, TaskId } from '@/shared/domain/ids'
-import { SubitemEntity, SubitemRow } from '@/shared/domain/subitem'
+import type {
+	SubitemEntity,
+	SubitemRow,
+	SubitemType
+} from '@/shared/domain/subitem'
 
 const SUBITEMS_SELECT = `
 	*,
@@ -110,7 +114,9 @@ const updateSubitemState = async (
 
 type CreateSubitemPayload = {
 	info: string
+	type?: SubitemType
 	task_id?: string | null
+	parent_id?: string | null
 }
 
 const createSubitem = async (
@@ -120,7 +126,9 @@ const createSubitem = async (
 		.from('subitems')
 		.insert({
 			info: payload.info,
-			task_id: payload.task_id ?? null
+			task_id: payload.task_id ?? null,
+			parent_id: payload.parent_id ?? null,
+			type: payload.type ?? 'p'
 		})
 		.select()
 		.single()
