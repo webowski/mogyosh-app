@@ -16,8 +16,8 @@ export const useUpdateSubitem = () => {
 			if (error) throw error
 		},
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['task'] })
-			queryClient.invalidateQueries({ queryKey: ['subitems'] })
+			// queryClient.invalidateQueries({ queryKey: ['task'] })
+			// queryClient.invalidateQueries({ queryKey: ['subitems'] })
 		}
 	})
 }

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Platform, Text, View } from 'react-native'
 import type { EnrichedMarkdownTextInputInstance } from 'react-native-enriched-markdown'
 import Animated, {
@@ -52,6 +52,19 @@ export default function BulletedSubitem({
 		const bullets = ['•', '◦', '▪', '•', '◦', '▪']
 		return bullets[bulletDepth % bullets.length]
 	}
+
+	const updateDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+	const handleChangeText = useCallback(
+		(value: string) => {
+			if (updateDebounceRef.current) clearTimeout(updateDebounceRef.current)
+			updateDebounceRef.current = setTimeout(() => {
+				updateSubitem.mutate({ id: data.id, info: value })
+			}, 500)
+		},
+		// eslint-disable-next-line
+		[data.id]
+	)
 
 	const [checked, setChecked] = useState(data.state === 'done')
 
@@ -128,12 +141,8 @@ export default function BulletedSubitem({
 					<MarkdownInput
 						ref={inputRef}
 						subitemText={data.info}
-						onChangeText={(info) => {
-							updateSubitem.mutate({ id: data.id, info })
-						}}
-						onChangeMarkdown={(markdown) => {
-							updateSubitem.mutate({ id: data.id, info: markdown })
-						}}
+						onChangeText={handleChangeText}
+						onChangeMarkdown={handleChangeText}
 						onEnterPress={handleAddAfter}
 						onBackspaceOnEmpty={() => {
 							removeSubitem.mutate(data.id)
