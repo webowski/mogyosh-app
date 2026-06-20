@@ -30,7 +30,6 @@ export default function TaskScreen() {
 	const inputRefs = useRef<SubitemInputRefsMap>(new Map())
 
 	const pendingFocusId = useRef<SubitemId | null>(null)
-	// const [focusTrigger, setFocusTrigger] = useState(0)
 
 	const createSubitem = useCreateSubitem()
 	const removeSubitem = useRemoveSubitem()
@@ -75,8 +74,6 @@ export default function TaskScreen() {
 			{
 				onSuccess: (newSubitem) => {
 					pendingFocusId.current = newSubitem.id
-					// setFocusTrigger(t => t + 1)
-					// 	setTimeout(() => focusSubitem(newSubitem.id), 50)
 				}
 			}
 		)
@@ -94,7 +91,6 @@ export default function TaskScreen() {
 			{
 				onSuccess: (newSubitem) => {
 					pendingFocusId.current = newSubitem.id
-					// setTimeout(() => focusSubitem(newSubitem.id), 50)
 				}
 			}
 		)
