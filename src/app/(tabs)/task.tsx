@@ -104,7 +104,7 @@ export default function TaskScreen() {
 			focusSubitem(previousSubitem.id)
 		}
 
-		removeSubitem.mutate(removeId)
+		removeSubitem.mutate({ id: removeId, taskId: selectedTaskId })
 	}
 
 	// Show loading state when waiting for task data
