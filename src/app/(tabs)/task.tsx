@@ -59,34 +59,21 @@ export default function TaskScreen() {
 		}
 	}
 
-	const handleAddAfter = (afterId: SubitemId) => {
-		// Find the subitem to get task_id, parent_id, type
-		const afterSubitem = subitems?.find((s) => s.id === afterId)
-		if (!afterSubitem) return
+	const handleAddSubitem = (afterId?: SubitemId) => {
+		const afterSubitem = afterId
+			? subitems?.find((subitem) => subitem.id === afterId)
+			: null
+
+		const optimisticId = `optimistic-${Date.now()}` as SubitemId
+		pendingFocusId.current = optimisticId
 
 		createSubitem.mutate(
 			{
 				info: '',
 				task_id: selectedTaskId,
-				parent_id: afterSubitem.parent_id ?? null,
-				type: 'ul'
-			},
-			{
-				onSuccess: (newSubitem) => {
-					pendingFocusId.current = newSubitem.id
-				}
-			}
-		)
-	}
-
-	const handleAddAfterLast = () => {
-		const lastSubitem = subitems?.[subitems.length - 1]
-		createSubitem.mutate(
-			{
-				info: '',
-				task_id: selectedTaskId,
-				parent_id: null,
-				type: 'ul'
+				parent_id: afterSubitem?.parent_id ?? null,
+				type: 'ul',
+				optimisticId
 			},
 			{
 				onSuccess: (newSubitem) => {
@@ -143,12 +130,12 @@ export default function TaskScreen() {
 					data={subitemData}
 					depth={0}
 					variant={subitemData.type}
-					onAddAfter={handleAddAfter}
+					onAddAfter={handleAddSubitem}
 					onRemove={handleRemove}
 					pendingFocusId={pendingFocusId}
 				/>
 			))}
-			<Pressable style={styles.addButton} onPress={() => handleAddAfterLast()}>
+			<Pressable style={styles.addButton} onPress={() => handleAddSubitem()}>
 				<MaterialIcons name='add' size={28} color={theme.colors.minor} />
 			</Pressable>
 		</ScrollBox>

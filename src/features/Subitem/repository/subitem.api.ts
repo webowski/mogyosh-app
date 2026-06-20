@@ -1,9 +1,9 @@
 import { supabaseClient } from '@/shared/api/supabaseClient'
 import { SubitemId, TaskId } from '@/shared/domain/ids'
 import type {
+	CreateSubitemPayload,
 	SubitemEntity,
-	SubitemRow,
-	SubitemType
+	SubitemRow
 } from '@/shared/domain/subitem'
 
 const SUBITEMS_SELECT = `
@@ -110,13 +110,6 @@ const updateSubitemState = async (
 
 	if (error) throw error
 	return makeSubitemObject(data)
-}
-
-type CreateSubitemPayload = {
-	info: string
-	type?: SubitemType
-	task_id?: string | null
-	parent_id?: string | null
 }
 
 const createSubitem = async (

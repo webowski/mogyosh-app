@@ -65,6 +65,14 @@ export type SubitemRow = {
 	updated_at: string
 }
 
+export type CreateSubitemPayload = {
+	info: string
+	type?: SubitemType
+	task_id?: string | null
+	parent_id?: string | null
+	optimisticId?: string
+}
+
 export type SubitemInsert = {
 	id: SubitemId
 	info: string

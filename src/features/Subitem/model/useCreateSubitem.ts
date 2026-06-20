@@ -19,7 +19,7 @@ export const useCreateSubitem = () => {
 			])
 
 			const optimisticSubitem: SubitemEntity = {
-				id: `optimistic-${Date.now()}` as SubitemId,
+				id: (payload.optimisticId ?? `optimistic-${Date.now()}`) as SubitemId,
 				task_id: taskId as TaskId,
 				parent_id: payload.parent_id ?? null,
 				type: payload.type ?? 'p',
