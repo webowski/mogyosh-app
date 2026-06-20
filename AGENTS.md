@@ -14,7 +14,7 @@
 - Придерживаться принципов программирования SOLID
 - Не удаляй закомментированные куски кода
 - Не удаляй комментарии в коде
-- не сокращать слова в названиях переменных и свойств объектов
+- Названия переменных пиши полностью. Не сокращать слова в названиях переменных и свойств объектов
 - не используй require, для импорта только import
 - если импортируешь только типы, то используй слово type `import type { ... } from '...'`
 - Используй javascript `new Map()` там где это удобно
@@ -55,7 +55,7 @@ This is a React Native mobile application built with Expo
 
 ## React Native Expo разработка
 
-- Код должен быть совеременным для latest React Native Expo на апрель 2026
+- Код должен быть совеременным для latest React Native Expo на июнь 2026
 - никогда не удаляй из имеющегося кода scheduleOnRN.
 - нигода не применяй runOnJS. для react-native-reanimated НЕ используй runOnJS, т.к. runOnJS is deprecated для latest версии react-native-reanimated
 - вместо withSpring использовать withTiming
