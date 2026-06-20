@@ -10,6 +10,8 @@ export type SubitemData = SubitemEntity & {
 export type SubitemProps = {
 	data: SubitemData
 	onCheckToggle?: (checked: boolean) => void
+	onAddAfter?: () => void
+	onRemove?: () => void
 }
 
 export type SubitemInputRef =

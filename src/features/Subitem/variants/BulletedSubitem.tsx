@@ -14,13 +14,11 @@ import { MarkdownInput } from '@/shared/ui/MarkdownInput'
 import type { SubitemProps } from '../model/subitem.types'
 import { SubitemInputRefsMap } from '../model/subitem.types'
 import { useCreateSubitem } from '../model/useCreateSubitem'
-import { useRemoveSubitem } from '../model/useRemoveSubitem'
 import { useUpdateSubitem } from '../model/useUpdateSubitem'
 
 type BulletedSubitemProps = SubitemProps & {
 	depth: number
 	inputRefs?: SubitemInputRefsMap
-	onAddAfter?: () => void
 }
 
 export default function BulletedSubitem({
@@ -28,11 +26,11 @@ export default function BulletedSubitem({
 	depth,
 	onCheckToggle,
 	inputRefs,
-	onAddAfter
+	onAddAfter,
+	onRemove
 }: BulletedSubitemProps) {
 	const updateSubitem = useUpdateSubitem()
 	const createSubitem = useCreateSubitem()
-	const removeSubitem = useRemoveSubitem()
 
 	// const newSubitemInputRef = useRef<
 	// 	EnrichedMarkdownTextInputInstance | HTMLDivElement | null
@@ -145,7 +143,7 @@ export default function BulletedSubitem({
 						onChangeMarkdown={handleChangeText}
 						onEnterPress={handleAddAfter}
 						onBackspaceOnEmpty={() => {
-							removeSubitem.mutate(data.id)
+							onRemove?.()
 						}}
 					/>
 				</Animated.Text>

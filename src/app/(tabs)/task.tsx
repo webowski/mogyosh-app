@@ -10,7 +10,11 @@ import {
 import type { EnrichedMarkdownTextInputInstance } from 'react-native-enriched-markdown'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
-import { useCreateSubitem, useSubitems } from '@/features/Subitem'
+import {
+	useCreateSubitem,
+	useRemoveSubitem,
+	useSubitems
+} from '@/features/Subitem'
 import type { SubitemInputRefsMap } from '@/features/Subitem/model/subitem.types'
 import { buildSubitemTree } from '@/features/Subitem/model/subitem.utils'
 import SubitemNode from '@/features/Subitem/SubitemNode'
@@ -24,7 +28,9 @@ export default function TaskScreen() {
 	const { theme } = useUnistyles()
 	const selectedTaskId = useTaskStore((state) => state.selectedTaskId)
 	const inputRefs = useRef<SubitemInputRefsMap>(new Map())
+
 	const createSubitem = useCreateSubitem()
+	const removeSubitem = useRemoveSubitem()
 
 	const { data, isLoading, error } = useTaskById(selectedTaskId)
 
@@ -88,6 +94,17 @@ export default function TaskScreen() {
 		)
 	}
 
+	const handleRemove = (removeId: SubitemId) => {
+		const index = subitems?.findIndex((s) => s.id === removeId) ?? -1
+		const previousSubitem = index > 0 ? subitems![index - 1] : null
+
+		if (previousSubitem) {
+			focusSubitem(previousSubitem.id)
+		}
+
+		removeSubitem.mutate(removeId)
+	}
+
 	// Show loading state when waiting for task data
 	if (isLoading || isLoadingSubitems)
 		return (
@@ -125,6 +142,7 @@ export default function TaskScreen() {
 					variant={subitemData.type}
 					inputRefs={inputRefs.current}
 					onAddAfter={handleAddAfter}
+					onRemove={handleRemove}
 				/>
 			))}
 			<Pressable style={styles.addButton} onPress={() => handleAddAfterLast()}>

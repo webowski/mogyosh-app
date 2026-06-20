@@ -21,6 +21,7 @@ interface SubitemNodeProps {
 	variant: SubitemType
 	inputRefs?: SubitemInputRefsMap
 	onAddAfter?: (afterId: SubitemId) => void
+	onRemove?: (id: SubitemId) => void
 }
 
 export default function SubitemNode({
@@ -28,7 +29,8 @@ export default function SubitemNode({
 	variant = 'p',
 	depth = 0,
 	inputRefs,
-	onAddAfter
+	onAddAfter,
+	onRemove
 }: SubitemNodeProps) {
 	const [isChildShown, setIsChildShown] = useState(true)
 	// const hasChildren = data.children.length > 0
@@ -78,6 +80,7 @@ export default function SubitemNode({
 					inputRefs={inputRefs}
 					onCheckToggle={(checked) => handleToggleSubitem(data.id, checked)}
 					onAddAfter={() => onAddAfter?.(data.id)}
+					onRemove={() => onRemove?.(data.id)}
 				/>
 			)
 			break
@@ -145,6 +148,7 @@ export default function SubitemNode({
 						depth={depth + 1}
 						variant={child.type}
 						onAddAfter={onAddAfter}
+						onRemove={onRemove}
 					/>
 				))}
 		</View>
