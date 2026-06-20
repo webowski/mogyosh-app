@@ -31,7 +31,7 @@ export type SubitemStateEntity = {
 export type SubitemSettings = {
 	checkable?: boolean
 	duration?: number
-}
+} | null
 
 export type SubitemEntity = {
 	id: SubitemId
@@ -39,7 +39,7 @@ export type SubitemEntity = {
 	parent_id?: SubitemId | null
 	type: SubitemType
 	info: string
-	status?: SubitemStatus
+	status?: SubitemStatus | null
 	settings: SubitemSettings
 	priority?: number | null
 	sort_order: any | null
