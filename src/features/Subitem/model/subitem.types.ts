@@ -12,6 +12,7 @@ export type SubitemProps = {
 	onCheckToggle?: (checked: boolean) => void
 	onAddAfter?: () => void
 	onRemove?: () => void
+	pendingFocusId?: React.RefObject<SubitemId | null>
 }
 
 export type SubitemInputRef =

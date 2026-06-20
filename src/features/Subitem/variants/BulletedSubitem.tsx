@@ -27,14 +27,11 @@ export default function BulletedSubitem({
 	onCheckToggle,
 	inputRefs,
 	onAddAfter,
-	onRemove
+	onRemove,
+	pendingFocusId
 }: BulletedSubitemProps) {
 	const updateSubitem = useUpdateSubitem()
 	const createSubitem = useCreateSubitem()
-
-	// const newSubitemInputRef = useRef<
-	// 	EnrichedMarkdownTextInputInstance | HTMLDivElement | null
-	// >(null)
 
 	const getOrCreateRef = () => {
 		if (!inputRefs) return { current: null }
@@ -130,6 +127,26 @@ export default function BulletedSubitem({
 			}
 		)
 	}
+
+	useEffect(() => {
+		if (pendingFocusId?.current === data.id) {
+			pendingFocusId.current = null
+			const ref = inputRef.current
+			if (!ref) return
+			if (Platform.OS === 'web') {
+				const element = ref as HTMLDivElement
+				element.focus()
+				const range = document.createRange()
+				const selection = window.getSelection()
+				range.selectNodeContents(element)
+				range.collapse(false)
+				selection?.removeAllRanges()
+				selection?.addRange(range)
+			} else {
+				;(ref as EnrichedMarkdownTextInputInstance).focus()
+			}
+		}
+	}, [data.id, pendingFocusId, inputRef])
 
 	return (
 		<View>

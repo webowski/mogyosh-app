@@ -22,6 +22,7 @@ interface SubitemNodeProps {
 	inputRefs?: SubitemInputRefsMap
 	onAddAfter?: (afterId: SubitemId) => void
 	onRemove?: (id: SubitemId) => void
+	pendingFocusId?: React.RefObject<SubitemId | null>
 }
 
 export default function SubitemNode({
@@ -30,7 +31,8 @@ export default function SubitemNode({
 	depth = 0,
 	inputRefs,
 	onAddAfter,
-	onRemove
+	onRemove,
+	pendingFocusId
 }: SubitemNodeProps) {
 	const [isChildShown, setIsChildShown] = useState(true)
 	// const hasChildren = data.children.length > 0
@@ -81,6 +83,7 @@ export default function SubitemNode({
 					onCheckToggle={(checked) => handleToggleSubitem(data.id, checked)}
 					onAddAfter={() => onAddAfter?.(data.id)}
 					onRemove={() => onRemove?.(data.id)}
+					pendingFocusId={pendingFocusId}
 				/>
 			)
 			break
@@ -149,6 +152,7 @@ export default function SubitemNode({
 						variant={child.type}
 						onAddAfter={onAddAfter}
 						onRemove={onRemove}
+						pendingFocusId={pendingFocusId}
 					/>
 				))}
 		</View>

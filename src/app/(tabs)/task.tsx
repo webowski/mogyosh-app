@@ -29,6 +29,9 @@ export default function TaskScreen() {
 	const selectedTaskId = useTaskStore((state) => state.selectedTaskId)
 	const inputRefs = useRef<SubitemInputRefsMap>(new Map())
 
+	const pendingFocusId = useRef<SubitemId | null>(null)
+	// const [focusTrigger, setFocusTrigger] = useState(0)
+
 	const createSubitem = useCreateSubitem()
 	const removeSubitem = useRemoveSubitem()
 
@@ -71,7 +74,9 @@ export default function TaskScreen() {
 			},
 			{
 				onSuccess: (newSubitem) => {
-					setTimeout(() => focusSubitem(newSubitem.id), 50)
+					pendingFocusId.current = newSubitem.id
+					// setFocusTrigger(t => t + 1)
+					// 	setTimeout(() => focusSubitem(newSubitem.id), 50)
 				}
 			}
 		)
@@ -88,7 +93,8 @@ export default function TaskScreen() {
 			},
 			{
 				onSuccess: (newSubitem) => {
-					setTimeout(() => focusSubitem(newSubitem.id), 50)
+					pendingFocusId.current = newSubitem.id
+					// setTimeout(() => focusSubitem(newSubitem.id), 50)
 				}
 			}
 		)
@@ -136,13 +142,14 @@ export default function TaskScreen() {
 		<ScrollBox>
 			{subitemTree.map((subitemData) => (
 				<SubitemNode
+					inputRefs={inputRefs.current}
 					key={subitemData.id}
 					data={subitemData}
 					depth={0}
 					variant={subitemData.type}
-					inputRefs={inputRefs.current}
 					onAddAfter={handleAddAfter}
 					onRemove={handleRemove}
+					pendingFocusId={pendingFocusId}
 				/>
 			))}
 			<Pressable style={styles.addButton} onPress={() => handleAddAfterLast()}>
