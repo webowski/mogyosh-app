@@ -8,6 +8,10 @@ import {
 	View
 } from 'react-native'
 import type { EnrichedMarkdownTextInputInstance } from 'react-native-enriched-markdown'
+import {
+	KeyboardAwareScrollView,
+	KeyboardStickyView
+} from 'react-native-keyboard-controller'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 import {
@@ -15,6 +19,7 @@ import {
 	useRemoveSubitem,
 	useSubitems
 } from '@/features/Subitem'
+import EditorPanel from '@/features/Subitem/EditorPanel'
 import type { SubitemInputRefsMap } from '@/features/Subitem/model/subitem.types'
 import { buildSubitemTree } from '@/features/Subitem/model/subitem.utils'
 import SubitemNode from '@/features/Subitem/SubitemNode'
@@ -22,7 +27,6 @@ import { useTaskById } from '@/features/TaskList'
 import { SubitemId } from '@/shared/domain/ids'
 import { useTaskStore } from '@/shared/model/taskStore'
 import { commonStyles, STYLE_VARS } from '@/shared/styles/common'
-import ScrollBox from '@/shared/ui/ScrollBox'
 
 export default function TaskScreen() {
 	const { theme } = useUnistyles()
@@ -122,23 +126,46 @@ export default function TaskScreen() {
 		)
 
 	return (
-		<ScrollBox>
-			{subitemTree.map((subitemData) => (
-				<SubitemNode
-					inputRefs={inputRefs.current}
-					key={subitemData.id}
-					data={subitemData}
-					depth={0}
-					variant={subitemData.type}
-					onAddAfter={handleAddSubitem}
-					onRemove={handleRemove}
-					pendingFocusId={pendingFocusId}
-				/>
-			))}
-			<Pressable style={styles.addButton} onPress={() => handleAddSubitem()}>
-				<MaterialIcons name='add' size={28} color={theme.colors.minor} />
-			</Pressable>
-		</ScrollBox>
+		<>
+			<KeyboardAwareScrollView
+				style={{
+					flex: 1
+				}}
+				contentContainerStyle={[
+					{
+						flexGrow: 1,
+						flexShrink: 0,
+						paddingHorizontal: STYLE_VARS.sidePadding,
+						paddingTop: STYLE_VARS.sidePadding,
+						paddingBottom: STYLE_VARS.sidePadding + STYLE_VARS.navPanelUnderlap,
+						gap: 4
+					}
+					// scrollIndent && {
+					// 	paddingBottom: rt.insets.bottom + STYLE_VARS.sidePadding + 70
+					// }
+				]}
+			>
+				{subitemTree.map((subitemData) => (
+					<SubitemNode
+						inputRefs={inputRefs.current}
+						key={subitemData.id}
+						data={subitemData}
+						depth={0}
+						variant={subitemData.type}
+						onAddAfter={handleAddSubitem}
+						onRemove={handleRemove}
+						pendingFocusId={pendingFocusId}
+					/>
+				))}
+				<Pressable style={styles.addButton} onPress={() => handleAddSubitem()}>
+					<MaterialIcons name='add' size={28} color={theme.colors.minor} />
+				</Pressable>
+			</KeyboardAwareScrollView>
+
+			<KeyboardStickyView offset={{ closed: 0, opened: 0 }}>
+				<EditorPanel />
+			</KeyboardStickyView>
+		</>
 	)
 }
 
