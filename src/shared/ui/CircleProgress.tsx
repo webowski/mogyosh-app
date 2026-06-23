@@ -116,7 +116,7 @@ const CircleProgress = forwardRef<CircleProgressRef, CircleProgressProps>(
 				</Svg>
 				{showLabel && (
 					<View style={[StyleSheet.absoluteFill, styles.labelContainer]}>
-						<Text style={styles.label}>{value}</Text>
+						{value && <Text style={styles.label}>{value}</Text>}
 						{children}
 					</View>
 				)}
