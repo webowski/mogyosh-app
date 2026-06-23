@@ -14,8 +14,8 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-type Variant = 'default' | 'secondary' | 'pill' | 'chip'
-type Size = 'default' | 'sm' | 'lg' | 'icon' | 'round' | 'chip'
+type Variant = 'default' | 'secondary' | 'pill' | 'chip' | 'bare'
+type Size = 'default' | 'sm' | 'lg' | 'icon' | 'round' | 'chip' | 'bare'
 
 interface ButtonProps {
 	children: React.ReactNode
@@ -43,10 +43,83 @@ interface Ripple {
 let rippleCounter = 0
 const RIPPLE_SIZE = 120
 
+// ─── Variant configs ──────────────────────────────────────────────────────────
+
+interface VariantConfig {
+	background: ViewStyle
+	useGradient?: boolean
+	text: TextStyle
+	rippleColor: string
+	noShadow?: boolean
+}
+
+const getVariantConfigs = (
+	theme: any,
+	borderRadius: number,
+	active?: boolean
+): Map<Variant, VariantConfig> =>
+	new Map([
+		[
+			'default',
+			{
+				useGradient: true,
+				background: { borderRadius },
+				text: { color: theme.colors.inverse },
+				rippleColor: theme.colors.rippleLight
+			}
+		],
+		[
+			'secondary',
+			{
+				background: { borderRadius, backgroundColor: theme.colors.surface },
+				text: { color: theme.colors.major },
+				rippleColor: theme.colors.ripple,
+				noShadow: true
+			}
+		],
+		[
+			'pill',
+			{
+				background: {
+					borderRadius: 999,
+					borderWidth: 1.5,
+					borderColor: theme.colors.primaryLight,
+					backgroundColor: theme.colors.primaryLighter
+				},
+				text: { color: theme.colors.major },
+				rippleColor: theme.colors.ripple,
+				noShadow: true
+			}
+		],
+		[
+			'chip',
+			{
+				background: {
+					borderRadius: 999,
+					borderWidth: 1,
+					borderColor: active ? theme.colors.primary : theme.colors.border,
+					backgroundColor: active ? theme.colors.primary : theme.colors.surface
+				},
+				text: { color: active ? theme.colors.buttonText : theme.colors.major },
+				rippleColor: theme.colors.ripple,
+				noShadow: true
+			}
+		],
+		[
+			'bare',
+			{
+				background: { borderRadius },
+				text: { color: theme.colors.major },
+				rippleColor: theme.colors.ripple,
+				noShadow: true
+			}
+		]
+	] as [Variant, VariantConfig][])
+
 // ─── Styles ──────────────────────────────────────────────────────────────
 
 const styles = StyleSheet.create((theme) => ({
-	base: {
+	Button: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'center',
@@ -62,38 +135,15 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	noShadow: {
 		boxShadow: 'none'
+	},
+
+	Button_bare: {
+		padding: 0,
+		boxShadow: 'none'
 	}
 }))
 
-const getVariantStyles = (
-	theme: any
-): Record<Variant, { text: TextStyle; rippleColor: string }> => ({
-	default: {
-		text: { color: theme.colors.inverse },
-		// deprecated: ripple opacity requires manual rgba string
-		rippleColor: theme.colors.rippleLight
-	},
-
-	secondary: {
-		text: { color: theme.colors.major },
-		// deprecated: ripple opacity requires manual rgba string
-		rippleColor: theme.colors.ripple
-	},
-
-	pill: {
-		text: { color: theme.colors.major },
-		// deprecated: ripple opacity requires manual rgba string
-		rippleColor: theme.colors.ripple
-	},
-
-	chip: {
-		text: { color: theme.colors.major },
-		// deprecated: ripple opacity requires manual rgba string
-		rippleColor: theme.colors.ripple
-	}
-})
-
-const sizeStyles: Record<Size, { container: ViewStyle; text: TextStyle }> = {
+const sizeStyles: Record<Size, { container?: ViewStyle; text?: TextStyle }> = {
 	default: {
 		container: { height: 42, paddingHorizontal: 20, borderRadius: 5 },
 		text: { fontSize: 15, fontWeight: '600' }
@@ -131,6 +181,11 @@ const sizeStyles: Record<Size, { container: ViewStyle; text: TextStyle }> = {
 
 	chip: {
 		container: { height: 32, paddingHorizontal: 16, borderRadius: 999 },
+		text: { fontSize: 15, fontWeight: '500' }
+	},
+
+	bare: {
+		container: { height: 32, width: 32, paddingHorizontal: 0 },
 		text: { fontSize: 15, fontWeight: '500' }
 	}
 }
@@ -176,12 +231,15 @@ export const Button: React.FC<ButtonProps> = ({
 	// 	transform: [{ rotate: `${rotation.value}deg` }]
 	// }))
 
-	const variantStyle = getVariantStyles(theme)[variant]
 	const sizeStyle = sizeStyles[size]
 	const borderRadius =
 		variant === 'pill' || variant === 'chip'
 			? 999
 			: ((sizeStyle.container as any).borderRadius ?? 8)
+
+	const variantConfig = getVariantConfigs(theme, borderRadius, active).get(
+		variant
+	)!
 
 	const handlePressIn = (event: any) => {
 		const { locationX, locationY } = event.nativeEvent
@@ -205,58 +263,24 @@ export const Button: React.FC<ButtonProps> = ({
 			onPressIn={disabled ? undefined : handlePressIn}
 			onPress={disabled ? undefined : onPress}
 			style={[
-				styles.base,
+				styles.Button,
 				sizeStyle.container,
 				disabled && styles.disabled,
-				(variant === 'pill' || variant === 'chip') && styles.noShadow,
+				variantConfig.noShadow && styles.noShadow,
+				variant === 'bare' && styles.Button_bare,
 				style
 			]}
 		>
 			{/* Layer 1: background */}
-			{variant === 'default' ? (
+			{variantConfig.useGradient ? (
 				<LinearGradient
 					colors={theme.colors.gradient}
 					start={{ x: 0, y: 0 }}
 					end={{ x: 1, y: 1 }}
 					style={[StyleSheet.absoluteFill, { borderRadius }]}
 				/>
-			) : variant === 'secondary' ? (
-				<View
-					style={[
-						StyleSheet.absoluteFill,
-						{
-							borderRadius,
-							backgroundColor: theme.colors.surface
-						}
-					]}
-				/>
-			) : variant === 'chip' ? (
-				<View
-					style={[
-						StyleSheet.absoluteFill,
-						{
-							borderRadius,
-							borderWidth: 1,
-							borderColor: active ? theme.colors.primary : theme.colors.border,
-							backgroundColor: active
-								? theme.colors.primary
-								: theme.colors.surface
-						}
-					]}
-				/>
 			) : (
-				// pill
-				<View
-					style={[
-						StyleSheet.absoluteFill,
-						{
-							borderRadius,
-							borderWidth: 1.5,
-							borderColor: theme.colors.primaryLight,
-							backgroundColor: theme.colors.primaryLighter
-						}
-					]}
-				/>
+				<View style={[StyleSheet.absoluteFill, variantConfig.background]} />
 			)}
 
 			{/* Layer 2: ripple */}
@@ -281,7 +305,7 @@ export const Button: React.FC<ButtonProps> = ({
 								width: RIPPLE_SIZE,
 								height: RIPPLE_SIZE,
 								borderRadius: RIPPLE_SIZE / 2,
-								backgroundColor: variantStyle.rippleColor,
+								backgroundColor: variantConfig.rippleColor,
 								opacity,
 								transform: [{ scale }]
 							}}
@@ -298,21 +322,19 @@ export const Button: React.FC<ButtonProps> = ({
 						// 	<MaterialIcons
 						// 		name='refresh'
 						// 		size={(sizeStyle.text.fontSize as number) ?? 15}
-						// 		color={variantStyle.text.color as string}
+						// 		color={variantConfig.text.color as string}
 						// 	/>
 						// </Reanimated.View>
 						<ActivityIndicator
 							size='small'
-							color={variantStyle.text.color as string}
+							color={variantConfig.text.color as string}
 						/>
 					) : (
 						<Text
 							style={[
 								styles.text,
-								variantStyle.text,
+								variantConfig.text,
 								sizeStyle.text,
-								variant === 'chip' &&
-									active && { color: theme.colors.buttonText },
 								textStyle
 							]}
 						>
@@ -335,12 +357,12 @@ export const Button: React.FC<ButtonProps> = ({
 						// 	<MaterialIcons
 						// 		name='refresh'
 						// 		size={20}
-						// 		color={variantStyle.text.color as string}
+						// 		color={variantConfig.text.color as string}
 						// 	/>
 						// </Reanimated.View>
 						<ActivityIndicator
 							size='small'
-							color={variantStyle.text.color as string}
+							color={variantConfig.text.color as string}
 						/>
 					) : (
 						children
