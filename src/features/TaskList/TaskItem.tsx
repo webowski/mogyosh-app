@@ -19,7 +19,7 @@ import {
 import { useSettingsStore } from '@/services/settings/model/settingsStore'
 import type { TaskEntity } from '@/shared/domain/task'
 import { formatTime } from '@/shared/lib/time'
-import { useTaskStore } from '@/shared/model/taskStore'
+import { useTaskStore } from '@/shared/model/task.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 import CircleProgress from '@/shared/ui/CircleProgress'
 import { scheduleOnRN } from 'react-native-worklets'

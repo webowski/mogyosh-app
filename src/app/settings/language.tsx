@@ -3,7 +3,7 @@ import { router } from 'expo-router'
 import { Pressable, Text, View } from 'react-native'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
-import { useLangStore } from '@/shared/model/langStore'
+import { useLangStore } from '@/shared/model/lang.store'
 
 import { ActionsPanel } from '@/features/ActionsPanel/ActionsPanel'
 import { Button } from '@/shared/ui/Button'

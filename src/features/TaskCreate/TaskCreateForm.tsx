@@ -17,7 +17,7 @@ import {
 	useCreateTask
 } from '@/features/TaskList'
 import { type SubitemInsert } from '@/shared/domain/subitem'
-import { useTaskStore } from '@/shared/model/taskStore'
+import { useTaskStore } from '@/shared/model/task.store'
 import { commonStyles, STYLE_VARS } from '@/shared/styles/common'
 import { formStyles } from '@/shared/styles/form'
 import { textStyles } from '@/shared/styles/text'

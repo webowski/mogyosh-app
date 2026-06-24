@@ -13,7 +13,7 @@ import SVGIconPlus from '@/shared/images/icons/plus.svg'
 import SVGIconTarget from '@/shared/images/icons/target.svg'
 
 import { SwipeSwitchItems } from '@/features/Navigation/model/navTypes'
-import { useCalendarStore } from '@/shared/model/calendarStore'
+import { useCalendarStore } from '@/shared/model/calendar.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 import ActionSheet from './ActionSheet'
 import { useNavStore } from './model/navStore'

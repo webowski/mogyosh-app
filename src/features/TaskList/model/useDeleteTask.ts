@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { useTaskStore } from '@/shared/model/taskStore'
+import { useTaskStore } from '@/shared/model/task.store'
 import { taskAPI } from '../repository/task.api'
 
 export const useDeleteTask = () => {

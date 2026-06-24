@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { Text, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-import { useCalendarStore } from '@/shared/model/calendarStore'
+import { useCalendarStore } from '@/shared/model/calendar.store'
 
 import { formatCalendarTitle } from '@/shared/lib/time'
 

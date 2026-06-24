@@ -3,7 +3,7 @@ import { Pressable, Text } from 'react-native'
 
 import { useNavStore } from '@/features/Navigation/model/navStore'
 import { TaskEntity } from '@/shared/domain/task'
-import { useTaskStore } from '@/shared/model/taskStore'
+import { useTaskStore } from '@/shared/model/task.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 

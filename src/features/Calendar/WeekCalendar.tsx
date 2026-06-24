@@ -23,7 +23,7 @@ import { getDateFnsLocale } from '@/shared/i18n/dateFnsLocale'
 import { useLanguageChange } from '@/shared/i18n/useLanguageChange'
 import { capitalize } from '@/shared/lib/string'
 import { getWeekStartDate } from '@/shared/lib/time'
-import { useCalendarStore } from '@/shared/model/calendarStore'
+import { useCalendarStore } from '@/shared/model/calendar.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 
 const BASE_SCREEN_WIDTH = Dimensions.get('window').width

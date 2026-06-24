@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTaskById } from '@/features/TaskList'
 import { useCategoriesStore } from '@/features/TaskList/model/categoriesStore'
 import { makeCategoryPath } from '@/features/TaskList/model/task.utils'
-import { useTaskStore } from '@/shared/model/taskStore'
+import { useTaskStore } from '@/shared/model/task.store'
 import { commonStyles, STYLE_VARS } from '@/shared/styles/common'
 
 type HeaderProps = BottomTabHeaderProps | NativeStackHeaderProps

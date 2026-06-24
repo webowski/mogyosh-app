@@ -16,7 +16,7 @@ import { useSettingsStore } from '@/services/settings/model/settingsStore'
 import { getDateFnsLocale } from '@/shared/i18n/dateFnsLocale'
 import { useLanguageChange } from '@/shared/i18n/useLanguageChange'
 import { capitalize } from '@/shared/lib/string'
-import { useCalendarStore } from '@/shared/model/calendarStore'
+import { useCalendarStore } from '@/shared/model/calendar.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 
 const { width: BASE_WINDOW_WIDTH } = Dimensions.get('window')

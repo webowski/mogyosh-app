@@ -6,7 +6,7 @@ import { MindMapNode } from '@/features/MindMap/model/types'
 import { useNavStore } from '@/features/Navigation/model/navStore'
 import { useTasksByCategory } from '@/features/TaskList'
 import { TaskCategoryGroupEntity } from '@/features/TaskList/model/task.types'
-import { useTaskStore } from '@/shared/model/taskStore'
+import { useTaskStore } from '@/shared/model/task.store'
 
 function mapCategoryGroupToMindMapNode(
 	group: TaskCategoryGroupEntity
