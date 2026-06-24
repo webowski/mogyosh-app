@@ -1,14 +1,13 @@
 import { MaterialIcons } from '@expo/vector-icons'
 import { useRef } from 'react'
-import {
-	ActivityIndicator,
-	Platform,
-	Pressable,
-	Text,
-	View
-} from 'react-native'
+import { ActivityIndicator, Platform, Text, View } from 'react-native'
 import type { EnrichedMarkdownTextInputInstance } from 'react-native-enriched-markdown'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
+import { Pressable } from 'react-native-gesture-handler'
+import {
+	KeyboardAwareScrollView,
+	KeyboardController
+} from 'react-native-keyboard-controller'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 import {
@@ -23,7 +22,6 @@ import { useTaskById } from '@/features/TaskList'
 import { SubitemId } from '@/shared/domain/ids'
 import { useTaskStore } from '@/shared/model/taskStore'
 import { commonStyles, staticStyles, STYLE_VARS } from '@/shared/styles/common'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function TaskScreen() {
 	const insets = useSafeAreaInsets()
@@ -133,24 +131,32 @@ export default function TaskScreen() {
 		<>
 			<KeyboardAwareScrollView
 				style={staticStyles.ScrollBox}
-				contentContainerStyle={staticStyles.ScrollBox__inner}
+				// contentContainerStyle={}
 				overScrollMode='never'
 				bottomOffset={STYLE_VARS.editorToolbarHeight * 1.25}
 			>
-				{subitemTree.map((subitemData) => (
-					<SubitemNode
-						inputRefs={inputRefs.current}
-						key={subitemData.id}
-						data={subitemData}
-						depth={0}
-						variant={subitemData.type}
-						onAddAfter={handleAddSubitem}
-						onRemove={handleRemove}
-						pendingFocusId={pendingFocusId}
-					/>
-				))}
-				<Pressable style={styles.addButton} onPress={() => handleAddSubitem()}>
-					<MaterialIcons name='add' size={28} color={theme.colors.minor} />
+				<Pressable
+					style={staticStyles.ScrollBox__inner}
+					onPress={() => KeyboardController.dismiss()}
+				>
+					{subitemTree.map((subitemData) => (
+						<SubitemNode
+							inputRefs={inputRefs.current}
+							key={subitemData.id}
+							data={subitemData}
+							depth={0}
+							variant={subitemData.type}
+							onAddAfter={handleAddSubitem}
+							onRemove={handleRemove}
+							pendingFocusId={pendingFocusId}
+						/>
+					))}
+					<Pressable
+						style={styles.addButton}
+						onPress={() => handleAddSubitem()}
+					>
+						<MaterialIcons name='add' size={28} color={theme.colors.minor} />
+					</Pressable>
 				</Pressable>
 			</KeyboardAwareScrollView>
 		</>
