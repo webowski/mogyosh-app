@@ -15,13 +15,16 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 // ─── Types ───────────────────────────────────────────────────────────────────
 
 type Variant = 'default' | 'secondary' | 'pill' | 'chip' | 'bare'
-type Size = 'default' | 'sm' | 'lg' | 'icon' | 'round' | 'chip' | 'bare'
+type Size = 'sm' | 'md' | 'lg'
+type WidthMode = 'fitContent' | 'equilateral' | 'full'
 
 interface ButtonProps {
 	children: React.ReactNode
 	onPress?: () => void
 	variant?: Variant
 	size?: Size
+	widthMode?: WidthMode
+	round?: boolean
 	disabled?: boolean
 	style?: ViewStyle
 	textStyle?: TextStyle
@@ -143,50 +146,70 @@ const styles = StyleSheet.create((theme) => ({
 	}
 }))
 
-const sizeStyles: Record<Size, { container?: ViewStyle; text?: TextStyle }> = {
-	default: {
-		container: { height: 42, paddingHorizontal: 20, borderRadius: 5 },
-		text: { fontSize: 15, fontWeight: '600' }
-	},
+// ─── Size configs ────────────────────────────────────────────────────────────
 
+interface SizeConfig {
+	height: number
+	paddingHorizontal: number
+	borderRadius: number
+	fontSize: number
+	fontWeight: TextStyle['fontWeight']
+}
+
+const SIZE_CONFIGS: Record<Size, SizeConfig> = {
 	sm: {
-		container: { height: 32, paddingHorizontal: 14, borderRadius: 4 },
-		text: { fontSize: 15, fontWeight: '600' }
+		height: 32,
+		paddingHorizontal: 14,
+		borderRadius: 4,
+		fontSize: 15,
+		fontWeight: '600'
 	},
-
+	md: {
+		height: 42,
+		paddingHorizontal: 20,
+		borderRadius: 5,
+		fontSize: 15,
+		fontWeight: '600'
+	},
 	lg: {
-		container: { height: 48, paddingHorizontal: 32, borderRadius: 10 },
-		text: { fontSize: 16, fontWeight: '600' }
-	},
+		height: 48,
+		paddingHorizontal: 32,
+		borderRadius: 10,
+		fontSize: 16,
+		fontWeight: '600'
+	}
+}
 
-	icon: {
-		container: {
-			height: 46,
-			width: 46,
-			borderRadius: 46,
+const getSizeStyle = (
+	sizeConfig: SizeConfig,
+	widthMode: WidthMode,
+	round: boolean
+): ViewStyle => {
+	const borderRadius = round ? 999 : sizeConfig.borderRadius
+
+	if (widthMode === 'equilateral') {
+		return {
+			height: sizeConfig.height,
+			width: sizeConfig.height,
+			borderRadius,
 			paddingHorizontal: 0
-		},
-		text: { fontSize: 15, fontWeight: '600' }
-	},
+		}
+	}
 
-	round: {
-		container: {
-			height: 48,
-			width: 48,
-			borderRadius: 48,
-			paddingHorizontal: 0
-		},
-		text: { fontSize: 15, fontWeight: '600' }
-	},
+	if (widthMode === 'full') {
+		return {
+			height: sizeConfig.height,
+			width: '100%',
+			borderRadius,
+			paddingHorizontal: sizeConfig.paddingHorizontal
+		}
+	}
 
-	chip: {
-		container: { height: 32, paddingHorizontal: 16, borderRadius: 999 },
-		text: { fontSize: 15, fontWeight: '500' }
-	},
-
-	bare: {
-		container: { height: 32, width: 32, paddingHorizontal: 0 },
-		text: { fontSize: 15, fontWeight: '500' }
+	// fitContent
+	return {
+		height: sizeConfig.height,
+		borderRadius,
+		paddingHorizontal: sizeConfig.paddingHorizontal
 	}
 }
 
@@ -196,7 +219,9 @@ export const Button: React.FC<ButtonProps> = ({
 	children,
 	onPress,
 	variant = 'default',
-	size = 'default',
+	size = 'md',
+	widthMode = 'fitContent',
+	round = false,
 	disabled = false,
 	style,
 	textStyle,
@@ -231,11 +256,13 @@ export const Button: React.FC<ButtonProps> = ({
 	// 	transform: [{ rotate: `${rotation.value}deg` }]
 	// }))
 
-	const sizeStyle = sizeStyles[size]
-	const borderRadius =
-		variant === 'pill' || variant === 'chip'
-			? 999
-			: ((sizeStyle.container as any).borderRadius ?? 8)
+	const sizeConfig = SIZE_CONFIGS[size]
+	const containerStyle = getSizeStyle(
+		sizeConfig,
+		widthMode,
+		round || variant === 'pill' || variant === 'chip'
+	)
+	const borderRadius = (containerStyle.borderRadius as number) ?? 8
 
 	const variantConfig = getVariantConfigs(theme, borderRadius, active).get(
 		variant
@@ -264,7 +291,7 @@ export const Button: React.FC<ButtonProps> = ({
 			onPress={disabled ? undefined : onPress}
 			style={[
 				styles.Button,
-				sizeStyle.container,
+				containerStyle,
 				disabled && styles.disabled,
 				variantConfig.noShadow && styles.noShadow,
 				variant === 'bare' && styles.Button_bare,
@@ -334,7 +361,10 @@ export const Button: React.FC<ButtonProps> = ({
 							style={[
 								styles.text,
 								variantConfig.text,
-								sizeStyle.text,
+								{
+									fontSize: sizeConfig.fontSize,
+									fontWeight: sizeConfig.fontWeight
+								},
 								textStyle
 							]}
 						>
