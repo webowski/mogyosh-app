@@ -48,7 +48,7 @@ export default function TimeFormatScreen() {
 			</ScrollBox>
 
 			<ActionsPanel>
-				<Button size='round' onPress={() => router.back()}>
+				<Button round onPress={() => router.back()}>
 					<MaterialIcons
 						name='arrow-back'
 						size={28}

@@ -192,7 +192,6 @@ export function TaskCreateForm({ onClose }: Props) {
 						<Button
 							textStyle={{ fontWeight: 400 }}
 							variant='chip'
-							size='chip'
 							arrow
 							onPress={() => sheetRef.current?.present()}
 						>
@@ -204,34 +203,19 @@ export function TaskCreateForm({ onClose }: Props) {
 					</View>
 					<View style={[formStyles.formRow]}>
 						<Text style={textStyles.label}>Метки</Text>
-						<Button
-							textStyle={{ fontWeight: 400 }}
-							variant='chip'
-							size='chip'
-							arrow
-						>
+						<Button textStyle={{ fontWeight: 400 }} variant='chip' arrow>
 							Без метки
 						</Button>
 					</View>
 					<View style={[formStyles.formRow]}>
 						<Text style={textStyles.label}>Повтор</Text>
-						<Button
-							textStyle={{ fontWeight: 400 }}
-							variant='chip'
-							size='chip'
-							arrow
-						>
+						<Button textStyle={{ fontWeight: 400 }} variant='chip' arrow>
 							Вт, Чт, Сб
 						</Button>
 					</View>
 					<View style={[formStyles.formRow, formStyles.formRow_last]}>
 						<Text style={textStyles.label}>Уведомление</Text>
-						<Button
-							textStyle={{ fontWeight: 400 }}
-							variant='chip'
-							size='chip'
-							arrow
-						>
+						<Button textStyle={{ fontWeight: 400 }} variant='chip' arrow>
 							за 1 час
 						</Button>
 					</View>
@@ -249,12 +233,12 @@ export function TaskCreateForm({ onClose }: Props) {
 			</KeyboardAwareScrollBox>
 
 			<ActionsPanel style={{ paddingBottom: STYLE_VARS.navPanelUnderlap }}>
-				{/* <Button size='round' variant='secondary' onPress={handleClearForm}>
+				{/* <Button round variant='secondary' onPress={handleClearForm}>
 					<MaterialIcons name='clear' size={28} color={theme.colors.primary} />
 				</Button> */}
 
 				<Button
-					size='round'
+					round
 					onPress={handleSubmit(onSubmit)}
 					disabled={isSubmitting || createTask.isPending}
 					loading={isSubmitting || createTask.isPending}

@@ -114,7 +114,7 @@ export default function SettingsScreen() {
 			</ScrollBox>
 
 			<ActionsPanel>
-				<Button size='round' onPress={() => router.back()}>
+				<Button round onPress={() => router.back()}>
 					<MaterialIcons
 						name='arrow-back'
 						size={28}

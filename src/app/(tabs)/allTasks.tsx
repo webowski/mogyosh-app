@@ -181,6 +181,7 @@ export default function AllTasksScreen() {
 				<Button
 					variant='pill'
 					size='sm'
+					widthMode='fitContent'
 					style={{ width: 'auto' }}
 					onPress={() => sheetRef.current?.present()}
 					indicator={isUncategorized || selectedCategory !== null}
