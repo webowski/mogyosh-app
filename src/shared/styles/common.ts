@@ -14,6 +14,9 @@ export const STYLE_VARS = {
 	radius_3xl: 32,
 	navPanelUnderlap: 32,
 
+	// всё что относится к открытию клавиатуры телефона
+	editorToolbarHeight: 48,
+
 	checkedOpacity: 0.45,
 
 	duration: {
@@ -86,3 +89,17 @@ export const commonStyles = StyleSheet.create((theme, rt) => ({
 		alignItems: 'center'
 	}
 }))
+
+export const staticStyles = {
+	ScrollBox: {
+		flex: 1
+	},
+	ScrollBox__inner: {
+		flexGrow: 1,
+		flexShrink: 0,
+		paddingHorizontal: STYLE_VARS.sidePadding,
+		paddingTop: STYLE_VARS.sidePadding,
+		paddingBottom: STYLE_VARS.sidePadding + STYLE_VARS.navPanelUnderlap,
+		gap: 4
+	}
+}

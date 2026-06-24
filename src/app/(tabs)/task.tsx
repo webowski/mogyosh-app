@@ -8,10 +8,7 @@ import {
 	View
 } from 'react-native'
 import type { EnrichedMarkdownTextInputInstance } from 'react-native-enriched-markdown'
-import {
-	KeyboardAwareScrollView,
-	KeyboardStickyView
-} from 'react-native-keyboard-controller'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 import {
@@ -19,16 +16,18 @@ import {
 	useRemoveSubitem,
 	useSubitems
 } from '@/features/Subitem'
-import EditorPanel from '@/features/Subitem/EditorPanel'
 import type { SubitemInputRefsMap } from '@/features/Subitem/model/subitem.types'
 import { buildSubitemTree } from '@/features/Subitem/model/subitem.utils'
 import SubitemNode from '@/features/Subitem/SubitemNode'
 import { useTaskById } from '@/features/TaskList'
 import { SubitemId } from '@/shared/domain/ids'
 import { useTaskStore } from '@/shared/model/taskStore'
-import { commonStyles, STYLE_VARS } from '@/shared/styles/common'
+import { commonStyles, staticStyles, STYLE_VARS } from '@/shared/styles/common'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function TaskScreen() {
+	const insets = useSafeAreaInsets()
+
 	const { theme } = useUnistyles()
 	const selectedTaskId = useTaskStore((state) => state.selectedTaskId)
 	const inputRefs = useRef<SubitemInputRefsMap>(new Map())
@@ -98,6 +97,11 @@ export default function TaskScreen() {
 		removeSubitem.mutate({ id: removeId, taskId: selectedTaskId })
 	}
 
+	// const keyboardOffset = useKeyboardOpening()
+	// useEffect(() => {
+	// 	console.log(keyboardOffset)
+	// }, [keyboardOffset])
+
 	// Show loading state when waiting for task data
 	if (isLoading || isLoadingSubitems)
 		return (
@@ -128,22 +132,10 @@ export default function TaskScreen() {
 	return (
 		<>
 			<KeyboardAwareScrollView
-				style={{
-					flex: 1
-				}}
-				contentContainerStyle={[
-					{
-						flexGrow: 1,
-						flexShrink: 0,
-						paddingHorizontal: STYLE_VARS.sidePadding,
-						paddingTop: STYLE_VARS.sidePadding,
-						paddingBottom: STYLE_VARS.sidePadding + STYLE_VARS.navPanelUnderlap,
-						gap: 4
-					}
-					// scrollIndent && {
-					// 	paddingBottom: rt.insets.bottom + STYLE_VARS.sidePadding + 70
-					// }
-				]}
+				style={staticStyles.ScrollBox}
+				contentContainerStyle={staticStyles.ScrollBox__inner}
+				overScrollMode='never'
+				bottomOffset={STYLE_VARS.editorToolbarHeight * 1.25}
 			>
 				{subitemTree.map((subitemData) => (
 					<SubitemNode
@@ -161,10 +153,6 @@ export default function TaskScreen() {
 					<MaterialIcons name='add' size={28} color={theme.colors.minor} />
 				</Pressable>
 			</KeyboardAwareScrollView>
-
-			<KeyboardStickyView offset={{ closed: 0, opened: 0 }}>
-				<EditorPanel />
-			</KeyboardStickyView>
 		</>
 	)
 }

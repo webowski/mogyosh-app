@@ -8,6 +8,7 @@ import HeaderCalendar from '@/features/Header/HeaderCalendar'
 import { default as HeaderDay } from '@/features/Header/HeaderDay'
 import HeaderTask from '@/features/Header/HeaderTask'
 import NavPanel from '@/features/Navigation/NavPanel'
+import EditorToolbar from '@/features/Subitem/EditorToolbar'
 
 export default function NavPanelLayout() {
 	const { theme } = useUnistyles()
@@ -101,6 +102,8 @@ export default function NavPanelLayout() {
 					}}
 				/>
 			</Tabs>
+
+			<EditorToolbar />
 		</>
 	)
 }
