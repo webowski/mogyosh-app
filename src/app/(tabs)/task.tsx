@@ -20,7 +20,7 @@ import { buildSubitemTree } from '@/features/Subitem/model/subitem.utils'
 import SubitemNode from '@/features/Subitem/SubitemNode'
 import { useTaskById } from '@/features/TaskList'
 import { SubitemId } from '@/shared/domain/ids'
-import { useTaskStore } from '@/shared/model/taskStore'
+import { useTaskStore } from '@/shared/model/task.store'
 import { commonStyles, staticStyles, STYLE_VARS } from '@/shared/styles/common'
 
 export default function TaskScreen() {
