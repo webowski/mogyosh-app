@@ -1,22 +1,18 @@
-import { STYLE_VARS } from '@/shared/styles/common'
-import { Button } from '@/shared/ui/Button'
-import { MaterialIcons } from '@expo/vector-icons'
 import { View } from 'react-native'
 import { KeyboardToolbar } from 'react-native-keyboard-controller'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
-type EditorToolbarProps = {
-	onBold?: () => void
-	onItalic?: () => void
-	onDelete?: () => void
-}
+import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
+import { STYLE_VARS } from '@/shared/styles/common'
+import { Button } from '@/shared/ui/Button'
+import { MaterialIcons } from '@expo/vector-icons'
 
-export default function EditorToolbar({
-	onBold,
-	onItalic,
-	onDelete
-}: EditorToolbarProps) {
+export default function EditorToolbar() {
 	const { theme } = useUnistyles()
+	const handleRemove = useEditorToolbarStore((state) => state.handleRemove)
+	const handleAddSubitem = useEditorToolbarStore(
+		(state) => state.handleAddSubitem
+	)
 
 	return (
 		<KeyboardToolbar>
@@ -42,19 +38,19 @@ export default function EditorToolbar({
 						gap: 8
 					}}
 				>
-					<Button variant='bare' onPress={onDelete}>
+					<Button variant='bare' onPress={handleAddSubitem}>
 						<MaterialIcons name='add' size={24} />
 					</Button>
 
-					<Button variant='bare' onPress={onDelete}>
+					<Button variant='bare' onPress={() => {}}>
 						<MaterialIcons name='swap-horiz' size={24} />
 					</Button>
 
-					<Button variant='bare' onPress={onBold}>
+					<Button variant='bare' onPress={() => {}}>
 						B
 					</Button>
 
-					<Button variant='bare' onPress={onItalic}>
+					<Button variant='bare' onPress={() => {}}>
 						I
 					</Button>
 
@@ -62,7 +58,7 @@ export default function EditorToolbar({
 						<MaterialIcons name='link' size={24} />
 					</Button>
 
-					<Button variant='bare' onPress={onDelete}>
+					<Button variant='bare' onPress={handleRemove}>
 						<MaterialIcons name='delete' size={24} />
 					</Button>
 				</View>
