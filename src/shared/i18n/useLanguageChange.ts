@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 
-import { useLangStore } from '@/shared/model/langStore'
+import { useLangStore } from '@/shared/model/lang.store'
 
 export function useLanguageChange(callback: () => void) {
 	const { language } = useLangStore()
