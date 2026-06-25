@@ -8,6 +8,7 @@ import Animated, {
 } from 'react-native-reanimated'
 import { StyleSheet } from 'react-native-unistyles'
 
+import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 import Checkbox from '@/shared/ui/Checkbox'
 import { MarkdownInput } from '@/shared/ui/MarkdownInput'
@@ -33,6 +34,10 @@ export default function BulletedSubitem({
 	const updateSubitem = useUpdateSubitem()
 	const createSubitem = useCreateSubitem()
 
+	const setFocusedSubitemId = useEditorToolbarStore(
+		(state) => state.setFocusedSubitemId
+	)
+
 	const getOrCreateRef = () => {
 		if (!inputRefs) return { current: null }
 		if (!inputRefs.has(data.id)) {
@@ -43,13 +48,7 @@ export default function BulletedSubitem({
 
 	const inputRef = getOrCreateRef()
 
-	function getBullet(bulletDepth: number): string {
-		const bullets = ['•', '◦', '▪', '•', '◦', '▪']
-		return bullets[bulletDepth % bullets.length]
-	}
-
 	const updateDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-
 	const handleChangeText = useCallback(
 		(value: string) => {
 			if (updateDebounceRef.current) clearTimeout(updateDebounceRef.current)
@@ -62,9 +61,7 @@ export default function BulletedSubitem({
 	)
 
 	const [checked, setChecked] = useState(data.state === 'done')
-
 	const animationProgress = useSharedValue(checked ? 1 : 0)
-
 	useEffect(
 		() => {
 			animationProgress.value = withTiming(checked ? 1 : 0, { duration: 250 })
@@ -72,6 +69,11 @@ export default function BulletedSubitem({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[checked]
 	)
+	const textStyle = useAnimatedStyle(() => ({
+		opacity: withTiming(checked ? STYLE_VARS.checkedOpacity : 1, {
+			duration: STYLE_VARS.duration.md
+		})
+	}))
 
 	const handlePressCheckbox = useCallback(
 		() => {
@@ -82,11 +84,7 @@ export default function BulletedSubitem({
 		[checked]
 	)
 
-	const textStyle = useAnimatedStyle(() => ({
-		opacity: withTiming(checked ? STYLE_VARS.checkedOpacity : 1, {
-			duration: STYLE_VARS.duration.md
-		})
-	}))
+	const handleFocus = () => setFocusedSubitemId(data.id)
 
 	const focusNewInput = () => {
 		const ref = inputRef.current
@@ -159,6 +157,7 @@ export default function BulletedSubitem({
 						onChangeText={handleChangeText}
 						onChangeMarkdown={handleChangeText}
 						onEnterPress={handleAddAfter}
+						onFocus={handleFocus}
 						onBackspaceOnEmpty={() => {
 							onRemove?.()
 						}}
@@ -186,3 +185,8 @@ const styles = StyleSheet.create((theme) => ({
 		color: theme.colors.major
 	}
 }))
+
+function getBullet(bulletDepth: number): string {
+	const bullets = ['•', '◦', '▪', '•', '◦', '▪']
+	return bullets[bulletDepth % bullets.length]
+}

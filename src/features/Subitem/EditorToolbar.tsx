@@ -1,18 +1,27 @@
+import { MaterialIcons } from '@expo/vector-icons'
 import { View } from 'react-native'
 import { KeyboardToolbar } from 'react-native-keyboard-controller'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
+import { useTaskStore } from '@/shared/model/task.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 import { Button } from '@/shared/ui/Button'
-import { MaterialIcons } from '@expo/vector-icons'
+import { useRemoveSubitem } from './model/useRemoveSubitem'
 
 export default function EditorToolbar() {
 	const { theme } = useUnistyles()
-	const handleRemove = useEditorToolbarStore((state) => state.handleRemove)
-	const handleAddSubitem = useEditorToolbarStore(
-		(state) => state.handleAddSubitem
+
+	const focusedSubitemId = useEditorToolbarStore(
+		(state) => state.focusedSubitemId
 	)
+	const selectedTaskId = useTaskStore((state) => state.selectedTaskId)
+	const removeSubitem = useRemoveSubitem()
+
+	const handleRemove = () => {
+		if (!focusedSubitemId) return
+		removeSubitem.mutate({ id: focusedSubitemId, taskId: selectedTaskId })
+	}
 
 	return (
 		<KeyboardToolbar>
@@ -38,7 +47,7 @@ export default function EditorToolbar() {
 						gap: 8
 					}}
 				>
-					<Button variant='bare' onPress={handleAddSubitem}>
+					<Button variant='bare' onPress={() => {}}>
 						<MaterialIcons name='add' size={24} />
 					</Button>
 
