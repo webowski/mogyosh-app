@@ -1,4 +1,11 @@
-export type { SubitemData, SubitemProps } from './model/subitem.types'
+export type {
+	SubitemData,
+	SubitemInputRefsMap,
+	SubitemProps
+} from './model/subitem.types'
+
+export { default as EditorToolbar } from './EditorToolbar'
+export { default as SubitemNode } from './SubitemNode'
 
 export { subitemAPI } from './repository/subitem.api'
 

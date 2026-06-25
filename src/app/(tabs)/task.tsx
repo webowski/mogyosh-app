@@ -1,4 +1,5 @@
 import { MaterialIcons } from '@expo/vector-icons'
+import { generateKeyBetween } from 'fractional-indexing'
 import { useRef } from 'react'
 import { ActivityIndicator, Platform, Text, View } from 'react-native'
 import type { EnrichedMarkdownTextInputInstance } from 'react-native-enriched-markdown'
@@ -11,19 +12,18 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 import {
+	buildSubitemTree,
+	SubitemNode,
 	useCreateSubitem,
 	useRemoveSubitem,
-	useSubitems
+	useSubitems,
+	type SubitemInputRefsMap
 } from '@/features/Subitem'
-import type { SubitemInputRefsMap } from '@/features/Subitem/model/subitem.types'
-import { buildSubitemTree } from '@/features/Subitem/model/subitem.utils'
-import SubitemNode from '@/features/Subitem/SubitemNode'
 import { useTaskById } from '@/features/TaskList'
 import { SubitemId } from '@/shared/domain/ids'
 import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
 import { useTaskStore } from '@/shared/model/task.store'
 import { commonStyles, staticStyles, STYLE_VARS } from '@/shared/styles/common'
-import { generateKeyBetween } from 'fractional-indexing'
 
 export default function TaskScreen() {
 	const insets = useSafeAreaInsets()

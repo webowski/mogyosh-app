@@ -1,4 +1,4 @@
-import { subitemAPI } from '@/features/Subitem/repository/subitem.api'
+import { subitemAPI } from '@/features/Subitem'
 import { supabaseClient } from '@/shared/api/supabaseClient'
 import { TaskId } from '@/shared/domain/ids'
 import { TaskEntity, TaskRow } from '@/shared/domain/task'
