@@ -28,7 +28,7 @@ export const useCreateSubitem = () => {
 				settings: null,
 				state: null,
 				priority: null,
-				sort_order: null,
+				sort_order: payload.sort_order ?? null,
 				created_at: new Date().toISOString(),
 				updated_at: new Date().toISOString()
 			}

@@ -42,7 +42,7 @@ export type SubitemEntity = {
 	status?: SubitemStatus | null
 	settings: SubitemSettings
 	priority?: number | null
-	sort_order: any | null
+	sort_order: string | null
 	state?: SubitemState | null
 	// schedules?: SubitemScheduleEntity[]
 	created_at: string
@@ -58,19 +58,20 @@ export type SubitemRow = {
 	settings: SubitemSettings
 	status: SubitemStatus
 	priority: number
-	sort_order: any
+	sort_order: string | null
 	subitem_states: SubitemStateEntity[]
 	// schedules: SubitemScheduleEntity[]
 	created_at: string
 	updated_at: string
 }
 
-export type CreateSubitemPayload = {
+export type SubitemCreatePayload = {
 	info: string
 	type?: SubitemType
 	task_id?: string | null
 	parent_id?: string | null
 	optimisticId?: string
+	sort_order?: string | null
 }
 
 export type SubitemInsert = {

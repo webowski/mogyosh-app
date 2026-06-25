@@ -1,7 +1,9 @@
+import { generateKeyBetween } from 'fractional-indexing'
+
 import { supabaseClient } from '@/shared/api/supabaseClient'
 import { SubitemId, TaskId } from '@/shared/domain/ids'
 import type {
-	CreateSubitemPayload,
+	SubitemCreatePayload,
 	SubitemEntity,
 	SubitemRow
 } from '@/shared/domain/subitem'
@@ -42,7 +44,8 @@ const getSubitems = async (taskId: TaskId): Promise<SubitemEntity[]> => {
 			.from('subitems')
 			.select(SUBITEMS_SELECT)
 			.eq('task_id', taskId)
-			.order('created_at', { ascending: true })
+			.order('sort_order', { ascending: true })
+		// .order('created_at', { ascending: true })
 
 		if (error) {
 			console.error('Error fetching subitems:', error)
@@ -113,7 +116,7 @@ const updateSubitemState = async (
 }
 
 const createSubitem = async (
-	payload: CreateSubitemPayload
+	payload: SubitemCreatePayload
 ): Promise<SubitemEntity> => {
 	const { data, error } = await supabaseClient
 		.from('subitems')
@@ -121,7 +124,8 @@ const createSubitem = async (
 			info: payload.info,
 			task_id: payload.task_id ?? null,
 			parent_id: payload.parent_id ?? null,
-			type: payload.type ?? 'p'
+			type: payload.type ?? 'p',
+			sort_order: payload.sort_order ?? generateKeyBetween(null, null)
 		})
 		.select()
 		.single()
