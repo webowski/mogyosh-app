@@ -1,9 +1,12 @@
 import { MaterialIcons } from '@expo/vector-icons'
+import { useQueryClient } from '@tanstack/react-query'
+import { generateKeyBetween } from 'fractional-indexing'
 import { View } from 'react-native'
 import { KeyboardToolbar } from 'react-native-keyboard-controller'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 import { SubitemId } from '@/shared/domain/ids'
+import { SubitemEntity } from '@/shared/domain/subitem'
 import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
 import { useTaskStore } from '@/shared/model/task.store'
 import { STYLE_VARS } from '@/shared/styles/common'
@@ -13,6 +16,7 @@ import { useRemoveSubitem } from './model/useRemoveSubitem'
 
 export default function EditorToolbar() {
 	const { theme } = useUnistyles()
+	const queryClient = useQueryClient()
 
 	const selectedTaskId = useTaskStore((state) => state.selectedTaskId)
 
@@ -29,6 +33,12 @@ export default function EditorToolbar() {
 	const pendingFocusId = useEditorToolbarStore((state) => state.pendingFocusId)
 	const createSubitem = useCreateSubitem()
 	const handleAddSubitem = () => {
+		const existingSubitems =
+			queryClient.getQueryData<SubitemEntity[]>(['subitems', selectedTaskId]) ??
+			[]
+		const lastSubitem = existingSubitems[existingSubitems.length - 1] ?? null
+		const sort_order = generateKeyBetween(lastSubitem?.sort_order ?? null, null)
+
 		const optimisticId = `optimistic-${Date.now()}` as SubitemId
 		pendingFocusId.current = optimisticId
 
@@ -38,7 +48,8 @@ export default function EditorToolbar() {
 				task_id: selectedTaskId,
 				parent_id: null,
 				type: 'ul',
-				optimisticId
+				optimisticId,
+				sort_order
 			},
 			{
 				onSuccess: (newSubitem) => {

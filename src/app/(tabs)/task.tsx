@@ -23,6 +23,7 @@ import { SubitemId } from '@/shared/domain/ids'
 import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
 import { useTaskStore } from '@/shared/model/task.store'
 import { commonStyles, staticStyles, STYLE_VARS } from '@/shared/styles/common'
+import { generateKeyBetween } from 'fractional-indexing'
 
 export default function TaskScreen() {
 	const insets = useSafeAreaInsets()
@@ -62,9 +63,18 @@ export default function TaskScreen() {
 	}
 
 	const handleAddSubitem = (afterId?: SubitemId) => {
-		const afterSubitem = afterId
-			? subitems?.find((subitem) => subitem.id === afterId)
-			: null
+		const flatSubitems = subitems ?? []
+		const afterIndex = afterId
+			? flatSubitems.findIndex((s) => s.id === afterId)
+			: flatSubitems.length - 1
+
+		const afterSubitem = afterIndex >= 0 ? flatSubitems[afterIndex] : null
+		const nextSubitem = flatSubitems[afterIndex + 1] ?? null
+
+		const sort_order = generateKeyBetween(
+			afterSubitem?.sort_order ?? null,
+			nextSubitem?.sort_order ?? null
+		)
 
 		const optimisticId = `optimistic-${Date.now()}` as SubitemId
 		pendingFocusId.current = optimisticId
@@ -75,7 +85,8 @@ export default function TaskScreen() {
 				task_id: selectedTaskId,
 				parent_id: afterSubitem?.parent_id ?? null,
 				type: 'ul',
-				optimisticId
+				optimisticId,
+				sort_order
 			},
 			{
 				onSuccess: (newSubitem) => {

@@ -1,6 +1,7 @@
 import { MaterialIcons } from '@expo/vector-icons'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { TrueSheet } from '@lodev09/react-native-true-sheet'
+import { generateNKeysBetween } from 'fractional-indexing'
 import { t } from 'i18next'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -150,11 +151,17 @@ export function TaskCreateForm({ onClose }: Props) {
 		)
 		if (filledSubitemsChecklist.length > 0 && parentTask.id) {
 			// возможно надо оптимизировать чтобы создавать subitems пачкой а не по одному
+			const positions = generateNKeysBetween(
+				null,
+				null,
+				filledSubitemsChecklist.length
+			)
 			await Promise.all(
-				filledSubitemsChecklist.map((checklistItem) =>
+				filledSubitemsChecklist.map((checklistItem, index) =>
 					createSubitem.mutateAsync({
 						info: checklistItem.info,
-						task_id: parentTask.id
+						task_id: parentTask.id,
+						sort_order: positions[index]
 					})
 				)
 			)
