@@ -12,6 +12,7 @@ interface MarkdownInputProps {
 	onChangeMarkdown?: (markdown: string) => void
 	onEnterPress?: () => void
 	onBackspaceOnEmpty?: () => void
+	onFocus?: () => void
 }
 
 export const MarkdownInput = forwardRef<
@@ -24,7 +25,8 @@ export const MarkdownInput = forwardRef<
 			onChangeText,
 			onChangeMarkdown,
 			onEnterPress,
-			onBackspaceOnEmpty
+			onBackspaceOnEmpty,
+			onFocus
 		},
 		ref
 	) => {
@@ -39,6 +41,7 @@ export const MarkdownInput = forwardRef<
 					onInput={(event) => {
 						onChangeText?.((event.currentTarget as HTMLDivElement).innerText)
 					}}
+					onFocus={onFocus}
 					onKeyDown={(event) => {
 						if (event.key === 'Enter') {
 							event.preventDefault()
@@ -79,6 +82,7 @@ export const MarkdownInput = forwardRef<
 				placeholderTextColor={theme.colors.minor}
 				scrollEnabled={false}
 				multiline
+				onFocus={onFocus}
 				onChangeText={(text) => {
 					if (text.includes('\n')) {
 						;(
