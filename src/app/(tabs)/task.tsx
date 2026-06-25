@@ -20,6 +20,7 @@ import { buildSubitemTree } from '@/features/Subitem/model/subitem.utils'
 import SubitemNode from '@/features/Subitem/SubitemNode'
 import { useTaskById } from '@/features/TaskList'
 import { SubitemId } from '@/shared/domain/ids'
+import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
 import { useTaskStore } from '@/shared/model/task.store'
 import { commonStyles, staticStyles, STYLE_VARS } from '@/shared/styles/common'
 
@@ -30,7 +31,7 @@ export default function TaskScreen() {
 	const selectedTaskId = useTaskStore((state) => state.selectedTaskId)
 	const inputRefs = useRef<SubitemInputRefsMap>(new Map())
 
-	const pendingFocusId = useRef<SubitemId | null>(null)
+	const pendingFocusId = useEditorToolbarStore((state) => state.pendingFocusId)
 
 	const createSubitem = useCreateSubitem()
 	const removeSubitem = useRemoveSubitem()

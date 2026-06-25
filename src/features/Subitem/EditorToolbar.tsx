@@ -3,24 +3,49 @@ import { View } from 'react-native'
 import { KeyboardToolbar } from 'react-native-keyboard-controller'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
+import { SubitemId } from '@/shared/domain/ids'
 import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
 import { useTaskStore } from '@/shared/model/task.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 import { Button } from '@/shared/ui/Button'
+import { useCreateSubitem } from './model/useCreateSubitem'
 import { useRemoveSubitem } from './model/useRemoveSubitem'
 
 export default function EditorToolbar() {
 	const { theme } = useUnistyles()
 
+	const selectedTaskId = useTaskStore((state) => state.selectedTaskId)
+
 	const focusedSubitemId = useEditorToolbarStore(
 		(state) => state.focusedSubitemId
 	)
-	const selectedTaskId = useTaskStore((state) => state.selectedTaskId)
-	const removeSubitem = useRemoveSubitem()
 
+	const removeSubitem = useRemoveSubitem()
 	const handleRemove = () => {
 		if (!focusedSubitemId) return
 		removeSubitem.mutate({ id: focusedSubitemId, taskId: selectedTaskId })
+	}
+
+	const pendingFocusId = useEditorToolbarStore((state) => state.pendingFocusId)
+	const createSubitem = useCreateSubitem()
+	const handleAddSubitem = () => {
+		const optimisticId = `optimistic-${Date.now()}` as SubitemId
+		pendingFocusId.current = optimisticId
+
+		createSubitem.mutate(
+			{
+				info: '',
+				task_id: selectedTaskId,
+				parent_id: null,
+				type: 'ul',
+				optimisticId
+			},
+			{
+				onSuccess: (newSubitem) => {
+					pendingFocusId.current = newSubitem.id
+				}
+			}
+		)
 	}
 
 	return (
@@ -47,7 +72,7 @@ export default function EditorToolbar() {
 						gap: 8
 					}}
 				>
-					<Button variant='bare' onPress={() => {}}>
+					<Button variant='bare' onPress={handleAddSubitem}>
 						<MaterialIcons name='add' size={24} />
 					</Button>
 
