@@ -150,6 +150,7 @@ export default function TaskScreen() {
 				<Pressable
 					style={staticStyles.ScrollBox__inner}
 					onPress={() => KeyboardController.dismiss()}
+					accessibilityRole={undefined}
 				>
 					{subitemTree.map((subitemData) => (
 						<SubitemNode
