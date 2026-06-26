@@ -65,11 +65,11 @@ export const useCreateSubitem = () => {
 					old?.map((s) => (s.id === context?.optimisticId ? newSubitem : s)) ??
 					[]
 			)
-			queryClient.invalidateQueries({ queryKey: ['tasks'] })
-			queryClient.invalidateQueries({ queryKey: ['tasks-flat'] })
-			queryClient.invalidateQueries({ queryKey: ['tasks-by-date'] })
-			queryClient.invalidateQueries({ queryKey: ['tasks-count-period'] })
-			queryClient.invalidateQueries({ queryKey: ['tasks-count-day'] })
+			// queryClient.invalidateQueries({ queryKey: ['tasks'] })
+			// queryClient.invalidateQueries({ queryKey: ['tasks-flat'] })
+			// queryClient.invalidateQueries({ queryKey: ['tasks-by-date'] })
+			// queryClient.invalidateQueries({ queryKey: ['tasks-count-period'] })
+			// queryClient.invalidateQueries({ queryKey: ['tasks-count-day'] })
 		},
 		onSettled: (_data, _err, payload) => {
 			queryClient.invalidateQueries({
