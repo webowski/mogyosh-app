@@ -1,9 +1,15 @@
 import { MaterialIcons } from '@expo/vector-icons'
 import { generateKeyBetween } from 'fractional-indexing'
 import { useRef } from 'react'
-import { ActivityIndicator, Platform, Text, View } from 'react-native'
+import {
+	ActivityIndicator,
+	Platform,
+	Pressable,
+	Text,
+	View
+} from 'react-native'
 import type { EnrichedMarkdownTextInputInstance } from 'react-native-enriched-markdown'
-import { Pressable } from 'react-native-gesture-handler'
+import { Pressable as GesturePressable } from 'react-native-gesture-handler'
 import {
 	KeyboardAwareScrollView,
 	KeyboardController
@@ -147,7 +153,7 @@ export default function TaskScreen() {
 				overScrollMode='never'
 				bottomOffset={STYLE_VARS.editorToolbarHeight * 1.25}
 			>
-				<Pressable
+				<GesturePressable
 					style={staticStyles.ScrollBox__inner}
 					onPress={() => KeyboardController.dismiss()}
 					accessibilityRole={undefined}
@@ -165,12 +171,12 @@ export default function TaskScreen() {
 						/>
 					))}
 					<Pressable
-						style={styles.addButton}
+						style={[styles.addButton]}
 						onPress={() => handleAddSubitem()}
 					>
 						<MaterialIcons name='add' size={28} color={theme.colors.minor} />
 					</Pressable>
-				</Pressable>
+				</GesturePressable>
 			</KeyboardAwareScrollView>
 		</>
 	)
