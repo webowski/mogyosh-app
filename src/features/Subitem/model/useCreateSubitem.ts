@@ -33,10 +33,21 @@ export const useCreateSubitem = () => {
 				updated_at: new Date().toISOString()
 			}
 
-			queryClient.setQueryData<SubitemEntity[]>(['subitems', taskId], (old) => [
-				...(old ?? []),
-				optimisticSubitem
-			])
+			queryClient.setQueryData<SubitemEntity[]>(['subitems', taskId], (old) => {
+				const list = old ?? []
+				if (!optimisticSubitem.sort_order) return [...list, optimisticSubitem]
+
+				const insertIndex = list.findIndex(
+					(subitem) =>
+						subitem.sort_order != null &&
+						subitem.sort_order > optimisticSubitem.sort_order!
+				)
+				if (insertIndex === -1) return [...list, optimisticSubitem]
+
+				const result = [...list]
+				result.splice(insertIndex, 0, optimisticSubitem)
+				return result
+			})
 
 			return { previousSubitems, taskId, optimisticId: optimisticSubitem.id }
 		},
