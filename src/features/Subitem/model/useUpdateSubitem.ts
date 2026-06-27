@@ -1,23 +1,28 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-
-import { supabaseClient } from '@/shared/api/supabaseClient'
-import { type SubitemUpdate } from '@/shared/domain/subitem'
+import { SubitemId, TaskId } from '@/shared/domain/ids'
+import { SubitemEntity } from '@/shared/domain/subitem'
+import { useSubitemStore } from './subitem.store'
 
 export const useUpdateSubitem = () => {
-	const queryClient = useQueryClient()
+	const { updateSubitem, enqueueOperation } = useSubitemStore.getState()
 
-	return useMutation({
-		mutationFn: async (subitem: SubitemUpdate) => {
-			const { error } = await supabaseClient
-				.from('subitems')
-				.update({ info: subitem.info })
-				.eq('id', subitem.id)
+	const mutate = (payload: {
+		id: SubitemId
+		taskId: TaskId
+		patch: Partial<
+			Pick<SubitemEntity, 'info' | 'type' | 'sort_order' | 'settings'>
+		>
+	}) => {
+		// 1. Instantly update UI
+		updateSubitem(payload.id, payload.taskId, payload.patch)
 
-			if (error) throw error
-		},
-		onSuccess: () => {
-			// queryClient.invalidateQueries({ queryKey: ['task'] })
-			// queryClient.invalidateQueries({ queryKey: ['subitems'] })
-		}
-	})
+		// 2. Enqueue for server sync
+		enqueueOperation({
+			type: 'update',
+			id: payload.id,
+			taskId: payload.taskId,
+			patch: payload.patch
+		})
+	}
+
+	return { mutate }
 }

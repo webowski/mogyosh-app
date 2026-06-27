@@ -11,13 +11,13 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 import { z } from 'zod'
 
 import { ActionsPanel } from '@/features/ActionsPanel/ActionsPanel'
-import { useCreateSubitem } from '@/features/Subitem'
+import { subitemAPI } from '@/features/Subitem/repository/subitem.api'
 import {
 	useCategories,
 	useCreateCategory,
 	useCreateTask
 } from '@/features/TaskList'
-import { type SubitemInsert } from '@/shared/domain/subitem'
+import type { SubitemInsert } from '@/shared/domain/subitem'
 import { useTaskStore } from '@/shared/model/task.store'
 import { commonStyles, STYLE_VARS } from '@/shared/styles/common'
 import { formStyles } from '@/shared/styles/form'
@@ -43,7 +43,6 @@ export function TaskCreateForm({ onClose }: Props) {
 	const { t } = useTranslation()
 
 	const createTask = useCreateTask()
-	const createSubitem = useCreateSubitem()
 	const setDraftTitle = useTaskStore((store) => store.setDraftTitle)
 	const clearDraftTitle = useTaskStore((store) => store.clearDraftTitle)
 
@@ -156,9 +155,10 @@ export function TaskCreateForm({ onClose }: Props) {
 				null,
 				filledSubitemsChecklist.length
 			)
+			// Direct API call — task is not open yet, no need for store/sync
 			await Promise.all(
 				filledSubitemsChecklist.map((checklistItem, index) =>
-					createSubitem.mutateAsync({
+					subitemAPI.createSubitem({
 						info: checklistItem.info,
 						task_id: parentTask.id,
 						sort_order: positions[index]

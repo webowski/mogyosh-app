@@ -1,5 +1,4 @@
 import { MaterialIcons } from '@expo/vector-icons'
-import { generateKeyBetween } from 'fractional-indexing'
 import { useRef } from 'react'
 import {
 	ActivityIndicator,
@@ -25,8 +24,13 @@ import {
 	useSubitems,
 	type SubitemInputRefsMap
 } from '@/features/Subitem'
+import {
+	selectSubitems,
+	useSubitemStore
+} from '@/features/Subitem/model/subitem.store'
+import { useSyncSubitems } from '@/features/Subitem/model/useSyncSubitems'
 import { useTaskById } from '@/features/TaskList'
-import { SubitemId } from '@/shared/domain/ids'
+import type { SubitemId, TaskId } from '@/shared/domain/ids'
 import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
 import { useTaskStore } from '@/shared/model/task.store'
 import { commonStyles, staticStyles, STYLE_VARS } from '@/shared/styles/common'
@@ -45,10 +49,16 @@ export default function TaskScreen() {
 
 	const { data, isLoading, error } = useTaskById(selectedTaskId)
 
-	const { data: subitems, isLoading: isLoadingSubitems } =
-		useSubitems(selectedTaskId)
+	// Load from server and sync into store
+	const { isLoading: isLoadingSubitems } = useSubitems(selectedTaskId)
 
-	const subitemTree = buildSubitemTree(subitems ?? [])
+	// UI reads from Zustand store directly
+	const subitems = useSubitemStore(selectSubitems(selectedTaskId))
+
+	// Start sync worker
+	useSyncSubitems()
+
+	const subitemTree = buildSubitemTree(subitems)
 
 	const focusSubitem = (id: SubitemId) => {
 		const ref = inputRefs.current.get(id)?.current
@@ -69,48 +79,28 @@ export default function TaskScreen() {
 	}
 
 	const handleAddSubitem = (afterId?: SubitemId) => {
-		const flatSubitems = subitems ?? []
-		const afterIndex = afterId
-			? flatSubitems.findIndex((s) => s.id === afterId)
-			: flatSubitems.length - 1
-
-		const afterSubitem = afterIndex >= 0 ? flatSubitems[afterIndex] : null
-		const nextSubitem = flatSubitems[afterIndex + 1] ?? null
-
-		const sort_order = generateKeyBetween(
-			afterSubitem?.sort_order ?? null,
-			nextSubitem?.sort_order ?? null
-		)
-
 		const optimisticId = `optimistic-${Date.now()}` as SubitemId
 		pendingFocusId.current = optimisticId
 
-		createSubitem.mutate(
-			{
-				info: '',
-				task_id: selectedTaskId,
-				parent_id: afterSubitem?.parent_id ?? null,
-				type: 'ul',
-				optimisticId,
-				sort_order
-			},
-			{
-				onSuccess: (newSubitem) => {
-					pendingFocusId.current = newSubitem.id
-				}
-			}
-		)
+		createSubitem.mutate({
+			info: '',
+			task_id: selectedTaskId,
+			parent_id: null,
+			type: 'ul',
+			optimisticId,
+			afterId: afterId ?? null
+		})
 	}
 
 	const handleRemove = (removeId: SubitemId) => {
-		const index = subitems?.findIndex((s) => s.id === removeId) ?? -1
-		const previousSubitem = index > 0 ? subitems![index - 1] : null
+		const index = subitems.findIndex((s) => s.id === removeId)
+		const previousSubitem = index > 0 ? subitems[index - 1] : null
 
 		if (previousSubitem) {
 			focusSubitem(previousSubitem.id)
 		}
 
-		removeSubitem.mutate({ id: removeId, taskId: selectedTaskId })
+		removeSubitem.mutate({ id: removeId, taskId: selectedTaskId as TaskId })
 	}
 
 	// const keyboardOffset = useKeyboardOpening()

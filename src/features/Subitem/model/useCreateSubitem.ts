@@ -1,81 +1,71 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-
 import { SubitemId, TaskId } from '@/shared/domain/ids'
 import { SubitemEntity } from '@/shared/domain/subitem'
-import { subitemAPI } from '../repository/subitem.api'
+import { useQueryClient } from '@tanstack/react-query'
+import {
+	generateSubitemSortOrder,
+	selectSubitems,
+	useSubitemStore
+} from './subitem.store'
 
 export const useCreateSubitem = () => {
 	const queryClient = useQueryClient()
+	const { addSubitem, enqueueOperation } = useSubitemStore.getState()
 
-	return useMutation({
-		mutationFn: subitemAPI.createSubitem,
-		onMutate: async (payload) => {
-			const taskId = payload.task_id ?? null
-			await queryClient.cancelQueries({ queryKey: ['subitems', taskId] })
-
-			const previousSubitems = queryClient.getQueryData<SubitemEntity[]>([
-				'subitems',
-				taskId
-			])
-
-			const optimisticSubitem: SubitemEntity = {
-				id: (payload.optimisticId ?? `optimistic-${Date.now()}`) as SubitemId,
-				task_id: taskId as TaskId,
-				parent_id: payload.parent_id ?? null,
-				type: payload.type ?? 'p',
-				info: payload.info,
-				status: null,
-				settings: null,
-				state: null,
-				priority: null,
-				sort_order: payload.sort_order ?? null,
-				created_at: new Date().toISOString(),
-				updated_at: new Date().toISOString()
-			}
-
-			queryClient.setQueryData<SubitemEntity[]>(['subitems', taskId], (old) => {
-				const list = old ?? []
-				if (!optimisticSubitem.sort_order) return [...list, optimisticSubitem]
-
-				const insertIndex = list.findIndex(
-					(subitem) =>
-						subitem.sort_order != null &&
-						subitem.sort_order > optimisticSubitem.sort_order!
-				)
-				if (insertIndex === -1) return [...list, optimisticSubitem]
-
-				const result = [...list]
-				result.splice(insertIndex, 0, optimisticSubitem)
-				return result
-			})
-
-			return { previousSubitems, taskId, optimisticId: optimisticSubitem.id }
+	const mutate = (
+		payload: {
+			info: string
+			task_id: TaskId | null
+			parent_id?: SubitemId | null
+			type?: SubitemEntity['type']
+			optimisticId?: SubitemId
+			afterId?: SubitemId | null
 		},
-		onError: (_err, _payload, context) => {
-			queryClient.setQueryData(
-				['subitems', context?.taskId],
-				context?.previousSubitems
-			)
-		},
-		onSuccess: (newSubitem, payload, context) => {
-			// Replace optimistic item with real one
-			queryClient.setQueryData<SubitemEntity[]>(
-				['subitems', context?.taskId],
-				(previousSubitems) =>
-					previousSubitems?.map((subitem) =>
-						subitem.id === context?.optimisticId ? newSubitem : subitem
-					) ?? []
-			)
-			// queryClient.invalidateQueries({ queryKey: ['tasks'] })
-			// queryClient.invalidateQueries({ queryKey: ['tasks-flat'] })
-			// queryClient.invalidateQueries({ queryKey: ['tasks-by-date'] })
-			// queryClient.invalidateQueries({ queryKey: ['tasks-count-period'] })
-			// queryClient.invalidateQueries({ queryKey: ['tasks-count-day'] })
-		},
-		onSettled: (_data, _err, payload) => {
-			queryClient.invalidateQueries({
-				queryKey: ['subitems', payload.task_id ?? null]
-			})
+		options?: { onSuccess?: (subitem: SubitemEntity) => void }
+	) => {
+		const taskId = payload.task_id as TaskId
+		const subitems = selectSubitems(taskId)(useSubitemStore.getState())
+
+		const tempId = (payload.optimisticId ??
+			`optimistic-${Date.now()}`) as SubitemId
+		const sort_order = generateSubitemSortOrder(
+			subitems,
+			payload.afterId ?? null
+		)
+
+		const optimisticSubitem: SubitemEntity = {
+			id: tempId,
+			task_id: taskId,
+			parent_id: payload.parent_id ?? null,
+			type: payload.type ?? 'ul',
+			info: payload.info,
+			status: null,
+			settings: null,
+			state: null,
+			priority: null,
+			sort_order,
+			created_at: new Date().toISOString(),
+			updated_at: new Date().toISOString()
 		}
-	})
+
+		// 1. Instantly update UI via store
+		addSubitem(payload.afterId ?? null, optimisticSubitem)
+
+		// 2. Enqueue for server sync
+		enqueueOperation({
+			type: 'create',
+			subitem: optimisticSubitem,
+			tempId
+		})
+
+		// Invalidate task counters
+		queryClient.invalidateQueries({ queryKey: ['tasks'] })
+		queryClient.invalidateQueries({ queryKey: ['tasks-flat'] })
+		queryClient.invalidateQueries({ queryKey: ['tasks-by-date'] })
+		queryClient.invalidateQueries({ queryKey: ['tasks-count-period'] })
+		queryClient.invalidateQueries({ queryKey: ['tasks-count-day'] })
+
+		return { tempId, optimisticSubitem }
+	}
+
+	return { mutate }
 }

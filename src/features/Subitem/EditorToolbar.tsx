@@ -1,22 +1,19 @@
 import { MaterialIcons } from '@expo/vector-icons'
-import { useQueryClient } from '@tanstack/react-query'
-import { generateKeyBetween } from 'fractional-indexing'
 import { View } from 'react-native'
 import { KeyboardToolbar } from 'react-native-keyboard-controller'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
-import { SubitemId } from '@/shared/domain/ids'
-import { SubitemEntity } from '@/shared/domain/subitem'
+import type { SubitemId, TaskId } from '@/shared/domain/ids'
 import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
 import { useTaskStore } from '@/shared/model/task.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 import { Button } from '@/shared/ui/Button'
+import { selectSubitems, useSubitemStore } from './model/subitem.store'
 import { useCreateSubitem } from './model/useCreateSubitem'
 import { useRemoveSubitem } from './model/useRemoveSubitem'
 
 export default function EditorToolbar() {
 	const { theme } = useUnistyles()
-	const queryClient = useQueryClient()
 
 	const selectedTaskId = useTaskStore((state) => state.selectedTaskId)
 
@@ -27,36 +24,30 @@ export default function EditorToolbar() {
 	const removeSubitem = useRemoveSubitem()
 	const handleRemove = () => {
 		if (!focusedSubitemId) return
-		removeSubitem.mutate({ id: focusedSubitemId, taskId: selectedTaskId })
+		removeSubitem.mutate({
+			id: focusedSubitemId,
+			taskId: selectedTaskId as TaskId
+		})
 	}
 
 	const pendingFocusId = useEditorToolbarStore((state) => state.pendingFocusId)
 	const createSubitem = useCreateSubitem()
+
 	const handleAddSubitem = () => {
-		const existingSubitems =
-			queryClient.getQueryData<SubitemEntity[]>(['subitems', selectedTaskId]) ??
-			[]
-		const lastSubitem = existingSubitems[existingSubitems.length - 1] ?? null
-		const sort_order = generateKeyBetween(lastSubitem?.sort_order ?? null, null)
+		const subitems = selectSubitems(selectedTaskId)(useSubitemStore.getState())
+		const lastSubitem = subitems[subitems.length - 1] ?? null
 
 		const optimisticId = `optimistic-${Date.now()}` as SubitemId
 		pendingFocusId.current = optimisticId
 
-		createSubitem.mutate(
-			{
-				info: '',
-				task_id: selectedTaskId,
-				parent_id: null,
-				type: 'ul',
-				optimisticId,
-				sort_order
-			},
-			{
-				onSuccess: (newSubitem) => {
-					pendingFocusId.current = newSubitem.id
-				}
-			}
-		)
+		createSubitem.mutate({
+			info: '',
+			task_id: selectedTaskId,
+			parent_id: null,
+			type: 'ul',
+			optimisticId,
+			afterId: lastSubitem?.id ?? null
+		})
 	}
 
 	return (
