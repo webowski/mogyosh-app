@@ -61,9 +61,10 @@ export const useCreateSubitem = () => {
 			// Replace optimistic item with real one
 			queryClient.setQueryData<SubitemEntity[]>(
 				['subitems', context?.taskId],
-				(old) =>
-					old?.map((s) => (s.id === context?.optimisticId ? newSubitem : s)) ??
-					[]
+				(previousSubitems) =>
+					previousSubitems?.map((subitem) =>
+						subitem.id === context?.optimisticId ? newSubitem : subitem
+					) ?? []
 			)
 			// queryClient.invalidateQueries({ queryKey: ['tasks'] })
 			// queryClient.invalidateQueries({ queryKey: ['tasks-flat'] })
