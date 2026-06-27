@@ -15,6 +15,7 @@ import {
 } from 'react-native-keyboard-controller'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
+import { useShallow } from 'zustand/react/shallow'
 
 import {
 	buildSubitemTree,
@@ -24,10 +25,7 @@ import {
 	useSubitems,
 	type SubitemInputRefsMap
 } from '@/features/Subitem'
-import {
-	selectSubitems,
-	useSubitemStore
-} from '@/features/Subitem/model/subitem.store'
+import { useSubitemStore } from '@/features/Subitem/model/subitem.store'
 import { useSyncSubitems } from '@/features/Subitem/model/useSyncSubitems'
 import { useTaskById } from '@/features/TaskList'
 import type { SubitemId, TaskId } from '@/shared/domain/ids'
@@ -53,7 +51,11 @@ export default function TaskScreen() {
 	const { isLoading: isLoadingSubitems } = useSubitems(selectedTaskId)
 
 	// UI reads from Zustand store directly
-	const subitems = useSubitemStore(selectSubitems(selectedTaskId))
+	const subitems = useSubitemStore(
+		useShallow((state) =>
+			selectedTaskId ? (state.subitemsByTask[selectedTaskId] ?? []) : []
+		)
+	)
 
 	// Start sync worker
 	useSyncSubitems()
