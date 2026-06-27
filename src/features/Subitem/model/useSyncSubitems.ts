@@ -6,6 +6,7 @@ import { SubitemId } from '@/shared/domain/ids'
 import { SubitemEntity } from '@/shared/domain/subitem'
 import {
 	SubitemOperation,
+	SubitemOperationUpdate,
 	selectPendingOperations,
 	useSubitemStore
 } from './subitem.store'
@@ -41,9 +42,7 @@ const syncCreate = async (subitem: SubitemEntity, tempId: SubitemId) => {
 
 const syncUpdate = async (
 	id: SubitemId,
-	patch: SubitemOperation extends { type: 'update' }
-		? SubitemOperation['patch']
-		: never
+	patch: SubitemOperationUpdate['patch']
 ) => {
 	const { error } = await supabaseClient
 		.from('subitems')
