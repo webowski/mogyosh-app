@@ -1,4 +1,4 @@
-import { forwardRef } from 'react'
+import { forwardRef, useEffect, useRef } from 'react'
 import { Platform } from 'react-native'
 import {
 	EnrichedMarkdownTextInput,
@@ -34,41 +34,14 @@ export const MarkdownInput = forwardRef<
 
 		if (Platform.OS === 'web') {
 			return (
-				<div
-					ref={ref as React.Ref<HTMLDivElement>}
-					contentEditable
-					suppressContentEditableWarning
-					onInput={(event) => {
-						onChangeText?.((event.currentTarget as HTMLDivElement).innerText)
-					}}
+				<WebDivInput
+					subitemText={subitemText}
+					onChangeText={onChangeText}
+					onEnterPress={onEnterPress}
+					onBackspaceOnEmpty={onBackspaceOnEmpty}
 					onFocus={onFocus}
-					onKeyDown={(event) => {
-						if (event.key === 'Enter') {
-							event.preventDefault()
-							onEnterPress?.()
-						} else if (event.key === 'Backspace') {
-							const text = (event.currentTarget as HTMLDivElement).innerText
-							if (text === '' || text === '\n') {
-								event.preventDefault()
-								onBackspaceOnEmpty?.()
-							}
-						}
-					}}
-					// @ts-ignore - web-only inline styles
-					style={{
-						flex: 1,
-						fontSize: 16,
-						fontWeight: 500,
-						color: theme.colors.major,
-						paddingTop: theme.spacing.xs,
-						paddingBottom: theme.spacing.xs,
-						outline: 'none',
-						minHeight: 22,
-						wordBreak: 'break-word'
-					}}
-				>
-					{subitemText}
-				</div>
+					divRef={ref as React.Ref<HTMLDivElement>}
+				/>
 			)
 		}
 
@@ -111,3 +84,71 @@ const styles = StyleSheet.create((theme) => ({
 		outline: 'none'
 	}
 }))
+
+interface WebDivInputProps {
+	subitemText: string
+	onChangeText?: (text: string) => void
+	onEnterPress?: () => void
+	onBackspaceOnEmpty?: () => void
+	onFocus?: () => void
+	divRef: React.Ref<HTMLDivElement>
+}
+
+function WebDivInput({
+	subitemText,
+	onChangeText,
+	onEnterPress,
+	onBackspaceOnEmpty,
+	onFocus,
+	divRef
+}: WebDivInputProps) {
+	const { theme } = useUnistyles()
+	const localRef = useRef<HTMLDivElement>(null)
+	const resolvedRef = (divRef as React.RefObject<HTMLDivElement>) ?? localRef
+
+	useEffect(
+		() => {
+			if (resolvedRef.current) {
+				resolvedRef.current.innerText = subitemText
+			}
+		},
+		// eslint-disable-next-line
+		[]
+	)
+
+	return (
+		<div
+			ref={resolvedRef}
+			contentEditable
+			suppressContentEditableWarning
+			onInput={(event) => {
+				onChangeText?.((event.currentTarget as HTMLDivElement).innerText)
+			}}
+			onFocus={onFocus}
+			onKeyDown={(event) => {
+				if (event.key === 'Enter') {
+					event.preventDefault()
+					onEnterPress?.()
+				} else if (event.key === 'Backspace') {
+					const text = (event.currentTarget as HTMLDivElement).innerText
+					if (text === '' || text === '\n') {
+						event.preventDefault()
+						onBackspaceOnEmpty?.()
+					}
+				}
+			}}
+			// @ts-ignore - web-only inline styles
+			style={{
+				flex: 1,
+				fontSize: 16,
+				fontWeight: 500,
+				color: theme.colors.major,
+				paddingTop: theme.spacing.xs,
+				paddingBottom: theme.spacing.xs,
+				outline: 'none',
+				minHeight: 22,
+				wordBreak: 'break-word'
+			}}
+		/>
+	)
+}
