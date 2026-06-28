@@ -12,7 +12,7 @@ export const STYLE_VARS = {
 	radius_xl: 16,
 	radius_2xl: 24,
 	radius_3xl: 32,
-	navPanelUnderlap: 32,
+	navPanelUnderlap: 32 + 10,
 
 	// всё что относится к открытию клавиатуры телефона
 	editorToolbarHeight: 48,
@@ -92,14 +92,16 @@ export const commonStyles = StyleSheet.create((theme, rt) => ({
 
 export const staticStyles = {
 	ScrollBox: {
-		flex: 1
+		flex: 1,
+		// marginBottom: STYLE_VARS.navPanelUnderlap,
+		paddingBottom: STYLE_VARS.navPanelUnderlap
 	},
 	ScrollBox__inner: {
 		flexGrow: 1,
 		flexShrink: 0,
 		paddingHorizontal: STYLE_VARS.sidePadding,
 		paddingTop: STYLE_VARS.sidePadding,
-		paddingBottom: STYLE_VARS.sidePadding + STYLE_VARS.navPanelUnderlap,
+		paddingBottom: STYLE_VARS.sidePadding,
 		gap: 4
 	}
 }
