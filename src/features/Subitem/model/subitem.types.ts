@@ -5,6 +5,7 @@ import { SubitemEntity } from '@/shared/domain/subitem'
 
 export type SubitemData = SubitemEntity & {
 	children: SubitemData[]
+	stableKey?: string
 }
 
 export type SubitemProps = {

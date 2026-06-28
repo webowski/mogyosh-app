@@ -105,11 +105,6 @@ export default function TaskScreen() {
 		removeSubitem.mutate({ id: removeId, taskId: selectedTaskId as TaskId })
 	}
 
-	// const keyboardOffset = useKeyboardOpening()
-	// useEffect(() => {
-	// 	console.log(keyboardOffset)
-	// }, [keyboardOffset])
-
 	// Show loading state when waiting for task data
 	if (isLoading || isLoadingSubitems)
 		return (
@@ -153,7 +148,7 @@ export default function TaskScreen() {
 					{subitemTree.map((subitemData) => (
 						<SubitemNode
 							inputRefs={inputRefs.current}
-							key={subitemData.id}
+							key={subitemData.stableKey ?? subitemData.id}
 							data={subitemData}
 							depth={0}
 							variant={subitemData.type}

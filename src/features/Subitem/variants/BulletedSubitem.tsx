@@ -53,6 +53,7 @@ export default function BulletedSubitem({
 		(value: string) => {
 			if (updateDebounceRef.current) clearTimeout(updateDebounceRef.current)
 			updateDebounceRef.current = setTimeout(() => {
+				// console.log('[BulletedSubitem] handleChangeText:', value)
 				updateSubitem.mutate({
 					id: data.id,
 					taskId: data.task_id,

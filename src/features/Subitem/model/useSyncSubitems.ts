@@ -32,10 +32,26 @@ const syncCreate = async (subitem: SubitemEntity, tempId: SubitemId) => {
 
 	if (error) throw error
 
-	// Replace optimistic item with real one in store
-	useSubitemStore
-		.getState()
-		.replaceOptimisticSubitem(tempId, subitem.task_id, data)
+	// Get current info from store (user may have typed while syncing)
+	const { subitemsByTask } = useSubitemStore.getState()
+	const taskSubitems = subitemsByTask[subitem.task_id] ?? []
+	const currentSubitem = taskSubitems.find((s) => s.id === tempId)
+	const currentInfo = currentSubitem?.info ?? subitem.info
+
+	useSubitemStore.getState().replaceOptimisticSubitem(tempId, subitem.task_id, {
+		...data,
+		info: currentInfo
+	})
+
+	// If user typed something while syncing — enqueue an update to persist it
+	if (currentInfo !== subitem.info) {
+		useSubitemStore.getState().enqueueOperation({
+			type: 'update',
+			id: data.id,
+			taskId: subitem.task_id,
+			patch: { info: currentInfo }
+		})
+	}
 
 	return data
 }
@@ -89,7 +105,7 @@ const flushQueue = async (operations: SubitemOperation[]) => {
 			if (operation.type === 'create') {
 				await syncCreate(operation.subitem, operation.tempId)
 			} else if (operation.type === 'update') {
-				console.log('[SyncSubitems] full operation:', JSON.stringify(operation))
+				// console.log('[SyncSubitems] full operation:', JSON.stringify(operation))
 				await syncUpdate(operation.id, operation.patch)
 			} else if (operation.type === 'delete') {
 				await syncDelete(operation.id)

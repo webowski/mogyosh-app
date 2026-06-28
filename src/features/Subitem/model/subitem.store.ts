@@ -92,12 +92,32 @@ export const useSubitemStore = create<SubitemStore>()(
 				pendingOperations: [],
 
 				setSubitems: (taskId, subitems) =>
-					set((state) => ({
-						subitemsByTask: {
-							...state.subitemsByTask,
-							[taskId]: subitems
+					set((state) => {
+						const current = state.subitemsByTask[taskId] ?? []
+
+						// Merge: keep local changes for existing items, add new from server
+						const merged = subitems.map((serverSubitem) => {
+							const localSubitem = current.find(
+								(s) => s.id === serverSubitem.id
+							)
+							// Keep local version if it exists (user may have typed)
+							return localSubitem ?? serverSubitem
+						})
+
+						// Keep optimistic items not yet confirmed by server
+						const optimisticItems = current.filter(
+							(s) =>
+								s.id.toString().startsWith('optimistic-') &&
+								!merged.some((m) => m.id === s.id)
+						)
+
+						return {
+							subitemsByTask: {
+								...state.subitemsByTask,
+								[taskId]: [...merged, ...optimisticItems]
+							}
 						}
-					})),
+					}),
 
 				addSubitem: (afterId, subitem) =>
 					set((state) => {
@@ -159,7 +179,9 @@ export const useSubitemStore = create<SubitemStore>()(
 							subitemsByTask: {
 								...state.subitemsByTask,
 								[taskId]: current.map((s) =>
-									s.id === tempId ? realSubitem : s
+									s.id === tempId
+										? { ...realSubitem, info: s.info, stableKey: tempId }
+										: s
 								)
 							}
 						}
