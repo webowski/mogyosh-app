@@ -44,6 +44,8 @@ const syncUpdate = async (
 	id: SubitemId,
 	patch: SubitemOperationUpdate['patch']
 ) => {
+	// if (Object.keys(patch).length === 0) return // guard: skip empty patch
+
 	const { error } = await supabaseClient
 		.from('subitems')
 		.update(patch)
@@ -66,13 +68,28 @@ const flushQueue = async (operations: SubitemOperation[]) => {
 
 	const { dequeueOperations } = useSubitemStore.getState()
 
+	const invalidOperations = operations.filter(
+		(op) =>
+			(op.type === 'update' && !op.patch) ||
+			(op.type !== 'create' && op.id?.toString().startsWith('optimistic-'))
+	)
+	if (invalidOperations.length > 0) {
+		dequeueOperations(invalidOperations)
+	}
+
+	const validOperations = operations.filter(
+		(op) => !invalidOperations.includes(op)
+	)
+	if (validOperations.length === 0) return
+
 	const successfulOperations: SubitemOperation[] = []
 
-	for (const operation of operations) {
+	for (const operation of validOperations) {
 		try {
 			if (operation.type === 'create') {
 				await syncCreate(operation.subitem, operation.tempId)
 			} else if (operation.type === 'update') {
+				console.log('[SyncSubitems] full operation:', JSON.stringify(operation))
 				await syncUpdate(operation.id, operation.patch)
 			} else if (operation.type === 'delete') {
 				await syncDelete(operation.id)

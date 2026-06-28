@@ -53,7 +53,11 @@ export default function BulletedSubitem({
 		(value: string) => {
 			if (updateDebounceRef.current) clearTimeout(updateDebounceRef.current)
 			updateDebounceRef.current = setTimeout(() => {
-				updateSubitem.mutate({ id: data.id, info: value })
+				updateSubitem.mutate({
+					id: data.id,
+					taskId: data.task_id,
+					patch: { info: value }
+				})
 			}, 500)
 		},
 		// eslint-disable-next-line
@@ -117,13 +121,14 @@ export default function BulletedSubitem({
 				task_id: data.task_id,
 				parent_id: data.parent_id ?? null,
 				type: 'ul'
-			},
-			{
-				onSuccess: () => {
-					setTimeout(focusNewInput, 50)
-				}
 			}
+			// {
+			// 	onSuccess: () => {
+			// 		setTimeout(focusNewInput, 50)
+			// 	}
+			// }
 		)
+		setTimeout(focusNewInput, 50)
 	}
 
 	useEffect(() => {

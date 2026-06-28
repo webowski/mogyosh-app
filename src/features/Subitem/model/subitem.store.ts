@@ -166,9 +166,17 @@ export const useSubitemStore = create<SubitemStore>()(
 					}),
 
 				enqueueOperation: (operation) =>
-					set((state) => ({
-						pendingOperations: [...state.pendingOperations, operation]
-					})),
+					set((state) => {
+						if (operation.type === 'update' && !operation.patch) return state
+						if (
+							operation.type === 'update' &&
+							operation.id?.toString().startsWith('optimistic-')
+						)
+							return state
+						return {
+							pendingOperations: [...state.pendingOperations, operation]
+						}
+					}),
 
 				dequeueOperations: (operations) =>
 					set((state) => ({
