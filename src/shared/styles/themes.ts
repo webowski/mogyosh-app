@@ -87,7 +87,7 @@ export const lightTheme = {
 		selectedText: 'hsl(0, 0%, 100%)',
 
 		surface: 'hsl(0, 0%, 100%)',
-		surfaceAlter: 'hsl(228, 56%, 98%)',
+		surfaceAlter: 'hsl(220, 23%, 98%)',
 
 		border: 'hsl(225, 35%, 79%)',
 		borderLight: 'hsl(225, 35%, 92%)',
