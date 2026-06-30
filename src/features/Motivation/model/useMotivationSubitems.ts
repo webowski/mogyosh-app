@@ -1,45 +1,36 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
+import { useEffect } from 'react'
 
-import { supabaseClient } from '@/shared/api/supabaseClient'
 import { motivationAPI } from '../repository/motivation.api'
+import { useMotivationStore } from './motivation.store'
 
-/**
- * Get all motivation subitems for the current user
- */
 export const useMotivationSubitems = () => {
-	return useQuery({
+	const setSubitems = useMotivationStore((state) => state.setSubitems)
+
+	const query = useQuery({
 		queryKey: ['motivation-subitems'],
 		queryFn: async () => {
 			try {
-				const result = await motivationAPI.getMotivationSubitems()
-				return result
+				return await motivationAPI.getMotivationSubitems()
 			} catch (error) {
 				console.error('useMotivationSubitems query error:', error)
 				throw error
 			}
 		},
 		retry: 2,
-		staleTime: 5 * 60 * 1000 // 5 minutes
+		staleTime: 5 * 60 * 1000
 	})
-}
 
-/**
- * Update motivation subitem type (for toggle functionality)
- */
-export const useUpdateMotivationSubitem = () => {
-	const queryClient = useQueryClient()
-
-	return useMutation({
-		mutationFn: async ({ id, type }: { id: string; type: string }) => {
-			const { error } = await supabaseClient
-				.from('motivation_subitems')
-				.update({ type })
-				.eq('id', id)
-
-			if (error) throw error
+	// Sync server data into store
+	useEffect(
+		() => {
+			if (query.data) {
+				setSubitems(query.data)
+			}
 		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['motivation-subitems'] })
-		}
-	})
+		// eslint-disable-next-line
+		[query.data]
+	)
+
+	return query
 }

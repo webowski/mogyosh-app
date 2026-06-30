@@ -1,38 +1,98 @@
-import { useQueryClient } from '@tanstack/react-query'
-import { ActivityIndicator, Text, View } from 'react-native'
+import { MaterialIcons } from '@expo/vector-icons'
+import { useRef } from 'react'
+import {
+	ActivityIndicator,
+	Platform,
+	Pressable,
+	Text,
+	View
+} from 'react-native'
+import type { EnrichedMarkdownTextInputInstance } from 'react-native-enriched-markdown'
 import { Pressable as GesturePressable } from 'react-native-gesture-handler'
 import {
 	KeyboardAwareScrollView,
 	KeyboardController
 } from 'react-native-keyboard-controller'
+import { StyleSheet, useUnistyles } from 'react-native-unistyles'
+import { useShallow } from 'zustand/react/shallow'
 
-import { useMotivationSubitems } from '@/features/Motivation'
-import { ChecklistItem } from '@/features/TaskList/ChecklistItem'
-import { supabaseClient } from '@/shared/api/supabaseClient'
+import {
+	useCreateMotivationSubitem,
+	useMotivationStore,
+	useMotivationSubitems,
+	useRemoveMotivationSubitem,
+	useSyncMotivationSubitems
+} from '@/features/Motivation'
+import {
+	buildSubitemTree,
+	SubitemNode,
+	type SubitemInputRefsMap
+} from '@/features/Subitem'
+import type { SubitemId } from '@/shared/domain/ids'
+import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
 import { commonStyles, staticStyles, STYLE_VARS } from '@/shared/styles/common'
 
 export default function MotivationScreen() {
-	const queryClient = useQueryClient()
-	const { data: subitems, isLoading, error } = useMotivationSubitems()
+	const { theme } = useUnistyles()
+	const inputRefs = useRef<SubitemInputRefsMap>(new Map())
+	const pendingFocusId = useEditorToolbarStore((state) => state.pendingFocusId)
 
-	const handleToggle = async (id: string, currentType: string) => {
-		const newType = currentType === 'done' ? 'active' : 'done'
+	const createSubitem = useCreateMotivationSubitem()
+	const removeSubitem = useRemoveMotivationSubitem()
 
-		try {
-			const { error } = await supabaseClient
-				.from('motivation_subitems')
-				.update({ type: newType })
-				.eq('id', id)
+	// Load from server and sync into store
+	const { isLoading, error } = useMotivationSubitems()
 
-			if (error) throw error
+	// UI reads from Zustand store directly
+	const subitems = useMotivationStore(useShallow((state) => state.subitems))
 
-			queryClient.invalidateQueries({ queryKey: ['motivation-subitems'] })
-		} catch (err) {
-			console.error('Failed to toggle motivation subitem:', err)
+	// Start sync worker
+	useSyncMotivationSubitems()
+
+	const subitemTree = buildSubitemTree(subitems)
+
+	const focusSubitem = (id: SubitemId) => {
+		const ref = inputRefs.current.get(id)?.current
+		if (!ref) return
+
+		if (Platform.OS === 'web') {
+			const element = ref as HTMLDivElement
+			element.focus()
+			const range = document.createRange()
+			const selection = window.getSelection()
+			range.selectNodeContents(element)
+			range.collapse(false)
+			selection?.removeAllRanges()
+			selection?.addRange(range)
+		} else {
+			;(ref as EnrichedMarkdownTextInputInstance).focus()
 		}
 	}
 
-	// Show loading state
+	const handleAddSubitem = (afterId?: SubitemId) => {
+		const optimisticId = `optimistic-${Date.now()}` as SubitemId
+		pendingFocusId.current = optimisticId
+
+		createSubitem.mutate({
+			info: '',
+			parent_id: null,
+			type: 'ul',
+			optimisticId,
+			afterId: afterId ?? null
+		})
+	}
+
+	const handleRemove = (removeId: SubitemId) => {
+		const index = subitems.findIndex((s) => s.id === removeId)
+		const previousSubitem = index > 0 ? subitems[index - 1] : null
+
+		if (previousSubitem) {
+			focusSubitem(previousSubitem.id)
+		}
+
+		removeSubitem.mutate({ id: removeId })
+	}
+
 	if (isLoading)
 		return (
 			<View style={commonStyles.mainArea}>
@@ -40,7 +100,6 @@ export default function MotivationScreen() {
 			</View>
 		)
 
-	// Show error state
 	if (error)
 		return (
 			<View style={commonStyles.mainArea}>
@@ -52,25 +111,52 @@ export default function MotivationScreen() {
 		)
 
 	return (
-		<KeyboardAwareScrollView
-			style={staticStyles.ScrollBox}
-			overScrollMode='never'
-			bottomOffset={STYLE_VARS.editorToolbarHeight * 1.25}
-		>
-			<GesturePressable
-				style={staticStyles.ScrollBox__inner}
-				onPress={() => KeyboardController.dismiss()}
-				accessibilityRole={undefined}
+		<>
+			<KeyboardAwareScrollView
+				style={staticStyles.ScrollBox}
+				overScrollMode='never'
+				bottomOffset={STYLE_VARS.editorToolbarHeight * 1.25}
 			>
-				{subitems?.map((subitem) => (
-					<ChecklistItem
-						key={subitem.id}
-						checked={subitem.type === 'done'}
-						text={subitem.info}
-						onToggle={(_value) => handleToggle(subitem.id, subitem.type)}
-					/>
-				))}
-			</GesturePressable>
-		</KeyboardAwareScrollView>
+				<GesturePressable
+					style={staticStyles.ScrollBox__inner}
+					onPress={() => KeyboardController.dismiss()}
+					accessibilityRole={undefined}
+				>
+					{subitemTree.map((subitemData) => (
+						<SubitemNode
+							inputRefs={inputRefs.current}
+							key={subitemData.stableKey ?? subitemData.id}
+							data={subitemData}
+							depth={0}
+							variant={subitemData.type}
+							onAddAfter={handleAddSubitem}
+							onRemove={handleRemove}
+							pendingFocusId={pendingFocusId}
+						/>
+					))}
+					<Pressable
+						style={[styles.AddButton]}
+						onPress={() => handleAddSubitem()}
+					>
+						<MaterialIcons name='add' size={28} color={theme.colors.minor} />
+					</Pressable>
+				</GesturePressable>
+			</KeyboardAwareScrollView>
+		</>
 	)
 }
+
+const styles = StyleSheet.create((theme) => ({
+	AddButton: {
+		marginTop: 4,
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'center',
+		paddingVertical: theme.spacing.xs,
+		backgroundColor: theme.colors.mutedLightFill,
+		borderTopLeftRadius: STYLE_VARS.radius_sm,
+		borderTopRightRadius: STYLE_VARS.radius_sm,
+		borderBottomLeftRadius: STYLE_VARS.radius_lg,
+		borderBottomRightRadius: STYLE_VARS.radius_lg
+	}
+}))
