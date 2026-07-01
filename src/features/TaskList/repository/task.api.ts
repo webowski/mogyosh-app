@@ -49,6 +49,7 @@ const getTasks = async (filters?: TaskFilters) => {
 	let query = supabaseClient
 		.from('tasks')
 		.select(TASKS_SELECT)
+		.eq('type', 'task')
 		.is('parent_id', null)
 		.order('created_at', { ascending: false })
 
@@ -93,6 +94,7 @@ const getAllTasks = async (): Promise<TaskEntity[]> => {
 	const { data, error } = await supabaseClient
 		.from('tasks')
 		.select(TASKS_SELECT)
+		.eq('type', 'task')
 		.order('created_at', { ascending: false })
 
 	if (error) throw error
@@ -108,6 +110,7 @@ const getTasksByDate = async (date: string): Promise<TaskEntity[]> => {
 	const { data, error } = await supabaseClient
 		.from('tasks')
 		.select(TASKS_SELECT)
+		.eq('type', 'task')
 		.or(
 			`schedules.date.eq.${date},schedules.start_date.lte.${date}.and.schedules.end_date.gte.${date}`
 		)
@@ -130,6 +133,7 @@ const getTasksCountByPeriod = async (
 	const { data, error } = await supabaseClient
 		.from('tasks')
 		.select('schedules(date)')
+		.eq('type', 'task')
 		.or(`schedules.date.gte.${startDate}.and.schedules.date.lte.${endDate}`)
 
 	if (error) throw error
