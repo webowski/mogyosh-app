@@ -1,5 +1,5 @@
 import { MaterialIcons } from '@expo/vector-icons'
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import {
 	ActivityIndicator,
 	Platform,
@@ -16,38 +16,55 @@ import {
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 import { useShallow } from 'zustand/react/shallow'
 
-import {
-	useCreateMotivationSubitem,
-	useMotivationStore,
-	useMotivationSubitems,
-	useRemoveMotivationSubitem,
-	useSyncMotivationSubitems
-} from '@/features/Motivation'
+import { useMotivationTaskId } from '@/features/Motivation'
 import {
 	buildSubitemTree,
 	SubitemNode,
+	useCreateSubitem,
+	useRemoveSubitem,
+	useSubitems,
 	type SubitemInputRefsMap
 } from '@/features/Subitem'
+import { useSubitemStore } from '@/features/Subitem/model/subitem.store'
+import { useSyncSubitems } from '@/features/Subitem/model/useSyncSubitems'
 import type { SubitemId } from '@/shared/domain/ids'
 import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
+import { useTaskStore } from '@/shared/model/task.store'
 import { commonStyles, staticStyles, STYLE_VARS } from '@/shared/styles/common'
 
 export default function MotivationScreen() {
 	const { theme } = useUnistyles()
 	const inputRefs = useRef<SubitemInputRefsMap>(new Map())
 	const pendingFocusId = useEditorToolbarStore((state) => state.pendingFocusId)
+	const setSelectedTaskId = useTaskStore((state) => state.setSelectedTaskId)
 
-	const createSubitem = useCreateMotivationSubitem()
-	const removeSubitem = useRemoveMotivationSubitem()
+	const createSubitem = useCreateSubitem()
+	const removeSubitem = useRemoveSubitem()
+
+	// Resolve (or create) the exclusive motivation task
+	const { data: motivationTaskId, isLoading: isLoadingMotivationTask } =
+		useMotivationTaskId()
+
+	// Make this task the selected one while the screen is mounted
+	useEffect(() => {
+		if (motivationTaskId) setSelectedTaskId(motivationTaskId)
+		// eslint-disable-next-line
+	}, [motivationTaskId])
 
 	// Load from server and sync into store
-	const { isLoading, error } = useMotivationSubitems()
+	const { isLoading: isLoadingSubitems, error } = useSubitems(
+		motivationTaskId ?? null
+	)
 
 	// UI reads from Zustand store directly
-	const subitems = useMotivationStore(useShallow((state) => state.subitems))
+	const subitems = useSubitemStore(
+		useShallow((state) =>
+			motivationTaskId ? (state.subitemsByTask[motivationTaskId] ?? []) : []
+		)
+	)
 
 	// Start sync worker
-	useSyncMotivationSubitems()
+	useSyncSubitems()
 
 	const subitemTree = buildSubitemTree(subitems)
 
@@ -70,11 +87,14 @@ export default function MotivationScreen() {
 	}
 
 	const handleAddSubitem = (afterId?: SubitemId) => {
+		if (!motivationTaskId) return
+
 		const optimisticId = `optimistic-${Date.now()}` as SubitemId
 		pendingFocusId.current = optimisticId
 
 		createSubitem.mutate({
 			info: '',
+			task_id: motivationTaskId,
 			parent_id: null,
 			type: 'ul',
 			optimisticId,
@@ -83,6 +103,8 @@ export default function MotivationScreen() {
 	}
 
 	const handleRemove = (removeId: SubitemId) => {
+		if (!motivationTaskId) return
+
 		const index = subitems.findIndex((s) => s.id === removeId)
 		const previousSubitem = index > 0 ? subitems[index - 1] : null
 
@@ -90,10 +112,10 @@ export default function MotivationScreen() {
 			focusSubitem(previousSubitem.id)
 		}
 
-		removeSubitem.mutate({ id: removeId })
+		removeSubitem.mutate({ id: removeId, taskId: motivationTaskId })
 	}
 
-	if (isLoading)
+	if (isLoadingMotivationTask || isLoadingSubitems)
 		return (
 			<View style={commonStyles.mainArea}>
 				<ActivityIndicator />

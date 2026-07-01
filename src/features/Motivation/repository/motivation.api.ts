@@ -11,6 +11,6 @@ const getOrCreateMotivationTask = async (): Promise<TaskId> => {
 	return data as TaskId
 }
 
-export const motivationTaskAPI = {
+export const motivationAPI = {
 	getOrCreateMotivationTask
 }
