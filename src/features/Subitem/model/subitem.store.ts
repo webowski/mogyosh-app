@@ -45,6 +45,8 @@ export type SubitemOperation =
 // Store interface
 // ---------------------------------------------------------------------------
 
+export type SubitemMoveDirection = 'up' | 'down'
+
 export interface SubitemStore {
 	// Subitems by taskId
 	subitemsByTask: Record<TaskId, SubitemEntity[]>
@@ -61,6 +63,13 @@ export interface SubitemStore {
 		patch: Partial<SubitemEntity>
 	) => void
 	removeSubitem: (id: SubitemId, taskId: TaskId) => void
+
+	moveSubitem: (
+		id: SubitemId,
+		taskId: TaskId,
+		direction: SubitemMoveDirection
+	) => void
+
 	replaceOptimisticSubitem: (
 		tempId: SubitemId,
 		taskId: TaskId,
@@ -168,6 +177,59 @@ export const useSubitemStore = create<SubitemStore>()(
 							subitemsByTask: {
 								...state.subitemsByTask,
 								[taskId]: current.filter((s) => s.id !== id)
+							}
+						}
+					}),
+
+				moveSubitem: (id, taskId, direction) =>
+					set((state) => {
+						const current = state.subitemsByTask[taskId] ?? []
+						const item = current.find((s) => s.id === id)
+						if (!item) return state
+
+						const parentId = item.parent_id ?? null
+						const siblings = current.filter(
+							(s) => (s.parent_id ?? null) === parentId
+						)
+						const siblingIndex = siblings.findIndex((s) => s.id === id)
+						const targetSiblingIndex =
+							direction === 'up' ? siblingIndex - 1 : siblingIndex + 1
+
+						if (targetSiblingIndex < 0 || targetSiblingIndex >= siblings.length)
+							return state
+
+						const targetSibling = siblings[targetSiblingIndex]
+						const beforeSibling =
+							direction === 'up'
+								? siblings[targetSiblingIndex - 1]
+								: targetSibling
+						const afterSibling =
+							direction === 'up'
+								? targetSibling
+								: siblings[targetSiblingIndex + 1]
+
+						const newSortOrder = generateKeyBetween(
+							beforeSibling?.sort_order ?? null,
+							afterSibling?.sort_order ?? null
+						)
+
+						const withoutItem = current.filter((s) => s.id !== id)
+						const targetIndexInFull = withoutItem.findIndex(
+							(s) => s.id === targetSibling.id
+						)
+						const insertAt =
+							direction === 'up' ? targetIndexInFull : targetIndexInFull + 1
+
+						const updatedList = [...withoutItem]
+						updatedList.splice(insertAt, 0, {
+							...item,
+							sort_order: newSortOrder
+						})
+
+						return {
+							subitemsByTask: {
+								...state.subitemsByTask,
+								[taskId]: updatedList
 							}
 						}
 					}),

@@ -3,13 +3,20 @@ import { View } from 'react-native'
 import { KeyboardToolbar } from 'react-native-keyboard-controller'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
+import {
+	MOTIVATION_TASK_ID,
+	selectMotivationSubitems,
+	useMotivationStore
+} from '@/features/Motivation/model/motivation.store'
 import type { SubitemId, TaskId } from '@/shared/domain/ids'
 import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
 import { useTaskStore } from '@/shared/model/task.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 import { Button } from '@/shared/ui/Button'
+import { useShallow } from 'zustand/react/shallow'
 import { selectSubitems, useSubitemStore } from './model/subitem.store'
 import { useCreateSubitem } from './model/useCreateSubitem'
+import { useMoveSubitem } from './model/useMoveSubitem'
 import { useRemoveSubitem } from './model/useRemoveSubitem'
 
 export default function EditorToolbar() {
@@ -20,6 +27,44 @@ export default function EditorToolbar() {
 	const focusedSubitemId = useEditorToolbarStore(
 		(state) => state.focusedSubitemId
 	)
+
+	const isMotivation = selectedTaskId === MOTIVATION_TASK_ID
+
+	const taskSubitems = useSubitemStore(
+		useShallow(selectSubitems(isMotivation ? null : (selectedTaskId as TaskId)))
+	)
+	const motivationSubitems = useMotivationStore(
+		useShallow(selectMotivationSubitems)
+	)
+	const subitemsForMove = isMotivation ? motivationSubitems : taskSubitems
+
+	const focusedSubitem = subitemsForMove.find((s) => s.id === focusedSubitemId)
+	const siblings = focusedSubitem
+		? subitemsForMove.filter(
+				(s) => (s.parent_id ?? null) === (focusedSubitem.parent_id ?? null)
+			)
+		: []
+	const siblingIndex = siblings.findIndex((s) => s.id === focusedSubitemId)
+	const canMoveUp = siblingIndex > 0
+	const canMoveDown = siblingIndex >= 0 && siblingIndex < siblings.length - 1
+
+	const moveSubitem = useMoveSubitem()
+	const handleMoveUp = () => {
+		if (!focusedSubitemId) return
+		moveSubitem.mutate({
+			id: focusedSubitemId,
+			taskId: selectedTaskId as TaskId,
+			direction: 'up'
+		})
+	}
+	const handleMoveDown = () => {
+		if (!focusedSubitemId) return
+		moveSubitem.mutate({
+			id: focusedSubitemId,
+			taskId: selectedTaskId as TaskId,
+			direction: 'down'
+		})
+	}
 
 	const removeSubitem = useRemoveSubitem()
 	const handleRemove = () => {
@@ -76,6 +121,18 @@ export default function EditorToolbar() {
 				>
 					<Button variant='bare' onPress={handleAddSubitem}>
 						<MaterialIcons name='add' size={24} />
+					</Button>
+
+					<Button variant='bare' disabled={!canMoveUp} onPress={handleMoveUp}>
+						<MaterialIcons name='arrow-upward' size={24} />
+					</Button>
+
+					<Button
+						variant='bare'
+						disabled={!canMoveDown}
+						onPress={handleMoveDown}
+					>
+						<MaterialIcons name='arrow-downward' size={24} />
 					</Button>
 
 					<Button variant='bare' onPress={() => {}}>
