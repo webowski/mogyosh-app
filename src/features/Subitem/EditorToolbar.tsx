@@ -3,11 +3,6 @@ import { View } from 'react-native'
 import { KeyboardToolbar } from 'react-native-keyboard-controller'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
-import {
-	MOTIVATION_TASK_ID,
-	selectMotivationSubitems,
-	useMotivationStore
-} from '@/features/Motivation/model/motivation.store'
 import type { SubitemId, TaskId } from '@/shared/domain/ids'
 import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
 import { useTaskStore } from '@/shared/model/task.store'
@@ -28,15 +23,11 @@ export default function EditorToolbar() {
 		(state) => state.focusedSubitemId
 	)
 
-	const isMotivation = selectedTaskId === MOTIVATION_TASK_ID
-
 	const taskSubitems = useSubitemStore(
-		useShallow(selectSubitems(isMotivation ? null : (selectedTaskId as TaskId)))
+		useShallow(selectSubitems(selectedTaskId as TaskId))
 	)
-	const motivationSubitems = useMotivationStore(
-		useShallow(selectMotivationSubitems)
-	)
-	const subitemsForMove = isMotivation ? motivationSubitems : taskSubitems
+
+	const subitemsForMove = taskSubitems
 
 	const focusedSubitem = subitemsForMove.find((s) => s.id === focusedSubitemId)
 	const siblings = focusedSubitem
