@@ -31,7 +31,7 @@ export type MotivationOperationUpdate = {
 	type: 'update'
 	id: SubitemId
 	patch: Partial<
-		Pick<SubitemEntity, 'info' | 'type' | 'sort_order' | 'settings'>
+		Pick<SubitemEntity, 'info' | 'type' | 'sort_order' | 'settings' | 'state'>
 	>
 }
 

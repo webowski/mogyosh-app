@@ -17,7 +17,8 @@ const makeMotivationSubitemEntity = (
 	info: (row.info as string) ?? '',
 	status: null,
 	settings: (row.settings as SubitemEntity['settings']) ?? null,
-	state: null,
+	state: ((row.motivation_subitem_states as { state: string }[] | null)?.[0]
+		?.state ?? null) as SubitemEntity['state'],
 	priority: null,
 	sort_order: (row.sort_order as string) ?? null,
 	created_at: row.created_at as string,
@@ -36,7 +37,7 @@ const getMotivationSubitems = async (): Promise<SubitemEntity[]> => {
 
 	const { data, error } = await supabaseClient
 		.from('motivation_subitems')
-		.select('*')
+		.select('*, motivation_subitem_states(state)')
 		.eq('user_id', userId)
 		.order('sort_order', { ascending: true })
 
@@ -79,7 +80,7 @@ const createMotivationSubitem = async (payload: {
 const updateMotivationSubitem = async (
 	id: SubitemId,
 	patch: Partial<
-		Pick<SubitemEntity, 'info' | 'type' | 'sort_order' | 'settings'>
+		Pick<SubitemEntity, 'info' | 'type' | 'sort_order' | 'settings' | 'state'>
 	>
 ): Promise<void> => {
 	const { error } = await supabaseClient
@@ -99,9 +100,48 @@ const deleteMotivationSubitem = async (id: SubitemId): Promise<void> => {
 	if (error) throw error
 }
 
+const updateMotivationSubitemState = async (
+	subitemId: SubitemId,
+	state: 'done' | 'active' | 'archived'
+): Promise<void> => {
+	// Check if state record exists
+	const { data: existingState, error: checkError } = await supabaseClient
+		.from('motivation_subitem_states')
+		.select('id')
+		.eq('subitem_id', subitemId)
+		.single()
+
+	if (checkError && checkError.code !== 'PGRST116') {
+		throw checkError
+	}
+
+	if (existingState) {
+		const { error: updateError } = await supabaseClient
+			.from('motivation_subitem_states')
+			.update({
+				state,
+				state_date: new Date().toISOString()
+			})
+			.eq('subitem_id', subitemId)
+
+		if (updateError) throw updateError
+	} else {
+		const { error: insertError } = await supabaseClient
+			.from('motivation_subitem_states')
+			.insert({
+				subitem_id: subitemId,
+				state,
+				state_date: new Date().toISOString()
+			})
+
+		if (insertError) throw insertError
+	}
+}
+
 export const motivationAPI = {
 	getMotivationSubitems,
 	createMotivationSubitem,
 	updateMotivationSubitem,
+	updateMotivationSubitemState,
 	deleteMotivationSubitem
 }

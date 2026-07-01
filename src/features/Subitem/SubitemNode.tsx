@@ -44,6 +44,7 @@ export default function SubitemNode({
 	const handleToggleSubitem = (subitemId: SubitemId, completed: boolean) => {
 		updateSubitemState.mutate({
 			subitemId,
+			taskId: data.task_id,
 			state: completed ? 'done' : 'active'
 		})
 	}
