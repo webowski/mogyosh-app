@@ -1,10 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import {
-	MOTIVATION_TASK_ID,
-	useMotivationStore
-} from '@/features/Motivation/model/motivation.store'
-import { motivationAPI } from '@/features/Motivation/repository/motivation.api'
 import { SubitemId, TaskId } from '@/shared/domain/ids'
 import { SubitemState } from '@/shared/domain/subitem'
 import { subitemAPI } from '../repository/subitem.api'
@@ -24,28 +19,10 @@ export const useUpdateSubitemState = () => {
 	const queryClient = useQueryClient()
 
 	return useMutation({
-		mutationFn: async ({
-			subitemId,
-			taskId,
-			state
-		}: SubitemStateMutationParams) => {
-			// Motivation subitems store state in motivation_subitem_states table
-			if (taskId === MOTIVATION_TASK_ID) {
-				// Optimistic UI update
-				useMotivationStore.getState().updateSubitem(subitemId, { state })
-				// Persist to DB
-				await motivationAPI.updateMotivationSubitemState(subitemId, state)
-				return
-			}
-
+		mutationFn: async ({ subitemId, state }: SubitemStateMutationParams) => {
 			return await subitemAPI.updateSubitemState(subitemId, state)
 		},
 		onSuccess: (_, variables) => {
-			if (variables.taskId === MOTIVATION_TASK_ID) {
-				// State already updated optimistically in mutationFn
-				return
-			}
-
 			// Update store directly
 			const { subitemsByTask } = useSubitemStore.getState()
 			for (const taskId in subitemsByTask) {
