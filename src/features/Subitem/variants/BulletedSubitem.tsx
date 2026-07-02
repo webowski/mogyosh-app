@@ -8,12 +8,11 @@ import Animated, {
 } from 'react-native-reanimated'
 import { StyleSheet } from 'react-native-unistyles'
 
+import type { SubitemInputRefsMap, SubitemProps } from '@/shared/domain/subitem'
 import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 import Checkbox from '@/shared/ui/Checkbox'
 import { MarkdownInput } from '@/shared/ui/MarkdownInput'
-import type { SubitemProps } from '../model/subitem.types'
-import { SubitemInputRefsMap } from '../model/subitem.types'
 import { useCreateSubitem } from '../model/useCreateSubitem'
 import { useUpdateSubitem } from '../model/useUpdateSubitem'
 
@@ -87,29 +86,6 @@ export default function BulletedSubitem({
 		},
 		// eslint-disable-next-line
 		[checked]
-	)
-
-	const refocusRequest = useEditorToolbarStore((state) => state.refocusRequest)
-	useEffect(
-		() => {
-			if (refocusRequest?.id !== data.id) return
-			const ref = inputRef.current
-			if (!ref) return
-			if (Platform.OS === 'web') {
-				const element = ref as HTMLDivElement
-				element.focus()
-				const range = document.createRange()
-				const selection = window.getSelection()
-				range.selectNodeContents(element)
-				range.collapse(false)
-				selection?.removeAllRanges()
-				selection?.addRange(range)
-			} else {
-				;(ref as EnrichedMarkdownTextInputInstance).focus()
-			}
-		},
-		// eslint-disable-next-line
-		[refocusRequest]
 	)
 
 	const handleFocus = () => setFocusedSubitemId(data.id)

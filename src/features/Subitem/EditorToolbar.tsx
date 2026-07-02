@@ -1,13 +1,14 @@
 import { MaterialIcons } from '@expo/vector-icons'
-import { View } from 'react-native'
+import { Platform, View } from 'react-native'
+import { EnrichedMarkdownTextInputInstance } from 'react-native-enriched-markdown'
 import { KeyboardToolbar } from 'react-native-keyboard-controller'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
+import { useShallow } from 'zustand/react/shallow'
 
 import type { SubitemId, TaskId } from '@/shared/domain/ids'
 import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 import { Button } from '@/shared/ui/Button'
-import { useShallow } from 'zustand/react/shallow'
 import { selectSubitems, useSubitemStore } from './model/subitem.store'
 import { useCreateSubitem } from './model/useCreateSubitem'
 import { useMoveSubitem } from './model/useMoveSubitem'
@@ -22,11 +23,11 @@ export default function EditorToolbar() {
 		(state) => state.focusedSubitemId
 	)
 
-	const requestRefocus = useEditorToolbarStore((state) => state.requestRefocus)
-
 	const taskSubitems = useSubitemStore(
 		useShallow(selectSubitems(activeItemId as TaskId))
 	)
+
+	const inputRefs = useEditorToolbarStore((state) => state.inputRefs)
 
 	const subitemsForMove = taskSubitems
 
@@ -41,6 +42,24 @@ export default function EditorToolbar() {
 	const canMoveDown = siblingIndex >= 0 && siblingIndex < siblings.length - 1
 
 	const moveSubitem = useMoveSubitem()
+
+	const focusSubitem = (id: SubitemId) => {
+		const ref = inputRefs.get(id)?.current
+		if (!ref) return
+		if (Platform.OS === 'web') {
+			const element = ref as HTMLDivElement
+			element.focus()
+			const range = document.createRange()
+			const selection = window.getSelection()
+			range.selectNodeContents(element)
+			range.collapse(false)
+			selection?.removeAllRanges()
+			selection?.addRange(range)
+		} else {
+			;(ref as EnrichedMarkdownTextInputInstance).focus()
+		}
+	}
+
 	const handleMoveUp = () => {
 		if (!focusedSubitemId) return
 		moveSubitem.mutate({
@@ -48,7 +67,7 @@ export default function EditorToolbar() {
 			taskId: activeItemId as TaskId,
 			direction: 'up'
 		})
-		requestRefocus(focusedSubitemId)
+		setTimeout(() => focusSubitem(focusedSubitemId), 50)
 	}
 	const handleMoveDown = () => {
 		if (!focusedSubitemId) return
@@ -57,7 +76,7 @@ export default function EditorToolbar() {
 			taskId: activeItemId as TaskId,
 			direction: 'down'
 		})
-		requestRefocus(focusedSubitemId)
+		setTimeout(() => focusSubitem(focusedSubitemId), 50)
 	}
 
 	const removeSubitem = useRemoveSubitem()

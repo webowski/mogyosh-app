@@ -3,8 +3,8 @@ import { useEffect, useRef, useState } from 'react'
 import { Pressable, Text, View } from 'react-native'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
+import type { SubitemProps } from '@/shared/domain/subitem'
 import { useStopwatchStore } from '@/shared/model/stopwatch.store'
-import type { SubitemProps } from '../model/subitem.types'
 import { SUBITEM_VARS } from '../style'
 
 type StopwatchSubitemProps = SubitemProps & {}

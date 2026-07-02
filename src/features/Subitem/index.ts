@@ -2,7 +2,7 @@ export type {
 	SubitemData,
 	SubitemInputRefsMap,
 	SubitemProps
-} from './model/subitem.types'
+} from '@/shared/domain/subitem'
 
 export { default as EditorToolbar } from './EditorToolbar'
 export { default as SubitemNode } from './SubitemNode'

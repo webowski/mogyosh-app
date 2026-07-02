@@ -3,11 +3,11 @@ import { useEffect, useRef, useState } from 'react'
 import { Pressable, Text, View } from 'react-native'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
+import type { SubitemProps } from '@/shared/domain/subitem'
 import { useTimerStore } from '@/shared/model/timer.store'
 import CircleProgress, {
 	type CircleProgressRef
 } from '@/shared/ui/CircleProgress'
-import type { SubitemProps } from '../model/subitem.types'
 import { SUBITEM_VARS } from '../style'
 
 type TimerSubitemProps = SubitemProps & {}
@@ -17,7 +17,7 @@ export default function TimerSubitem({ data }: TimerSubitemProps) {
 
 	const circleRef = useRef<CircleProgressRef>(null)
 
-	const durationMs = data.settings.duration ?? 0
+	const durationMs = data.settings?.duration ?? 0
 	const { start, pause, reset, getRemaining, entries } = useTimerStore()
 
 	const entry = entries.get(data.id)

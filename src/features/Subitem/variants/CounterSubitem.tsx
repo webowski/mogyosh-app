@@ -2,9 +2,9 @@ import { useCallback, useEffect, useState } from 'react'
 import { Text, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
+import { SubitemProps } from '@/shared/domain/subitem'
 import Checkbox from '@/shared/ui/Checkbox'
 import { useSharedValue, withTiming } from 'react-native-reanimated'
-import { SubitemProps } from '../model/subitem.types'
 import { SUBITEM_VARS } from '../style'
 
 type CounterSubitemProps = SubitemProps & {

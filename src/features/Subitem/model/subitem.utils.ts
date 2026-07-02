@@ -1,6 +1,5 @@
 import { SubitemId } from '@/shared/domain/ids'
-import { SubitemEntity } from '@/shared/domain/subitem'
-import { SubitemData } from './subitem.types'
+import type { SubitemData, SubitemEntity } from '@/shared/domain/subitem'
 
 // Helper: build tree from flat list
 export function buildSubitemTree(

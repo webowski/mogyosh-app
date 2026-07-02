@@ -1,5 +1,5 @@
 import { MaterialIcons } from '@expo/vector-icons'
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import {
 	ActivityIndicator,
 	Platform,
@@ -22,8 +22,7 @@ import {
 	SubitemNode,
 	useCreateSubitem,
 	useRemoveSubitem,
-	useSubitems,
-	type SubitemInputRefsMap
+	useSubitems
 } from '@/features/Subitem'
 import { useSubitemStore } from '@/features/Subitem/model/subitem.store'
 import { useSyncSubitems } from '@/features/Subitem/model/useSyncSubitems'
@@ -50,7 +49,7 @@ export default function TaskScreen() {
 		[selectedTaskId]
 	)
 
-	const inputRefs = useRef<SubitemInputRefsMap>(new Map())
+	const inputRefs = useEditorToolbarStore((state) => state.inputRefs)
 
 	const pendingFocusId = useEditorToolbarStore((state) => state.pendingFocusId)
 
@@ -75,7 +74,7 @@ export default function TaskScreen() {
 	const subitemTree = buildSubitemTree(subitems)
 
 	const focusSubitem = (id: SubitemId) => {
-		const ref = inputRefs.current.get(id)?.current
+		const ref = inputRefs.get(id)?.current
 		if (!ref) return
 
 		if (Platform.OS === 'web') {
@@ -159,7 +158,7 @@ export default function TaskScreen() {
 				>
 					{subitemTree.map((subitemData) => (
 						<SubitemNode
-							inputRefs={inputRefs.current}
+							inputRefs={inputRefs}
 							key={subitemData.stableKey ?? subitemData.id}
 							data={subitemData}
 							depth={0}

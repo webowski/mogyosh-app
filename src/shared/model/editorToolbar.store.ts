@@ -2,6 +2,7 @@ import type { RefObject } from 'react'
 import { create } from 'zustand'
 
 import type { ItemId, SubitemId } from '@/shared/domain/ids'
+import type { SubitemInputRefsMap } from '@/shared/domain/subitem'
 
 type EditorToolbarStore = {
 	focusedSubitemId: SubitemId | null
@@ -12,8 +13,7 @@ type EditorToolbarStore = {
 	activeItemId: ItemId | null
 	setActiveItemId: (taskId: ItemId | null) => void
 
-	refocusRequest: { id: SubitemId; token: number } | null
-	requestRefocus: (id: SubitemId) => void
+	inputRefs: SubitemInputRefsMap
 }
 
 export const useEditorToolbarStore = create<EditorToolbarStore>((set) => ({
@@ -25,9 +25,5 @@ export const useEditorToolbarStore = create<EditorToolbarStore>((set) => ({
 	activeItemId: null,
 	setActiveItemId: (taskId: ItemId | null) => set({ activeItemId: taskId }),
 
-	refocusRequest: null,
-	requestRefocus: (id: SubitemId) =>
-		set((state) => ({
-			refocusRequest: { id, token: (state.refocusRequest?.token ?? 0) + 1 }
-		}))
+	inputRefs: new Map()
 }))
