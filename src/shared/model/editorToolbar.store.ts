@@ -11,6 +11,9 @@ type EditorToolbarStore = {
 
 	activeItemId: ItemId | null
 	setActiveItemId: (taskId: ItemId | null) => void
+
+	refocusRequest: { id: SubitemId; token: number } | null
+	requestRefocus: (id: SubitemId) => void
 }
 
 export const useEditorToolbarStore = create<EditorToolbarStore>((set) => ({
@@ -20,5 +23,11 @@ export const useEditorToolbarStore = create<EditorToolbarStore>((set) => ({
 	pendingFocusId: { current: null },
 
 	activeItemId: null,
-	setActiveItemId: (taskId: ItemId | null) => set({ activeItemId: taskId })
+	setActiveItemId: (taskId: ItemId | null) => set({ activeItemId: taskId }),
+
+	refocusRequest: null,
+	requestRefocus: (id: SubitemId) =>
+		set((state) => ({
+			refocusRequest: { id, token: (state.refocusRequest?.token ?? 0) + 1 }
+		}))
 }))

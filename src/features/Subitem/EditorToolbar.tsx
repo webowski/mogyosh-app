@@ -22,6 +22,8 @@ export default function EditorToolbar() {
 		(state) => state.focusedSubitemId
 	)
 
+	const requestRefocus = useEditorToolbarStore((state) => state.requestRefocus)
+
 	const taskSubitems = useSubitemStore(
 		useShallow(selectSubitems(activeItemId as TaskId))
 	)
@@ -46,6 +48,7 @@ export default function EditorToolbar() {
 			taskId: activeItemId as TaskId,
 			direction: 'up'
 		})
+		requestRefocus(focusedSubitemId)
 	}
 	const handleMoveDown = () => {
 		if (!focusedSubitemId) return
@@ -54,6 +57,7 @@ export default function EditorToolbar() {
 			taskId: activeItemId as TaskId,
 			direction: 'down'
 		})
+		requestRefocus(focusedSubitemId)
 	}
 
 	const removeSubitem = useRemoveSubitem()

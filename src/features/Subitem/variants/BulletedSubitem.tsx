@@ -89,6 +89,29 @@ export default function BulletedSubitem({
 		[checked]
 	)
 
+	const refocusRequest = useEditorToolbarStore((state) => state.refocusRequest)
+	useEffect(
+		() => {
+			if (refocusRequest?.id !== data.id) return
+			const ref = inputRef.current
+			if (!ref) return
+			if (Platform.OS === 'web') {
+				const element = ref as HTMLDivElement
+				element.focus()
+				const range = document.createRange()
+				const selection = window.getSelection()
+				range.selectNodeContents(element)
+				range.collapse(false)
+				selection?.removeAllRanges()
+				selection?.addRange(range)
+			} else {
+				;(ref as EnrichedMarkdownTextInputInstance).focus()
+			}
+		},
+		// eslint-disable-next-line
+		[refocusRequest]
+	)
+
 	const handleFocus = () => setFocusedSubitemId(data.id)
 
 	const focusNewInput = () => {
