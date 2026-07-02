@@ -1,5 +1,5 @@
 import { MaterialIcons } from '@expo/vector-icons'
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import {
 	ActivityIndicator,
 	Platform,
@@ -38,6 +38,18 @@ export default function TaskScreen() {
 
 	const { theme } = useUnistyles()
 	const selectedTaskId = useTaskStore((state) => state.selectedTaskId)
+	const setActiveTaskId = useEditorToolbarStore(
+		(state) => state.setActiveItemId
+	)
+
+	useEffect(
+		() => {
+			setActiveTaskId(selectedTaskId)
+		},
+		// eslint-disable-next-line
+		[selectedTaskId]
+	)
+
 	const inputRefs = useRef<SubitemInputRefsMap>(new Map())
 
 	const pendingFocusId = useEditorToolbarStore((state) => state.pendingFocusId)

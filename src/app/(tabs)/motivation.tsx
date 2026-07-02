@@ -16,7 +16,7 @@ import {
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 import { useShallow } from 'zustand/react/shallow'
 
-import { useMotivationTaskId } from '@/features/Motivation'
+import { useMotivationItemId } from '@/features/Motivation'
 import {
 	buildSubitemTree,
 	SubitemNode,
@@ -29,27 +29,31 @@ import { useSubitemStore } from '@/features/Subitem/model/subitem.store'
 import { useSyncSubitems } from '@/features/Subitem/model/useSyncSubitems'
 import type { SubitemId } from '@/shared/domain/ids'
 import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
-import { useTaskStore } from '@/shared/model/task.store'
 import { commonStyles, staticStyles, STYLE_VARS } from '@/shared/styles/common'
 
 export default function MotivationScreen() {
 	const { theme } = useUnistyles()
 	const inputRefs = useRef<SubitemInputRefsMap>(new Map())
 	const pendingFocusId = useEditorToolbarStore((state) => state.pendingFocusId)
-	const setSelectedTaskId = useTaskStore((state) => state.setSelectedTaskId)
+	const setActiveItemId = useEditorToolbarStore(
+		(state) => state.setActiveItemId
+	)
 
 	const createSubitem = useCreateSubitem()
 	const removeSubitem = useRemoveSubitem()
 
 	// Resolve (or create) the exclusive motivation task
 	const { data: motivationTaskId, isLoading: isLoadingMotivationTask } =
-		useMotivationTaskId()
+		useMotivationItemId()
 
 	// Make this task the selected one while the screen is mounted
-	useEffect(() => {
-		if (motivationTaskId) setSelectedTaskId(motivationTaskId)
+	useEffect(
+		() => {
+			if (motivationTaskId) setActiveItemId(motivationTaskId)
+		},
 		// eslint-disable-next-line
-	}, [motivationTaskId])
+		[motivationTaskId]
+	)
 
 	// Load from server and sync into store
 	const { isLoading: isLoadingSubitems, error } = useSubitems(

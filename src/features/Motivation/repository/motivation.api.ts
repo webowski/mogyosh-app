@@ -1,16 +1,16 @@
 import { supabaseClient } from '@/shared/api/supabaseClient'
-import type { TaskId } from '@/shared/domain/ids'
+import type { ItemId } from '@/shared/domain/ids'
 
-const getOrCreateMotivationTask = async (): Promise<TaskId> => {
+const getOrCreateMotivationItem = async (): Promise<ItemId> => {
 	const { data, error } = await supabaseClient.rpc(
 		'get_or_create_motivation_task'
 	)
 
 	if (error) throw error
 
-	return data as TaskId
+	return data as ItemId
 }
 
 export const motivationAPI = {
-	getOrCreateMotivationTask
+	getOrCreateMotivationItem
 }

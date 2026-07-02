@@ -1,3 +1,3 @@
 export { motivationAPI } from './repository/motivation.api'
 
-export { useMotivationTaskId } from './model/useMotivationTaskId'
+export { useMotivationItemId } from './model/useMotivationItemId'

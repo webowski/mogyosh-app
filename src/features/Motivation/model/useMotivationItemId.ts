@@ -2,10 +2,10 @@ import { useQuery } from '@tanstack/react-query'
 
 import { motivationAPI } from '../repository/motivation.api'
 
-export const useMotivationTaskId = () => {
+export const useMotivationItemId = () => {
 	return useQuery({
-		queryKey: ['motivation-task'],
-		queryFn: () => motivationAPI.getOrCreateMotivationTask(),
+		queryKey: ['motivation-item'],
+		queryFn: () => motivationAPI.getOrCreateMotivationItem(),
 		staleTime: Infinity
 	})
 }

@@ -5,7 +5,6 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 import type { SubitemId, TaskId } from '@/shared/domain/ids'
 import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
-import { useTaskStore } from '@/shared/model/task.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 import { Button } from '@/shared/ui/Button'
 import { useShallow } from 'zustand/react/shallow'
@@ -17,14 +16,14 @@ import { useRemoveSubitem } from './model/useRemoveSubitem'
 export default function EditorToolbar() {
 	const { theme } = useUnistyles()
 
-	const selectedTaskId = useTaskStore((state) => state.selectedTaskId)
+	const activeItemId = useEditorToolbarStore((state) => state.activeItemId)
 
 	const focusedSubitemId = useEditorToolbarStore(
 		(state) => state.focusedSubitemId
 	)
 
 	const taskSubitems = useSubitemStore(
-		useShallow(selectSubitems(selectedTaskId as TaskId))
+		useShallow(selectSubitems(activeItemId as TaskId))
 	)
 
 	const subitemsForMove = taskSubitems
@@ -44,7 +43,7 @@ export default function EditorToolbar() {
 		if (!focusedSubitemId) return
 		moveSubitem.mutate({
 			id: focusedSubitemId,
-			taskId: selectedTaskId as TaskId,
+			taskId: activeItemId as TaskId,
 			direction: 'up'
 		})
 	}
@@ -52,7 +51,7 @@ export default function EditorToolbar() {
 		if (!focusedSubitemId) return
 		moveSubitem.mutate({
 			id: focusedSubitemId,
-			taskId: selectedTaskId as TaskId,
+			taskId: activeItemId as TaskId,
 			direction: 'down'
 		})
 	}
@@ -62,7 +61,7 @@ export default function EditorToolbar() {
 		if (!focusedSubitemId) return
 		removeSubitem.mutate({
 			id: focusedSubitemId,
-			taskId: selectedTaskId as TaskId
+			taskId: activeItemId as TaskId
 		})
 	}
 
@@ -70,7 +69,7 @@ export default function EditorToolbar() {
 	const createSubitem = useCreateSubitem()
 
 	const handleAddSubitem = () => {
-		const subitems = selectSubitems(selectedTaskId)(useSubitemStore.getState())
+		const subitems = selectSubitems(activeItemId)(useSubitemStore.getState())
 		const lastSubitem = subitems[subitems.length - 1] ?? null
 
 		const optimisticId = `optimistic-${Date.now()}` as SubitemId
@@ -78,7 +77,7 @@ export default function EditorToolbar() {
 
 		createSubitem.mutate({
 			info: '',
-			task_id: selectedTaskId,
+			task_id: activeItemId,
 			parent_id: null,
 			type: 'ul',
 			optimisticId,
