@@ -136,7 +136,12 @@ export default function EditorToolbar() {
 						<MaterialIcons name='add' size={24} />
 					</Button>
 
-					<Button variant='bare' disabled={!canMoveUp} onPress={handleMoveUp}>
+					<Button
+						variant='bare'
+						disabled={!canMoveUp}
+						onPress={handleMoveUp}
+						preventFocusSteal
+					>
 						<MaterialIcons name='arrow-upward' size={24} />
 					</Button>
 
@@ -144,6 +149,7 @@ export default function EditorToolbar() {
 						variant='bare'
 						disabled={!canMoveDown}
 						onPress={handleMoveDown}
+						preventFocusSteal
 					>
 						<MaterialIcons name='arrow-downward' size={24} />
 					</Button>

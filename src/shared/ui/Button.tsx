@@ -4,6 +4,7 @@ import React from 'react'
 import {
 	ActivityIndicator,
 	Animated,
+	Platform,
 	Pressable,
 	Text,
 	TextStyle,
@@ -32,6 +33,7 @@ interface ButtonProps {
 	active?: boolean
 	arrow?: boolean
 	loading?: boolean
+	preventFocusSteal?: boolean
 }
 
 interface Ripple {
@@ -228,7 +230,8 @@ export const Button: React.FC<ButtonProps> = ({
 	indicator = false,
 	active = false,
 	arrow = false,
-	loading = false
+	loading = false,
+	preventFocusSteal = false
 }) => {
 	const { theme } = useUnistyles()
 	const [ripples, setRipples] = React.useState<Ripple[]>([])
@@ -289,6 +292,9 @@ export const Button: React.FC<ButtonProps> = ({
 		<Pressable
 			onPressIn={disabled ? undefined : handlePressIn}
 			onPress={disabled ? undefined : onPress}
+			{...(Platform.OS === 'web' && preventFocusSteal
+				? { onMouseDown: (event: any) => event.preventDefault() }
+				: {})}
 			style={[
 				styles.Button,
 				containerStyle,
