@@ -62,12 +62,16 @@ export default function EditorToolbar() {
 
 	const handleMoveUp = () => {
 		if (!focusedSubitemId) return
+		// blurSubitem(focusedSubitemId) // см. ниже
 		moveSubitem.mutate({
 			id: focusedSubitemId,
 			taskId: activeItemId as TaskId,
 			direction: 'up'
 		})
-		setTimeout(() => focusSubitem(focusedSubitemId), 50)
+
+		requestAnimationFrame(() =>
+			requestAnimationFrame(() => focusSubitem(focusedSubitemId))
+		)
 	}
 	const handleMoveDown = () => {
 		if (!focusedSubitemId) return
@@ -76,7 +80,20 @@ export default function EditorToolbar() {
 			taskId: activeItemId as TaskId,
 			direction: 'down'
 		})
-		setTimeout(() => focusSubitem(focusedSubitemId), 50)
+
+		requestAnimationFrame(() =>
+			requestAnimationFrame(() => focusSubitem(focusedSubitemId))
+		)
+	}
+
+	const blurSubitem = (id: SubitemId) => {
+		const ref = inputRefs.get(id)?.current
+		if (!ref) return
+		if (Platform.OS === 'web') {
+			;(ref as HTMLDivElement).blur()
+		} else {
+			;(ref as EnrichedMarkdownTextInputInstance).blur()
+		}
 	}
 
 	const removeSubitem = useRemoveSubitem()
