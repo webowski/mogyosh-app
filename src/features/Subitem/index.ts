@@ -17,3 +17,14 @@ export { useRemoveSubitem } from './model/useRemoveSubitem'
 export { useSubitems } from './model/useSubitems'
 export { useUpdateSubitem } from './model/useUpdateSubitem'
 export { useUpdateSubitemState } from './model/useUpdateSubitemState'
+
+export {
+	DRAG_AUTOSCROLL_EDGE,
+	DRAG_AUTOSCROLL_SPEED,
+	DRAG_INDENT_STEP,
+	DRAG_LONG_PRESS_MS,
+	dragSubitemState
+} from './model/dragSubitem.store'
+export { computeDropTarget, flattenSubitemTree } from './model/subitem.utils'
+export type { SubitemFlatEntry } from './model/subitem.utils'
+export { reorderSubitem, useReorderSubitem } from './model/useReorderSubitem'
