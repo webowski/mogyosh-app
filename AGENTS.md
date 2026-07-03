@@ -56,9 +56,9 @@ This is a React Native mobile application built with Expo
 
 ## React Native Expo разработка
 
-- Код должен быть совеременным для latest React Native Expo на июнь 2026
-- никогда не удаляй из имеющегося кода scheduleOnRN.
 - нигода не применяй runOnJS. для react-native-reanimated НЕ используй runOnJS, т.к. runOnJS is deprecated для latest версии react-native-reanimated
+- никогда не удаляй из имеющегося кода scheduleOnRN.
+- Код должен быть совеременным для latest React Native Expo на июнь 2026
 - вместо withSpring использовать withTiming
 - не используй useScrollViewOffset. 'useScrollViewOffset' is deprecated
 - использовать современный Pressable, вместо устаревшего TouchableOpacity
