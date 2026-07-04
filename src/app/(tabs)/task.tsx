@@ -64,13 +64,6 @@ function SubitemDragSortLayer({
 	onAddSubitem,
 	onRemoveSubitem
 }: SubitemDragSortLayerProps) {
-	const { theme } = useUnistyles()
-
-	const { scrollAnimatedRef, scrollHandler, measureContainer } =
-		useDragSortScroll()
-	useDragSortAutoScroll(scrollAnimatedRef)
-	useSyncDragSortFlatOrder(flattenSubitemTree(subitemTree))
-
 	const handleDrop = useCallback(
 		(payload: DragSortDropPayload<SubitemId>) => {
 			reorderSubitem({
@@ -86,44 +79,71 @@ function SubitemDragSortLayer({
 
 	return (
 		<DragSortProvider onDrop={handleDrop}>
-			<KeyboardAwareScrollView
-				ref={scrollAnimatedRef as unknown as Ref<KeyboardAwareScrollViewRef>}
-				ScrollViewComponent={
-					Animated.ScrollView as unknown as AnimatedScrollViewComponent
-				}
-				onScroll={scrollHandler}
-				scrollEventThrottle={16}
-				onLayout={measureContainer}
-				style={staticStyles.ScrollBox}
-				overScrollMode='never'
-				bottomOffset={STYLE_VARS.editorToolbarHeight * 1.25}
-			>
-				<GesturePressable
-					style={staticStyles.ScrollBox__inner}
-					onPress={() => KeyboardController.dismiss()}
-					accessibilityRole={undefined}
-				>
-					<View style={{ position: 'relative' }}>
-						{subitemTree.map((subitemData) => (
-							<SubitemNode
-								inputRefs={inputRefs}
-								key={subitemData.stableKey ?? subitemData.id}
-								data={subitemData}
-								depth={0}
-								variant={subitemData.type}
-								onAddAfter={onAddSubitem}
-								onRemove={onRemoveSubitem}
-								pendingFocusId={pendingFocusId}
-							/>
-						))}
-						<DragSortIndicator style={styles.dropIndicator} />
-					</View>
-					<Pressable style={[styles.addButton]} onPress={() => onAddSubitem()}>
-						<MaterialIcons name='add' size={28} color={theme.colors.minor} />
-					</Pressable>
-				</GesturePressable>
-			</KeyboardAwareScrollView>
+			<SubitemDragSortContent
+				subitemTree={subitemTree}
+				inputRefs={inputRefs}
+				pendingFocusId={pendingFocusId}
+				onAddSubitem={onAddSubitem}
+				onRemoveSubitem={onRemoveSubitem}
+			/>
 		</DragSortProvider>
+	)
+}
+
+type SubitemDragSortContentProps = Omit<SubitemDragSortLayerProps, 'taskId'>
+
+function SubitemDragSortContent({
+	subitemTree,
+	inputRefs,
+	pendingFocusId,
+	onAddSubitem,
+	onRemoveSubitem
+}: SubitemDragSortContentProps) {
+	const { theme } = useUnistyles()
+
+	const { scrollAnimatedRef, scrollHandler, measureContainer } =
+		useDragSortScroll()
+	useDragSortAutoScroll(scrollAnimatedRef)
+	useSyncDragSortFlatOrder(flattenSubitemTree(subitemTree))
+
+	return (
+		<KeyboardAwareScrollView
+			ref={scrollAnimatedRef as unknown as Ref<KeyboardAwareScrollViewRef>}
+			ScrollViewComponent={
+				Animated.ScrollView as unknown as AnimatedScrollViewComponent
+			}
+			onScroll={scrollHandler}
+			scrollEventThrottle={16}
+			onLayout={measureContainer}
+			style={staticStyles.ScrollBox}
+			overScrollMode='never'
+			bottomOffset={STYLE_VARS.editorToolbarHeight * 1.25}
+		>
+			<GesturePressable
+				style={staticStyles.ScrollBox__inner}
+				onPress={() => KeyboardController.dismiss()}
+				accessibilityRole={undefined}
+			>
+				<View style={{ position: 'relative' }}>
+					{subitemTree.map((subitemData) => (
+						<SubitemNode
+							inputRefs={inputRefs}
+							key={subitemData.stableKey ?? subitemData.id}
+							data={subitemData}
+							depth={0}
+							variant={subitemData.type}
+							onAddAfter={onAddSubitem}
+							onRemove={onRemoveSubitem}
+							pendingFocusId={pendingFocusId}
+						/>
+					))}
+					<DragSortIndicator style={styles.dropIndicator} />
+				</View>
+				<Pressable style={[styles.addButton]} onPress={() => onAddSubitem()}>
+					<MaterialIcons name='add' size={28} color={theme.colors.minor} />
+				</Pressable>
+			</GesturePressable>
+		</KeyboardAwareScrollView>
 	)
 }
 
