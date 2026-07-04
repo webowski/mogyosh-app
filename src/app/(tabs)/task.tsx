@@ -15,6 +15,7 @@ import {
 	KeyboardController,
 	type KeyboardAwareScrollViewRef
 } from 'react-native-keyboard-controller'
+import { AnimatedScrollViewComponent } from 'react-native-keyboard-controller/lib/typescript/components/ScrollViewWithBottomPadding'
 import Animated from 'react-native-reanimated'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 import { useShallow } from 'zustand/react/shallow'
@@ -87,7 +88,9 @@ function SubitemDragSortLayer({
 		<DragSortProvider onDrop={handleDrop}>
 			<KeyboardAwareScrollView
 				ref={scrollAnimatedRef as unknown as Ref<KeyboardAwareScrollViewRef>}
-				ScrollViewComponent={Animated.ScrollView}
+				ScrollViewComponent={
+					Animated.ScrollView as unknown as AnimatedScrollViewComponent
+				}
 				onScroll={scrollHandler}
 				scrollEventThrottle={16}
 				onLayout={measureContainer}
