@@ -1,5 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons'
-import { useEffect } from 'react'
+import type { RefObject } from 'react'
+import { useCallback, useEffect } from 'react'
 import {
 	ActivityIndicator,
 	Platform,
@@ -13,16 +14,20 @@ import {
 	KeyboardAwareScrollView,
 	KeyboardController
 } from 'react-native-keyboard-controller'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import Animated from 'react-native-reanimated'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 import { useShallow } from 'zustand/react/shallow'
 
 import {
 	buildSubitemTree,
+	flattenSubitemTree,
+	reorderSubitem,
 	SubitemNode,
 	useCreateSubitem,
 	useRemoveSubitem,
-	useSubitems
+	useSubitems,
+	type SubitemData,
+	type SubitemInputRefsMap
 } from '@/features/Subitem'
 import { useSubitemStore } from '@/features/Subitem/model/subitem.store'
 import { useSyncSubitems } from '@/features/Subitem/model/useSyncSubitems'
@@ -30,12 +35,95 @@ import { useTaskById } from '@/features/TaskList'
 import type { SubitemId, TaskId } from '@/shared/domain/ids'
 import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
 import { useTaskStore } from '@/shared/model/task.store'
+import {
+	DragSortIndicator,
+	DragSortProvider,
+	useDragSortAutoScroll,
+	useDragSortScroll,
+	useSyncDragSortFlatOrder,
+	type DragSortDropPayload
+} from '@/shared/modules/DragSort'
 import { commonStyles, staticStyles, STYLE_VARS } from '@/shared/styles/common'
 
-export default function TaskScreen() {
-	const insets = useSafeAreaInsets()
+type SubitemDragSortLayerProps = {
+	subitemTree: SubitemData[]
+	taskId: TaskId
+	inputRefs: SubitemInputRefsMap
+	pendingFocusId: RefObject<SubitemId | null>
+	onAddSubitem: (afterId?: SubitemId) => void
+	onRemoveSubitem: (removeId: SubitemId) => void
+}
 
+function SubitemDragSortLayer({
+	subitemTree,
+	taskId,
+	inputRefs,
+	pendingFocusId,
+	onAddSubitem,
+	onRemoveSubitem
+}: SubitemDragSortLayerProps) {
 	const { theme } = useUnistyles()
+
+	const { scrollAnimatedRef, scrollHandler, measureContainer } =
+		useDragSortScroll()
+	useDragSortAutoScroll(scrollAnimatedRef)
+	useSyncDragSortFlatOrder(flattenSubitemTree(subitemTree))
+
+	const handleDrop = useCallback(
+		(payload: DragSortDropPayload<SubitemId>) => {
+			reorderSubitem({
+				id: payload.id,
+				taskId,
+				newParentId: payload.parentId,
+				prevId: payload.prevId,
+				nextId: payload.nextId
+			})
+		},
+		[taskId]
+	)
+
+	return (
+		<DragSortProvider onDrop={handleDrop}>
+			<KeyboardAwareScrollView
+				ref={scrollAnimatedRef}
+				ScrollViewComponent={Animated.ScrollView}
+				onScroll={scrollHandler}
+				scrollEventThrottle={16}
+				onLayout={measureContainer}
+				style={staticStyles.ScrollBox}
+				overScrollMode='never'
+				bottomOffset={STYLE_VARS.editorToolbarHeight * 1.25}
+			>
+				<GesturePressable
+					style={staticStyles.ScrollBox__inner}
+					onPress={() => KeyboardController.dismiss()}
+					accessibilityRole={undefined}
+				>
+					<View style={{ position: 'relative' }}>
+						{subitemTree.map((subitemData) => (
+							<SubitemNode
+								inputRefs={inputRefs}
+								key={subitemData.stableKey ?? subitemData.id}
+								data={subitemData}
+								depth={0}
+								variant={subitemData.type}
+								onAddAfter={onAddSubitem}
+								onRemove={onRemoveSubitem}
+								pendingFocusId={pendingFocusId}
+							/>
+						))}
+						<DragSortIndicator style={styles.dropIndicator} />
+					</View>
+					<Pressable style={[styles.addButton]} onPress={() => onAddSubitem()}>
+						<MaterialIcons name='add' size={28} color={theme.colors.minor} />
+					</Pressable>
+				</GesturePressable>
+			</KeyboardAwareScrollView>
+		</DragSortProvider>
+	)
+}
+
+export default function TaskScreen() {
 	const selectedTaskId = useTaskStore((state) => state.selectedTaskId)
 	const setActiveTaskId = useEditorToolbarStore(
 		(state) => state.setActiveItemId
@@ -106,7 +194,7 @@ export default function TaskScreen() {
 	}
 
 	const handleRemove = (removeId: SubitemId) => {
-		const index = subitems.findIndex((s) => s.id === removeId)
+		const index = subitems.findIndex((subitem) => subitem.id === removeId)
 		const previousSubitem = index > 0 ? subitems[index - 1] : null
 
 		if (previousSubitem) {
@@ -145,37 +233,14 @@ export default function TaskScreen() {
 
 	return (
 		<>
-			<KeyboardAwareScrollView
-				style={staticStyles.ScrollBox}
-				// contentContainerStyle={}
-				overScrollMode='never'
-				bottomOffset={STYLE_VARS.editorToolbarHeight * 1.25}
-			>
-				<GesturePressable
-					style={staticStyles.ScrollBox__inner}
-					onPress={() => KeyboardController.dismiss()}
-					accessibilityRole={undefined}
-				>
-					{subitemTree.map((subitemData) => (
-						<SubitemNode
-							inputRefs={inputRefs}
-							key={subitemData.stableKey ?? subitemData.id}
-							data={subitemData}
-							depth={0}
-							variant={subitemData.type}
-							onAddAfter={handleAddSubitem}
-							onRemove={handleRemove}
-							pendingFocusId={pendingFocusId}
-						/>
-					))}
-					<Pressable
-						style={[styles.addButton]}
-						onPress={() => handleAddSubitem()}
-					>
-						<MaterialIcons name='add' size={28} color={theme.colors.minor} />
-					</Pressable>
-				</GesturePressable>
-			</KeyboardAwareScrollView>
+			<SubitemDragSortLayer
+				subitemTree={subitemTree}
+				taskId={selectedTaskId as TaskId}
+				inputRefs={inputRefs}
+				pendingFocusId={pendingFocusId}
+				onAddSubitem={handleAddSubitem}
+				onRemoveSubitem={handleRemove}
+			/>
 		</>
 	)
 }
@@ -192,5 +257,13 @@ const styles = StyleSheet.create((theme) => ({
 		borderTopRightRadius: STYLE_VARS.radius_sm,
 		borderBottomLeftRadius: STYLE_VARS.radius_lg,
 		borderBottomRightRadius: STYLE_VARS.radius_lg
+	},
+	dropIndicator: {
+		position: 'absolute',
+		left: 0,
+		right: 0,
+		height: 2,
+		borderRadius: 1,
+		backgroundColor: theme.colors.minor
 	}
 }))

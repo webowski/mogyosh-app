@@ -1,12 +1,16 @@
 import { useState } from 'react'
 import { View } from 'react-native'
 
+import { GestureDetector } from 'react-native-gesture-handler'
+import Animated from 'react-native-reanimated'
+
 import type { SubitemId } from '@/shared/domain/ids'
 import type {
 	SubitemData,
 	SubitemInputRefsMap,
 	SubitemType
 } from '@/shared/domain/subitem'
+import { useDragSortRow } from '@/shared/modules/DragSort'
 import { useUpdateSubitemState } from './model/useUpdateSubitemState'
 import BulletedSubitem from './variants/BulletedSubitem'
 import CollapsibleSubitem from './variants/CollapsibleSubitem'
@@ -41,6 +45,8 @@ export default function SubitemNode({
 	// const hasChildren = data.children.length > 0
 
 	let HAS_CHECKBOX = true
+
+	const { gesture, style, onLayout } = useDragSortRow(data.id, depth)
 
 	const updateSubitemState = useUpdateSubitemState()
 
@@ -144,7 +150,11 @@ export default function SubitemNode({
 
 	return (
 		<View style={{ paddingLeft: depth * 16 }}>
-			{content}
+			<GestureDetector gesture={gesture}>
+				<Animated.View onLayout={onLayout} style={style}>
+					{content}
+				</Animated.View>
+			</GestureDetector>
 
 			{isChildShown &&
 				data.children.map((child) => (
