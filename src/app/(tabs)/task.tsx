@@ -1,5 +1,5 @@
 import { MaterialIcons } from '@expo/vector-icons'
-import type { RefObject } from 'react'
+import type { Ref, RefObject } from 'react'
 import { useCallback, useEffect } from 'react'
 import {
 	ActivityIndicator,
@@ -12,7 +12,8 @@ import type { EnrichedMarkdownTextInputInstance } from 'react-native-enriched-ma
 import { Pressable as GesturePressable } from 'react-native-gesture-handler'
 import {
 	KeyboardAwareScrollView,
-	KeyboardController
+	KeyboardController,
+	type KeyboardAwareScrollViewRef
 } from 'react-native-keyboard-controller'
 import Animated from 'react-native-reanimated'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
@@ -85,7 +86,7 @@ function SubitemDragSortLayer({
 	return (
 		<DragSortProvider onDrop={handleDrop}>
 			<KeyboardAwareScrollView
-				ref={scrollAnimatedRef}
+				ref={scrollAnimatedRef as unknown as Ref<KeyboardAwareScrollViewRef>}
 				ScrollViewComponent={Animated.ScrollView}
 				onScroll={scrollHandler}
 				scrollEventThrottle={16}

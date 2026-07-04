@@ -37,7 +37,7 @@ export function DragSortProvider<TId extends DragSortId = DragSortId>({
 	)
 
 	return (
-		<DragSortContext.Provider value={value as DragSortContextValue}>
+		<DragSortContext.Provider value={value as unknown as DragSortContextValue}>
 			{children}
 		</DragSortContext.Provider>
 	)
@@ -48,5 +48,5 @@ export function useDragSortContext<TId extends DragSortId = DragSortId>() {
 	if (!context) {
 		throw new Error('useDragSortContext must be used within DragSortProvider')
 	}
-	return context as DragSortContextValue<TId>
+	return context as unknown as DragSortContextValue<TId>
 }
