@@ -21,15 +21,12 @@ export function useDragSortRow<TId extends DragSortId = DragSortId>(
 		}
 	}
 
-	const commitDrop = () => {
-		const draggedId = state.draggedId.value
-		if (!draggedId) return
-
+	const commitDrop = (draggedId: TId, dropIndex: number, dropDepth: number) => {
 		const target = computeDropTarget(
 			state.flatOrder.value,
 			draggedId,
-			state.dropIndex.value,
-			state.dropDepth.value
+			dropIndex,
+			dropDepth
 		)
 
 		onDrop({ id: draggedId, ...target })
@@ -106,7 +103,15 @@ export function useDragSortRow<TId extends DragSortId = DragSortId>(
 		})
 		.onEnd(() => {
 			'worklet'
-			scheduleOnRN(commitDrop)
+			const draggedId = state.draggedId.value
+			if (draggedId === null) return
+
+			scheduleOnRN(
+				commitDrop,
+				draggedId,
+				state.dropIndex.value,
+				state.dropDepth.value
+			)
 		})
 		.onFinalize(() => {
 			'worklet'
