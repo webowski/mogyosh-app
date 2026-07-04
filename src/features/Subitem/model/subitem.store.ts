@@ -26,10 +26,7 @@ export type SubitemOperationUpdate = {
 	id: SubitemId
 	taskId: TaskId
 	patch: Partial<
-		Pick<
-			SubitemEntity,
-			'info' | 'type' | 'sort_order' | 'settings' | 'parent_id'
-		>
+		Pick<SubitemEntity, 'info' | 'type' | 'sort_order' | 'settings'>
 	>
 }
 
@@ -71,14 +68,6 @@ export interface SubitemStore {
 		id: SubitemId,
 		taskId: TaskId,
 		direction: SubitemMoveDirection
-	) => void
-
-	reorderSubitem: (
-		id: SubitemId,
-		taskId: TaskId,
-		newParentId: SubitemId | null,
-		prevId: SubitemId | null,
-		nextId: SubitemId | null
 	) => void
 
 	replaceOptimisticSubitem: (
@@ -234,46 +223,6 @@ export const useSubitemStore = create<SubitemStore>()(
 						const updatedList = [...withoutItem]
 						updatedList.splice(insertAt, 0, {
 							...item,
-							sort_order: newSortOrder
-						})
-
-						return {
-							subitemsByTask: {
-								...state.subitemsByTask,
-								[taskId]: updatedList
-							}
-						}
-					}),
-
-				reorderSubitem: (id, taskId, newParentId, prevId, nextId) =>
-					set((state) => {
-						const current = state.subitemsByTask[taskId] ?? []
-						const item = current.find((s) => s.id === id)
-						if (!item) return state
-
-						const prevSibling = prevId
-							? current.find((s) => s.id === prevId)
-							: null
-						const nextSibling = nextId
-							? current.find((s) => s.id === nextId)
-							: null
-
-						const newSortOrder = generateKeyBetween(
-							prevSibling?.sort_order ?? null,
-							nextSibling?.sort_order ?? null
-						)
-
-						const withoutItem = current.filter((s) => s.id !== id)
-						const anchorIndex = prevSibling
-							? withoutItem.findIndex((s) => s.id === prevSibling.id)
-							: nextSibling
-								? withoutItem.findIndex((s) => s.id === nextSibling.id) - 1
-								: withoutItem.length - 1
-
-						const updatedList = [...withoutItem]
-						updatedList.splice(anchorIndex + 1, 0, {
-							...item,
-							parent_id: newParentId,
 							sort_order: newSortOrder
 						})
 

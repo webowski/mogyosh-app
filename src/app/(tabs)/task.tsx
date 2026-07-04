@@ -2,7 +2,6 @@ import { MaterialIcons } from '@expo/vector-icons'
 import { useEffect } from 'react'
 import {
 	ActivityIndicator,
-	Dimensions,
 	Platform,
 	Pressable,
 	Text,
@@ -14,26 +13,12 @@ import {
 	KeyboardAwareScrollView,
 	KeyboardController
 } from 'react-native-keyboard-controller'
-import Animated, {
-	measure,
-	runOnUI,
-	scrollTo,
-	useAnimatedRef,
-	useAnimatedScrollHandler,
-	useAnimatedStyle,
-	useFrameCallback
-} from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 import { useShallow } from 'zustand/react/shallow'
 
 import {
 	buildSubitemTree,
-	DRAG_AUTOSCROLL_EDGE,
-	DRAG_AUTOSCROLL_SPEED,
-	DRAG_INDENT_STEP,
-	dragSubitemState,
-	flattenSubitemTree,
 	SubitemNode,
 	useCreateSubitem,
 	useRemoveSubitem,
@@ -87,74 +72,6 @@ export default function TaskScreen() {
 	useSyncSubitems()
 
 	const subitemTree = buildSubitemTree(subitems)
-
-	const scrollAnimatedRef = useAnimatedRef<Animated.ScrollView>()
-
-	const scrollHandler = useAnimatedScrollHandler({
-		onScroll: (event) => {
-			dragSubitemState.scrollY.value = event.contentOffset.y
-		}
-	})
-
-	const measureContainer = () => {
-		runOnUI(() => {
-			'worklet'
-			const measured = measure(scrollAnimatedRef)
-			if (measured) {
-				dragSubitemState.containerPageY.value = measured.pageY
-			}
-		})()
-	}
-
-	useEffect(() => {
-		dragSubitemState.flatOrder.value = flattenSubitemTree(subitemTree)
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [subitems])
-
-	const windowHeight = Dimensions.get('window').height
-
-	useFrameCallback(() => {
-		'worklet'
-		if (!dragSubitemState.active.value) return
-
-		const y = dragSubitemState.lastAbsoluteY.value
-		if (y < DRAG_AUTOSCROLL_EDGE) {
-			scrollTo(
-				scrollAnimatedRef,
-				0,
-				dragSubitemState.scrollY.value - DRAG_AUTOSCROLL_SPEED,
-				false
-			)
-		} else if (y > windowHeight - DRAG_AUTOSCROLL_EDGE) {
-			scrollTo(
-				scrollAnimatedRef,
-				0,
-				dragSubitemState.scrollY.value + DRAG_AUTOSCROLL_SPEED,
-				false
-			)
-		}
-	})
-
-	const dropIndicatorStyle = useAnimatedStyle(() => {
-		if (!dragSubitemState.active.value) return { opacity: 0 }
-
-		const order = dragSubitemState.flatOrder.value
-		const heights = dragSubitemState.rowHeights.value
-		const dropIndex = dragSubitemState.dropIndex.value
-
-		let cumulativeY = 0
-		for (let i = 0; i < dropIndex && i < order.length; i++) {
-			cumulativeY += heights[order[i].id] ?? 0
-		}
-
-		return {
-			opacity: 1,
-			transform: [
-				{ translateY: cumulativeY },
-				{ translateX: dragSubitemState.dropDepth.value * DRAG_INDENT_STEP }
-			]
-		}
-	})
 
 	const focusSubitem = (id: SubitemId) => {
 		const ref = inputRefs.get(id)?.current
@@ -229,12 +146,8 @@ export default function TaskScreen() {
 	return (
 		<>
 			<KeyboardAwareScrollView
-				ref={scrollAnimatedRef}
-				ScrollViewComponent={Animated.ScrollView}
-				onScroll={scrollHandler}
-				scrollEventThrottle={16}
-				onLayout={measureContainer}
 				style={staticStyles.ScrollBox}
+				// contentContainerStyle={}
 				overScrollMode='never'
 				bottomOffset={STYLE_VARS.editorToolbarHeight * 1.25}
 			>
@@ -243,24 +156,18 @@ export default function TaskScreen() {
 					onPress={() => KeyboardController.dismiss()}
 					accessibilityRole={undefined}
 				>
-					<View style={{ position: 'relative' }}>
-						{subitemTree.map((subitemData) => (
-							<SubitemNode
-								inputRefs={inputRefs}
-								key={subitemData.stableKey ?? subitemData.id}
-								data={subitemData}
-								depth={0}
-								variant={subitemData.type}
-								onAddAfter={handleAddSubitem}
-								onRemove={handleRemove}
-								pendingFocusId={pendingFocusId}
-							/>
-						))}
-						<Animated.View
-							pointerEvents='none'
-							style={[styles.dropIndicator, dropIndicatorStyle]}
+					{subitemTree.map((subitemData) => (
+						<SubitemNode
+							inputRefs={inputRefs}
+							key={subitemData.stableKey ?? subitemData.id}
+							data={subitemData}
+							depth={0}
+							variant={subitemData.type}
+							onAddAfter={handleAddSubitem}
+							onRemove={handleRemove}
+							pendingFocusId={pendingFocusId}
 						/>
-					</View>
+					))}
 					<Pressable
 						style={[styles.addButton]}
 						onPress={() => handleAddSubitem()}
@@ -285,13 +192,5 @@ const styles = StyleSheet.create((theme) => ({
 		borderTopRightRadius: STYLE_VARS.radius_sm,
 		borderBottomLeftRadius: STYLE_VARS.radius_lg,
 		borderBottomRightRadius: STYLE_VARS.radius_lg
-	},
-	dropIndicator: {
-		position: 'absolute',
-		left: 0,
-		right: 0,
-		height: 2,
-		borderRadius: 1,
-		backgroundColor: theme.colors.minor
 	}
 }))
