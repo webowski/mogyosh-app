@@ -1,5 +1,9 @@
 export { computeDropTarget } from './model/dragSort.utils'
-export { DragSortProvider, useDragSortContext } from './model/DragSortContext'
+export {
+	DragSortProvider,
+	useDragSortContainerRef,
+	useDragSortContext
+} from './model/DragSortContext'
 export { useDragSortAutoScroll } from './model/useDragSortAutoScroll'
 export { useDragSortRow } from './model/useDragSortRow'
 export { useDragSortScroll } from './model/useDragSortScroll'

@@ -1,6 +1,6 @@
 import type { LayoutChangeEvent } from 'react-native'
 import { Gesture } from 'react-native-gesture-handler'
-import { useAnimatedStyle, withTiming } from 'react-native-reanimated'
+import { measure, useAnimatedStyle, withTiming } from 'react-native-reanimated'
 import { scheduleOnRN } from 'react-native-worklets'
 
 import { DRAG_SORT_LONG_PRESS_MS } from './dragSort.constants'
@@ -12,7 +12,7 @@ export function useDragSortRow<TId extends DragSortId = DragSortId>(
 	id: TId,
 	depth: number
 ) {
-	const { state, indentStep, onDrop } = useDragSortContext<TId>()
+	const { state, indentStep, onDrop, containerRef } = useDragSortContext<TId>()
 
 	const handleLayout = (e: LayoutChangeEvent) => {
 		state.rowHeights.value = {
@@ -66,8 +66,9 @@ export function useDragSortRow<TId extends DragSortId = DragSortId>(
 			const isInSubtree = (index: number) =>
 				draggedIndex >= 0 && index >= draggedIndex && index < subtreeEnd
 
-			const absoluteContentY =
-				e.absoluteY - state.containerPageY.value + state.scrollY.value
+			const measuredContainer = measure(containerRef)
+			const containerTop = measuredContainer ? measuredContainer.pageY : 0
+			const absoluteContentY = e.absoluteY - containerTop
 
 			let cumulativeY = 0
 			let hoveredIndex = order.length

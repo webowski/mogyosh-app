@@ -1,6 +1,4 @@
 import Animated, {
-	measure,
-	runOnUI,
 	useAnimatedRef,
 	useAnimatedScrollHandler
 } from 'react-native-reanimated'
@@ -17,15 +15,5 @@ export function useDragSortScroll() {
 		}
 	})
 
-	const measureContainer = () => {
-		runOnUI(() => {
-			'worklet'
-			const measured = measure(scrollAnimatedRef)
-			if (measured) {
-				state.containerPageY.value = measured.pageY
-			}
-		})()
-	}
-
-	return { scrollAnimatedRef, scrollHandler, measureContainer }
+	return { scrollAnimatedRef, scrollHandler }
 }

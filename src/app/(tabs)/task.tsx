@@ -41,6 +41,7 @@ import {
 	DragSortIndicator,
 	DragSortProvider,
 	useDragSortAutoScroll,
+	useDragSortContainerRef,
 	useDragSortScroll,
 	useSyncDragSortFlatOrder,
 	type DragSortDropPayload
@@ -101,10 +102,10 @@ function SubitemDragSortContent({
 }: SubitemDragSortContentProps) {
 	const { theme } = useUnistyles()
 
-	const { scrollAnimatedRef, scrollHandler, measureContainer } =
-		useDragSortScroll()
+	const { scrollAnimatedRef, scrollHandler } = useDragSortScroll()
 	useDragSortAutoScroll(scrollAnimatedRef)
 	useSyncDragSortFlatOrder(flattenSubitemTree(subitemTree))
+	const containerRef = useDragSortContainerRef()
 
 	return (
 		<KeyboardAwareScrollView
@@ -114,7 +115,6 @@ function SubitemDragSortContent({
 			}
 			onScroll={scrollHandler}
 			scrollEventThrottle={16}
-			onLayout={measureContainer}
 			style={staticStyles.ScrollBox}
 			overScrollMode='never'
 			bottomOffset={STYLE_VARS.editorToolbarHeight * 1.25}
@@ -124,7 +124,7 @@ function SubitemDragSortContent({
 				onPress={() => KeyboardController.dismiss()}
 				accessibilityRole={undefined}
 			>
-				<View style={{ position: 'relative' }}>
+				<Animated.View ref={containerRef} style={{ position: 'relative' }}>
 					{subitemTree.map((subitemData) => (
 						<SubitemNode
 							inputRefs={inputRefs}
@@ -138,7 +138,7 @@ function SubitemDragSortContent({
 						/>
 					))}
 					<DragSortIndicator style={styles.dropIndicator} />
-				</View>
+				</Animated.View>
 				<Pressable style={[styles.addButton]} onPress={() => onAddSubitem()}>
 					<MaterialIcons name='add' size={28} color={theme.colors.minor} />
 				</Pressable>

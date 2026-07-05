@@ -5,6 +5,10 @@ import {
 	useRef,
 	type ReactNode
 } from 'react'
+import Animated, {
+	useAnimatedRef,
+	type AnimatedRef
+} from 'react-native-reanimated'
 
 import { DRAG_SORT_DEFAULT_INDENT_STEP } from './dragSort.constants'
 import { createDragSortState, type DragSortState } from './dragSort.state'
@@ -14,6 +18,7 @@ type DragSortContextValue<TId extends DragSortId = DragSortId> = {
 	state: DragSortState<TId>
 	indentStep: number
 	onDrop: (payload: DragSortDropPayload<TId>) => void
+	containerRef: AnimatedRef<Animated.View>
 }
 
 const DragSortContext = createContext<DragSortContextValue | null>(null)
@@ -30,10 +35,11 @@ export function DragSortProvider<TId extends DragSortId = DragSortId>({
 	indentStep = DRAG_SORT_DEFAULT_INDENT_STEP
 }: DragSortProviderProps<TId>) {
 	const stateRef = useRef<DragSortState<TId>>(createDragSortState<TId>())
+	const containerRef = useAnimatedRef<Animated.View>()
 
 	const value = useMemo(
-		() => ({ state: stateRef.current, indentStep, onDrop }),
-		[indentStep, onDrop]
+		() => ({ state: stateRef.current, indentStep, onDrop, containerRef }),
+		[indentStep, onDrop, containerRef]
 	)
 
 	return (
@@ -49,4 +55,8 @@ export function useDragSortContext<TId extends DragSortId = DragSortId>() {
 		throw new Error('useDragSortContext must be used within DragSortProvider')
 	}
 	return context as unknown as DragSortContextValue<TId>
+}
+
+export function useDragSortContainerRef<TId extends DragSortId = DragSortId>() {
+	return useDragSortContext<TId>().containerRef
 }
