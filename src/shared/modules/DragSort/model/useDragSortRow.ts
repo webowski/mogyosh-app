@@ -41,6 +41,12 @@ export function useDragSortRow<TId extends DragSortId = DragSortId>(
 			state.draggedDepth.value = depth
 			state.translateY.value = 0
 			state.translateX.value = 0
+
+			const measuredContainer = measure(containerRef)
+			state.dragStartContainerTop.value = measuredContainer
+				? measuredContainer.pageY
+				: 0
+			state.dragStartScrollY.value = state.scrollY.value
 		})
 		.onUpdate((e) => {
 			'worklet'
@@ -66,8 +72,9 @@ export function useDragSortRow<TId extends DragSortId = DragSortId>(
 			const isInSubtree = (index: number) =>
 				draggedIndex >= 0 && index >= draggedIndex && index < subtreeEnd
 
-			const measuredContainer = measure(containerRef)
-			const containerTop = measuredContainer ? measuredContainer.pageY : 0
+			const containerTop =
+				state.dragStartContainerTop.value -
+				(state.scrollY.value - state.dragStartScrollY.value)
 			const absoluteContentY = e.absoluteY - containerTop
 
 			let cumulativeY = 0

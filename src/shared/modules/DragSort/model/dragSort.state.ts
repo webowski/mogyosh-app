@@ -13,6 +13,8 @@ export function createDragSortState<TId extends DragSortId = DragSortId>() {
 		translateY: makeMutable(0),
 		translateX: makeMutable(0),
 		lastAbsoluteY: makeMutable(0),
+		dragStartContainerTop: makeMutable(0),
+		dragStartScrollY: makeMutable(0),
 
 		// id -> measured row height (own row only, without children)
 		rowHeights: makeMutable<Record<string, number>>({}),
