@@ -81,17 +81,11 @@ export function useDragSortRow<TId extends DragSortId = DragSortId>(
 				cumulativeY += rowHeight
 			}
 
-			if (__DEV__) {
+			if (__DEV__ && Math.floor(e.absoluteY / 20) % 5 === 0) {
 				scheduleOnRN(
 					console.log,
 					'DragSort debug',
-					JSON.stringify({
-						absoluteY: e.absoluteY,
-						containerTop,
-						absoluteContentY,
-						hoveredIndex,
-						orderLength: order.length
-					})
+					JSON.stringify({ containerTop, absoluteContentY, hoveredIndex })
 				)
 			}
 
