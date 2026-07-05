@@ -1,6 +1,6 @@
 import type { LayoutChangeEvent } from 'react-native'
 import { Gesture } from 'react-native-gesture-handler'
-import { measure, useAnimatedStyle, withTiming } from 'react-native-reanimated'
+import { useAnimatedStyle, withTiming } from 'react-native-reanimated'
 import { scheduleOnRN } from 'react-native-worklets'
 
 import { DRAG_SORT_LONG_PRESS_MS } from './dragSort.constants'
@@ -12,7 +12,7 @@ export function useDragSortRow<TId extends DragSortId = DragSortId>(
 	id: TId,
 	depth: number
 ) {
-	const { state, indentStep, onDrop, containerRef } = useDragSortContext<TId>()
+	const { state, indentStep, onDrop } = useDragSortContext<TId>()
 
 	const handleLayout = (e: LayoutChangeEvent) => {
 		state.rowHeights.value = {
@@ -42,17 +42,21 @@ export function useDragSortRow<TId extends DragSortId = DragSortId>(
 			state.translateY.value = 0
 			state.translateX.value = 0
 
-			const measuredContainer = measure(containerRef)
-			state.dragStartContainerTop.value = measuredContainer
-				? measuredContainer.pageY
-				: 0
-			state.dragStartScrollY.value = state.scrollY.value
+			const order = state.flatOrder.value
+			const heights = state.rowHeights.value
+			const draggedIndex = order.findIndex((entry) => entry.id === id)
+
+			let originY = 0
+			for (let i = 0; i < draggedIndex; i++) {
+				originY += heights[order[i].id] ?? 0
+			}
+			state.dragOriginY.value = originY
+			state.dragOwnHeight.value = heights[id] ?? 0
 		})
 		.onUpdate((e) => {
 			'worklet'
 			state.translateY.value = e.translationY
 			state.translateX.value = e.translationX
-			state.lastAbsoluteY.value = e.absoluteY
 
 			const order = state.flatOrder.value
 			const heights = state.rowHeights.value
@@ -72,30 +76,21 @@ export function useDragSortRow<TId extends DragSortId = DragSortId>(
 			const isInSubtree = (index: number) =>
 				draggedIndex >= 0 && index >= draggedIndex && index < subtreeEnd
 
-			const containerTop =
-				state.dragStartContainerTop.value -
-				(state.scrollY.value - state.dragStartScrollY.value)
-			const absoluteContentY = e.absoluteY - containerTop
+			// Content-space virtual center of the dragged row (no screen
+			// measurement needed — scroll-invariant by construction).
+			const virtualCenterY =
+				state.dragOriginY.value + e.translationY + state.dragOwnHeight.value / 2
 
 			let cumulativeY = 0
 			let hoveredIndex = order.length
 			for (let i = 0; i < order.length; i++) {
 				const rowHeight = heights[order[i].id] ?? 0
-				if (absoluteContentY < cumulativeY + rowHeight / 2) {
+				if (virtualCenterY < cumulativeY + rowHeight / 2) {
 					hoveredIndex = i
 					break
 				}
 				cumulativeY += rowHeight
 			}
-
-			if (__DEV__ && Math.floor(e.absoluteY / 20) % 5 === 0) {
-				scheduleOnRN(
-					console.log,
-					'DragSort debug',
-					JSON.stringify({ containerTop, absoluteContentY, hoveredIndex })
-				)
-			}
-
 			state.dropIndex.value = hoveredIndex
 
 			let prevEntry = null as (typeof order)[number] | null
