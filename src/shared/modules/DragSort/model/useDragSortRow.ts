@@ -80,6 +80,21 @@ export function useDragSortRow<TId extends DragSortId = DragSortId>(
 				}
 				cumulativeY += rowHeight
 			}
+
+			if (__DEV__) {
+				scheduleOnRN(
+					console.log,
+					'DragSort debug',
+					JSON.stringify({
+						absoluteY: e.absoluteY,
+						containerTop,
+						absoluteContentY,
+						hoveredIndex,
+						orderLength: order.length
+					})
+				)
+			}
+
 			state.dropIndex.value = hoveredIndex
 
 			let prevEntry = null as (typeof order)[number] | null
