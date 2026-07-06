@@ -50,11 +50,17 @@ export function useDragSortRow<TId extends DragSortId = DragSortId>(
 			for (let i = 0; i < draggedIndex; i++) {
 				originY += heights[order[i].id] ?? 0
 			}
+
 			state.dragOriginY.value = originY
 			state.dragOwnHeight.value = heights[id] ?? 0
 			// Finger offset within the row at the moment the drag started —
 			// the indicator must track this point, not the row's center.
 			state.dragPressOffsetY.value = e.y
+
+			// Show the indicator at the item's own position immediately,
+			// before the finger has moved.
+			state.dropIndex.value = draggedIndex
+			state.dropDepth.value = depth
 		})
 		.onUpdate((e) => {
 			'worklet'
