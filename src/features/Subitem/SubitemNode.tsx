@@ -46,7 +46,7 @@ export default function SubitemNode({
 
 	let HAS_CHECKBOX = true
 
-	const { gesture, style, onLayout } = useDragSortRow(data.id, depth)
+	const { gesture, dragRowStyle, onLayout } = useDragSortRow(data.id, depth)
 
 	const updateSubitemState = useUpdateSubitemState()
 
@@ -151,24 +151,23 @@ export default function SubitemNode({
 	return (
 		<View style={{ paddingLeft: depth * 16 }}>
 			<GestureDetector gesture={gesture}>
-				<Animated.View onLayout={onLayout} style={style}>
-					{content}
+				<Animated.View style={dragRowStyle}>
+					<View onLayout={onLayout}>{content}</View>
+					{isChildShown &&
+						data.children.map((child) => (
+							<SubitemNode
+								inputRefs={inputRefs}
+								key={child.id}
+								data={child}
+								depth={depth + 1}
+								variant={child.type}
+								onAddAfter={onAddAfter}
+								onRemove={onRemove}
+								pendingFocusId={pendingFocusId}
+							/>
+						))}
 				</Animated.View>
 			</GestureDetector>
-
-			{isChildShown &&
-				data.children.map((child) => (
-					<SubitemNode
-						inputRefs={inputRefs}
-						key={child.id}
-						data={child}
-						depth={depth + 1}
-						variant={child.type}
-						onAddAfter={onAddAfter}
-						onRemove={onRemove}
-						pendingFocusId={pendingFocusId}
-					/>
-				))}
 		</View>
 	)
 }

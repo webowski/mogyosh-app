@@ -136,7 +136,7 @@ export function useDragSortRow<TId extends DragSortId = DragSortId>(
 			state.translateX.value = withTiming(0)
 		})
 
-	const style = useAnimatedStyle(() => {
+	const dragRowStyle = useAnimatedStyle(() => {
 		const isDragged = state.draggedId.value === id
 		return {
 			transform: [
@@ -148,5 +148,5 @@ export function useDragSortRow<TId extends DragSortId = DragSortId>(
 		}
 	})
 
-	return { gesture, style, onLayout: handleLayout }
+	return { gesture, dragRowStyle, onLayout: handleLayout }
 }
