@@ -288,6 +288,6 @@ const styles = StyleSheet.create((theme) => ({
 		right: 0,
 		height: 2,
 		borderRadius: 1,
-		backgroundColor: theme.colors.minor
+		backgroundColor: theme.colors.primaryLight
 	}
 }))
