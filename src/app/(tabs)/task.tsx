@@ -40,6 +40,7 @@ import { useTaskStore } from '@/shared/model/task.store'
 import {
 	DragSortIndicator,
 	DragSortProvider,
+	useDragSortAutoScroll,
 	useDragSortContainerRef,
 	useDragSortScroll,
 	useSyncDragSortFlatOrder,
@@ -102,7 +103,7 @@ function SubitemDragSortContent({
 	const { theme } = useUnistyles()
 
 	const { scrollAnimatedRef, scrollHandler } = useDragSortScroll()
-	// useDragSortAutoScroll(scrollAnimatedRef)
+	useDragSortAutoScroll(scrollAnimatedRef)
 	useSyncDragSortFlatOrder(flattenSubitemTree(subitemTree))
 	const containerRef = useDragSortContainerRef()
 
