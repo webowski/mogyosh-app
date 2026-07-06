@@ -34,7 +34,7 @@ export function useDragSortRow<TId extends DragSortId = DragSortId>(
 
 	const gesture = Gesture.Pan()
 		.activateAfterLongPress(DRAG_SORT_LONG_PRESS_MS)
-		.onStart(() => {
+		.onStart((e) => {
 			'worklet'
 			state.active.value = true
 			state.draggedId.value = id
@@ -52,6 +52,9 @@ export function useDragSortRow<TId extends DragSortId = DragSortId>(
 			}
 			state.dragOriginY.value = originY
 			state.dragOwnHeight.value = heights[id] ?? 0
+			// Finger offset within the row at the moment the drag started —
+			// the indicator must track this point, not the row's center.
+			state.dragPressOffsetY.value = e.y
 		})
 		.onUpdate((e) => {
 			'worklet'
@@ -76,16 +79,15 @@ export function useDragSortRow<TId extends DragSortId = DragSortId>(
 			const isInSubtree = (index: number) =>
 				draggedIndex >= 0 && index >= draggedIndex && index < subtreeEnd
 
-			// Content-space virtual center of the dragged row (no screen
-			// measurement needed — scroll-invariant by construction).
-			const virtualCenterY =
-				state.dragOriginY.value + e.translationY + state.dragOwnHeight.value / 2
+			// Content-space finger position — scroll-invariant by construction.
+			const virtualFingerY =
+				state.dragOriginY.value + state.dragPressOffsetY.value + e.translationY
 
 			let cumulativeY = 0
 			let hoveredIndex = order.length
 			for (let i = 0; i < order.length; i++) {
 				const rowHeight = heights[order[i].id] ?? 0
-				if (virtualCenterY < cumulativeY + rowHeight / 2) {
+				if (virtualFingerY < cumulativeY + rowHeight / 2) {
 					hoveredIndex = i
 					break
 				}
