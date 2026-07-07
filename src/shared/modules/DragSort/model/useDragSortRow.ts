@@ -160,9 +160,17 @@ export function useDragSortRow<TId extends DragSortId = DragSortId>(
 
 	const dragRowStyle = useAnimatedStyle(() => {
 		const isDragged = state.draggedId.value === id
+		const scrollCompensation = isDragged
+			? state.scrollY.value - state.dragStartScrollY.value
+			: 0
+
 		return {
 			transform: [
-				{ translateY: isDragged ? state.translateY.value : 0 },
+				{
+					translateY: isDragged
+						? state.translateY.value + scrollCompensation
+						: 0
+				},
 				{ translateX: isDragged ? state.translateX.value : 0 }
 			],
 			zIndex: isDragged ? 10 : 0,
