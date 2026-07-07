@@ -1,5 +1,4 @@
 import { SubitemId, TaskId } from '@/shared/domain/ids'
-import { log } from '@/shared/lib/development'
 import { useSubitemStore } from './subitem.store'
 
 export type ReorderSubitemPayload = {
@@ -28,9 +27,9 @@ export const reorderSubitem = (payload: ReorderSubitemPayload) => {
 		.getState()
 		.subitemsByTask[payload.taskId]?.find((s) => s.id === payload.id)
 
-	if (__DEV__) {
-		log('reorderSubitem debug', JSON.stringify({ payload, moved }))
-	}
+	// if (__DEV__) {
+	// 	log('reorderSubitem debug', JSON.stringify({ payload, moved }))
+	// }
 
 	if (!moved) return
 
