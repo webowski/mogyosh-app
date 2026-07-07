@@ -75,19 +75,6 @@ export function useDragSortRow<TId extends DragSortId = DragSortId>(
 			// before the finger has moved.
 			state.dropIndex.value = draggedIndex
 			state.dropDepth.value = depth
-			// if (__DEV__) {
-			// 	scheduleOnRN(
-			// 		log,
-			// 		'DragSort onStart debug',
-			// 		JSON.stringify({
-			// 			id,
-			// 			draggedIndex,
-			// 			orderLength: order.length,
-			// 			ownHeight: heights[id] ?? null,
-			// 			originY
-			// 		})
-			// 	)
-			// }
 		})
 		.onUpdate((e) => {
 			'worklet'
@@ -182,8 +169,4 @@ export function useDragSortRow<TId extends DragSortId = DragSortId>(
 	})
 
 	return { gesture, dragRowStyle, onLayout: handleLayout }
-}
-
-function log(...props: any[]) {
-	console.log(props)
 }
