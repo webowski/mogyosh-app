@@ -30,10 +30,8 @@ export function useDragSortRow<TId extends DragSortId = DragSortId>(
 	}, [id, state.rowHeights])
 
 	const handleLayout = (e: LayoutChangeEvent) => {
-		state.rowHeights.value = {
-			...state.rowHeights.value,
-			[id]: e.nativeEvent.layout.height
-		}
+		state.rowHeightsStaging[id] = e.nativeEvent.layout.height
+		state.rowHeights.value = { ...state.rowHeightsStaging }
 	}
 
 	const commitDrop = (draggedId: TId, dropIndex: number, dropDepth: number) => {
@@ -76,19 +74,19 @@ export function useDragSortRow<TId extends DragSortId = DragSortId>(
 			// before the finger has moved.
 			state.dropIndex.value = draggedIndex
 			state.dropDepth.value = depth
-			if (__DEV__) {
-				scheduleOnRN(
-					log,
-					'DragSort onStart debug',
-					JSON.stringify({
-						id,
-						draggedIndex,
-						orderLength: order.length,
-						ownHeight: heights[id] ?? null,
-						originY
-					})
-				)
-			}
+			// if (__DEV__) {
+			// 	scheduleOnRN(
+			// 		log,
+			// 		'DragSort onStart debug',
+			// 		JSON.stringify({
+			// 			id,
+			// 			draggedIndex,
+			// 			orderLength: order.length,
+			// 			ownHeight: heights[id] ?? null,
+			// 			originY
+			// 		})
+			// 	)
+			// }
 		})
 		.onUpdate((e) => {
 			'worklet'
