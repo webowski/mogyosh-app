@@ -3,6 +3,7 @@ import { Gesture } from 'react-native-gesture-handler'
 import { useAnimatedStyle, withTiming } from 'react-native-reanimated'
 import { scheduleOnRN } from 'react-native-worklets'
 
+import { useEffect, useRef } from 'react'
 import { DRAG_SORT_LONG_PRESS_MS } from './dragSort.constants'
 import type { DragSortId } from './dragSort.types'
 import { computeDropTarget } from './dragSort.utils'
@@ -13,6 +14,20 @@ export function useDragSortRow<TId extends DragSortId = DragSortId>(
 	depth: number
 ) {
 	const { state, indentStep, onDrop } = useDragSortContext<TId>()
+	const previousIdRef = useRef(id)
+
+	useEffect(() => {
+		if (previousIdRef.current !== id) {
+			const previousHeight = state.rowHeights.value[previousIdRef.current]
+			if (previousHeight !== undefined) {
+				const nextHeights = { ...state.rowHeights.value }
+				delete nextHeights[previousIdRef.current]
+				nextHeights[id] = previousHeight
+				state.rowHeights.value = nextHeights
+			}
+			previousIdRef.current = id
+		}
+	}, [id, state.rowHeights])
 
 	const handleLayout = (e: LayoutChangeEvent) => {
 		state.rowHeights.value = {
@@ -61,6 +76,19 @@ export function useDragSortRow<TId extends DragSortId = DragSortId>(
 			// before the finger has moved.
 			state.dropIndex.value = draggedIndex
 			state.dropDepth.value = depth
+			if (__DEV__) {
+				scheduleOnRN(
+					log,
+					'DragSort onStart debug',
+					JSON.stringify({
+						id,
+						draggedIndex,
+						orderLength: order.length,
+						ownHeight: heights[id] ?? null,
+						originY
+					})
+				)
+			}
 		})
 		.onUpdate((e) => {
 			'worklet'
@@ -155,4 +183,8 @@ export function useDragSortRow<TId extends DragSortId = DragSortId>(
 	})
 
 	return { gesture, dragRowStyle, onLayout: handleLayout }
+}
+
+function log(...props: any[]) {
+	console.log(props)
 }
