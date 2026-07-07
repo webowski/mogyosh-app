@@ -55,6 +55,7 @@ export function useDragSortRow<TId extends DragSortId = DragSortId>(
 			state.draggedDepth.value = depth
 			state.translateY.value = 0
 			state.translateX.value = 0
+			state.lastAbsoluteY.value = e.absoluteY
 
 			const order = state.flatOrder.value
 			const heights = state.rowHeights.value
@@ -80,6 +81,7 @@ export function useDragSortRow<TId extends DragSortId = DragSortId>(
 			'worklet'
 			state.translateY.value = e.translationY
 			state.translateX.value = e.translationX
+			state.lastAbsoluteY.value = e.absoluteY
 
 			const order = state.flatOrder.value
 			const heights = state.rowHeights.value
