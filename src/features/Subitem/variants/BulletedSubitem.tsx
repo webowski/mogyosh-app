@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Platform, Text, View } from 'react-native'
+import { Platform, View } from 'react-native'
 import type { EnrichedMarkdownTextInputInstance } from 'react-native-enriched-markdown'
 import Animated, {
 	useAnimatedStyle,
@@ -154,7 +154,17 @@ export default function BulletedSubitem({
 	return (
 		<View>
 			<View style={styles.container}>
-				<Text style={{ marginRight: 6, fontSize: 20 }}>{getBullet(depth)}</Text>
+				{/* <Text
+					style={{
+						marginLeft: 1,
+						marginRight: 6,
+						fontSize: 24,
+						lineHeight: 22
+					}}
+				>
+					{getBullet(depth)}
+				</Text> */}
+				<View style={styles.Bullet} />
 				<Animated.Text style={[styles.text, textStyle]}>
 					<MarkdownInput
 						ref={inputRef}
@@ -180,8 +190,16 @@ const styles = StyleSheet.create((theme) => ({
 	container: {
 		flexDirection: 'row',
 		alignItems: 'flex-start',
-		gap: 8,
-		paddingVertical: 6
+		gap: 10,
+		paddingVertical: 4
+	},
+	Bullet: {
+		marginTop: 10,
+		marginLeft: 2,
+		width: 6,
+		height: 6,
+		borderRadius: 3,
+		backgroundColor: theme.colors.major
 	},
 	text: {
 		flex: 1,

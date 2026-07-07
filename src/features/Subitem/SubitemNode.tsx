@@ -11,6 +11,7 @@ import type {
 	SubitemType
 } from '@/shared/domain/subitem'
 import { useDragSortRow } from '@/shared/modules/DragSort'
+import { StyleSheet } from 'react-native-unistyles'
 import { useUpdateSubitemState } from './model/useUpdateSubitemState'
 import BulletedSubitem from './variants/BulletedSubitem'
 import CollapsibleSubitem from './variants/CollapsibleSubitem'
@@ -152,7 +153,9 @@ export default function SubitemNode({
 		<View style={{ paddingLeft: depth * 16 }}>
 			<GestureDetector gesture={gesture}>
 				<Animated.View style={dragRowStyle}>
-					<View onLayout={onLayout}>{content}</View>
+					<View onLayout={onLayout} style={styles.subitem}>
+						{content}
+					</View>
 					{isChildShown &&
 						data.children.map((child) => (
 							<SubitemNode
@@ -171,3 +174,10 @@ export default function SubitemNode({
 		</View>
 	)
 }
+
+const styles = StyleSheet.create((theme) => ({
+	subitem: {
+		borderRadius: 8
+		// backgroundColor: theme.colors.thFill
+	}
+}))

@@ -143,8 +143,7 @@ function WebDivInput({
 				fontSize: 16,
 				fontWeight: 500,
 				color: theme.colors.major,
-				paddingTop: theme.spacing.xs,
-				paddingBottom: theme.spacing.xs,
+				paddingBlock: 0,
 				outline: 'none',
 				minHeight: 22,
 				wordBreak: 'break-word'
