@@ -19,11 +19,6 @@ export function createDragSortState<TId extends DragSortId = DragSortId>() {
 		dragOwnHeight: makeMutable(0),
 		dragPressOffsetY: makeMutable(0),
 
-		// Plain JS staging object (not a shared value) — accumulates row
-		// heights synchronously across multiple onLayout calls without the
-		// stale-read race that spreading state.rowHeights.value caused.
-		rowHeightsStaging: {} as Record<string, number>,
-
 		// id -> measured row height (own row only, without children)
 		rowHeights: makeMutable<Record<string, number>>({}),
 

@@ -1,5 +1,6 @@
 import {
 	createContext,
+	RefObject,
 	useContext,
 	useMemo,
 	useRef,
@@ -19,6 +20,11 @@ type DragSortContextValue<TId extends DragSortId = DragSortId> = {
 	indentStep: number
 	onDrop: (payload: DragSortDropPayload<TId>) => void
 	containerRef: AnimatedRef<Animated.View>
+	// Plain JS-thread-only staging object for accumulating row heights.
+	// Kept OUTSIDE `state` on purpose: `state` is captured by worklets,
+	// which freezes it into a shareable snapshot — a plain mutable object
+	// must live separately to remain writable from handleLayout.
+	rowHeightsStagingRef: RefObject<Record<string, number>>
 }
 
 const DragSortContext = createContext<DragSortContextValue | null>(null)
@@ -37,8 +43,16 @@ export function DragSortProvider<TId extends DragSortId = DragSortId>({
 	const stateRef = useRef<DragSortState<TId>>(createDragSortState<TId>())
 	const containerRef = useAnimatedRef<Animated.View>()
 
+	const rowHeightsStagingRef = useRef<Record<string, number>>({})
+
 	const value = useMemo(
-		() => ({ state: stateRef.current, indentStep, onDrop, containerRef }),
+		() => ({
+			state: stateRef.current,
+			indentStep,
+			onDrop,
+			containerRef,
+			rowHeightsStagingRef
+		}),
 		[indentStep, onDrop, containerRef]
 	)
 

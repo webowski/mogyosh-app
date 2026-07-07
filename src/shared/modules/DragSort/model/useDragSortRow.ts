@@ -1,9 +1,9 @@
+import { useEffect, useRef } from 'react'
 import type { LayoutChangeEvent } from 'react-native'
 import { Gesture } from 'react-native-gesture-handler'
 import { useAnimatedStyle, withTiming } from 'react-native-reanimated'
 import { scheduleOnRN } from 'react-native-worklets'
 
-import { useEffect, useRef } from 'react'
 import { DRAG_SORT_LONG_PRESS_MS } from './dragSort.constants'
 import type { DragSortId } from './dragSort.types'
 import { computeDropTarget } from './dragSort.utils'
@@ -13,7 +13,8 @@ export function useDragSortRow<TId extends DragSortId = DragSortId>(
 	id: TId,
 	depth: number
 ) {
-	const { state, indentStep, onDrop } = useDragSortContext<TId>()
+	const { state, indentStep, onDrop, rowHeightsStagingRef } =
+		useDragSortContext<TId>()
 	const previousIdRef = useRef(id)
 
 	useEffect(() => {
@@ -30,8 +31,8 @@ export function useDragSortRow<TId extends DragSortId = DragSortId>(
 	}, [id, state.rowHeights])
 
 	const handleLayout = (e: LayoutChangeEvent) => {
-		state.rowHeightsStaging[id] = e.nativeEvent.layout.height
-		state.rowHeights.value = { ...state.rowHeightsStaging }
+		rowHeightsStagingRef.current[id] = e.nativeEvent.layout.height
+		state.rowHeights.value = { ...rowHeightsStagingRef.current }
 	}
 
 	const commitDrop = (draggedId: TId, dropIndex: number, dropDepth: number) => {
