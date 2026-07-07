@@ -152,9 +152,8 @@ export default function BulletedSubitem({
 	}, [data.id, pendingFocusId, inputRef])
 
 	return (
-		<View>
-			<View style={styles.container}>
-				{/* <Text
+		<View style={styles.Bulleted}>
+			{/* <Text
 					style={{
 						marginLeft: 1,
 						marginRight: 6,
@@ -164,37 +163,36 @@ export default function BulletedSubitem({
 				>
 					{getBullet(depth)}
 				</Text> */}
-				<View style={styles.Bullet} />
-				<Animated.Text style={[styles.text, textStyle]}>
-					<MarkdownInput
-						ref={inputRef}
-						subitemText={data.info}
-						onChangeText={handleChangeText}
-						onChangeMarkdown={handleChangeText}
-						onEnterPress={handleAddAfter}
-						onFocus={handleFocus}
-						onBackspaceOnEmpty={() => {
-							onRemove?.()
-						}}
-					/>
-				</Animated.Text>
-				{data.settings?.checkable && (
-					<Checkbox checked={checked} onPress={handlePressCheckbox} />
-				)}
-			</View>
+			<View style={styles.Bullet} />
+			<Animated.Text style={[styles.text, textStyle]}>
+				<MarkdownInput
+					ref={inputRef}
+					subitemText={data.info}
+					onChangeText={handleChangeText}
+					onChangeMarkdown={handleChangeText}
+					onEnterPress={handleAddAfter}
+					onFocus={handleFocus}
+					onBackspaceOnEmpty={() => {
+						onRemove?.()
+					}}
+				/>
+			</Animated.Text>
+			{data.settings?.checkable && (
+				<Checkbox checked={checked} onPress={handlePressCheckbox} />
+			)}
 		</View>
 	)
 }
 
 const styles = StyleSheet.create((theme) => ({
-	container: {
+	Bulleted: {
 		flexDirection: 'row',
 		alignItems: 'flex-start',
 		gap: 10,
 		paddingVertical: 4
 	},
 	Bullet: {
-		marginTop: 10,
+		marginTop: 12,
 		marginLeft: 2,
 		width: 6,
 		height: 6,

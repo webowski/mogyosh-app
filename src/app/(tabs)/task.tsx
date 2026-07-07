@@ -284,6 +284,7 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	dropIndicator: {
 		position: 'absolute',
+		zIndex: 20,
 		left: 0,
 		right: 0,
 		height: 2,

@@ -25,7 +25,7 @@ export function DragSortIndicator({ style }: DragSortIndicatorProps) {
 		return {
 			opacity: 1,
 			transform: [
-				{ translateY: cumulativeY },
+				{ translateY: cumulativeY - 1 },
 				{ translateX: state.dropDepth.value * indentStep }
 			]
 		}

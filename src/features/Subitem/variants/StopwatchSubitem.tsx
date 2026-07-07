@@ -80,12 +80,14 @@ const styles = StyleSheet.create((theme) => ({
 	Stopwatch__body: {
 		flex: 1,
 		gap: 0,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
 		paddingHorizontal: 12,
 		paddingVertical: 8
 	},
 
 	Stopwatch__label: {
-		fontSize: 15,
+		fontSize: 16,
 		fontWeight: '500',
 		color: theme.colors.major
 	},
@@ -98,6 +100,7 @@ const styles = StyleSheet.create((theme) => ({
 	},
 
 	Stopwatch__actions: {
+		minHeight: 52,
 		width: SUBITEM_VARS.actionWidth,
 		padding: 8,
 		borderLeftWidth: 1,

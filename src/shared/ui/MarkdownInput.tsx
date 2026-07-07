@@ -78,7 +78,7 @@ const styles = StyleSheet.create((theme) => ({
 	Input: {
 		flex: 1,
 		fontSize: 16,
-		fontWeight: '400',
+		fontWeight: '500',
 		color: theme.colors.major,
 		paddingVertical: theme.spacing.xs,
 		outline: 'none'
