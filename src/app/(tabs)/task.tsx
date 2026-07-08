@@ -24,14 +24,6 @@ export default function TaskScreen() {
 		(state) => state.setActiveItemId
 	)
 
-	useEffect(
-		() => {
-			setActiveTaskId(selectedTaskId)
-		},
-		// eslint-disable-next-line
-		[selectedTaskId]
-	)
-
 	const inputRefs = useEditorToolbarStore((state) => state.inputRefs)
 
 	const pendingFocusId = useEditorToolbarStore((state) => state.pendingFocusId)
@@ -40,6 +32,13 @@ export default function TaskScreen() {
 	const removeSubitem = useRemoveSubitem()
 
 	const { data, isLoading, error } = useTaskById(selectedTaskId)
+	useEffect(
+		() => {
+			setActiveTaskId(selectedTaskId)
+		},
+		// eslint-disable-next-line
+		[selectedTaskId]
+	)
 
 	// Load from server and sync into store
 	const { isLoading: isLoadingSubitems } = useSubitems(selectedTaskId)
