@@ -10,12 +10,13 @@ import {
 	DRAG_SORT_AUTOSCROLL_EDGE,
 	DRAG_SORT_AUTOSCROLL_SPEED
 } from './dragSort.constants'
+import { recomputeDragSortDropTarget } from './dragSort.utils'
 import { useDragSortContext } from './DragSortContext'
 
 export function useDragSortAutoScroll(
 	scrollAnimatedRef: AnimatedRef<Animated.ScrollView>
 ) {
-	const { state } = useDragSortContext()
+	const { state, indentStep } = useDragSortContext()
 	const windowHeight = Dimensions.get('window').height
 
 	useFrameCallback(() => {
@@ -38,5 +39,7 @@ export function useDragSortAutoScroll(
 				false
 			)
 		}
+
+		recomputeDragSortDropTarget(state, indentStep)
 	})
 }
