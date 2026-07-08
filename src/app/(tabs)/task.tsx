@@ -138,7 +138,7 @@ function SubitemDragSortContent({
 							pendingFocusId={pendingFocusId}
 						/>
 					))}
-					<DragSortIndicator style={styles.dropIndicator} />
+					<DragSortIndicator />
 				</Animated.View>
 				<Pressable style={[styles.addButton]} onPress={() => onAddSubitem()}>
 					<MaterialIcons name='add' size={28} color={theme.colors.minor} />
@@ -280,14 +280,5 @@ const styles = StyleSheet.create((theme) => ({
 		borderTopRightRadius: STYLE_VARS.radius_sm,
 		borderBottomLeftRadius: STYLE_VARS.radius_lg,
 		borderBottomRightRadius: STYLE_VARS.radius_lg
-	},
-	dropIndicator: {
-		position: 'absolute',
-		zIndex: 20,
-		left: 0,
-		right: 0,
-		height: 2,
-		borderRadius: 1,
-		backgroundColor: theme.colors.primaryLight
 	}
 }))
