@@ -123,6 +123,7 @@ function SubitemDragSortContent({
 				style={staticStyles.ScrollBox__inner}
 				onPress={() => KeyboardController.dismiss()}
 				accessibilityRole={undefined}
+				android_disableSound
 			>
 				<Animated.View ref={containerRef} style={{ position: 'relative' }}>
 					{subitemTree.map((subitemData) => (
