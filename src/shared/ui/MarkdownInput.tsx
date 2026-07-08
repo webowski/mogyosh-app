@@ -71,6 +71,14 @@ export const MarkdownInput = forwardRef<
 						markdown.endsWith('\n') ? markdown.slice(0, -1) : markdown
 					)
 				}}
+				markdownStyle={
+					{
+						// strong: { color: 'red' }
+						// em: { color: '#7C3AED' },
+						// link: { color: '#2563EB', underline: true },
+						// h1: { fontSize: 28, fontWeight: 'bold', color: '#111827' },
+					}
+				}
 			/>
 		)
 	}
