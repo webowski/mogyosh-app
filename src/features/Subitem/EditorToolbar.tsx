@@ -9,6 +9,7 @@ import type { SubitemId, TaskId } from '@/shared/domain/ids'
 import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 import { Button } from '@/shared/ui/Button'
+import { ScrollView } from 'react-native-gesture-handler'
 import { selectSubitems, useSubitemStore } from './model/subitem.store'
 import { useCreateSubitem } from './model/useCreateSubitem'
 import { useMoveSubitem } from './model/useMoveSubitem'
@@ -140,11 +141,21 @@ export default function EditorToolbar() {
 				/>
 			</KeyboardToolbar.Background>
 
-			<KeyboardToolbar.Content style={{ padding: 8 }}>
-				<View
-					style={{
-						padding: 8,
-						// paddingHorizontal: STYLE_VARS.sidePadding,
+			<KeyboardToolbar.Content
+				style={
+					{
+						// padding: 8
+					}
+				}
+			>
+				<ScrollView
+					horizontal
+					style={{}}
+					bounces={false}
+					showsHorizontalScrollIndicator={false}
+					contentContainerStyle={{
+						// paddingHorizontal: 8,
+						paddingHorizontal: STYLE_VARS.sidePadding,
 						flexDirection: 'row',
 						gap: 8
 					}}
@@ -171,6 +182,10 @@ export default function EditorToolbar() {
 						<MaterialIcons name='arrow-downward' size={24} />
 					</Button>
 
+					<Button variant='bare' onPress={handleRemove}>
+						<MaterialIcons name='delete' size={24} />
+					</Button>
+
 					<Button variant='bare' onPress={() => {}}>
 						<MaterialIcons name='swap-horiz' size={24} />
 					</Button>
@@ -186,11 +201,7 @@ export default function EditorToolbar() {
 					<Button variant='bare' onPress={() => {}}>
 						<MaterialIcons name='link' size={24} />
 					</Button>
-
-					<Button variant='bare' onPress={handleRemove}>
-						<MaterialIcons name='delete' size={24} />
-					</Button>
-				</View>
+				</ScrollView>
 			</KeyboardToolbar.Content>
 		</KeyboardToolbar>
 	)
