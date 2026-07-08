@@ -57,10 +57,10 @@ export const MarkdownInput = forwardRef<
 				multiline
 				onFocus={onFocus}
 				onChangeText={(text) => {
-					if (text.includes('\n')) {
+					if (text.endsWith('\n')) {
 						;(
 							ref as React.RefObject<EnrichedMarkdownTextInputInstance>
-						).current?.setValue(subitemText)
+						).current?.setValue(subitemText.trim())
 						onEnterPress?.()
 					} else if (text === '') {
 						onBackspaceOnEmpty?.()
