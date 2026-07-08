@@ -123,7 +123,7 @@ export function SubitemDragSortContent({
 					))}
 					<DragSortIndicator />
 				</Animated.View>
-				<Pressable style={[styles.addButton]} onPress={() => onAddSubitem()}>
+				<Pressable style={[styles.ButtonAdd]} onPress={() => onAddSubitem()}>
 					<MaterialIcons name='add' size={28} color={theme.colors.minor} />
 				</Pressable>
 			</GesturePressable>
@@ -132,7 +132,7 @@ export function SubitemDragSortContent({
 }
 
 const styles = StyleSheet.create((theme) => ({
-	addButton: {
+	ButtonAdd: {
 		marginTop: 4,
 		flexDirection: 'row',
 		alignItems: 'center',
