@@ -256,16 +256,14 @@ export default function TaskScreen() {
 		)
 
 	return (
-		<>
-			<SubitemDragSortLayer
-				subitemTree={subitemTree}
-				taskId={selectedTaskId as TaskId}
-				inputRefs={inputRefs}
-				pendingFocusId={pendingFocusId}
-				onAddSubitem={handleAddSubitem}
-				onRemoveSubitem={handleRemove}
-			/>
-		</>
+		<SubitemDragSortLayer
+			subitemTree={subitemTree}
+			taskId={selectedTaskId as TaskId}
+			inputRefs={inputRefs}
+			pendingFocusId={pendingFocusId}
+			onAddSubitem={handleAddSubitem}
+			onRemoveSubitem={handleRemove}
+		/>
 	)
 }
 

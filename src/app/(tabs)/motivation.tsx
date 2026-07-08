@@ -138,38 +138,36 @@ export default function MotivationScreen() {
 		)
 
 	return (
-		<>
-			<KeyboardAwareScrollView
-				style={staticStyles.ScrollBox}
-				overScrollMode='never'
-				bottomOffset={STYLE_VARS.editorToolbarHeight * 1.25}
+		<KeyboardAwareScrollView
+			style={staticStyles.ScrollBox}
+			overScrollMode='never'
+			bottomOffset={STYLE_VARS.editorToolbarHeight * 1.25}
+		>
+			<GesturePressable
+				style={staticStyles.ScrollBox__inner}
+				onPress={() => KeyboardController.dismiss()}
+				accessibilityRole={undefined}
 			>
-				<GesturePressable
-					style={staticStyles.ScrollBox__inner}
-					onPress={() => KeyboardController.dismiss()}
-					accessibilityRole={undefined}
+				{subitemTree.map((subitemData) => (
+					<SubitemNode
+						inputRefs={inputRefs}
+						key={subitemData.stableKey ?? subitemData.id}
+						data={subitemData}
+						depth={0}
+						variant={subitemData.type}
+						onAddAfter={handleAddSubitem}
+						onRemove={handleRemove}
+						pendingFocusId={pendingFocusId}
+					/>
+				))}
+				<Pressable
+					style={[styles.AddButton]}
+					onPress={() => handleAddSubitem()}
 				>
-					{subitemTree.map((subitemData) => (
-						<SubitemNode
-							inputRefs={inputRefs}
-							key={subitemData.stableKey ?? subitemData.id}
-							data={subitemData}
-							depth={0}
-							variant={subitemData.type}
-							onAddAfter={handleAddSubitem}
-							onRemove={handleRemove}
-							pendingFocusId={pendingFocusId}
-						/>
-					))}
-					<Pressable
-						style={[styles.AddButton]}
-						onPress={() => handleAddSubitem()}
-					>
-						<MaterialIcons name='add' size={28} color={theme.colors.minor} />
-					</Pressable>
-				</GesturePressable>
-			</KeyboardAwareScrollView>
-		</>
+					<MaterialIcons name='add' size={28} color={theme.colors.minor} />
+				</Pressable>
+			</GesturePressable>
+		</KeyboardAwareScrollView>
 	)
 }
 
