@@ -168,7 +168,7 @@ export default function BulletedSubitem({
 				<MarkdownInput
 					ref={inputRef}
 					subitemText={data.info}
-					onChangeText={handleChangeText}
+					// onChangeText={handleChangeText}
 					onChangeMarkdown={handleChangeText}
 					onEnterPress={handleAddAfter}
 					onFocus={handleFocus}

@@ -66,7 +66,11 @@ export const MarkdownInput = forwardRef<
 						onBackspaceOnEmpty?.()
 					}
 				}}
-				onChangeMarkdown={onChangeMarkdown}
+				onChangeMarkdown={(markdown) => {
+					onChangeMarkdown?.(
+						markdown.endsWith('\n') ? markdown.slice(0, -1) : markdown
+					)
+				}}
 			/>
 		)
 	}
