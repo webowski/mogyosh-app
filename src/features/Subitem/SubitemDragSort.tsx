@@ -12,13 +12,11 @@ import { AnimatedScrollViewComponent } from 'react-native-keyboard-controller/li
 import Animated from 'react-native-reanimated'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
-import {
-	flattenSubitemTree,
-	reorderSubitem,
-	SubitemNode,
-	type SubitemData,
-	type SubitemInputRefsMap
-} from '@/features/Subitem'
+import type { SubitemData, SubitemInputRefsMap } from '@/shared/domain/subitem'
+import { flattenSubitemTree } from './model/subitem.utils'
+import { reorderSubitem } from './model/useReorderSubitem'
+import SubitemNode from './SubitemNode'
+
 import type { SubitemId, TaskId } from '@/shared/domain/ids'
 import {
 	DragSortIndicator,
