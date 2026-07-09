@@ -1,20 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { Platform, Text, View } from 'react-native'
-import type { EnrichedMarkdownTextInputInstance } from 'react-native-enriched-markdown'
-import Animated, {
-	useAnimatedStyle,
-	useSharedValue,
-	withTiming
-} from 'react-native-reanimated'
+import { Text, View } from 'react-native'
+import Animated from 'react-native-reanimated'
 import { StyleSheet } from 'react-native-unistyles'
 
 import type { SubitemInputRefsMap, SubitemProps } from '@/shared/domain/subitem'
-import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
-import { STYLE_VARS } from '@/shared/styles/common'
 import Checkbox from '@/shared/ui/Checkbox'
 import { MarkdownInput } from '@/shared/ui/MarkdownInput'
-import { useCreateSubitem } from '../model/useCreateSubitem'
-import { useUpdateSubitem } from '../model/useUpdateSubitem'
+import { useSubitemLogic } from '../model/useSubitemLogic'
 
 type OrderedSubitemProps = SubitemProps & {
 	depth: number
@@ -30,126 +21,22 @@ export default function OrderedSubitem({
 	onRemove,
 	pendingFocusId
 }: OrderedSubitemProps) {
-	const updateSubitem = useUpdateSubitem()
-	const createSubitem = useCreateSubitem()
-
-	const setFocusedSubitemId = useEditorToolbarStore(
-		(state) => state.setFocusedSubitemId
-	)
-
-	const getOrCreateRef = () => {
-		if (!inputRefs) return { current: null }
-		if (!inputRefs.has(data.id)) {
-			inputRefs.set(data.id, { current: null })
-		}
-		return inputRefs.get(data.id)!
-	}
-
-	const inputRef = getOrCreateRef()
-
-	const updateDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-	const handleChangeText = useCallback(
-		(value: string) => {
-			if (updateDebounceRef.current) clearTimeout(updateDebounceRef.current)
-			updateDebounceRef.current = setTimeout(() => {
-				// console.log('[OrderedSubitem] handleChangeText:', value)
-				updateSubitem.mutate({
-					id: data.id,
-					taskId: data.task_id,
-					patch: { info: value }
-				})
-			}, 500)
-		},
-		// eslint-disable-next-line
-		[data.id]
-	)
-
-	const [checked, setChecked] = useState(data.state === 'done')
-	const animationProgress = useSharedValue(checked ? 1 : 0)
-	useEffect(
-		() => {
-			animationProgress.value = withTiming(checked ? 1 : 0, { duration: 250 })
-		},
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[checked]
-	)
-	const textStyle = useAnimatedStyle(() => ({
-		opacity: withTiming(checked ? STYLE_VARS.checkedOpacity : 1, {
-			duration: STYLE_VARS.duration.md
-		})
-	}))
-
-	const handlePressCheckbox = useCallback(
-		() => {
-			setChecked(!checked)
-			onCheckToggle?.(!checked)
-		},
-		// eslint-disable-next-line
-		[checked]
-	)
-
-	const handleFocus = () => setFocusedSubitemId(data.id)
-
-	const focusNewInput = () => {
-		const ref = inputRef.current
-		if (!ref) return
-
-		if (Platform.OS === 'web') {
-			const element = ref as HTMLDivElement
-			element.focus()
-			const range = document.createRange()
-			const selection = window.getSelection()
-			range.selectNodeContents(element)
-			range.collapse(false)
-			selection?.removeAllRanges()
-			selection?.addRange(range)
-		} else {
-			;(ref as EnrichedMarkdownTextInputInstance).focus()
-		}
-	}
-
-	const handleAddAfter = () => {
-		if (onAddAfter) {
-			onAddAfter()
-			return
-		}
-
-		// Fallback: create directly if no onAddAfter provided (standalone usage)
-		createSubitem.mutate(
-			{
-				info: '',
-				task_id: data.task_id,
-				parent_id: data.parent_id ?? null,
-				type: 'ol'
-			}
-			// {
-			// 	onSuccess: () => {
-			// 		setTimeout(focusNewInput, 50)
-			// 	}
-			// }
-		)
-		setTimeout(focusNewInput, 50)
-	}
-
-	useEffect(() => {
-		if (pendingFocusId?.current === data.id) {
-			pendingFocusId.current = null
-			const ref = inputRef.current
-			if (!ref) return
-			if (Platform.OS === 'web') {
-				const element = ref as HTMLDivElement
-				element.focus()
-				const range = document.createRange()
-				const selection = window.getSelection()
-				range.selectNodeContents(element)
-				range.collapse(false)
-				selection?.removeAllRanges()
-				selection?.addRange(range)
-			} else {
-				;(ref as EnrichedMarkdownTextInputInstance).focus()
-			}
-		}
-	}, [data.id, pendingFocusId, inputRef])
+	const {
+		inputRef,
+		checked,
+		textStyle,
+		handleChangeText,
+		handlePressCheckbox,
+		handleFocus,
+		handleAddAfter
+	} = useSubitemLogic({
+		data,
+		onCheckToggle,
+		inputRefs,
+		onAddAfter,
+		pendingFocusId,
+		subitemType: 'ol'
+	})
 
 	return (
 		<View style={styles.Ordered}>
