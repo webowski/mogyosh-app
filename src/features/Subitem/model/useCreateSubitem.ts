@@ -29,7 +29,8 @@ export const useCreateSubitem = () => {
 			`optimistic-${Date.now()}`) as SubitemId
 		const sort_order = generateSubitemSortOrder(
 			subitems,
-			payload.afterId ?? null
+			payload.afterId ?? null,
+			payload.parent_id ?? null
 		)
 
 		const optimisticSubitem: SubitemEntity = {

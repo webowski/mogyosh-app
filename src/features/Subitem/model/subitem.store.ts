@@ -349,18 +349,27 @@ export const selectPendingOperations = (state: SubitemStore) =>
 
 export function generateSubitemSortOrder(
 	subitems: SubitemEntity[],
-	afterId: SubitemId | null
+	afterId: SubitemId | null,
+	parentId: SubitemId | null = null
 ): string {
-	if (subitems.length === 0) return generateKeyBetween(null, null)
+	const siblings = subitems
+		.filter((item) => (item.parent_id ?? null) === parentId)
+		.sort((a, b) => {
+			const sortOrderA = a.sort_order ?? ''
+			const sortOrderB = b.sort_order ?? ''
+			return sortOrderA < sortOrderB ? -1 : sortOrderA > sortOrderB ? 1 : 0
+		})
+
+	if (siblings.length === 0) return generateKeyBetween(null, null)
 
 	if (!afterId) {
-		const last = subitems[subitems.length - 1]
+		const last = siblings[siblings.length - 1]
 		return generateKeyBetween(last?.sort_order ?? null, null)
 	}
 
-	const afterIndex = subitems.findIndex((s) => s.id === afterId)
-	const afterSubitem = afterIndex >= 0 ? subitems[afterIndex] : null
-	const nextSubitem = subitems[afterIndex + 1] ?? null
+	const afterIndex = siblings.findIndex((item) => item.id === afterId)
+	const afterSubitem = afterIndex >= 0 ? siblings[afterIndex] : null
+	const nextSubitem = siblings[afterIndex + 1] ?? null
 
 	return generateKeyBetween(
 		afterSubitem?.sort_order ?? null,
