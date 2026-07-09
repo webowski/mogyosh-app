@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Platform, View } from 'react-native'
+import { Platform, Text, View } from 'react-native'
 import type { EnrichedMarkdownTextInputInstance } from 'react-native-enriched-markdown'
 import Animated, {
 	useAnimatedStyle,
@@ -153,22 +153,11 @@ export default function BulletedSubitem({
 
 	return (
 		<View style={styles.Bulleted}>
-			{/* <Text
-					style={{
-						marginLeft: 1,
-						marginRight: 6,
-						fontSize: 24,
-						lineHeight: 22
-					}}
-				>
-					{getBullet(depth)}
-				</Text> */}
-			<View style={styles.Bullet} />
+			<Text style={styles.Bulleted__marker}>{getBulletedMarker(depth)}</Text>
 			<Animated.Text style={[styles.text, textStyle]}>
 				<MarkdownInput
 					ref={inputRef}
 					subitemText={data.info}
-					// onChangeText={handleChangeText}
 					onChangeMarkdown={handleChangeText}
 					onEnterPress={handleAddAfter}
 					onFocus={handleFocus}
@@ -191,13 +180,17 @@ const styles = StyleSheet.create((theme) => ({
 		gap: 10,
 		paddingVertical: 4
 	},
-	Bullet: {
-		marginTop: 12,
-		marginLeft: 2,
-		width: 6,
-		height: 6,
-		borderRadius: 3,
-		backgroundColor: theme.colors.major
+	Bulleted__marker: {
+		// marginLeft: 1,
+		// marginRight: 6,
+		fontSize: 26,
+		lineHeight: 20,
+		marginTop: 0,
+		marginLeft: 2
+		// width: 6,
+		// height: 6,
+		// borderRadius: 3,
+		// backgroundColor: theme.colors.major
 	},
 	text: {
 		flex: 1,
@@ -207,7 +200,7 @@ const styles = StyleSheet.create((theme) => ({
 	}
 }))
 
-function getBullet(bulletDepth: number): string {
-	const bullets = ['•', '◦', '▪', '•', '◦', '▪']
-	return bullets[bulletDepth % bullets.length]
+function getBulletedMarker(depth: number): string {
+	const markers = ['•', '◦', '▪', '•', '◦', '▪']
+	return markers[depth % markers.length]
 }
