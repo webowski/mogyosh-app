@@ -8,39 +8,30 @@ export const subitemStyles = StyleSheet.create((theme) => ({
 	Bulleted: {
 		flexDirection: 'row',
 		alignItems: 'flex-start',
-		gap: 10,
+		gap: 8,
 		paddingVertical: 4
 	},
 	Bulleted__marker: {
-		// marginLeft: 1,
-		// marginRight: 6,
-		fontSize: 26,
-		lineHeight: 20,
-		marginTop: 0,
-		marginLeft: 2
-		// width: 6,
-		// height: 6,
-		// borderRadius: 3,
-		// backgroundColor: theme.colors.major
+		width: 16,
+		textAlign: 'center',
+		paddingTop: 1,
+		fontSize: 28,
+		lineHeight: 28,
+		fontWeight: 500
 	},
 
 	Ordered: {
 		flexDirection: 'row',
 		alignItems: 'flex-start',
-		gap: 10,
+		gap: 8,
 		paddingVertical: 4
 	},
 	Ordered__marker: {
-		// marginTop: 12,
-		// marginLeft: 2,
-		// width: 6,
-		// height: 6,
-		// borderRadius: 3,
-		// backgroundColor: theme.colors.major,
-		marginLeft: 2,
-		marginRight: 6,
+		width: 16,
+		textAlign: 'right',
+		paddingTop: 4,
 		fontSize: 16,
-		lineHeight: 20,
+		lineHeight: 22,
 		fontWeight: 500
 	},
 
