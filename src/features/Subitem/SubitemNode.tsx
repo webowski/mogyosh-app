@@ -12,6 +12,7 @@ import type {
 } from '@/shared/domain/subitem'
 import { useDragSortRow } from '@/shared/modules/DragSort'
 import { StyleSheet } from 'react-native-unistyles'
+import { getOrderedSiblingIndex } from './model/subitem.utils'
 import { useUpdateSubitemState } from './model/useUpdateSubitemState'
 import BulletedSubitem from './variants/BulletedSubitem'
 import CollapsibleSubitem from './variants/CollapsibleSubitem'
@@ -25,8 +26,8 @@ import TimerSubitem from './variants/TimerSubitem'
 interface SubitemNodeProps {
 	data: SubitemData
 	depth: number
-	// onCheckToggle: (subitemId: SubitemId, checked: boolean) => void
 	variant: SubitemType
+	siblings?: SubitemData[]
 	inputRefs?: SubitemInputRefsMap
 	onAddAfter?: (afterId: SubitemId) => void
 	onRemove?: (id: SubitemId) => void
@@ -37,6 +38,7 @@ export default function SubitemNode({
 	data,
 	variant = 'p',
 	depth = 0,
+	siblings,
 	inputRefs,
 	onAddAfter,
 	onRemove,
@@ -104,7 +106,12 @@ export default function SubitemNode({
 				<OrderedSubitem
 					data={data}
 					depth={depth}
+					orderIndex={getOrderedSiblingIndex(siblings ?? [data], data.id)}
+					inputRefs={inputRefs}
 					onCheckToggle={(checked) => handleToggleSubitem(data.id, checked)}
+					onAddAfter={() => onAddAfter?.(data.id)}
+					onRemove={() => onRemove?.(data.id)}
+					pendingFocusId={pendingFocusId}
 				/>
 			)
 			break
@@ -164,6 +171,7 @@ export default function SubitemNode({
 								data={child}
 								depth={depth + 1}
 								variant={child.type}
+								siblings={data.children}
 								onAddAfter={onAddAfter}
 								onRemove={onRemove}
 								pendingFocusId={pendingFocusId}

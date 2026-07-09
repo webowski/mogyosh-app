@@ -10,12 +10,14 @@ import { subitemStyles } from '../style'
 
 type OrderedSubitemProps = SubitemProps & {
 	depth: number
+	orderIndex: number
 	inputRefs?: SubitemInputRefsMap
 }
 
 export default function OrderedSubitem({
 	data,
 	depth,
+	orderIndex,
 	onCheckToggle,
 	inputRefs,
 	onAddAfter,
@@ -42,7 +44,7 @@ export default function OrderedSubitem({
 	return (
 		<View style={subitemStyles.Ordered}>
 			<Text style={subitemStyles.Ordered__marker}>
-				{getOrderedMarker(depth)}
+				{getOrderedMarker(depth, orderIndex)}
 			</Text>
 			<Animated.Text style={[subitemStyles.text, textStyle]}>
 				<MarkdownInput

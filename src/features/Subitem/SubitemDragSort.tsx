@@ -114,6 +114,7 @@ export function SubitemDragSortContent({
 							data={subitemData}
 							depth={0}
 							variant={subitemData.type}
+							siblings={subitemTree}
 							onAddAfter={onAddSubitem}
 							onRemove={onRemoveSubitem}
 							pendingFocusId={pendingFocusId}
