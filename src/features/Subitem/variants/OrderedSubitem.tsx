@@ -1,11 +1,12 @@
 import { Text, View } from 'react-native'
 import Animated from 'react-native-reanimated'
-import { StyleSheet } from 'react-native-unistyles'
 
 import type { SubitemInputRefsMap, SubitemProps } from '@/shared/domain/subitem'
 import Checkbox from '@/shared/ui/Checkbox'
 import { MarkdownInput } from '@/shared/ui/MarkdownInput'
+import { getOrderedMarker } from '../model/subitem.utils'
 import { useSubitemLogic } from '../model/useSubitemLogic'
+import { subitemStyles } from '../style'
 
 type OrderedSubitemProps = SubitemProps & {
 	depth: number
@@ -39,9 +40,11 @@ export default function OrderedSubitem({
 	})
 
 	return (
-		<View style={styles.Ordered}>
-			<Text style={styles.Ordered__marker}>{getOrderedMarker(depth)}</Text>
-			<Animated.Text style={[styles.text, textStyle]}>
+		<View style={subitemStyles.Ordered}>
+			<Text style={subitemStyles.Ordered__marker}>
+				{getOrderedMarker(depth)}
+			</Text>
+			<Animated.Text style={[subitemStyles.text, textStyle]}>
 				<MarkdownInput
 					ref={inputRef}
 					subitemText={data.info}
@@ -58,37 +61,4 @@ export default function OrderedSubitem({
 			)}
 		</View>
 	)
-}
-
-const styles = StyleSheet.create((theme) => ({
-	Ordered: {
-		flexDirection: 'row',
-		alignItems: 'flex-start',
-		gap: 10,
-		paddingVertical: 4
-	},
-	Ordered__marker: {
-		// marginTop: 12,
-		// marginLeft: 2,
-		// width: 6,
-		// height: 6,
-		// borderRadius: 3,
-		// backgroundColor: theme.colors.major,
-		marginLeft: 2,
-		marginRight: 6,
-		fontSize: 16,
-		lineHeight: 20,
-		fontWeight: 500
-	},
-	text: {
-		flex: 1,
-		fontSize: 16,
-		fontWeight: 500,
-		color: theme.colors.major
-	}
-}))
-
-function getOrderedMarker(depth: number): string {
-	const markers = ['1.', 'a.', '.i', '1.', 'a.', 'i.']
-	return markers[depth % markers.length]
 }

@@ -1,11 +1,12 @@
 import { Text, View } from 'react-native'
 import Animated from 'react-native-reanimated'
-import { StyleSheet } from 'react-native-unistyles'
 
 import type { SubitemInputRefsMap, SubitemProps } from '@/shared/domain/subitem'
 import Checkbox from '@/shared/ui/Checkbox'
 import { MarkdownInput } from '@/shared/ui/MarkdownInput'
+import { getBulletedMarker } from '../model/subitem.utils'
 import { useSubitemLogic } from '../model/useSubitemLogic'
+import { subitemStyles } from '../style'
 
 type BulletedSubitemProps = SubitemProps & {
 	depth: number
@@ -39,9 +40,11 @@ export default function BulletedSubitem({
 	})
 
 	return (
-		<View style={styles.Bulleted}>
-			<Text style={styles.Bulleted__marker}>{getBulletedMarker(depth)}</Text>
-			<Animated.Text style={[styles.text, textStyle]}>
+		<View style={subitemStyles.Bulleted}>
+			<Text style={subitemStyles.Bulleted__marker}>
+				{getBulletedMarker(depth)}
+			</Text>
+			<Animated.Text style={[subitemStyles.text, textStyle]}>
 				<MarkdownInput
 					ref={inputRef}
 					subitemText={data.info}
@@ -58,36 +61,4 @@ export default function BulletedSubitem({
 			)}
 		</View>
 	)
-}
-
-const styles = StyleSheet.create((theme) => ({
-	Bulleted: {
-		flexDirection: 'row',
-		alignItems: 'flex-start',
-		gap: 10,
-		paddingVertical: 4
-	},
-	Bulleted__marker: {
-		// marginLeft: 1,
-		// marginRight: 6,
-		fontSize: 26,
-		lineHeight: 20,
-		marginTop: 0,
-		marginLeft: 2
-		// width: 6,
-		// height: 6,
-		// borderRadius: 3,
-		// backgroundColor: theme.colors.major
-	},
-	text: {
-		flex: 1,
-		fontSize: 16,
-		fontWeight: 500,
-		color: theme.colors.major
-	}
-}))
-
-function getBulletedMarker(depth: number): string {
-	const markers = ['•', '◦', '▪', '•', '◦', '▪']
-	return markers[depth % markers.length]
 }

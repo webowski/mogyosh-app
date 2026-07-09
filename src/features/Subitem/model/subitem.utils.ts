@@ -25,3 +25,13 @@ export function buildSubitemTree(
 			children: buildSubitemTree(subitems, item.id)
 		}))
 }
+
+export function getBulletedMarker(depth: number): string {
+	const markers = ['•', '◦', '▪', '•', '◦', '▪']
+	return markers[depth % markers.length]
+}
+
+export function getOrderedMarker(depth: number): string {
+	const markers = ['1.', 'a.', '.i', '1.', 'a.', 'i.']
+	return markers[depth % markers.length]
+}
