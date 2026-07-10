@@ -1,9 +1,10 @@
+import { NavigationBar } from 'expo-navigation-bar'
 import { Stack, usePathname } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import { StatusBar } from 'expo-status-bar'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ActivityIndicator, Text, View } from 'react-native'
+import { ActivityIndicator, Platform, Text, View } from 'react-native'
 import { useUnistyles } from 'react-native-unistyles'
 
 import Header from '@/features/Header/Header'
@@ -22,7 +23,7 @@ export const unstable_settings = {
 }
 
 export default function RootLayout() {
-	const { theme } = useUnistyles()
+	const { theme, rt } = useUnistyles()
 	const { t } = useTranslation()
 
 	const [isLoggedIn, setLoggedIn] = useState(false)
@@ -79,6 +80,14 @@ export default function RootLayout() {
 	return (
 		<Providers>
 			<StatusBar style={theme.statusBarColor} />
+
+			{Platform.OS === 'android' && (
+				<NavigationBar
+					style={rt.themeName === 'light' ? 'dark' : 'light'}
+					hidden={false}
+				/>
+			)}
+
 			<Stack
 				screenOptions={{
 					contentStyle: {

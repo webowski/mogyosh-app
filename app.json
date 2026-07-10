@@ -58,6 +58,14 @@
         }
       ],
       [
+        "expo-navigation-bar",
+        {
+          "enforceContrast": true,
+          "hidden": false,
+          "style": "light"
+        }
+      ],
+      [
         "expo-splash-screen",
         {
           "backgroundColor": "#668cff",
