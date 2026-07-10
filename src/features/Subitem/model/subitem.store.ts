@@ -184,10 +184,21 @@ export const useSubitemStore = create<SubitemStore>()(
 				removeSubitem: (id, taskId) =>
 					set((state) => {
 						const current = state.subitemsByTask[taskId] ?? []
+						const removedSubitem = current.find((subitem) => subitem.id === id)
+						const newParentId = removedSubitem?.parent_id ?? null
+
+						const updatedList = current
+							.filter((subitem) => subitem.id !== id)
+							.map((subitem) =>
+								subitem.parent_id === id
+									? { ...subitem, parent_id: newParentId }
+									: subitem
+							)
+
 						return {
 							subitemsByTask: {
 								...state.subitemsByTask,
-								[taskId]: current.filter((s) => s.id !== id)
+								[taskId]: updatedList
 							}
 						}
 					}),
