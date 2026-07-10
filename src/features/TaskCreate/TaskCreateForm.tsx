@@ -1,4 +1,5 @@
 import { MaterialIcons } from '@expo/vector-icons'
+import { BottomSheetScrollView } from '@gorhom/bottom-sheet'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { TrueSheet } from '@lodev09/react-native-true-sheet'
 import { generateNKeysBetween } from 'fractional-indexing'
@@ -23,7 +24,6 @@ import { STYLE_VARS } from '@/shared/styles/common'
 import { formStyles } from '@/shared/styles/form'
 import { textStyles } from '@/shared/styles/text'
 import { Button } from '@/shared/ui/Button'
-import KeyboardAwareScrollBox from '@/shared/ui/KeyboardAwareScrollBox'
 import RadioButton from '@/shared/ui/RadioButton'
 import Textarea from '@/shared/ui/Textarea'
 
@@ -171,7 +171,10 @@ export function TaskCreateForm({ onClose }: Props) {
 
 	return (
 		<>
-			<KeyboardAwareScrollBox>
+			<BottomSheetScrollView
+				contentContainerStyle={styles.ScrollContent}
+				keyboardShouldPersistTaps='handled'
+			>
 				<View style={styles.fieldGroup}>
 					<Controller
 						control={control}
@@ -226,7 +229,7 @@ export function TaskCreateForm({ onClose }: Props) {
 						</Button>
 					</View>
 				</View>
-			</KeyboardAwareScrollBox>
+			</BottomSheetScrollView>
 
 			<ActionsPanel style={{ paddingBottom: STYLE_VARS.navPanelUnderlap }}>
 				{/* <Button round variant='secondary' onPress={handleClearForm}>
@@ -330,6 +333,13 @@ export function TaskCreateForm({ onClose }: Props) {
 }
 
 const styles = StyleSheet.create((theme, rt) => ({
+	ScrollContent: {
+		gap: 18,
+		paddingTop: STYLE_VARS.sidePadding,
+		paddingBottom: STYLE_VARS.sidePadding + STYLE_VARS.navPanelUnderlap + 12,
+		paddingHorizontal: STYLE_VARS.sidePadding
+	},
+
 	fieldGroup: {
 		gap: theme.spacing.xs
 	},

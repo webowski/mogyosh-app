@@ -9,6 +9,7 @@ import { default as HeaderDay } from '@/features/Header/HeaderDay'
 import HeaderTask from '@/features/Header/HeaderTask'
 import NavPanel from '@/features/Navigation/NavPanel'
 import { EditorToolbar } from '@/features/Subitem'
+import { TaskCreateSheet } from '@/features/TaskCreate/TaskCreateSheet'
 
 export default function NavPanelLayout() {
 	const { theme } = useUnistyles()
@@ -92,7 +93,7 @@ export default function NavPanelLayout() {
 						header: (props) => <HeaderTask {...props} />
 					}}
 				/>
-				<Tabs.Screen
+				{/* <Tabs.Screen
 					name='createTask'
 					options={{
 						title: t('screen.Create Task'),
@@ -100,10 +101,11 @@ export default function NavPanelLayout() {
 						headerShown: true,
 						header: (props) => <Header {...props} />
 					}}
-				/>
+				/> */}
 			</Tabs>
 
 			<EditorToolbar />
+			<TaskCreateSheet />
 		</>
 	)
 }

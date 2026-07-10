@@ -13,6 +13,7 @@ import SVGIconPlus from '@/shared/images/icons/plus.svg'
 import SVGIconTarget from '@/shared/images/icons/target.svg'
 
 import { SwipeSwitchItems } from '@/features/Navigation/model/navTypes'
+import { useTaskCreateStore } from '@/features/TaskCreate/model/taskCreate.store'
 import { useCalendarStore } from '@/shared/model/calendar.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 import ActionSheet from './ActionSheet'
@@ -44,6 +45,7 @@ export default function NavPanel({
 	// Get selected date and swipe switch items from store
 	const selectedDate = useCalendarStore((state) => state.selectedDate)
 	const swipeSwitchItems = useNavStore((state) => state.swipeSwitchItems)
+	const openCreateTaskSheet = useTaskCreateStore((state) => state.open)
 
 	// Track current route for transition effects - ensure correct initialization
 	const currentRoute = state.routes[state.index]?.name || 'index'
@@ -132,13 +134,20 @@ export default function NavPanel({
 				/>
 
 				<NavButton
+					onPress={() => {
+						setIsActionSheetOpen(false)
+						openCreateTaskSheet()
+					}}
+					icon={<SVGIconPlus width={32} height={32} />}
+				/>
+				{/* <NavButton
 					isFocused={isCurrentRoute('createTask', state)}
 					onPress={() => {
 						navigation.navigate('createTask')
 						// setSwipeRoute('task')
 					}}
 					icon={<SVGIconPlus width={32} height={32} />}
-				/>
+				/> */}
 			</View>
 		</View>
 	)
