@@ -19,14 +19,13 @@ import {
 } from '@/features/TaskList'
 import type { SubitemInsert } from '@/shared/domain/subitem'
 import { useTaskStore } from '@/shared/model/task.store'
-import { commonStyles, STYLE_VARS } from '@/shared/styles/common'
+import { STYLE_VARS } from '@/shared/styles/common'
 import { formStyles } from '@/shared/styles/form'
 import { textStyles } from '@/shared/styles/text'
 import { Button } from '@/shared/ui/Button'
 import KeyboardAwareScrollBox from '@/shared/ui/KeyboardAwareScrollBox'
 import RadioButton from '@/shared/ui/RadioButton'
 import Textarea from '@/shared/ui/Textarea'
-import { SubitemListEditor } from './SubitemListEditor'
 
 const schema = z.object({
 	title: z.string().min(1, t('error.Enter the task title')).max(100)
@@ -226,16 +225,6 @@ export function TaskCreateForm({ onClose }: Props) {
 							за 1 час
 						</Button>
 					</View>
-				</View>
-
-				<View style={styles.fieldGroup}>
-					<View style={commonStyles.sectionHeader}>
-						<Text style={textStyles.heading5}>Task details</Text>
-					</View>
-					<SubitemListEditor
-						subitems={subitemsChecklist}
-						onChange={setSubitemsChecklist}
-					/>
 				</View>
 			</KeyboardAwareScrollBox>
 
