@@ -37,15 +37,16 @@ export const MarkdownInput = forwardRef<
 
 		if (Platform.OS === 'web') {
 			return (
-				<WebDivInput
-					subitemText={subitemText}
-					onChangeText={onChangeText}
-					onEnterPress={onEnterPress}
-					onBackspaceOnEmpty={onBackspaceOnEmpty}
-					onFocus={onFocus}
-					divRef={ref as React.Ref<HTMLDivElement>}
-					style={style}
-				/>
+				<Animated.View style={style}>
+					<WebDivInput
+						subitemText={subitemText}
+						onChangeText={onChangeText}
+						onEnterPress={onEnterPress}
+						onBackspaceOnEmpty={onBackspaceOnEmpty}
+						onFocus={onFocus}
+						divRef={ref as React.Ref<HTMLDivElement>}
+					/>
+				</Animated.View>
 			)
 		}
 
@@ -110,7 +111,6 @@ interface WebDivInputProps {
 	onBackspaceOnEmpty?: () => void
 	onFocus?: () => void
 	divRef: React.Ref<HTMLDivElement>
-	style?: StyleProp<AnimatedStyle<ViewStyle>>
 }
 
 function WebDivInput({
@@ -119,8 +119,7 @@ function WebDivInput({
 	onEnterPress,
 	onBackspaceOnEmpty,
 	onFocus,
-	divRef,
-	style
+	divRef
 }: WebDivInputProps) {
 	const { theme } = useUnistyles()
 	const localRef = useRef<HTMLDivElement>(null)
@@ -157,20 +156,17 @@ function WebDivInput({
 					}
 				}
 			}}
-			// @ts-ignore - web-only inline styles with animated styles
-			style={
-				{
-					flex: 1,
-					fontSize: 16,
-					fontWeight: 500,
-					color: theme.colors.major,
-					paddingBlock: 0,
-					outline: 'none',
-					minHeight: 22,
-					wordBreak: 'break-word',
-					...style
-				} as React.CSSProperties
-			}
+			// @ts-ignore - web-only inline styles
+			style={{
+				flex: 1,
+				fontSize: 16,
+				fontWeight: 500,
+				color: theme.colors.major,
+				paddingBlock: 0,
+				outline: 'none',
+				minHeight: 22,
+				wordBreak: 'break-word'
+			}}
 		/>
 	)
 }
