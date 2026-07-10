@@ -11,6 +11,7 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 import { z } from 'zod'
 
 import { ActionsPanel } from '@/features/ActionsPanel/ActionsPanel'
+import { useNavStore } from '@/features/Navigation/model/navStore'
 import { subitemAPI } from '@/features/Subitem/repository/subitem.api'
 import {
 	useCategories,
@@ -25,6 +26,7 @@ import { textStyles } from '@/shared/styles/text'
 import { Button } from '@/shared/ui/Button'
 import RadioButton from '@/shared/ui/RadioButton'
 import Textarea from '@/shared/ui/Textarea'
+import { useRouter } from 'expo-router'
 
 const schema = z.object({
 	title: z.string().min(1, t('error.Enter the task title')).max(100)
@@ -53,6 +55,10 @@ export function TaskCreateForm({ onClose }: Props) {
 	const [newCategoryName, setNewCategoryName] = useState('')
 	const { data: categories = [] } = useCategories()
 	const createCategory = useCreateCategory()
+
+	const router = useRouter()
+	const setSelectedTaskId = useTaskStore((store) => store.setSelectedTaskId)
+	const setSwipeRoute = useNavStore((store) => store.setSwipeRoute)
 
 	const categoryItems = useMemo(
 		() => {
@@ -166,6 +172,9 @@ export function TaskCreateForm({ onClose }: Props) {
 		}
 
 		onClose()
+		setSelectedTaskId(parentTask.id)
+		setSwipeRoute('task')
+		router.push('/task')
 	}
 
 	return (
