@@ -1,5 +1,4 @@
 import { MaterialIcons } from '@expo/vector-icons'
-import { BottomSheetScrollView } from '@gorhom/bottom-sheet'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { TrueSheet } from '@lodev09/react-native-true-sheet'
 import { generateNKeysBetween } from 'fractional-indexing'
@@ -7,7 +6,7 @@ import { t } from 'i18next'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { Text, TextInput, View } from 'react-native'
+import { ScrollView, Text, TextInput, View } from 'react-native'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 import { z } from 'zod'
 
@@ -171,7 +170,7 @@ export function TaskCreateForm({ onClose }: Props) {
 
 	return (
 		<>
-			<BottomSheetScrollView
+			<ScrollView
 				contentContainerStyle={styles.ScrollContent}
 				keyboardShouldPersistTaps='handled'
 			>
@@ -229,7 +228,7 @@ export function TaskCreateForm({ onClose }: Props) {
 						</Button>
 					</View>
 				</View>
-			</BottomSheetScrollView>
+			</ScrollView>
 
 			<ActionsPanel style={{ paddingBottom: STYLE_VARS.navPanelUnderlap }}>
 				{/* <Button round variant='secondary' onPress={handleClearForm}>

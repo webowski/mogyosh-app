@@ -1,43 +1,37 @@
-import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet'
+import { TrueSheet } from '@lodev09/react-native-true-sheet'
 import { useEffect, useRef } from 'react'
 import { useUnistyles } from 'react-native-unistyles'
 
-import { useTaskCreateStore } from '@/features/TaskCreate/model/taskCreate.store'
-import { TaskCreateForm } from '@/features/TaskCreate/TaskCreateForm'
 import { STYLE_VARS } from '@/shared/styles/common'
+import { useTaskCreateStore } from './model/taskCreate.store'
+import { TaskCreateForm } from './TaskCreateForm'
 
 export function TaskCreateSheet() {
 	const { theme } = useUnistyles()
 
-	const bottomSheetModalRef = useRef<BottomSheetModal>(null)
+	const sheetRef = useRef<TrueSheet>(null)
 
 	const isOpen = useTaskCreateStore((state) => state.isOpen)
 	const close = useTaskCreateStore((state) => state.close)
 
 	useEffect(() => {
 		if (isOpen) {
-			bottomSheetModalRef.current?.present()
+			sheetRef.current?.present()
 		} else {
-			bottomSheetModalRef.current?.dismiss()
+			sheetRef.current?.dismiss()
 		}
 	}, [isOpen])
 
 	return (
-		<BottomSheetModal
-			ref={bottomSheetModalRef}
-			enableDynamicSizing={false}
-			snapPoints={['92%']}
-			topInset={STYLE_VARS.sidePadding}
-			keyboardBehavior='extend'
-			keyboardBlurBehavior='restore'
-			android_keyboardInputMode='adjustResize'
-			backgroundStyle={{ backgroundColor: theme.colors.surfaceAlter }}
-			handleIndicatorStyle={{ backgroundColor: theme.colors.minor }}
-			onDismiss={close}
+		<TrueSheet
+			ref={sheetRef}
+			detents={['auto']}
+			cornerRadius={STYLE_VARS.radius_2xl}
+			backgroundColor={theme.colors.surfaceAlter}
+			grabberOptions={{ color: theme.colors.minor }}
+			onDidDismiss={close}
 		>
-			<BottomSheetView style={{ flex: 1 }}>
-				<TaskCreateForm onClose={close} />
-			</BottomSheetView>
-		</BottomSheetModal>
+			<TaskCreateForm onClose={close} />
+		</TrueSheet>
 	)
 }
