@@ -173,6 +173,7 @@ export function TaskCreateForm({ onClose }: Props) {
 			<ScrollView
 				contentContainerStyle={styles.ScrollContent}
 				keyboardShouldPersistTaps='handled'
+				style={{ paddingTop: 24 }}
 			>
 				<View style={styles.fieldGroup}>
 					<Controller
@@ -230,7 +231,7 @@ export function TaskCreateForm({ onClose }: Props) {
 				</View>
 			</ScrollView>
 
-			<ActionsPanel style={{ paddingBottom: STYLE_VARS.navPanelUnderlap }}>
+			<ActionsPanel style={{ bottom: 0 }}>
 				{/* <Button round variant='secondary' onPress={handleClearForm}>
 					<MaterialIcons name='clear' size={28} color={theme.colors.primary} />
 				</Button> */}
