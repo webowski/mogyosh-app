@@ -1,9 +1,10 @@
 import { forwardRef, useEffect, useRef } from 'react'
-import { Platform } from 'react-native'
+import { Platform, type StyleProp, type ViewStyle } from 'react-native'
 import {
 	EnrichedMarkdownTextInput,
 	type EnrichedMarkdownTextInputInstance
 } from 'react-native-enriched-markdown'
+import Animated, { type AnimatedStyle } from 'react-native-reanimated'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 interface MarkdownInputProps {
@@ -13,6 +14,7 @@ interface MarkdownInputProps {
 	onEnterPress?: () => void
 	onBackspaceOnEmpty?: () => void
 	onFocus?: () => void
+	style?: StyleProp<AnimatedStyle<ViewStyle>>
 }
 
 export const MarkdownInput = forwardRef<
@@ -26,7 +28,8 @@ export const MarkdownInput = forwardRef<
 			onChangeMarkdown,
 			onEnterPress,
 			onBackspaceOnEmpty,
-			onFocus
+			onFocus,
+			style
 		},
 		ref
 	) => {
@@ -41,45 +44,48 @@ export const MarkdownInput = forwardRef<
 					onBackspaceOnEmpty={onBackspaceOnEmpty}
 					onFocus={onFocus}
 					divRef={ref as React.Ref<HTMLDivElement>}
+					style={style}
 				/>
 			)
 		}
 
 		return (
-			<EnrichedMarkdownTextInput
-				ref={
-					ref as unknown as React.RefObject<EnrichedMarkdownTextInputInstance>
-				}
-				style={styles.Input}
-				defaultValue={subitemText}
-				placeholderTextColor={theme.colors.minor}
-				scrollEnabled={false}
-				multiline
-				onFocus={onFocus}
-				onChangeText={(text) => {
-					if (text.endsWith('\n')) {
-						;(
-							ref as React.RefObject<EnrichedMarkdownTextInputInstance>
-						).current?.setValue(subitemText.trim())
-						onEnterPress?.()
-					} else if (text === '') {
-						onBackspaceOnEmpty?.()
+			<Animated.View style={style}>
+				<EnrichedMarkdownTextInput
+					ref={
+						ref as unknown as React.RefObject<EnrichedMarkdownTextInputInstance>
 					}
-				}}
-				onChangeMarkdown={(markdown) => {
-					onChangeMarkdown?.(
-						markdown.endsWith('\n') ? markdown.slice(0, -1) : markdown
-					)
-				}}
-				markdownStyle={
-					{
-						// strong: { color: 'red' }
-						// em: { color: '#7C3AED' },
-						// link: { color: '#2563EB', underline: true },
-						// h1: { fontSize: 28, fontWeight: 'bold', color: '#111827' },
+					style={styles.Input}
+					defaultValue={subitemText}
+					placeholderTextColor={theme.colors.minor}
+					scrollEnabled={false}
+					multiline
+					onFocus={onFocus}
+					onChangeText={(text) => {
+						if (text.endsWith('\n')) {
+							;(
+								ref as React.RefObject<EnrichedMarkdownTextInputInstance>
+							).current?.setValue(subitemText.trim())
+							onEnterPress?.()
+						} else if (text === '') {
+							onBackspaceOnEmpty?.()
+						}
+					}}
+					onChangeMarkdown={(markdown) => {
+						onChangeMarkdown?.(
+							markdown.endsWith('\n') ? markdown.slice(0, -1) : markdown
+						)
+					}}
+					markdownStyle={
+						{
+							// strong: { color: 'red' }
+							// em: { color: '#7C3AED' },
+							// link: { color: '#2563EB', underline: true },
+							// h1: { fontSize: 28, fontWeight: 'bold', color: '#111827' },
+						}
 					}
-				}
-			/>
+				/>
+			</Animated.View>
 		)
 	}
 )
@@ -104,6 +110,7 @@ interface WebDivInputProps {
 	onBackspaceOnEmpty?: () => void
 	onFocus?: () => void
 	divRef: React.Ref<HTMLDivElement>
+	style?: StyleProp<AnimatedStyle<ViewStyle>>
 }
 
 function WebDivInput({
@@ -112,7 +119,8 @@ function WebDivInput({
 	onEnterPress,
 	onBackspaceOnEmpty,
 	onFocus,
-	divRef
+	divRef,
+	style
 }: WebDivInputProps) {
 	const { theme } = useUnistyles()
 	const localRef = useRef<HTMLDivElement>(null)
@@ -149,17 +157,20 @@ function WebDivInput({
 					}
 				}
 			}}
-			// @ts-ignore - web-only inline styles
-			style={{
-				flex: 1,
-				fontSize: 16,
-				fontWeight: 500,
-				color: theme.colors.major,
-				paddingBlock: 0,
-				outline: 'none',
-				minHeight: 22,
-				wordBreak: 'break-word'
-			}}
+			// @ts-ignore - web-only inline styles with animated styles
+			style={
+				{
+					flex: 1,
+					fontSize: 16,
+					fontWeight: 500,
+					color: theme.colors.major,
+					paddingBlock: 0,
+					outline: 'none',
+					minHeight: 22,
+					wordBreak: 'break-word',
+					...style
+				} as React.CSSProperties
+			}
 		/>
 	)
 }

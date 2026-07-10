@@ -85,7 +85,7 @@ export function useSubitemLogic({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[checked]
 	)
-	const textStyle = useAnimatedStyle(() => ({
+	const checkedStyle = useAnimatedStyle(() => ({
 		opacity: withTiming(checked ? STYLE_VARS.checkedOpacity : 1, {
 			duration: STYLE_VARS.duration.md
 		})
@@ -136,7 +136,7 @@ export function useSubitemLogic({
 	return {
 		inputRef,
 		checked,
-		textStyle,
+		checkedStyle,
 		handleChangeText,
 		handlePressCheckbox,
 		handleFocus,
