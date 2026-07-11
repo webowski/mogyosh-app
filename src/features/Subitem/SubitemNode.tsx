@@ -19,8 +19,8 @@ import CollapsibleSubitem from './variants/CollapsibleSubitem'
 import CounterSubitem from './variants/CounterSubitem'
 import HeadingSubitem from './variants/HeadingSubitem'
 import OrderedSubitem from './variants/OrderedSubitem'
+import ParagraphSubitem from './variants/ParagraphSubitem'
 import StopwatchSubitem from './variants/StopwatchSubitem'
-import TextSubitem from './variants/TextSubitem'
 import TimerSubitem from './variants/TimerSubitem'
 
 interface SubitemNodeProps {
@@ -149,7 +149,7 @@ export default function SubitemNode({
 		// case 'p':
 		default:
 			content = (
-				<TextSubitem
+				<ParagraphSubitem
 					data={data}
 					onCheckToggle={(checked) => handleToggleSubitem(data.id, checked)}
 				/>

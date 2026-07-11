@@ -12,7 +12,10 @@ import Checkbox from '@/shared/ui/Checkbox'
 import { MarkdownInput } from '@/shared/ui/MarkdownInput'
 import { SubitemProps } from '../index'
 
-export default function TextSubitem({ data, onCheckToggle }: SubitemProps) {
+export default function ParagraphSubitem({
+	data,
+	onCheckToggle
+}: SubitemProps) {
 	const [checked, setChecked] = useState(data.state === 'done')
 
 	const animationProgress = useSharedValue(checked ? 1 : 0)
