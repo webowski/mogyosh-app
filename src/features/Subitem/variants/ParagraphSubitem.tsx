@@ -7,13 +7,11 @@ import { useSubitemLogic } from '../model/useSubitemLogic'
 import { subitemStyles } from '../style'
 
 type ParagraphSubitemProps = SubitemProps & {
-	depth: number
 	inputRefs?: SubitemInputRefsMap
 }
 
 export default function ParagraphSubitem({
 	data,
-	depth,
 	onCheckToggle,
 	inputRefs,
 	onAddAfter,

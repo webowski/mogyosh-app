@@ -37,7 +37,7 @@ export const useCreateSubitem = () => {
 			id: tempId,
 			task_id: taskId,
 			parent_id: payload.parent_id ?? null,
-			type: payload.type ?? 'ul',
+			type: payload.type ?? 'p',
 			info: payload.info,
 			status: null,
 			settings: null,

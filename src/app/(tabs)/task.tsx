@@ -81,7 +81,7 @@ export default function TaskScreen() {
 			info: '',
 			task_id: selectedTaskId,
 			parent_id: null,
-			type: 'ul',
+			type: 'p',
 			optimisticId,
 			afterId: afterId ?? null
 		})
