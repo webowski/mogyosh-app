@@ -5,7 +5,8 @@ import { EnrichedMarkdownTextInputInstance } from 'react-native-enriched-markdow
 import { ScrollView } from 'react-native-gesture-handler'
 import {
 	KeyboardToolbar,
-	OverKeyboardView
+	OverKeyboardView,
+	useReanimatedKeyboardAnimation
 } from 'react-native-keyboard-controller'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
@@ -16,6 +17,7 @@ import { SubitemType } from '@/shared/domain/subitem'
 import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 import { Button } from '@/shared/ui/Button'
+import Animated, { useAnimatedStyle } from 'react-native-reanimated'
 import { selectSubitems, useSubitemStore } from './model/subitem.store'
 import { useCreateSubitem } from './model/useCreateSubitem'
 import { useMoveSubitem } from './model/useMoveSubitem'
@@ -144,6 +146,14 @@ export default function EditorToolbar() {
 	}
 
 	const insets = useSafeAreaInsets()
+	const { height: keyboardHeight } = useReanimatedKeyboardAnimation()
+
+	const typeMenuAnimatedStyle = useAnimatedStyle(() => ({
+		bottom:
+			STYLE_VARS.editorToolbarHeight +
+			Math.max(keyboardHeight.value, insets.bottom)
+	}))
+
 	const [isTypeMenuOpen, setIsTypeMenuOpen] = useState(false)
 	const updateSubitem = useUpdateSubitem()
 
@@ -253,12 +263,7 @@ export default function EditorToolbar() {
 					style={styles.TypeMenu__backdrop}
 					onPress={() => setIsTypeMenuOpen(false)}
 				/>
-				<View
-					style={[
-						styles.TypeMenu,
-						{ bottom: STYLE_VARS.editorToolbarHeight + insets.bottom + 8 }
-					]}
-				>
+				<Animated.View style={[styles.TypeMenu, typeMenuAnimatedStyle]}>
 					{BLOCK_TYPE_OPTIONS.map((option) => (
 						<Pressable
 							key={option.type}
@@ -277,7 +282,7 @@ export default function EditorToolbar() {
 							<Text style={styles.TypeMenu__label}>{option.label}</Text>
 						</Pressable>
 					))}
-				</View>
+				</Animated.View>
 			</OverKeyboardView>
 		</>
 	)
