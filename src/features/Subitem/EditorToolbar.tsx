@@ -164,6 +164,10 @@ export default function EditorToolbar() {
 						<MaterialIcons name='add' size={24} />
 					</Button>
 
+					<Button variant='bare' onPress={() => {}}>
+						<MaterialIcons name='swap-horiz' size={24} />
+					</Button>
+
 					<Button
 						variant='bare'
 						disabled={!canMoveUp}
@@ -184,10 +188,6 @@ export default function EditorToolbar() {
 
 					<Button variant='bare' onPress={handleRemove}>
 						<MaterialIcons name='delete' size={24} />
-					</Button>
-
-					<Button variant='bare' onPress={() => {}}>
-						<MaterialIcons name='swap-horiz' size={24} />
 					</Button>
 
 					<Button variant='bare' onPress={() => {}}>
