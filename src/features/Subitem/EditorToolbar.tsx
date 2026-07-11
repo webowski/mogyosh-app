@@ -159,7 +159,10 @@ export default function EditorToolbar() {
 			Math.max(keyboardHeight.value * -1, insets.bottom)
 	}))
 
-	const [isTypeMenuOpen, setIsTypeMenuOpen] = useState(false)
+	const [typeMenuMode, setTypeMenuMode] = useState<'change' | 'add' | null>(
+		null
+	)
+	const isTypeMenuOpen = typeMenuMode !== null
 	const updateSubitem = useUpdateSubitem()
 
 	const currentTypeOption =
@@ -167,15 +170,39 @@ export default function EditorToolbar() {
 		null
 
 	const handleSelectBlockType = (type: SubitemType) => {
-		if (!focusedSubitem) return
+		if (typeMenuMode === 'change' && focusedSubitem) {
+			updateSubitem.mutate({
+				id: focusedSubitem.id,
+				taskId: activeItemId as TaskId,
+				patch: { type }
+			})
 
-		updateSubitem.mutate({
-			id: focusedSubitem.id,
-			taskId: activeItemId as TaskId,
-			patch: { type }
-		})
+			requestAnimationFrame(() =>
+				requestAnimationFrame(() => focusSubitem(focusedSubitem.id))
+			)
+		}
 
-		setIsTypeMenuOpen(false)
+		if (typeMenuMode === 'add') {
+			const subitems = selectSubitems(activeItemId)(useSubitemStore.getState())
+			const lastSubitem = subitems[subitems.length - 1] ?? null
+
+			const afterId = focusedSubitem?.id ?? lastSubitem?.id ?? null
+			const parentId = focusedSubitem?.parent_id ?? null
+
+			const optimisticId = `optimistic-${Date.now()}` as SubitemId
+			pendingFocusId.current = optimisticId
+
+			createSubitem.mutate({
+				info: '',
+				task_id: activeItemId,
+				parent_id: parentId,
+				type,
+				optimisticId,
+				afterId
+			})
+		}
+
+		setTypeMenuMode(null)
 	}
 
 	return (
@@ -213,17 +240,24 @@ export default function EditorToolbar() {
 							gap: 8
 						}}
 					>
-						<Button variant='bare' onPress={handleAddSubitem}>
+						<Button
+							variant='bare'
+							onPress={() => setTypeMenuMode('add')}
+							preventFocusSteal
+						>
 							<MaterialIcons name='add' size={24} />
 						</Button>
 
 						<Button
 							variant='bare'
-							onPress={() => setIsTypeMenuOpen(true)}
+							onPress={() => setTypeMenuMode('change')}
 							disabled={!focusedSubitem}
 							preventFocusSteal
 						>
-							<MaterialIcons name='swap-horiz' size={24} />
+							<MaterialIcons
+								name={currentTypeOption?.icon ?? 'notes'}
+								size={24}
+							/>
 						</Button>
 
 						<Button
@@ -266,7 +300,7 @@ export default function EditorToolbar() {
 			<OverKeyboardView visible={isTypeMenuOpen}>
 				<Pressable
 					style={styles.TypeMenu__backdrop}
-					onPress={() => setIsTypeMenuOpen(false)}
+					onPress={() => setTypeMenuMode(null)}
 				/>
 				<Animated.View style={[styles.TypeMenu, typeMenuAnimatedStyle]}>
 					{BLOCK_TYPE_OPTIONS.map((option) => (
