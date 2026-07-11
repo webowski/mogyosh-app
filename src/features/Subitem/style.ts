@@ -47,5 +47,9 @@ export const subitemStyles = StyleSheet.create((theme) => ({
 		fontSize: 16,
 		fontWeight: 500,
 		color: theme.colors.major
+	},
+
+	Block__checkbox: {
+		marginTop: 3
 	}
 }))

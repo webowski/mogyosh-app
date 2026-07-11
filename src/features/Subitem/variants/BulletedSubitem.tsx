@@ -56,7 +56,11 @@ export default function BulletedSubitem({
 				}}
 			/>
 			{data.settings?.checkable && (
-				<Checkbox checked={checked} onPress={handlePressCheckbox} />
+				<Checkbox
+					style={subitemStyles.Block__checkbox}
+					checked={checked}
+					onPress={handlePressCheckbox}
+				/>
 			)}
 		</View>
 	)
