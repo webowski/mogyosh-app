@@ -14,6 +14,7 @@ import { selectSubitems, useSubitemStore } from './model/subitem.store'
 import { useCreateSubitem } from './model/useCreateSubitem'
 import { useMoveSubitem } from './model/useMoveSubitem'
 import { useRemoveSubitem } from './model/useRemoveSubitem'
+import { useUpdateSubitem } from './model/useUpdateSubitem'
 
 export default function EditorToolbar() {
 	const { theme } = useUnistyles()
@@ -126,6 +127,24 @@ export default function EditorToolbar() {
 		})
 	}
 
+	const updateSubitem = useUpdateSubitem()
+	const handleToggleListType = () => {
+		if (!focusedSubitem) return
+		if (focusedSubitem.type !== 'ul' && focusedSubitem.type !== 'ol') return
+
+		const nextType = focusedSubitem.type === 'ul' ? 'ol' : 'ul'
+
+		updateSubitem.mutate({
+			id: focusedSubitem.id,
+			taskId: activeItemId as TaskId,
+			patch: { type: nextType }
+		})
+
+		requestAnimationFrame(() =>
+			requestAnimationFrame(() => focusSubitem(focusedSubitem.id))
+		)
+	}
+
 	return (
 		<KeyboardToolbar>
 			<KeyboardToolbar.Background>
@@ -164,7 +183,14 @@ export default function EditorToolbar() {
 						<MaterialIcons name='add' size={24} />
 					</Button>
 
-					<Button variant='bare' onPress={() => {}}>
+					<Button
+						variant='bare'
+						onPress={handleToggleListType}
+						disabled={
+							focusedSubitem?.type !== 'ul' && focusedSubitem?.type !== 'ol'
+						}
+						preventFocusSteal
+					>
 						<MaterialIcons name='swap-horiz' size={24} />
 					</Button>
 
