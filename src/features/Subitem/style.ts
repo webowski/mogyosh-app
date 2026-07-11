@@ -5,6 +5,13 @@ export const SUBITEM_VARS = {
 } as const
 
 export const subitemStyles = StyleSheet.create((theme) => ({
+	Paragraph: {
+		flexDirection: 'row',
+		alignItems: 'flex-start',
+		gap: 8,
+		paddingVertical: 4
+	},
+
 	Bulleted: {
 		flexDirection: 'row',
 		alignItems: 'flex-start',

@@ -7,7 +7,11 @@ import {
 	withTiming
 } from 'react-native-reanimated'
 
-import type { SubitemInputRefsMap, SubitemProps } from '@/shared/domain/subitem'
+import type {
+	SubitemInputRefsMap,
+	SubitemProps,
+	SubitemType
+} from '@/shared/domain/subitem'
 import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 import { useCreateSubitem } from './useCreateSubitem'
@@ -15,7 +19,7 @@ import { useUpdateSubitem } from './useUpdateSubitem'
 
 type UseSubitemLogicParams = SubitemProps & {
 	inputRefs?: SubitemInputRefsMap
-	subitemType: 'ol' | 'ul'
+	subitemType: SubitemType
 }
 
 function focusInputElement(
