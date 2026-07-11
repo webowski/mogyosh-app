@@ -1,20 +1,36 @@
 import { MaterialIcons } from '@expo/vector-icons'
-import { Platform, View } from 'react-native'
+import { useState } from 'react'
+import { Platform, Pressable, Text, View } from 'react-native'
 import { EnrichedMarkdownTextInputInstance } from 'react-native-enriched-markdown'
-import { KeyboardToolbar } from 'react-native-keyboard-controller'
+import { ScrollView } from 'react-native-gesture-handler'
+import {
+	KeyboardToolbar,
+	OverKeyboardView
+} from 'react-native-keyboard-controller'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 import { useShallow } from 'zustand/react/shallow'
 
 import type { SubitemId, TaskId } from '@/shared/domain/ids'
+import { SubitemType } from '@/shared/domain/subitem'
 import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 import { Button } from '@/shared/ui/Button'
-import { ScrollView } from 'react-native-gesture-handler'
 import { selectSubitems, useSubitemStore } from './model/subitem.store'
 import { useCreateSubitem } from './model/useCreateSubitem'
 import { useMoveSubitem } from './model/useMoveSubitem'
 import { useRemoveSubitem } from './model/useRemoveSubitem'
 import { useUpdateSubitem } from './model/useUpdateSubitem'
+
+const BLOCK_TYPE_OPTIONS: {
+	type: SubitemType
+	icon: keyof typeof MaterialIcons.glyphMap
+	label: string
+}[] = [
+	{ type: 'p', icon: 'notes', label: 'Paragraph' },
+	{ type: 'ul', icon: 'format-list-bulleted', label: 'Bulleted list' },
+	{ type: 'ol', icon: 'format-list-numbered', label: 'Numbered list' }
+]
 
 export default function EditorToolbar() {
 	const { theme } = useUnistyles()
@@ -127,109 +143,143 @@ export default function EditorToolbar() {
 		})
 	}
 
+	const insets = useSafeAreaInsets()
+	const [isTypeMenuOpen, setIsTypeMenuOpen] = useState(false)
 	const updateSubitem = useUpdateSubitem()
-	const handleToggleListType = () => {
-		if (!focusedSubitem) return
-		if (focusedSubitem.type !== 'ul' && focusedSubitem.type !== 'ol') return
 
-		const nextType = focusedSubitem.type === 'ul' ? 'ol' : 'ul'
+	const currentTypeOption =
+		BLOCK_TYPE_OPTIONS.find((option) => option.type === focusedSubitem?.type) ??
+		null
+
+	const handleSelectBlockType = (type: SubitemType) => {
+		if (!focusedSubitem) return
 
 		updateSubitem.mutate({
 			id: focusedSubitem.id,
 			taskId: activeItemId as TaskId,
-			patch: { type: nextType }
+			patch: { type }
 		})
 
-		requestAnimationFrame(() =>
-			requestAnimationFrame(() => focusSubitem(focusedSubitem.id))
-		)
+		setIsTypeMenuOpen(false)
 	}
 
 	return (
-		<KeyboardToolbar>
-			<KeyboardToolbar.Background>
-				<View
-					style={{
-						backgroundColor: theme.colors.surface,
-						position: 'absolute',
-						top: 0,
-						left: 0,
-						bottom: 0,
-						right: 0
-					}}
-				/>
-			</KeyboardToolbar.Background>
+		<>
+			<KeyboardToolbar>
+				<KeyboardToolbar.Background>
+					<View
+						style={{
+							backgroundColor: theme.colors.surface,
+							position: 'absolute',
+							top: 0,
+							left: 0,
+							bottom: 0,
+							right: 0
+						}}
+					/>
+				</KeyboardToolbar.Background>
 
-			<KeyboardToolbar.Content
-				style={
-					{
-						// padding: 8
-					}
-				}
-			>
-				<ScrollView
-					horizontal
-					style={{}}
-					bounces={false}
-					showsHorizontalScrollIndicator={false}
-					contentContainerStyle={{
-						// paddingHorizontal: 8,
-						paddingHorizontal: STYLE_VARS.sidePadding,
-						flexDirection: 'row',
-						gap: 8
-					}}
-				>
-					<Button variant='bare' onPress={handleAddSubitem}>
-						<MaterialIcons name='add' size={24} />
-					</Button>
-
-					<Button
-						variant='bare'
-						onPress={handleToggleListType}
-						disabled={
-							focusedSubitem?.type !== 'ul' && focusedSubitem?.type !== 'ol'
+				<KeyboardToolbar.Content
+					style={
+						{
+							// padding: 8
 						}
-						preventFocusSteal
+					}
+				>
+					<ScrollView
+						horizontal
+						style={{}}
+						bounces={false}
+						showsHorizontalScrollIndicator={false}
+						contentContainerStyle={{
+							// paddingHorizontal: 8,
+							paddingHorizontal: STYLE_VARS.sidePadding,
+							flexDirection: 'row',
+							gap: 8
+						}}
 					>
-						<MaterialIcons name='swap-horiz' size={24} />
-					</Button>
+						<Button variant='bare' onPress={handleAddSubitem}>
+							<MaterialIcons name='add' size={24} />
+						</Button>
 
-					<Button
-						variant='bare'
-						disabled={!canMoveUp}
-						onPress={handleMoveUp}
-						preventFocusSteal
-					>
-						<MaterialIcons name='arrow-upward' size={24} />
-					</Button>
+						<Button
+							variant='bare'
+							onPress={() => setIsTypeMenuOpen(true)}
+							disabled={!focusedSubitem}
+							preventFocusSteal
+						>
+							<MaterialIcons name='swap-horiz' size={24} />
+						</Button>
 
-					<Button
-						variant='bare'
-						disabled={!canMoveDown}
-						onPress={handleMoveDown}
-						preventFocusSteal
-					>
-						<MaterialIcons name='arrow-downward' size={24} />
-					</Button>
+						<Button
+							variant='bare'
+							disabled={!canMoveUp}
+							onPress={handleMoveUp}
+							preventFocusSteal
+						>
+							<MaterialIcons name='arrow-upward' size={24} />
+						</Button>
 
-					<Button variant='bare' onPress={handleRemove}>
-						<MaterialIcons name='delete' size={24} />
-					</Button>
+						<Button
+							variant='bare'
+							disabled={!canMoveDown}
+							onPress={handleMoveDown}
+							preventFocusSteal
+						>
+							<MaterialIcons name='arrow-downward' size={24} />
+						</Button>
 
-					<Button variant='bare' onPress={() => {}}>
-						B
-					</Button>
+						<Button variant='bare' onPress={handleRemove}>
+							<MaterialIcons name='delete' size={24} />
+						</Button>
 
-					<Button variant='bare' onPress={() => {}}>
-						I
-					</Button>
+						<Button variant='bare' onPress={() => {}}>
+							B
+						</Button>
 
-					<Button variant='bare' onPress={() => {}}>
-						<MaterialIcons name='link' size={24} />
-					</Button>
-				</ScrollView>
-			</KeyboardToolbar.Content>
-		</KeyboardToolbar>
+						<Button variant='bare' onPress={() => {}}>
+							I
+						</Button>
+
+						<Button variant='bare' onPress={() => {}}>
+							<MaterialIcons name='link' size={24} />
+						</Button>
+					</ScrollView>
+				</KeyboardToolbar.Content>
+			</KeyboardToolbar>
+
+			<OverKeyboardView visible={isTypeMenuOpen}>
+				<Pressable
+					style={styles.TypeMenu__backdrop}
+					onPress={() => setIsTypeMenuOpen(false)}
+				/>
+				<View
+					style={[
+						styles.TypeMenu,
+						{ bottom: STYLE_VARS.editorToolbarHeight + insets.bottom + 8 }
+					]}
+				>
+					{BLOCK_TYPE_OPTIONS.map((option) => (
+						<Pressable
+							key={option.type}
+							style={[
+								styles.TypeMenu__row,
+								option.type === focusedSubitem?.type &&
+									styles.TypeMenu_row_active
+							]}
+							onPress={() => handleSelectBlockType(option.type)}
+						>
+							<MaterialIcons
+								name={option.icon}
+								size={20}
+								color={theme.colors.major}
+							/>
+							<Text style={styles.TypeMenu__label}>{option.label}</Text>
+						</Pressable>
+					))}
+				</View>
+			</OverKeyboardView>
+		</>
 	)
 }
 
@@ -270,5 +320,38 @@ const styles = StyleSheet.create((theme, rt) => ({
 		paddingHorizontal: STYLE_VARS.sidePadding,
 		flexDirection: 'row',
 		gap: 8
+	},
+
+	TypeMenu__backdrop: {
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0
+	},
+	TypeMenu: {
+		position: 'absolute',
+		left: STYLE_VARS.sidePadding,
+		backgroundColor: theme.colors.surface,
+		borderRadius: STYLE_VARS.radius_md,
+		borderWidth: 1,
+		borderColor: theme.colors.borderLightest,
+		boxShadow: theme.colors.shadeActionSheet,
+		paddingVertical: 4,
+		minWidth: 180
+	},
+	TypeMenu__row: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		gap: 10,
+		paddingVertical: 10,
+		paddingHorizontal: 12
+	},
+	TypeMenu_row_active: {
+		backgroundColor: theme.colors.surfaceAlter
+	},
+	TypeMenu__label: {
+		fontSize: 14,
+		color: theme.colors.major
 	}
 }))
