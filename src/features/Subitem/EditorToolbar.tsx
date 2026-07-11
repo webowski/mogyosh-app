@@ -151,7 +151,7 @@ export default function EditorToolbar() {
 	const typeMenuAnimatedStyle = useAnimatedStyle(() => ({
 		bottom:
 			STYLE_VARS.editorToolbarHeight +
-			Math.max(keyboardHeight.value, insets.bottom)
+			Math.max(keyboardHeight.value * -1, insets.bottom)
 	}))
 
 	const [isTypeMenuOpen, setIsTypeMenuOpen] = useState(false)
