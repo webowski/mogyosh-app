@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { View } from 'react-native'
-
 import { GestureDetector } from 'react-native-gesture-handler'
 import Animated from 'react-native-reanimated'
+import { StyleSheet } from 'react-native-unistyles'
 
 import type { SubitemId } from '@/shared/domain/ids'
 import type {
@@ -11,7 +11,6 @@ import type {
 	SubitemType
 } from '@/shared/domain/subitem'
 import { useDragSortRow } from '@/shared/modules/DragSort'
-import { StyleSheet } from 'react-native-unistyles'
 import { getOrderedSiblingIndex } from './model/subitem.utils'
 import { useUpdateSubitemState } from './model/useUpdateSubitemState'
 import BulletedSubitem from './variants/BulletedSubitem'
