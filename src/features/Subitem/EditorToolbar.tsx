@@ -6,6 +6,7 @@ import { ScrollView } from 'react-native-gesture-handler'
 import {
 	KeyboardToolbar,
 	OverKeyboardView,
+	useKeyboardState,
 	useReanimatedKeyboardAnimation
 } from 'react-native-keyboard-controller'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -147,6 +148,10 @@ export default function EditorToolbar() {
 
 	const insets = useSafeAreaInsets()
 	const { height: keyboardHeight } = useReanimatedKeyboardAnimation()
+
+	// для тэста
+	const { height: kbrdHeight } = useKeyboardState()
+	console.log(kbrdHeight)
 
 	const typeMenuAnimatedStyle = useAnimatedStyle(() => ({
 		bottom:
