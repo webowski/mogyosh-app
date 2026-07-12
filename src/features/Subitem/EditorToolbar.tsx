@@ -162,47 +162,63 @@ export default function EditorToolbar() {
 	const [blockTypeMenuMode, setBlockTypeMenuMode] = useState<
 		'change' | 'add' | null
 	>(null)
-	const isBlockTypeMenuOpen = blockTypeMenuMode !== null
+	const [isBlockTypeMenuOpen, setIsBlockTypeMenuOpen] = useState(false)
+
+	const closeBlockTypeMenu = () => setIsBlockTypeMenuOpen(false)
+
+	const openAddSubitemMenu = () => {
+		setBlockTypeMenuMode('add')
+		setIsBlockTypeMenuOpen(true)
+	}
+
+	const openChangeBlockTypeMenu = () => {
+		setBlockTypeMenuMode('change')
+		setIsBlockTypeMenuOpen(true)
+	}
+
 	const updateSubitem = useUpdateSubitem()
 
 	const currentTypeOption =
 		BLOCK_TYPE_OPTIONS.find((option) => option.type === focusedSubitem?.type) ??
 		null
 
+	const handleChangeBlockType = (type: SubitemType) => {
+		if (!focusedSubitem) return
+
+		updateSubitem.mutate({
+			id: focusedSubitem.id,
+			taskId: activeItemId as TaskId,
+			patch: { type }
+		})
+
+		requestAnimationFrame(() =>
+			requestAnimationFrame(() => focusSubitem(focusedSubitem.id))
+		)
+	}
+
+	const handleAddSubitemWithType = (type: SubitemType) => {
+		const subitems = selectSubitems(activeItemId)(useSubitemStore.getState())
+		const lastSubitem = subitems[subitems.length - 1] ?? null
+
+		const afterId = focusedSubitem?.id ?? lastSubitem?.id ?? null
+		const parentId = focusedSubitem?.parent_id ?? null
+
+		const optimisticId = `optimistic-${Date.now()}` as SubitemId
+		pendingFocusId.current = optimisticId
+
+		createSubitem.mutate({
+			info: '',
+			task_id: activeItemId,
+			parent_id: parentId,
+			type,
+			optimisticId,
+			afterId
+		})
+	}
+
 	const handleSelectBlockType = (type: SubitemType) => {
-		if (blockTypeMenuMode === 'change' && focusedSubitem) {
-			updateSubitem.mutate({
-				id: focusedSubitem.id,
-				taskId: activeItemId as TaskId,
-				patch: { type }
-			})
-
-			requestAnimationFrame(() =>
-				requestAnimationFrame(() => focusSubitem(focusedSubitem.id))
-			)
-		}
-
-		if (blockTypeMenuMode === 'add') {
-			const subitems = selectSubitems(activeItemId)(useSubitemStore.getState())
-			const lastSubitem = subitems[subitems.length - 1] ?? null
-
-			const afterId = focusedSubitem?.id ?? lastSubitem?.id ?? null
-			const parentId = focusedSubitem?.parent_id ?? null
-
-			const optimisticId = `optimistic-${Date.now()}` as SubitemId
-			pendingFocusId.current = optimisticId
-
-			createSubitem.mutate({
-				info: '',
-				task_id: activeItemId,
-				parent_id: parentId,
-				type,
-				optimisticId,
-				afterId
-			})
-		}
-
-		setBlockTypeMenuMode(null)
+		if (blockTypeMenuMode === 'change') handleChangeBlockType(type)
+		if (blockTypeMenuMode === 'add') handleAddSubitemWithType(type)
 	}
 
 	return (
@@ -242,7 +258,7 @@ export default function EditorToolbar() {
 					>
 						<Button
 							variant='bare'
-							onPress={() => setBlockTypeMenuMode('add')}
+							onPress={openAddSubitemMenu}
 							preventFocusSteal
 						>
 							<MaterialIcons name='add' size={24} />
@@ -250,7 +266,7 @@ export default function EditorToolbar() {
 
 						<Button
 							variant='bare'
-							onPress={() => setBlockTypeMenuMode('change')}
+							onPress={openChangeBlockTypeMenu}
 							disabled={!focusedSubitem}
 							preventFocusSteal
 						>
@@ -300,7 +316,7 @@ export default function EditorToolbar() {
 			<OverKeyboardView visible={isBlockTypeMenuOpen}>
 				<Pressable
 					style={styles.TypeMenu__backdrop}
-					onPress={() => setBlockTypeMenuMode(null)}
+					onPress={closeBlockTypeMenu}
 				/>
 				<Animated.View style={[styles.TypeMenu, typeMenuAnimatedStyle]}>
 					{BLOCK_TYPE_OPTIONS.map((option) => (
@@ -311,7 +327,10 @@ export default function EditorToolbar() {
 								option.type === focusedSubitem?.type &&
 									styles.TypeMenu_row_active
 							]}
-							onPress={() => handleSelectBlockType(option.type)}
+							onPress={() => {
+								handleSelectBlockType(option.type)
+								closeBlockTypeMenu()
+							}}
 						>
 							<MaterialIcons
 								name={option.icon}
