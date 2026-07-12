@@ -270,10 +270,11 @@ export default function EditorToolbar() {
 							disabled={!focusedSubitem}
 							preventFocusSteal
 						>
-							<MaterialIcons
-								name={currentTypeOption?.icon ?? 'notes'}
-								size={24}
-							/>
+							<MaterialIcons name='swap-horiz' size={24} />
+						</Button>
+
+						<Button variant='bare' onPress={() => {}} preventFocusSteal>
+							<MaterialIcons name='edit-square' size={24} />
 						</Button>
 
 						<Button
