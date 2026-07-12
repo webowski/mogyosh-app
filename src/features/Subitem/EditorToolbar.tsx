@@ -327,37 +327,6 @@ export default function EditorToolbar() {
 	)
 }
 
-{
-	/*
-	<KeyboardStickyView
-		offset={{
-			closed: 0,
-			// closed: -STYLE_VARS.editorToolbarHeight,
-			// opened: insets.bottom + 40
-			// opened: 62
-			// opened: -STYLE_VARS.editorToolbarHeight * 0.5
-			opened: 0
-		}}
-	>
-		<EditorPanel />
-	</KeyboardStickyView>
-
-<View
-	style={{
-		height: STYLE_VARS.editorToolbarHeight,
-		flexDirection: 'row',
-		alignItems: 'center',
-		paddingVertical: 8,
-		paddingHorizontal: STYLE_VARS.sidePadding,
-		backgroundColor: '#fff',
-		borderTopWidth: StyleSheet.hairlineWidth,
-		borderColor: '#ddd',
-		gap: 6
-	}}
->
-</View> */
-}
-
 const styles = StyleSheet.create((theme, rt) => ({
 	Toolbar__set: {
 		paddingVertical: 8,
