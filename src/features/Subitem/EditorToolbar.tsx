@@ -6,8 +6,7 @@ import { ScrollView } from 'react-native-gesture-handler'
 import {
 	KeyboardToolbar,
 	OverKeyboardView,
-	useKeyboardState,
-	useReanimatedKeyboardAnimation
+	useKeyboardState
 } from 'react-native-keyboard-controller'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
@@ -18,7 +17,7 @@ import { SubitemType } from '@/shared/domain/subitem'
 import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 import { Button } from '@/shared/ui/Button'
-import Animated, { useAnimatedStyle } from 'react-native-reanimated'
+import Animated from 'react-native-reanimated'
 import { selectSubitems, useSubitemStore } from './model/subitem.store'
 import { useCreateSubitem } from './model/useCreateSubitem'
 import { useMoveSubitem } from './model/useMoveSubitem'
@@ -147,17 +146,8 @@ export default function EditorToolbar() {
 	}
 
 	const insets = useSafeAreaInsets()
-	const { height: keyboardHeight } = useReanimatedKeyboardAnimation()
 
-	// для тэста
-	const { height: kbrdHeight } = useKeyboardState()
-	// console.log(kbrdHeight)
-
-	const typeMenuAnimatedStyle = useAnimatedStyle(() => ({
-		bottom:
-			STYLE_VARS.editorToolbarHeight +
-			Math.max(keyboardHeight.value * -1, insets.bottom)
-	}))
+	const { height: keyboardHeight } = useKeyboardState()
 
 	const [blockTypeMenuMode, setBlockTypeMenuMode] = useState<
 		'change' | 'add' | null
@@ -319,7 +309,16 @@ export default function EditorToolbar() {
 					style={styles.TypeMenu__backdrop}
 					onPress={closeBlockTypeMenu}
 				/>
-				<Animated.View style={[styles.TypeMenu, typeMenuAnimatedStyle]}>
+				<Animated.View
+					style={[
+						styles.TypeMenu,
+						{
+							bottom:
+								STYLE_VARS.editorToolbarHeight +
+								Math.max(keyboardHeight, insets.bottom)
+						}
+					]}
+				>
 					{BLOCK_TYPE_OPTIONS.map((option) => (
 						<Pressable
 							key={option.type}
