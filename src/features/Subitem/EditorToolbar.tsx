@@ -151,7 +151,7 @@ export default function EditorToolbar() {
 
 	// для тэста
 	const { height: kbrdHeight } = useKeyboardState()
-	console.log(kbrdHeight)
+	// console.log(kbrdHeight)
 
 	const typeMenuAnimatedStyle = useAnimatedStyle(() => ({
 		bottom:
