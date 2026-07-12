@@ -159,10 +159,10 @@ export default function EditorToolbar() {
 			Math.max(keyboardHeight.value * -1, insets.bottom)
 	}))
 
-	const [typeMenuMode, setTypeMenuMode] = useState<'change' | 'add' | null>(
-		null
-	)
-	const isTypeMenuOpen = typeMenuMode !== null
+	const [blockTypeMenuMode, setBlockTypeMenuMode] = useState<
+		'change' | 'add' | null
+	>(null)
+	const isBlockTypeMenuOpen = blockTypeMenuMode !== null
 	const updateSubitem = useUpdateSubitem()
 
 	const currentTypeOption =
@@ -170,7 +170,7 @@ export default function EditorToolbar() {
 		null
 
 	const handleSelectBlockType = (type: SubitemType) => {
-		if (typeMenuMode === 'change' && focusedSubitem) {
+		if (blockTypeMenuMode === 'change' && focusedSubitem) {
 			updateSubitem.mutate({
 				id: focusedSubitem.id,
 				taskId: activeItemId as TaskId,
@@ -182,7 +182,7 @@ export default function EditorToolbar() {
 			)
 		}
 
-		if (typeMenuMode === 'add') {
+		if (blockTypeMenuMode === 'add') {
 			const subitems = selectSubitems(activeItemId)(useSubitemStore.getState())
 			const lastSubitem = subitems[subitems.length - 1] ?? null
 
@@ -202,7 +202,7 @@ export default function EditorToolbar() {
 			})
 		}
 
-		setTypeMenuMode(null)
+		setBlockTypeMenuMode(null)
 	}
 
 	return (
@@ -242,7 +242,7 @@ export default function EditorToolbar() {
 					>
 						<Button
 							variant='bare'
-							onPress={() => setTypeMenuMode('add')}
+							onPress={() => setBlockTypeMenuMode('add')}
 							preventFocusSteal
 						>
 							<MaterialIcons name='add' size={24} />
@@ -250,7 +250,7 @@ export default function EditorToolbar() {
 
 						<Button
 							variant='bare'
-							onPress={() => setTypeMenuMode('change')}
+							onPress={() => setBlockTypeMenuMode('change')}
 							disabled={!focusedSubitem}
 							preventFocusSteal
 						>
@@ -297,10 +297,10 @@ export default function EditorToolbar() {
 				</KeyboardToolbar.Content>
 			</KeyboardToolbar>
 
-			<OverKeyboardView visible={isTypeMenuOpen}>
+			<OverKeyboardView visible={isBlockTypeMenuOpen}>
 				<Pressable
 					style={styles.TypeMenu__backdrop}
-					onPress={() => setTypeMenuMode(null)}
+					onPress={() => setBlockTypeMenuMode(null)}
 				/>
 				<Animated.View style={[styles.TypeMenu, typeMenuAnimatedStyle]}>
 					{BLOCK_TYPE_OPTIONS.map((option) => (
