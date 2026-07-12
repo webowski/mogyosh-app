@@ -17,10 +17,12 @@ export function TaskCreateSheet() {
 	useEffect(() => {
 		if (isOpen) {
 			sheetRef.current?.present()
-		} else {
-			sheetRef.current?.dismiss()
 		}
 	}, [isOpen])
+
+	const handleClose = () => {
+		sheetRef.current?.dismiss()
+	}
 
 	return (
 		<TrueSheet
@@ -31,7 +33,7 @@ export function TaskCreateSheet() {
 			grabberOptions={{ color: theme.colors.minor }}
 			onDidDismiss={close}
 		>
-			<TaskCreateForm onClose={close} />
+			<TaskCreateForm onClose={handleClose} />
 		</TrueSheet>
 	)
 }
