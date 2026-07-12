@@ -73,12 +73,12 @@ export default function TaskScreen() {
 		}
 	}
 
-	const handleAddSubitem = (afterId?: SubitemId) => {
+	const handleAddSubitem = (afterId?: SubitemId, initialText?: string) => {
 		const optimisticId = `optimistic-${Date.now()}` as SubitemId
 		pendingFocusId.current = optimisticId
 
 		createSubitem.mutate({
-			info: '',
+			info: initialText ?? '',
 			task_id: selectedTaskId,
 			parent_id: null,
 			type: 'p',

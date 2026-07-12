@@ -14,6 +14,7 @@ interface MarkdownInputProps {
 	onEnterPress?: () => void
 	onBackspaceOnEmpty?: () => void
 	onFocus?: () => void
+	onBlur?: () => void
 	style?: StyleProp<AnimatedStyle<ViewStyle>>
 }
 
@@ -29,6 +30,7 @@ export const MarkdownInput = forwardRef<
 			onEnterPress,
 			onBackspaceOnEmpty,
 			onFocus,
+			onBlur,
 			style
 		},
 		ref

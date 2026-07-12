@@ -1,7 +1,5 @@
-import { MaterialIcons } from '@expo/vector-icons'
 import type { Ref, RefObject } from 'react'
 import { useCallback } from 'react'
-import { Pressable } from 'react-native'
 import { Pressable as GesturePressable } from 'react-native-gesture-handler'
 import {
 	KeyboardAwareScrollView,
@@ -28,13 +26,14 @@ import {
 	type DragSortDropPayload
 } from '@/shared/modules/DragSort'
 import { staticStyles, STYLE_VARS } from '@/shared/styles/common'
+import SubitemDraftAdd from './SubitemDraftAdd'
 
 type SubitemDragSortLayerProps = {
 	subitemTree: SubitemData[]
 	taskId: TaskId
 	inputRefs: SubitemInputRefsMap
 	pendingFocusId: RefObject<SubitemId | null>
-	onAddSubitem: (afterId?: SubitemId) => void
+	onAddSubitem: (afterId?: SubitemId, initialText?: string) => void
 	onRemoveSubitem: (removeId: SubitemId) => void
 }
 
@@ -122,9 +121,12 @@ export function SubitemDragSortContent({
 					))}
 					<DragSortIndicator />
 				</Animated.View>
-				<Pressable style={[styles.ButtonAdd]} onPress={() => onAddSubitem()}>
+				{/* <Pressable style={[styles.ButtonAdd]} onPress={() => onAddSubitem()}>
 					<MaterialIcons name='add' size={28} color={theme.colors.minor} />
-				</Pressable>
+				</Pressable> */}
+				<SubitemDraftAdd
+					onAddSubitem={(initialText) => onAddSubitem(undefined, initialText)}
+				/>
 			</GesturePressable>
 		</KeyboardAwareScrollView>
 	)

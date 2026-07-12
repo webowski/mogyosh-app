@@ -76,17 +76,17 @@ export default function MotivationScreen() {
 		}
 	}
 
-	const handleAddSubitem = (afterId?: SubitemId) => {
+	const handleAddSubitem = (afterId?: SubitemId, initialText?: string) => {
 		if (!motivationTaskId) return
 
 		const optimisticId = `optimistic-${Date.now()}` as SubitemId
 		pendingFocusId.current = optimisticId
 
 		createSubitem.mutate({
-			info: '',
+			info: initialText ?? '',
 			task_id: motivationTaskId,
 			parent_id: null,
-			type: 'ul',
+			type: 'p',
 			optimisticId,
 			afterId: afterId ?? null
 		})
