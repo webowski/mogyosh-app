@@ -35,7 +35,7 @@ This is a React Native mobile application built with Expo
 
 ## Technology Stack
 
-- Framework: Expo SDK 56 (docs at https://docs.expo.dev/versions/v56.0.0/)
+- Framework: Expo SDK 57 (Read the exact versioned docs at https://docs.expo.dev/versions/v57.0.0/)
 - Language: TypeScript
 - Routing: Expo Router
 - State Management: Zustand
