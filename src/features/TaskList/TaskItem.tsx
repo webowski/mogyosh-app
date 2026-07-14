@@ -74,7 +74,7 @@ export default function TaskItem({
 	const panGesture = Gesture.Pan()
 		.activeOffsetX([-10, 10])
 		.onUpdate((event) => {
-			translateX.value = event.translationX
+			// translateX.value = event.translationX
 			if (event.translationX < 0) {
 				// // Swipe left — delete zone
 				// deleteOpacity.value = Math.min(
@@ -83,6 +83,7 @@ export default function TaskItem({
 				// )
 				// completeOpacity.value = 0
 			} else {
+				translateX.value = event.translationX
 				// Swipe right — complete zone
 				completeOpacity.value = Math.min(
 					1,
