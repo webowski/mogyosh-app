@@ -31,7 +31,9 @@ const BLOCK_TYPE_OPTIONS: {
 }[] = [
 	{ type: 'p', icon: 'notes', label: 'Paragraph' },
 	{ type: 'ul', icon: 'format-list-bulleted', label: 'Bulleted list' },
-	{ type: 'ol', icon: 'format-list-numbered', label: 'Numbered list' }
+	{ type: 'ol', icon: 'format-list-numbered', label: 'Numbered list' },
+	{ type: 'expandable', icon: 'arrow-drop-down', label: 'Expandable' },
+	{ type: 'timer', icon: 'timer', label: 'Timer' }
 ]
 
 export default function EditorToolbar() {
