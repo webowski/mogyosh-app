@@ -1,10 +1,10 @@
 import { StyleSheet } from 'react-native-unistyles'
 
 export const TEXT_VARS = {
-	h1: 26,
-	h2: 23,
-	h3: 19,
-	h4: 17,
+	h1: 27,
+	h2: 24,
+	h3: 21,
+	h4: 18,
 	h5: 12
 }
 
