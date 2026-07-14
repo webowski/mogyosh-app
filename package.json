@@ -19,6 +19,7 @@
     "@hookform/resolvers": "^5.4.0",
     "@lodev09/react-native-true-sheet": "^3.11.6",
     "@quidone/react-native-wheel-picker": "^1.7.1",
+    "@react-native-vector-icons/material-design-icons": "^13.1.2",
     "@shopify/react-native-skia": "2.6.2",
     "@supabase/supabase-js": "^2.110.3",
     "@tanstack/react-query": "^5.101.2",

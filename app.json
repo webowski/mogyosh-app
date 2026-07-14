@@ -86,7 +86,8 @@
       "expo-image",
       "expo-web-browser",
       "react-native-enriched-markdown",
-      "expo-status-bar"
+      "expo-status-bar",
+      "@react-native-vector-icons/material-design-icons"
     ],
     "experiments": {
       "typedRoutes": true,
