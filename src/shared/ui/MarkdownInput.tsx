@@ -136,7 +136,10 @@ function WebDivInput({
 	const { theme } = useUnistyles()
 	const localRef = useRef<HTMLDivElement>(null)
 	const resolvedRef = (divRef as React.RefObject<HTMLDivElement>) ?? localRef
-	const flattenedTextStyle = StyleSheet.flatten(textStyle) ?? {}
+	const flattenedTextStyle = StyleSheet.flatten(textStyle) as Record<
+		string,
+		unknown
+	>
 
 	useEffect(
 		() => {
