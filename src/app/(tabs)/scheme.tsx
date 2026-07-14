@@ -22,7 +22,7 @@ function mapCategoryGroupToMindMapNode(
 	for (const task of group.tasks) {
 		children.push({
 			id: task.id,
-			label: task.text_content,
+			label: task.title,
 			type: 'task'
 		})
 	}

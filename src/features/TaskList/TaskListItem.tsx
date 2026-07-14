@@ -29,7 +29,7 @@ export default function TaskListItem({ data }: TaskListItemProps) {
 			<Text
 				style={{ fontSize: 15, fontWeight: '500', color: theme.colors.major }}
 			>
-				{data.text_content}
+				{data.title}
 			</Text>
 			{data.priority !== null && data.priority !== undefined && (
 				<Text

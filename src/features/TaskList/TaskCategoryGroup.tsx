@@ -23,18 +23,18 @@ export default function TaskCategoryGroup({
 	// Filter tasks by search query
 	const filteredTasks = group.tasks.filter((task) => {
 		if (!searchQuery) return true
-		return task.text_content.toLowerCase().includes(searchQuery.toLowerCase())
+		return task.title.toLowerCase().includes(searchQuery.toLowerCase())
 	})
 
 	// Recursively filter children categories
 	const filteredChildren = group.children
 		?.map((child) => {
 			const hasMatchingTasks = child.tasks.some((task) =>
-				task.text_content.toLowerCase().includes(searchQuery.toLowerCase())
+				task.title.toLowerCase().includes(searchQuery.toLowerCase())
 			)
 			const hasMatchingChildren = child.children?.some((grandchild) =>
 				grandchild.tasks.some((task) =>
-					task.text_content.toLowerCase().includes(searchQuery.toLowerCase())
+					task.title.toLowerCase().includes(searchQuery.toLowerCase())
 				)
 			)
 

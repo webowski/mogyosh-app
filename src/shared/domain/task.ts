@@ -39,7 +39,7 @@ export type TaskType = 'task' | 'motivation'
 
 export type TaskEntity = {
 	id: TaskId
-	text_content: string
+	title: string
 	type: TaskType
 	status?: TaskStatus
 	state?: TaskState | null
@@ -53,7 +53,7 @@ export type TaskEntity = {
 
 export type TaskRow = {
 	id: string
-	text_content: string
+	title: string
 	type: TaskType
 	status: TaskStatus
 	priority: number

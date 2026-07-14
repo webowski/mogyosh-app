@@ -169,7 +169,7 @@ export default function TaskItem({
 									{makeCategoryPath(data.category.id, categoryMap)}
 								</Text>
 							)}
-							<Text style={styles.card__title}>{data.text_content}</Text>
+							<Text style={styles.card__title}>{data.title}</Text>
 						</View>
 						<View></View>
 					</View>

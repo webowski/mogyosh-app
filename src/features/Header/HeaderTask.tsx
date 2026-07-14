@@ -39,9 +39,7 @@ export default function HeaderTask({
 					? makeCategoryPath(data?.category?.id, categoryMap)
 					: ' '}
 			</Text>
-			<Text style={commonStyles.headerTitle}>
-				{!error && data?.text_content}
-			</Text>
+			<Text style={commonStyles.headerTitle}>{!error && data?.title}</Text>
 		</View>
 	)
 }

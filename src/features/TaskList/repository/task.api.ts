@@ -33,7 +33,7 @@ const TASKS_SELECT = `
 
 const makeTaskObject = (task: TaskRow): TaskEntity => ({
 	id: task.id,
-	text_content: task.text_content,
+	title: task.title,
 	type: task.type,
 	status: task.status,
 	state: task.states?.[0]?.state ?? null,
