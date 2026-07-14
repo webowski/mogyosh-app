@@ -143,7 +143,7 @@ export function TaskCreateForm({ onClose }: Props) {
 
 	const onSubmit = async (data: TaskFormData) => {
 		const parentTask = await createTask.mutateAsync({
-			text_content: data.title,
+			title: data.title,
 			category_id: selectedCategoryId
 		})
 

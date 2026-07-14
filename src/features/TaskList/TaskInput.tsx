@@ -11,7 +11,7 @@ export const TaskInput = () => {
 		if (!input.trim()) return
 
 		mutate(
-			{ text_content: input },
+			{ title: input },
 			{
 				onSuccess: () => {
 					clearInput()
