@@ -1,3 +1,4 @@
+import * as Haptics from 'expo-haptics'
 import { useEffect } from 'react'
 import { Text, View, ViewStyle } from 'react-native'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
@@ -258,6 +259,10 @@ const SwipeSwitch: React.FC<SwipeSwitchProps> = ({
 		[swipePosition.row, swipePosition.col]
 	)
 
+	const triggerSwitchHaptic = () => {
+		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+	}
+
 	const pan = Gesture.Pan()
 		.minDistance(6)
 		.onBegin(() => {
@@ -313,6 +318,10 @@ const SwipeSwitch: React.FC<SwipeSwitchProps> = ({
 				// if (onIndexChange) {
 				// 	scheduleOnRN(handleIndexChange, rowIndex.value, newCol)
 				// }
+
+				if (delta !== 0) {
+					scheduleOnRN(triggerSwitchHaptic)
+				}
 
 				// Update store with new position
 				scheduleOnRN(setSwipePosition, { row: rowIndex.value, col: newCol })
