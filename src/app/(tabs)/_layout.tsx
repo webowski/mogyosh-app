@@ -2,13 +2,13 @@ import { Tabs } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { useUnistyles } from 'react-native-unistyles'
 
+import { EditorToolbar } from '@/features/Block'
 import Drawer from '@/features/Drawer/Drawer'
 import Header from '@/features/Header/Header'
 import HeaderCalendar from '@/features/Header/HeaderCalendar'
 import { default as HeaderDay } from '@/features/Header/HeaderDay'
 import HeaderTask from '@/features/Header/HeaderTask'
 import NavPanel from '@/features/Navigation/NavPanel'
-import { EditorToolbar } from '@/features/Subitem'
 import { TaskCreateSheet } from '@/features/TaskCreate/TaskCreateSheet'
 
 export default function NavPanelLayout() {

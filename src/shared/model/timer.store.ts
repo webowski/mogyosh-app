@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-import type { SubitemId } from '@/shared/domain/ids'
+import type { BlockId } from '@/shared/domain/ids'
 
 type TimerEntry = {
 	isRunning: boolean
@@ -9,11 +9,11 @@ type TimerEntry = {
 }
 
 type TimerStore = {
-	entries: Map<SubitemId, TimerEntry>
-	start: (id: SubitemId, durationMs: number) => void
-	pause: (id: SubitemId) => void
-	reset: (id: SubitemId, durationMs: number) => void
-	getRemaining: (id: SubitemId, durationMs: number) => number
+	entries: Map<BlockId, TimerEntry>
+	start: (id: BlockId, durationMs: number) => void
+	pause: (id: BlockId) => void
+	reset: (id: BlockId, durationMs: number) => void
+	getRemaining: (id: BlockId, durationMs: number) => number
 }
 
 export const useTimerStore = create<TimerStore>((set, get) => ({

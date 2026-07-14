@@ -3,17 +3,17 @@ import { ActivityIndicator, Platform, Text, View } from 'react-native'
 import type { EnrichedMarkdownTextInputInstance } from 'react-native-enriched-markdown'
 import { useShallow } from 'zustand/react/shallow'
 
-import { useMotivationItemId } from '@/features/Motivation'
 import {
-	buildSubitemTree,
-	SubitemDragSortLayer,
-	useCreateSubitem,
-	useRemoveSubitem,
-	useSubitems,
-	useSubitemStore,
-	useSyncSubitems
-} from '@/features/Subitem'
-import type { SubitemId, TaskId } from '@/shared/domain/ids'
+	BlockDragSortLayer,
+	buildBlockTree,
+	useBlocks,
+	useBlockStore,
+	useCreateBlock,
+	useRemoveBlock,
+	useSyncBlocks
+} from '@/features/Block'
+import { useMotivationItemId } from '@/features/Motivation'
+import type { BlockId, TaskId } from '@/shared/domain/ids'
 import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
 import { commonStyles } from '@/shared/styles/common'
 
@@ -25,8 +25,8 @@ export default function MotivationScreen() {
 		(state) => state.setActiveItemId
 	)
 
-	const createSubitem = useCreateSubitem()
-	const removeSubitem = useRemoveSubitem()
+	const createBlock = useCreateBlock()
+	const removeBlock = useRemoveBlock()
 
 	// Resolve (or create) the exclusive motivation task
 	const { data: motivationTaskId, isLoading: isLoadingMotivationTask } =
@@ -42,23 +42,23 @@ export default function MotivationScreen() {
 	)
 
 	// Load from server and sync into store
-	const { isLoading: isLoadingSubitems, error } = useSubitems(
+	const { isLoading: isLoadingBlocks, error } = useBlocks(
 		motivationTaskId ?? null
 	)
 
 	// UI reads from Zustand store directly
-	const subitems = useSubitemStore(
+	const blocks = useBlockStore(
 		useShallow((state) =>
-			motivationTaskId ? (state.subitemsByTask[motivationTaskId] ?? []) : []
+			motivationTaskId ? (state.blocksByTask[motivationTaskId] ?? []) : []
 		)
 	)
 
 	// Start sync worker
-	useSyncSubitems()
+	useSyncBlocks()
 
-	const subitemTree = buildSubitemTree(subitems)
+	const blockTree = buildBlockTree(blocks)
 
-	const focusSubitem = (id: SubitemId) => {
+	const focusBlock = (id: BlockId) => {
 		const ref = inputRefs.get(id)?.current
 		if (!ref) return
 
@@ -76,13 +76,13 @@ export default function MotivationScreen() {
 		}
 	}
 
-	const handleAddSubitem = (afterId?: SubitemId, initialText?: string) => {
+	const handleAddBlock = (afterId?: BlockId, initialText?: string) => {
 		if (!motivationTaskId) return
 
-		const optimisticId = `optimistic-${Date.now()}` as SubitemId
+		const optimisticId = `optimistic-${Date.now()}` as BlockId
 		pendingFocusId.current = optimisticId
 
-		createSubitem.mutate({
+		createBlock.mutate({
 			text_content: initialText ?? '',
 			task_id: motivationTaskId,
 			parent_id: null,
@@ -92,20 +92,20 @@ export default function MotivationScreen() {
 		})
 	}
 
-	const handleRemove = (removeId: SubitemId) => {
+	const handleRemove = (removeId: BlockId) => {
 		if (!motivationTaskId) return
 
-		const index = subitems.findIndex((s) => s.id === removeId)
-		const previousSubitem = index > 0 ? subitems[index - 1] : null
+		const index = blocks.findIndex((s) => s.id === removeId)
+		const previousBlock = index > 0 ? blocks[index - 1] : null
 
-		if (previousSubitem) {
-			focusSubitem(previousSubitem.id)
+		if (previousBlock) {
+			focusBlock(previousBlock.id)
 		}
 
-		removeSubitem.mutate({ id: removeId, taskId: motivationTaskId })
+		removeBlock.mutate({ id: removeId, taskId: motivationTaskId })
 	}
 
-	if (isLoadingMotivationTask || isLoadingSubitems)
+	if (isLoadingMotivationTask || isLoadingBlocks)
 		return (
 			<View style={commonStyles.mainArea}>
 				<ActivityIndicator />
@@ -123,13 +123,13 @@ export default function MotivationScreen() {
 		)
 
 	return (
-		<SubitemDragSortLayer
-			subitemTree={subitemTree}
+		<BlockDragSortLayer
+			blockTree={blockTree}
 			taskId={motivationTaskId as TaskId}
 			inputRefs={inputRefs}
 			pendingFocusId={pendingFocusId}
-			onAddSubitem={handleAddSubitem}
-			onRemoveSubitem={handleRemove}
+			onAddBlock={handleAddBlock}
+			onRemoveBlock={handleRemove}
 		/>
 	)
 }

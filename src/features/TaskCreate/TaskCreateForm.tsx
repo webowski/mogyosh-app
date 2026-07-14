@@ -11,14 +11,14 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 import { z } from 'zod'
 
 import { ActionsPanel } from '@/features/ActionsPanel/ActionsPanel'
+import { blockAPI } from '@/features/Block/repository/block.api'
 import { useNavStore } from '@/features/Navigation/model/navStore'
-import { subitemAPI } from '@/features/Subitem/repository/subitem.api'
 import {
 	useCategories,
 	useCreateCategory,
 	useCreateTask
 } from '@/features/TaskList'
-import type { SubitemInsert } from '@/shared/domain/subitem'
+import type { BlockInsert } from '@/shared/domain/block'
 import { useTaskStore } from '@/shared/model/task.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 import { formStyles } from '@/shared/styles/form'
@@ -115,9 +115,7 @@ export function TaskCreateForm({ onClose }: Props) {
 		}
 	}
 
-	const [subitemsChecklist, setSubitemsChecklist] = useState<SubitemInsert[]>(
-		[]
-	)
+	const [blocksChecklist, setBlocksChecklist] = useState<BlockInsert[]>([])
 
 	const {
 		control,
@@ -149,20 +147,20 @@ export function TaskCreateForm({ onClose }: Props) {
 			category_id: selectedCategoryId
 		})
 
-		const filledSubitemsChecklist = subitemsChecklist.filter((checklistItem) =>
+		const filledBlocksChecklist = blocksChecklist.filter((checklistItem) =>
 			checklistItem.text_content.trim()
 		)
-		if (filledSubitemsChecklist.length > 0 && parentTask.id) {
-			// возможно надо оптимизировать чтобы создавать subitems пачкой а не по одному
+		if (filledBlocksChecklist.length > 0 && parentTask.id) {
+			// возможно надо оптимизировать чтобы создавать blocks пачкой а не по одному
 			const positions = generateNKeysBetween(
 				null,
 				null,
-				filledSubitemsChecklist.length
+				filledBlocksChecklist.length
 			)
 			// Direct API call — task is not open yet, no need for store/sync
 			await Promise.all(
-				filledSubitemsChecklist.map((checklistItem, index) =>
-					subitemAPI.createSubitem({
+				filledBlocksChecklist.map((checklistItem, index) =>
+					blockAPI.createBlock({
 						text_content: checklistItem.text_content,
 						task_id: parentTask.id,
 						sort_order: positions[index]

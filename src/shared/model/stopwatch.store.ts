@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-import type { SubitemId } from '@/shared/domain/ids'
+import type { BlockId } from '@/shared/domain/ids'
 
 type StopwatchEntry = {
 	isRunning: boolean
@@ -9,11 +9,11 @@ type StopwatchEntry = {
 }
 
 type StopwatchStore = {
-	entries: Map<SubitemId, StopwatchEntry>
-	start: (id: SubitemId) => void
-	pause: (id: SubitemId) => void
-	reset: (id: SubitemId) => void
-	getElapsed: (id: SubitemId) => number
+	entries: Map<BlockId, StopwatchEntry>
+	start: (id: BlockId) => void
+	pause: (id: BlockId) => void
+	reset: (id: BlockId) => void
+	getElapsed: (id: BlockId) => number
 }
 
 const DEFAULT_ENTRY: StopwatchEntry = {

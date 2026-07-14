@@ -11,7 +11,7 @@ type TaskStateMutationParams = {
 
 /**
  * Update task state mutation
- * Used for toggling subitem completion status
+ * Used for toggling block completion status
  */
 export const useUpdateTaskState = () => {
 	const queryClient = useQueryClient()
@@ -22,21 +22,21 @@ export const useUpdateTaskState = () => {
 		},
 		onSuccess: (_, variables) => {
 			queryClient.invalidateQueries({ queryKey: ['task', variables.taskId] })
-			queryClient.invalidateQueries({ queryKey: ['subitems'] })
+			queryClient.invalidateQueries({ queryKey: ['blocks'] })
 			queryClient.invalidateQueries({ queryKey: ['task-progress'] })
 			queryClient.invalidateQueries({ queryKey: ['tasks'] })
 			queryClient.invalidateQueries({ queryKey: ['tasks-grouped'] })
 		},
 		onMutate: async ({ taskId, state }) => {
-			await queryClient.cancelQueries({ queryKey: ['subitems'] })
+			await queryClient.cancelQueries({ queryKey: ['blocks'] })
 
 			const previous = queryClient.getQueriesData({
-				queryKey: ['subitems']
+				queryKey: ['blocks']
 			})
 
 			queryClient.setQueriesData(
 				{
-					queryKey: ['subitems']
+					queryKey: ['blocks']
 				},
 				(old: TaskEntity[] | undefined) => {
 					return old?.map((task) => {

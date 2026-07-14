@@ -13,7 +13,7 @@ import Animated, { type AnimatedStyle } from 'react-native-reanimated'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 interface MarkdownInputProps {
-	subitemText: string
+	blockText: string
 	style?: StyleProp<AnimatedStyle<ViewStyle>>
 	textStyle?: StyleProp<TextStyle>
 	onChangeText?: (text: string) => void
@@ -30,7 +30,7 @@ export const MarkdownInput = forwardRef<
 >(
 	(
 		{
-			subitemText,
+			blockText,
 			style,
 			textStyle,
 			onChangeText,
@@ -49,7 +49,7 @@ export const MarkdownInput = forwardRef<
 				<Animated.View style={style}>
 					<WebDivInput
 						divRef={ref as React.Ref<HTMLDivElement>}
-						subitemText={subitemText}
+						blockText={blockText}
 						textStyle={textStyle}
 						onChangeText={onChangeText}
 						onEnterPress={onEnterPress}
@@ -67,7 +67,7 @@ export const MarkdownInput = forwardRef<
 						ref as unknown as React.RefObject<EnrichedMarkdownTextInputInstance>
 					}
 					style={StyleSheet.flatten([styles.Input, textStyle]) as TextStyle}
-					defaultValue={subitemText}
+					defaultValue={blockText}
 					placeholderTextColor={theme.colors.minor}
 					scrollEnabled={false}
 					multiline
@@ -76,7 +76,7 @@ export const MarkdownInput = forwardRef<
 						if (text.endsWith('\n')) {
 							;(
 								ref as React.RefObject<EnrichedMarkdownTextInputInstance>
-							).current?.setValue(subitemText.trim())
+							).current?.setValue(blockText.trim())
 							onEnterPress?.()
 						} else if (text === '') {
 							onBackspaceOnEmpty?.()
@@ -116,7 +116,7 @@ const styles = StyleSheet.create((theme) => ({
 
 interface WebDivInputProps {
 	divRef: React.Ref<HTMLDivElement>
-	subitemText: string
+	blockText: string
 	textStyle?: StyleProp<TextStyle>
 	onChangeText?: (text: string) => void
 	onEnterPress?: () => void
@@ -126,7 +126,7 @@ interface WebDivInputProps {
 
 function WebDivInput({
 	divRef,
-	subitemText,
+	blockText,
 	textStyle,
 	onChangeText,
 	onEnterPress,
@@ -144,7 +144,7 @@ function WebDivInput({
 	useEffect(
 		() => {
 			if (resolvedRef.current) {
-				resolvedRef.current.innerText = subitemText
+				resolvedRef.current.innerText = blockText
 			}
 		},
 		// eslint-disable-next-line

@@ -4,16 +4,16 @@ import type { EnrichedMarkdownTextInputInstance } from 'react-native-enriched-ma
 import { useShallow } from 'zustand/react/shallow'
 
 import {
-	buildSubitemTree,
-	SubitemDragSortLayer,
-	useCreateSubitem,
-	useRemoveSubitem,
-	useSubitems,
-	useSubitemStore,
-	useSyncSubitems
-} from '@/features/Subitem'
+	BlockDragSortLayer,
+	buildBlockTree,
+	useBlocks,
+	useBlockStore,
+	useCreateBlock,
+	useRemoveBlock,
+	useSyncBlocks
+} from '@/features/Block'
 import { useTaskById } from '@/features/TaskList'
-import type { SubitemId, TaskId } from '@/shared/domain/ids'
+import type { BlockId, TaskId } from '@/shared/domain/ids'
 import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
 import { useTaskStore } from '@/shared/model/task.store'
 import { commonStyles } from '@/shared/styles/common'
@@ -28,8 +28,8 @@ export default function TaskScreen() {
 
 	const pendingFocusId = useEditorToolbarStore((state) => state.pendingFocusId)
 
-	const createSubitem = useCreateSubitem()
-	const removeSubitem = useRemoveSubitem()
+	const createBlock = useCreateBlock()
+	const removeBlock = useRemoveBlock()
 
 	const { data, isLoading, error } = useTaskById(selectedTaskId)
 	useEffect(
@@ -41,21 +41,21 @@ export default function TaskScreen() {
 	)
 
 	// Load from server and sync into store
-	const { isLoading: isLoadingSubitems } = useSubitems(selectedTaskId)
+	const { isLoading: isLoadingBlocks } = useBlocks(selectedTaskId)
 
 	// UI reads from Zustand store directly
-	const subitems = useSubitemStore(
+	const blocks = useBlockStore(
 		useShallow((state) =>
-			selectedTaskId ? (state.subitemsByTask[selectedTaskId] ?? []) : []
+			selectedTaskId ? (state.blocksByTask[selectedTaskId] ?? []) : []
 		)
 	)
 
 	// Start sync worker
-	useSyncSubitems()
+	useSyncBlocks()
 
-	const subitemTree = buildSubitemTree(subitems)
+	const blockTree = buildBlockTree(blocks)
 
-	const focusSubitem = (id: SubitemId) => {
+	const focusBlock = (id: BlockId) => {
 		const ref = inputRefs.get(id)?.current
 		if (!ref) return
 
@@ -73,11 +73,11 @@ export default function TaskScreen() {
 		}
 	}
 
-	const handleAddSubitem = (afterId?: SubitemId, initialText?: string) => {
-		const optimisticId = `optimistic-${Date.now()}` as SubitemId
+	const handleAddBlock = (afterId?: BlockId, initialText?: string) => {
+		const optimisticId = `optimistic-${Date.now()}` as BlockId
 		pendingFocusId.current = optimisticId
 
-		createSubitem.mutate({
+		createBlock.mutate({
 			text_content: initialText ?? '',
 			task_id: selectedTaskId,
 			parent_id: null,
@@ -87,19 +87,19 @@ export default function TaskScreen() {
 		})
 	}
 
-	const handleRemove = (removeId: SubitemId) => {
-		const index = subitems.findIndex((subitem) => subitem.id === removeId)
-		const previousSubitem = index > 0 ? subitems[index - 1] : null
+	const handleRemove = (removeId: BlockId) => {
+		const index = blocks.findIndex((block) => block.id === removeId)
+		const previousBlock = index > 0 ? blocks[index - 1] : null
 
-		if (previousSubitem) {
-			focusSubitem(previousSubitem.id)
+		if (previousBlock) {
+			focusBlock(previousBlock.id)
 		}
 
-		removeSubitem.mutate({ id: removeId, taskId: selectedTaskId as TaskId })
+		removeBlock.mutate({ id: removeId, taskId: selectedTaskId as TaskId })
 	}
 
 	// Show loading state when waiting for task data
-	if (isLoading || isLoadingSubitems)
+	if (isLoading || isLoadingBlocks)
 		return (
 			<View style={commonStyles.mainArea}>
 				<ActivityIndicator />
@@ -126,13 +126,13 @@ export default function TaskScreen() {
 		)
 
 	return (
-		<SubitemDragSortLayer
-			subitemTree={subitemTree}
+		<BlockDragSortLayer
+			blockTree={blockTree}
 			taskId={selectedTaskId as TaskId}
 			inputRefs={inputRefs}
 			pendingFocusId={pendingFocusId}
-			onAddSubitem={handleAddSubitem}
-			onRemoveSubitem={handleRemove}
+			onAddBlock={handleAddBlock}
+			onRemoveBlock={handleRemove}
 		/>
 	)
 }

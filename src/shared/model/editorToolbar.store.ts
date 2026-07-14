@@ -1,24 +1,24 @@
 import type { RefObject } from 'react'
 import { create } from 'zustand'
 
-import type { ItemId, SubitemId } from '@/shared/domain/ids'
-import type { SubitemInputRefsMap } from '@/shared/domain/subitem'
+import type { BlockInputRefsMap } from '@/shared/domain/block'
+import type { BlockId, ItemId } from '@/shared/domain/ids'
 
 type EditorToolbarStore = {
-	focusedSubitemId: SubitemId | null
-	setFocusedSubitemId: (id: SubitemId | null) => void
+	focusedBlockId: BlockId | null
+	setFocusedBlockId: (id: BlockId | null) => void
 
-	pendingFocusId: RefObject<SubitemId | null>
+	pendingFocusId: RefObject<BlockId | null>
 
 	activeItemId: ItemId | null
 	setActiveItemId: (taskId: ItemId | null) => void
 
-	inputRefs: SubitemInputRefsMap
+	inputRefs: BlockInputRefsMap
 }
 
 export const useEditorToolbarStore = create<EditorToolbarStore>((set) => ({
-	focusedSubitemId: null,
-	setFocusedSubitemId: (id: SubitemId | null) => set({ focusedSubitemId: id }),
+	focusedBlockId: null,
+	setFocusedBlockId: (id: BlockId | null) => set({ focusedBlockId: id }),
 
 	pendingFocusId: { current: null },
 

@@ -1,4 +1,4 @@
-import { subitemAPI } from '@/features/Subitem'
+import { blockAPI } from '@/features/Block'
 import { supabaseClient } from '@/shared/api/supabaseClient'
 import { TaskId } from '@/shared/domain/ids'
 import { TaskEntity, TaskRow } from '@/shared/domain/task'
@@ -289,10 +289,10 @@ const deleteTask = async (taskId: TaskId): Promise<void> => {
 
 	if (schedulesError) throw schedulesError
 
-	// Delete subitems recursively
-	const subitems = await subitemAPI.getSubitems(taskId)
-	for (const subitem of subitems) {
-		await deleteTask(subitem.id)
+	// Delete blocks recursively
+	const blocks = await blockAPI.getBlocks(taskId)
+	for (const block of blocks) {
+		await deleteTask(block.id)
 	}
 
 	// Delete the task itself
