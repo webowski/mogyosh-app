@@ -155,6 +155,36 @@ SET default_tablespace = '';
 SET default_table_access_method = "heap";
 
 
+CREATE TABLE IF NOT EXISTS "public"."block_states" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "block_id" "uuid" NOT NULL,
+    "state" "text" NOT NULL,
+    "state_date" "date",
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "settings" "jsonb"
+);
+
+
+ALTER TABLE "public"."block_states" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."blocks" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "task_id" "uuid" NOT NULL,
+    "parent_id" "uuid",
+    "type" "text",
+    "text_content" "text",
+    "status" "text" DEFAULT 'active'::"text" NOT NULL,
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "updated_at" timestamp with time zone DEFAULT "now"(),
+    "settings" "jsonb",
+    "sort_order" "text" COLLATE "pg_catalog"."C"
+);
+
+
+ALTER TABLE "public"."blocks" OWNER TO "postgres";
+
+
 CREATE TABLE IF NOT EXISTS "public"."categories" (
     "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
     "user_id" "uuid" NOT NULL,
@@ -208,52 +238,32 @@ CREATE TABLE IF NOT EXISTS "public"."states" (
 ALTER TABLE "public"."states" OWNER TO "postgres";
 
 
-CREATE TABLE IF NOT EXISTS "public"."subitem_states" (
-    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
-    "subitem_id" "uuid" NOT NULL,
-    "state" "text" NOT NULL,
-    "state_date" "date",
-    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
-    "settings" "jsonb"
-);
-
-
-ALTER TABLE "public"."subitem_states" OWNER TO "postgres";
-
-
-CREATE TABLE IF NOT EXISTS "public"."subitems" (
-    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
-    "task_id" "uuid" NOT NULL,
-    "parent_id" "uuid",
-    "type" "text",
-    "info" "text",
-    "status" "text" DEFAULT 'active'::"text" NOT NULL,
-    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
-    "updated_at" timestamp with time zone DEFAULT "now"(),
-    "settings" "jsonb",
-    "sort_order" "text"
-);
-
-
-ALTER TABLE "public"."subitems" OWNER TO "postgres";
-
-
 CREATE TABLE IF NOT EXISTS "public"."tasks" (
     "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
     "user_id" "uuid" NOT NULL,
     "created_at" timestamp with time zone DEFAULT "timezone"('utc'::"text", "now"()) NOT NULL,
     "parent_id" "uuid",
     "category_id" "uuid",
-    "info" "text",
+    "title" "text",
     "status" "text" DEFAULT 'active'::"text" NOT NULL,
     "priority" integer,
     "updated_at" timestamp with time zone DEFAULT "now"(),
     "type" "text" DEFAULT 'task'::"text" NOT NULL,
-    CONSTRAINT "check_tasks_info_not_empty" CHECK ((("info" IS NULL) OR ("length"(TRIM(BOTH FROM "info")) > 0)))
+    CONSTRAINT "check_tasks_info_not_empty" CHECK ((("title" IS NULL) OR ("length"(TRIM(BOTH FROM "title")) > 0)))
 );
 
 
 ALTER TABLE "public"."tasks" OWNER TO "postgres";
+
+
+ALTER TABLE ONLY "public"."block_states"
+    ADD CONSTRAINT "block_states_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."blocks"
+    ADD CONSTRAINT "blocks_pkey" PRIMARY KEY ("id");
+
 
 
 ALTER TABLE ONLY "public"."categories"
@@ -281,18 +291,20 @@ ALTER TABLE ONLY "public"."states"
 
 
 
-ALTER TABLE ONLY "public"."subitem_states"
-    ADD CONSTRAINT "subitem_states_pkey" PRIMARY KEY ("id");
-
-
-
-ALTER TABLE ONLY "public"."subitems"
-    ADD CONSTRAINT "subitems_pkey" PRIMARY KEY ("id");
-
-
-
 ALTER TABLE ONLY "public"."tasks"
     ADD CONSTRAINT "tasks_pkey" PRIMARY KEY ("id");
+
+
+
+CREATE INDEX "block_states_block_id_idx" ON "public"."block_states" USING "btree" ("block_id");
+
+
+
+CREATE INDEX "blocks_parent_id_idx" ON "public"."blocks" USING "btree" ("parent_id");
+
+
+
+CREATE INDEX "blocks_sort_order_idx" ON "public"."blocks" USING "btree" ("task_id", "sort_order");
 
 
 
@@ -344,18 +356,6 @@ CREATE INDEX "idx_tasks_user_id" ON "public"."tasks" USING "btree" ("user_id");
 
 
 
-CREATE INDEX "subitem_states_subitem_id_idx" ON "public"."subitem_states" USING "btree" ("subitem_id");
-
-
-
-CREATE INDEX "subitems_parent_id_idx" ON "public"."subitems" USING "btree" ("parent_id");
-
-
-
-CREATE INDEX "subitems_sort_order_idx" ON "public"."subitems" USING "btree" ("task_id", "sort_order");
-
-
-
 CREATE UNIQUE INDEX "tasks_one_motivation_per_user" ON "public"."tasks" USING "btree" ("user_id") WHERE ("type" = 'motivation'::"text");
 
 
@@ -365,6 +365,21 @@ CREATE UNIQUE INDEX "uniq_category_name_per_user_parent" ON "public"."categories
 
 
 CREATE OR REPLACE TRIGGER "update_tasks_updated_at" BEFORE UPDATE ON "public"."tasks" FOR EACH ROW EXECUTE FUNCTION "public"."update_updated_at_column"();
+
+
+
+ALTER TABLE ONLY "public"."block_states"
+    ADD CONSTRAINT "block_states_block_id_fkey" FOREIGN KEY ("block_id") REFERENCES "public"."blocks"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."blocks"
+    ADD CONSTRAINT "blocks_parent_id_fkey" FOREIGN KEY ("parent_id") REFERENCES "public"."blocks"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."blocks"
+    ADD CONSTRAINT "blocks_task_id_fkey" FOREIGN KEY ("task_id") REFERENCES "public"."tasks"("id") ON DELETE CASCADE;
 
 
 
@@ -390,21 +405,6 @@ ALTER TABLE ONLY "public"."schedules"
 
 ALTER TABLE ONLY "public"."states"
     ADD CONSTRAINT "states_task_id_fkey" FOREIGN KEY ("task_id") REFERENCES "public"."tasks"("id") ON DELETE CASCADE;
-
-
-
-ALTER TABLE ONLY "public"."subitem_states"
-    ADD CONSTRAINT "subitem_states_subitem_id_fkey" FOREIGN KEY ("subitem_id") REFERENCES "public"."subitems"("id") ON DELETE CASCADE;
-
-
-
-ALTER TABLE ONLY "public"."subitems"
-    ADD CONSTRAINT "subitems_parent_id_fkey" FOREIGN KEY ("parent_id") REFERENCES "public"."subitems"("id") ON DELETE CASCADE;
-
-
-
-ALTER TABLE ONLY "public"."subitems"
-    ADD CONSTRAINT "subitems_task_id_fkey" FOREIGN KEY ("task_id") REFERENCES "public"."tasks"("id") ON DELETE CASCADE;
 
 
 
@@ -451,16 +451,16 @@ CREATE POLICY "Users can create categories" ON "public"."categories" FOR INSERT 
 
 
 
-CREATE POLICY "Users can delete own subitem_states" ON "public"."subitem_states" FOR DELETE USING ((EXISTS ( SELECT 1
-   FROM ("public"."subitems"
-     JOIN "public"."tasks" ON (("tasks"."id" = "subitems"."task_id")))
-  WHERE (("subitems"."id" = "subitem_states"."subitem_id") AND ("tasks"."user_id" = "auth"."uid"())))));
+CREATE POLICY "Users can delete own block_states" ON "public"."block_states" FOR DELETE USING ((EXISTS ( SELECT 1
+   FROM ("public"."blocks"
+     JOIN "public"."tasks" ON (("tasks"."id" = "blocks"."task_id")))
+  WHERE (("blocks"."id" = "block_states"."block_id") AND ("tasks"."user_id" = "auth"."uid"())))));
 
 
 
-CREATE POLICY "Users can delete own subitems" ON "public"."subitems" FOR DELETE USING ((EXISTS ( SELECT 1
+CREATE POLICY "Users can delete own blocks" ON "public"."blocks" FOR DELETE USING ((EXISTS ( SELECT 1
    FROM "public"."tasks"
-  WHERE (("tasks"."id" = "subitems"."task_id") AND ("tasks"."user_id" = "auth"."uid"())))));
+  WHERE (("tasks"."id" = "blocks"."task_id") AND ("tasks"."user_id" = "auth"."uid"())))));
 
 
 
@@ -472,16 +472,16 @@ CREATE POLICY "Users can delete their categories" ON "public"."categories" FOR D
 
 
 
-CREATE POLICY "Users can insert own subitem_states" ON "public"."subitem_states" FOR INSERT WITH CHECK ((EXISTS ( SELECT 1
-   FROM ("public"."subitems"
-     JOIN "public"."tasks" ON (("tasks"."id" = "subitems"."task_id")))
-  WHERE (("subitems"."id" = "subitem_states"."subitem_id") AND ("tasks"."user_id" = "auth"."uid"())))));
+CREATE POLICY "Users can insert own block_states" ON "public"."block_states" FOR INSERT WITH CHECK ((EXISTS ( SELECT 1
+   FROM ("public"."blocks"
+     JOIN "public"."tasks" ON (("tasks"."id" = "blocks"."task_id")))
+  WHERE (("blocks"."id" = "block_states"."block_id") AND ("tasks"."user_id" = "auth"."uid"())))));
 
 
 
-CREATE POLICY "Users can insert own subitems" ON "public"."subitems" FOR INSERT WITH CHECK ((EXISTS ( SELECT 1
+CREATE POLICY "Users can insert own blocks" ON "public"."blocks" FOR INSERT WITH CHECK ((EXISTS ( SELECT 1
    FROM "public"."tasks"
-  WHERE (("tasks"."id" = "subitems"."task_id") AND ("tasks"."user_id" = "auth"."uid"())))));
+  WHERE (("tasks"."id" = "blocks"."task_id") AND ("tasks"."user_id" = "auth"."uid"())))));
 
 
 
@@ -493,20 +493,20 @@ CREATE POLICY "Users can insert their own profile." ON "public"."profiles" FOR I
 
 
 
-CREATE POLICY "Users can update own profile." ON "public"."profiles" FOR UPDATE USING ((( SELECT "auth"."uid"() AS "uid") = "id"));
+CREATE POLICY "Users can update own block_states" ON "public"."block_states" FOR UPDATE USING ((EXISTS ( SELECT 1
+   FROM ("public"."blocks"
+     JOIN "public"."tasks" ON (("tasks"."id" = "blocks"."task_id")))
+  WHERE (("blocks"."id" = "block_states"."block_id") AND ("tasks"."user_id" = "auth"."uid"())))));
 
 
 
-CREATE POLICY "Users can update own subitem_states" ON "public"."subitem_states" FOR UPDATE USING ((EXISTS ( SELECT 1
-   FROM ("public"."subitems"
-     JOIN "public"."tasks" ON (("tasks"."id" = "subitems"."task_id")))
-  WHERE (("subitems"."id" = "subitem_states"."subitem_id") AND ("tasks"."user_id" = "auth"."uid"())))));
-
-
-
-CREATE POLICY "Users can update own subitems" ON "public"."subitems" FOR UPDATE USING ((EXISTS ( SELECT 1
+CREATE POLICY "Users can update own blocks" ON "public"."blocks" FOR UPDATE USING ((EXISTS ( SELECT 1
    FROM "public"."tasks"
-  WHERE (("tasks"."id" = "subitems"."task_id") AND ("tasks"."user_id" = "auth"."uid"())))));
+  WHERE (("tasks"."id" = "blocks"."task_id") AND ("tasks"."user_id" = "auth"."uid"())))));
+
+
+
+CREATE POLICY "Users can update own profile." ON "public"."profiles" FOR UPDATE USING ((( SELECT "auth"."uid"() AS "uid") = "id"));
 
 
 
@@ -518,16 +518,16 @@ CREATE POLICY "Users can update their categories" ON "public"."categories" FOR U
 
 
 
-CREATE POLICY "Users can view own subitem_states" ON "public"."subitem_states" FOR SELECT USING ((EXISTS ( SELECT 1
-   FROM ("public"."subitems"
-     JOIN "public"."tasks" ON (("tasks"."id" = "subitems"."task_id")))
-  WHERE (("subitems"."id" = "subitem_states"."subitem_id") AND ("tasks"."user_id" = "auth"."uid"())))));
+CREATE POLICY "Users can view own block_states" ON "public"."block_states" FOR SELECT USING ((EXISTS ( SELECT 1
+   FROM ("public"."blocks"
+     JOIN "public"."tasks" ON (("tasks"."id" = "blocks"."task_id")))
+  WHERE (("blocks"."id" = "block_states"."block_id") AND ("tasks"."user_id" = "auth"."uid"())))));
 
 
 
-CREATE POLICY "Users can view own subitems" ON "public"."subitems" FOR SELECT USING ((EXISTS ( SELECT 1
+CREATE POLICY "Users can view own blocks" ON "public"."blocks" FOR SELECT USING ((EXISTS ( SELECT 1
    FROM "public"."tasks"
-  WHERE (("tasks"."id" = "subitems"."task_id") AND ("tasks"."user_id" = "auth"."uid"())))));
+  WHERE (("tasks"."id" = "blocks"."task_id") AND ("tasks"."user_id" = "auth"."uid"())))));
 
 
 
@@ -537,6 +537,12 @@ CREATE POLICY "Users can view own task states" ON "public"."states" FOR SELECT T
 
 CREATE POLICY "Users can view their categories" ON "public"."categories" FOR SELECT USING (("user_id" = "auth"."uid"()));
 
+
+
+ALTER TABLE "public"."block_states" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."blocks" ENABLE ROW LEVEL SECURITY;
 
 
 ALTER TABLE "public"."categories" ENABLE ROW LEVEL SECURITY;
@@ -549,12 +555,6 @@ ALTER TABLE "public"."schedules" ENABLE ROW LEVEL SECURITY;
 
 
 ALTER TABLE "public"."states" ENABLE ROW LEVEL SECURITY;
-
-
-ALTER TABLE "public"."subitem_states" ENABLE ROW LEVEL SECURITY;
-
-
-ALTER TABLE "public"."subitems" ENABLE ROW LEVEL SECURITY;
 
 
 ALTER TABLE "public"."tasks" ENABLE ROW LEVEL SECURITY;
@@ -764,6 +764,18 @@ GRANT ALL ON FUNCTION "public"."update_updated_at_column"() TO "service_role";
 
 
 
+GRANT ALL ON TABLE "public"."block_states" TO "anon";
+GRANT ALL ON TABLE "public"."block_states" TO "authenticated";
+GRANT ALL ON TABLE "public"."block_states" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."blocks" TO "anon";
+GRANT ALL ON TABLE "public"."blocks" TO "authenticated";
+GRANT ALL ON TABLE "public"."blocks" TO "service_role";
+
+
+
 GRANT ALL ON TABLE "public"."categories" TO "anon";
 GRANT ALL ON TABLE "public"."categories" TO "authenticated";
 GRANT ALL ON TABLE "public"."categories" TO "service_role";
@@ -785,18 +797,6 @@ GRANT ALL ON TABLE "public"."schedules" TO "service_role";
 GRANT ALL ON TABLE "public"."states" TO "anon";
 GRANT ALL ON TABLE "public"."states" TO "authenticated";
 GRANT ALL ON TABLE "public"."states" TO "service_role";
-
-
-
-GRANT ALL ON TABLE "public"."subitem_states" TO "anon";
-GRANT ALL ON TABLE "public"."subitem_states" TO "authenticated";
-GRANT ALL ON TABLE "public"."subitem_states" TO "service_role";
-
-
-
-GRANT ALL ON TABLE "public"."subitems" TO "anon";
-GRANT ALL ON TABLE "public"."subitems" TO "authenticated";
-GRANT ALL ON TABLE "public"."subitems" TO "service_role";
 
 
 
