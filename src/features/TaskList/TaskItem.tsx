@@ -76,12 +76,12 @@ export default function TaskItem({
 		.onUpdate((event) => {
 			translateX.value = event.translationX
 			if (event.translationX < 0) {
-				// Swipe left — delete zone
-				deleteOpacity.value = Math.min(
-					1,
-					Math.abs(event.translationX) / Math.abs(DELETE_THRESHOLD)
-				)
-				completeOpacity.value = 0
+				// // Swipe left — delete zone
+				// deleteOpacity.value = Math.min(
+				// 	1,
+				// 	Math.abs(event.translationX) / Math.abs(DELETE_THRESHOLD)
+				// )
+				// completeOpacity.value = 0
 			} else {
 				// Swipe right — complete zone
 				completeOpacity.value = Math.min(
@@ -93,9 +93,9 @@ export default function TaskItem({
 		})
 		.onEnd((event) => {
 			if (event.translationX < DELETE_THRESHOLD) {
-				translateX.value = withTiming(-500, { duration: 300 })
-				// itemHeight.value = withTiming(0, { duration: 300 })
-				scheduleOnRN(deleteTask)
+				// translateX.value = withTiming(-500, { duration: 300 })
+				// // itemHeight.value = withTiming(0, { duration: 300 })
+				// scheduleOnRN(deleteTask)
 			} else if (event.translationX > COMPLETE_THRESHOLD) {
 				translateX.value = withTiming(500, { duration: 300 })
 				// itemHeight.value = withTiming(0, { duration: 300 })
