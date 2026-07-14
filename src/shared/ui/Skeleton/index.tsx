@@ -10,7 +10,7 @@ export default function Skeleton() {
 			height={540}
 			viewBox='0 0 380 540'
 			foregroundColor={theme.colors.surfaceAlter}
-			backgroundColor={theme.colors.mutedLightestText}
+			backgroundColor={theme.colors.mutedSubtlestText}
 		>
 			<Rect x='0' y='6' rx='4' ry='4' width='110' height='15' />
 			<Rect x='0' y='30' rx='4' ry='4' width='380' height='80' />

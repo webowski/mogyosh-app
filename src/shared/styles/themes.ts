@@ -57,24 +57,24 @@ export const lightTheme = {
 		// primary800: 'hsl(225, 100%, 92%)',
 		// primary900: 'hsl(225, 100%, 97%)',
 
-		brandLightest: 'hsl(225, 100%, 97%)',
+		brandSubtlest: 'hsl(225, 100%, 97%)',
 
 		// text
-		primaryDarker: 'hsl(225, 60%, 55%)',
+		primaryStronger: 'hsl(225, 60%, 55%)',
 		primary: 'hsl(225, 100%, 70%)',
-		primaryLight: 'hsl(225, 100%, 75%)',
-		primaryLighter: 'hsl(225, 100%, 92%)',
+		primarySubtle: 'hsl(225, 100%, 75%)',
+		primarySubtler: 'hsl(225, 100%, 92%)',
 
 		major: 'hsl(224, 20%, 28%)',
 		minor: 'hsl(225, 22%, 55%)', // Secondary text (subtitles, placeholders, icons)
 
-		mutedTextDark: 'hsl(225, 28%, 68%)',
+		mutedTextStrong: 'hsl(225, 28%, 68%)',
 		mutedText: 'hsl(225, 36%, 75%)',
-		mutedLightText: 'hsl(225, 36%, 82%)',
-		mutedLighterText: 'hsl(225, 36%, 87%)',
-		mutedLightestText: 'hsl(225, 37%, 93%)',
+		mutedSubtleText: 'hsl(225, 36%, 82%)',
+		mutedSubtlerText: 'hsl(225, 36%, 87%)',
+		mutedSubtlestText: 'hsl(225, 37%, 93%)',
 
-		mutedLightFill: 'hsl(225, 37%, 95%)',
+		mutedSubtleFill: 'hsl(225, 37%, 95%)',
 
 		buttonText: 'hsl(0, 0%, 100%)',
 		success: 'hsl(148, 100%, 66%)',
@@ -90,16 +90,16 @@ export const lightTheme = {
 		surfaceAlter: 'hsl(220, 23%, 98%)',
 
 		border: 'hsl(225, 35%, 79%)',
-		borderLight: 'hsl(225, 35%, 92%)',
-		borderLighter: 'hsl(225, 35%, 94%)',
-		borderLightest: 'hsl(225, 37%, 96%)',
+		borderSubtle: 'hsl(225, 35%, 92%)',
+		borderSubtler: 'hsl(225, 35%, 94%)',
+		borderSubtlest: 'hsl(225, 37%, 96%)',
 
 		// table
 		thFill: 'hsl(224, 37%, 93%)',
 		thText: 'hsl(225, 28%, 68%)',
 
 		ripple: 'rgba(99,125,255,0.15)',
-		rippleLight: 'rgba(255,255,255,0.35)',
+		rippleSubtle: 'rgba(255,255,255,0.35)',
 
 		shadeHeader: '0 0px 6px hsla(225, 74%, 40%, .09)',
 		shadeDrawer: '0 0px 40px hsla(225, 74%, 40%, .55)',
@@ -140,20 +140,20 @@ export const darkTheme = {
 	colors: {
 		...lightTheme.colors,
 
-		brandLightest: 'hsl(225, 80%, 12%)',
+		brandSubtlest: 'hsl(225, 80%, 12%)',
 
 		// text
-		primaryDarker: 'hsl(225, 100%, 78%)',
+		primaryStronger: 'hsl(225, 100%, 78%)',
 		primary: 'hsl(225, 100%, 72%)',
-		primaryLight: 'hsl(225, 100%, 65%)',
-		primaryLighter: 'hsl(225, 60%, 45%)',
+		primarySubtle: 'hsl(225, 100%, 65%)',
+		primarySubtler: 'hsl(225, 60%, 45%)',
 
 		major: 'hsl(0, 0%, 98%)',
 		minor: 'hsl(225, 20%, 72%)',
 		mutedText: 'hsl(225, 15%, 62%)',
-		mutedLightText: 'hsl(225, 15%, 55%)',
-		mutedLighterText: 'hsl(225, 15%, 48%)',
-		mutedLightestText: 'hsl(225, 15%, 42%)',
+		mutedSubtleText: 'hsl(225, 15%, 55%)',
+		mutedSubtlerText: 'hsl(225, 15%, 48%)',
+		mutedSubtlestText: 'hsl(225, 15%, 42%)',
 		buttonText: 'hsl(0, 0%, 100%)',
 		success: 'hsl(148, 80%, 58%)',
 		danger: 'hsl(355, 85%, 68%)',
@@ -167,15 +167,15 @@ export const darkTheme = {
 		surfaceAlter: 'hsl(225, 20%, 13%)',
 
 		border: 'hsl(225, 15%, 24%)',
-		borderLight: 'hsl(225, 15%, 19%)',
-		borderLightest: 'hsl(225, 20%, 16%)',
+		borderSubtle: 'hsl(225, 15%, 19%)',
+		borderSubtlest: 'hsl(225, 20%, 16%)',
 
 		// table
 		thFill: 'hsl(225, 20%, 16%)',
 		thText: 'hsl(225, 20%, 65%)',
 
 		ripple: 'rgba(120, 140, 255, 0.18)',
-		rippleLight: 'rgba(255,255,255,0.08)',
+		rippleSubtle: 'rgba(255,255,255,0.08)',
 
 		shadeHeader: '0 0px 6px hsla(225, 0%, 0%, .3)',
 		shadeDrawer: '0 0px 40px hsla(225, 0%, 0%, .35)',

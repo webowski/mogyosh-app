@@ -37,7 +37,7 @@ export default function NavButton({
 					fill:
 						isFocused || pressed
 							? theme.colors.primary
-							: theme.colors.mutedTextDark
+							: theme.colors.mutedTextStrong
 				} as any)
 			}
 		</Pressable>

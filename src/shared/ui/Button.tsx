@@ -70,7 +70,7 @@ const getVariantConfigs = (
 				useGradient: true,
 				background: { borderRadius },
 				text: { color: theme.colors.inverse },
-				rippleColor: theme.colors.rippleLight
+				rippleColor: theme.colors.rippleSubtle
 			}
 		],
 		[
@@ -88,8 +88,8 @@ const getVariantConfigs = (
 				background: {
 					borderRadius: 999,
 					borderWidth: 1.5,
-					borderColor: theme.colors.primaryLight,
-					backgroundColor: theme.colors.primaryLighter
+					borderColor: theme.colors.primarySubtle,
+					backgroundColor: theme.colors.primarySubtler
 				},
 				text: { color: theme.colors.major },
 				rippleColor: theme.colors.ripple,
@@ -424,7 +424,7 @@ export const Button: React.FC<ButtonProps> = ({
 						height: 7,
 						boxShadow: theme.colors.shadeButtonIndicator,
 						borderRadius: 999,
-						backgroundColor: theme.colors.primaryLight
+						backgroundColor: theme.colors.primarySubtle
 					}}
 					pointerEvents='none'
 				/>

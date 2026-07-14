@@ -413,7 +413,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 	},
 
 	text_muted: {
-		color: theme.colors.mutedLightestText
+		color: theme.colors.mutedSubtlestText
 	},
 
 	dayNumber: {
@@ -423,7 +423,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		color: theme.colors.major
 	},
 	dayNumber_otherMonth: {
-		color: theme.colors.mutedLightText
+		color: theme.colors.mutedSubtleText
 	},
 
 	day__counter: {
@@ -431,7 +431,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		fontSize: 11 * rt.fontScale,
 		lineHeight: 11 * rt.fontScale,
 		fontWeight: '500',
-		color: theme.colors.mutedLightText,
+		color: theme.colors.mutedSubtleText,
 		textAlign: 'center'
 	}
 }))

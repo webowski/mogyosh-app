@@ -61,7 +61,7 @@ export const commonStyles = StyleSheet.create((theme, rt) => ({
 		fontSize: 15,
 		lineHeight: 15 * 1.2,
 		letterSpacing: 15 * -0.01,
-		color: theme.colors.mutedTextDark,
+		color: theme.colors.mutedTextStrong,
 		marginBottom: 2
 	},
 

@@ -44,7 +44,7 @@ export function DragSortIndicator({ style }: DragSortIndicatorProps) {
 					right: 0,
 					height: 2,
 					borderRadius: 1,
-					backgroundColor: theme.colors.primaryLight
+					backgroundColor: theme.colors.primarySubtle
 				},
 				indicatorStyle
 			]}

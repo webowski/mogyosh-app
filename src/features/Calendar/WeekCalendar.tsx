@@ -328,14 +328,14 @@ const styles = StyleSheet.create((theme) => ({
 		fontSize: 11,
 		lineHeight: 11 * 1,
 		fontWeight: '500',
-		color: theme.colors.mutedLightText,
+		color: theme.colors.mutedSubtleText,
 		marginBottom: 3
 	},
 	dayNumber: {
 		fontSize: 14,
 		lineHeight: 14 * 1,
 		fontWeight: '600',
-		color: theme.colors.mutedLightText
+		color: theme.colors.mutedSubtleText
 	},
 
 	day_selected: {

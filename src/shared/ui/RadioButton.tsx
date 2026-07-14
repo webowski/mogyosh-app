@@ -64,7 +64,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		borderRadius: 9,
 		backgroundColor: checked ? theme.colors.primary : 'transparent',
 		borderWidth: checked ? 0 : 2,
-		borderColor: theme.colors.mutedLighterText,
+		borderColor: theme.colors.mutedSubtlerText,
 		alignItems: 'center',
 		justifyContent: 'center'
 	})

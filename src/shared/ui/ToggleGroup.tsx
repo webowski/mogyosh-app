@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { Pressable, ViewStyle } from 'react-native'
 import Animated, {
 	interpolateColor,
@@ -59,7 +59,7 @@ function ToggleItem({
 		borderColor: interpolateColor(
 			progress.value,
 			[0, 1],
-			[theme.colors.borderLight, theme.colors.primary]
+			[theme.colors.borderSubtle, theme.colors.primary]
 		)
 	}))
 

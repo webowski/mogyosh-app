@@ -389,7 +389,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		backgroundColor: theme.colors.surface,
 		borderRadius: STYLE_VARS.radius_md,
 		borderWidth: 1,
-		borderColor: theme.colors.borderLightest,
+		borderColor: theme.colors.borderSubtlest,
 		boxShadow: theme.colors.shadeActionSheet,
 		paddingVertical: 4,
 		minWidth: 180

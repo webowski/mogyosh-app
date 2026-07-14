@@ -74,7 +74,7 @@ const styles = StyleSheet.create((theme) => ({
 		backgroundColor: theme.colors.surface,
 		borderRadius: 6,
 		borderWidth: 1,
-		borderColor: theme.colors.borderLightest
+		borderColor: theme.colors.borderSubtlest
 	},
 
 	Stopwatch__body: {
@@ -104,7 +104,7 @@ const styles = StyleSheet.create((theme) => ({
 		width: SUBITEM_VARS.actionWidth,
 		padding: 8,
 		borderLeftWidth: 1,
-		borderColor: theme.colors.borderLightest,
+		borderColor: theme.colors.borderSubtlest,
 		justifyContent: 'center',
 		alignItems: 'center',
 		alignSelf: 'stretch'

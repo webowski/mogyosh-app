@@ -35,7 +35,7 @@ export default function TaskListItem({ data }: TaskListItemProps) {
 				<Text
 					style={{
 						fontSize: 12,
-						color: theme.colors.mutedTextDark,
+						color: theme.colors.mutedTextStrong,
 						marginTop: 4
 					}}
 				>
@@ -46,7 +46,7 @@ export default function TaskListItem({ data }: TaskListItemProps) {
 				<Text
 					style={{
 						fontSize: 12,
-						color: theme.colors.mutedTextDark,
+						color: theme.colors.mutedTextStrong,
 						marginTop: 2
 					}}
 				>

@@ -151,14 +151,14 @@ const styles = StyleSheet.create((theme, rt) => ({
 		paddingHorizontal: STYLE_VARS.sidePadding,
 		paddingTop: 12,
 		boxShadow: theme.colors.shadeActionSheet,
-		borderColor: theme.colors.borderLightest,
+		borderColor: theme.colors.borderSubtlest,
 		borderWidth: 1
 	},
 	grabber: {
 		width: 36,
 		height: 4,
 		borderRadius: 2,
-		backgroundColor: theme.colors.mutedTextDark,
+		backgroundColor: theme.colors.mutedTextStrong,
 		alignSelf: 'center',
 		marginBottom: 12
 	},

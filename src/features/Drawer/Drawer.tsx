@@ -153,7 +153,7 @@ export default function Drawer() {
 								<MaterialIcons
 									name='info-outline'
 									size={26}
-									color={theme.colors.mutedTextDark}
+									color={theme.colors.mutedTextStrong}
 								/>
 								<Text style={styles.menuItemText}>{t('screen.About')}</Text>
 							</Pressable>
@@ -167,7 +167,7 @@ export default function Drawer() {
 								<MaterialIcons
 									name='alternate-email'
 									size={26}
-									color={theme.colors.mutedTextDark}
+									color={theme.colors.mutedTextStrong}
 								/>
 								<Text style={styles.menuItemText}>{t('screen.Account')}</Text>
 							</Pressable>
@@ -181,7 +181,7 @@ export default function Drawer() {
 								<MaterialIcons
 									name='settings'
 									size={26}
-									color={theme.colors.mutedTextDark}
+									color={theme.colors.mutedTextStrong}
 								/>
 								<Text style={styles.menuItemText}>{t('screen.Settings')}</Text>
 							</Pressable>
@@ -218,8 +218,8 @@ const styles = StyleSheet.create((theme, rt) => ({
 		marginLeft: '27%',
 		paddingTop: 3,
 		borderTopWidth: 11,
-		borderColor: theme.colors.brandLightest,
-		color: theme.colors.mutedLightText,
+		borderColor: theme.colors.brandSubtlest,
+		color: theme.colors.mutedSubtleText,
 		fontSize: 13 * rt.fontScale,
 		fontWeight: '400'
 	},
@@ -230,7 +230,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		top: -300,
 		left: -430,
 		borderRadius: 600,
-		backgroundColor: theme.colors.brandLightest
+		backgroundColor: theme.colors.brandSubtlest
 	},
 
 	menu: {
@@ -256,7 +256,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		marginTop: 20,
 		marginLeft: 32,
 		fontSize: 12,
-		color: theme.colors.mutedTextDark
+		color: theme.colors.mutedTextStrong
 	},
 
 	backdrop: {

@@ -139,7 +139,7 @@ const styles = StyleSheet.create((theme) => ({
 		alignItems: 'center',
 		justifyContent: 'center',
 		paddingVertical: theme.spacing.xs,
-		backgroundColor: theme.colors.mutedLightFill,
+		backgroundColor: theme.colors.mutedSubtleFill,
 		borderTopLeftRadius: STYLE_VARS.radius_sm,
 		borderTopRightRadius: STYLE_VARS.radius_sm,
 		borderBottomLeftRadius: STYLE_VARS.radius_lg,

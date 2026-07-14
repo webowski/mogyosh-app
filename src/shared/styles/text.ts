@@ -28,7 +28,7 @@ export const textStyles = StyleSheet.create((theme, rt) => ({
 		fontSize: TEXT_VARS.h5,
 		lineHeight: TEXT_VARS.h5 * 1.2,
 		letterSpacing: TEXT_VARS.h5 * 0.01,
-		color: theme.colors.mutedLightText
+		color: theme.colors.mutedSubtleText
 	},
 
 	// text-align: center;
