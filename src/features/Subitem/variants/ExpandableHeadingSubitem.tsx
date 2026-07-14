@@ -101,11 +101,11 @@ export default function ExpandableHeadingSubitem({
 			<MarkdownInput
 				ref={inputRef}
 				subitemText={data.info}
+				style={[{ flex: 1 }, checkedStyle]}
+				textStyle={subitemStyles.heading(HEADING_SIZES[variant])}
 				onChangeMarkdown={handleChangeText}
 				onEnterPress={handleAddAfter}
 				onFocus={handleFocus}
-				style={[{ flex: 1 }, checkedStyle]}
-				textStyle={subitemStyles.heading(HEADING_SIZES[variant])}
 				onBackspaceOnEmpty={() => {
 					onRemove?.()
 				}}

@@ -85,10 +85,11 @@ export default function ExpandableSubitem({
 			<MarkdownInput
 				ref={inputRef}
 				subitemText={data.info}
+				style={[{ flex: 1 }, checkedStyle]}
+				textStyle={subitemStyles.text}
 				onChangeMarkdown={handleChangeText}
 				onEnterPress={handleAddAfter}
 				onFocus={handleFocus}
-				style={[subitemStyles.text, checkedStyle]}
 				onBackspaceOnEmpty={() => {
 					onRemove?.()
 				}}
