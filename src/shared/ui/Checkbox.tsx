@@ -9,6 +9,8 @@ import Animated, {
 } from 'react-native-reanimated'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
+import { triggerHapticLight } from '@/shared/ui/Haptic'
+
 type CheckboxProps = {
 	checked: boolean
 	style?: ViewStyle | ViewStyle[]
@@ -35,6 +37,11 @@ export default function Checkbox({
 		[checked]
 	)
 
+	const handlePress = () => {
+		triggerHapticLight()
+		onPress?.()
+	}
+
 	const checkboxStyle = useAnimatedStyle(() => ({
 		backgroundColor: interpolateColor(
 			animationProgress.value,
@@ -50,7 +57,7 @@ export default function Checkbox({
 
 	return (
 		<AnimatedPressable
-			onPress={onPress}
+			onPress={handlePress}
 			style={[styles.checkbox, checkboxStyle, style]}
 			{...props}
 		>
