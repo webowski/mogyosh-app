@@ -4,6 +4,8 @@ import { PropsWithChildren } from 'react'
 import { Text, View } from 'react-native'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import Animated, {
+	FadeOut,
+	LinearTransition,
 	useAnimatedStyle,
 	useSharedValue,
 	withTiming
@@ -151,71 +153,78 @@ export default function TaskItem({
 	}
 
 	return (
-		<MenuView
-			onOpenMenu={handleOpenMenu}
-			shouldOpenOnLongPress
-			actions={[
-				{
-					id: 'delete',
-					title: 'Delete task',
-					image: undefined,
-					attributes: { destructive: true }
-				}
-			]}
-			onPressAction={handleMenuPressAction}
+		<Animated.View
+			layout={LinearTransition.duration(250)}
+			exiting={FadeOut.duration(200)}
 		>
-			<View style={styles.wrapper}>
-				{/* Complete background */}
-				<Animated.View
-					style={[styles.completeBackground, completeContainerStyle]}
-				>
-					<Text style={styles.completeBackground__label}>Done</Text>
-				</Animated.View>
-
-				{/* Delete background */}
-				<Animated.View style={[styles.deleteBackground, deleteContainerStyle]}>
-					<Text style={styles.deleteBackground__label}>Delete</Text>
-				</Animated.View>
-
-				<GestureDetector gesture={composedGesture}>
+			<MenuView
+				onOpenMenu={handleOpenMenu}
+				shouldOpenOnLongPress
+				actions={[
+					{
+						id: 'delete',
+						title: 'Delete task',
+						image: undefined,
+						attributes: { destructive: true }
+					}
+				]}
+				onPressAction={handleMenuPressAction}
+			>
+				<View style={styles.wrapper}>
+					{/* Complete background */}
 					<Animated.View
-						style={[styles.card, cardAnimatedStyle]}
-						// onLayout={(e) => {
-						// 	itemHeight.value = e.nativeEvent.layout.height
-						// }}
+						style={[styles.completeBackground, completeContainerStyle]}
 					>
-						{isByTimeBool && (
-							<Text style={styles.card__time}>
-								{formatTime(
-									data.schedules?.[0]?.start_time as string,
-									hourFormat
-								)}
-							</Text>
-						)}
-						<View style={styles.card__columns}>
-							<View style={styles.card__header}>
-								{data.category && (
-									<Text style={styles.card__category}>
-										{makeCategoryPath(data.category.id, categoryMap)}
-									</Text>
-								)}
-								<Text style={styles.card__title}>{data.title}</Text>
-							</View>
-							<View></View>
-						</View>
-						{children}
-						{totalProgressCount > 0 && (
-							<View style={styles.card__dashboard}>
-								<CircleProgress
-									progress={progress}
-									value={`${completedProgressCount}/${totalProgressCount}`}
-								/>
-							</View>
-						)}
+						<Text style={styles.completeBackground__label}>Done</Text>
 					</Animated.View>
-				</GestureDetector>
-			</View>
-		</MenuView>
+
+					{/* Delete background */}
+					<Animated.View
+						style={[styles.deleteBackground, deleteContainerStyle]}
+					>
+						<Text style={styles.deleteBackground__label}>Delete</Text>
+					</Animated.View>
+
+					<GestureDetector gesture={composedGesture}>
+						<Animated.View
+							style={[styles.card, cardAnimatedStyle]}
+							// onLayout={(e) => {
+							// 	itemHeight.value = e.nativeEvent.layout.height
+							// }}
+						>
+							{isByTimeBool && (
+								<Text style={styles.card__time}>
+									{formatTime(
+										data.schedules?.[0]?.start_time as string,
+										hourFormat
+									)}
+								</Text>
+							)}
+							<View style={styles.card__columns}>
+								<View style={styles.card__header}>
+									{data.category && (
+										<Text style={styles.card__category}>
+											{makeCategoryPath(data.category.id, categoryMap)}
+										</Text>
+									)}
+									<Text style={styles.card__title}>{data.title}</Text>
+								</View>
+								<View></View>
+							</View>
+							{children}
+							{totalProgressCount > 0 && (
+								<View style={styles.card__dashboard}>
+									<CircleProgress
+										progress={progress}
+										value={`${completedProgressCount}/${totalProgressCount}`}
+									/>
+								</View>
+							)}
+						</Animated.View>
+					</GestureDetector>
+				</View>
+			</MenuView>
+		</Animated.View>
 	)
 }
 
