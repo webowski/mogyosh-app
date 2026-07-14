@@ -1,3 +1,4 @@
+import { MenuView } from '@expo/ui/community/menu'
 import { useRouter } from 'expo-router'
 import { PropsWithChildren } from 'react'
 import { Text, View } from 'react-native'
@@ -22,6 +23,7 @@ import { formatTime } from '@/shared/lib/time'
 import { useTaskStore } from '@/shared/model/task.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 import CircleProgress from '@/shared/ui/CircleProgress'
+import { triggerHapticLight } from '@/shared/ui/Haptic'
 import { scheduleOnRN } from 'react-native-worklets'
 
 const DELETE_THRESHOLD = -80
@@ -133,58 +135,87 @@ export default function TaskItem({
 	const totalProgressCount = progressData?.totalCount ?? 0
 	const completedProgressCount = progressData?.completedCount ?? 0
 
+	// 	const deleteIcon = Icon.select({
+	// 	ios: 'trash',
+	// 	android: import('@expo/material-symbols/delete.xml')
+	// })
+
+	const handleMenuPressAction = (event: { nativeEvent: { event: string } }) => {
+		if (event.nativeEvent.event === 'delete') {
+			deleteTask()
+		}
+	}
+
+	const handleOpenMenu = () => {
+		triggerHapticLight()
+	}
+
 	return (
-		<View style={styles.wrapper}>
-			{/* Complete background */}
-			<Animated.View
-				style={[styles.completeBackground, completeContainerStyle]}
-			>
-				<Text style={styles.completeBackground__label}>Done</Text>
-			</Animated.View>
-
-			{/* Delete background */}
-			<Animated.View style={[styles.deleteBackground, deleteContainerStyle]}>
-				<Text style={styles.deleteBackground__label}>Delete</Text>
-			</Animated.View>
-
-			<GestureDetector gesture={composedGesture}>
+		<MenuView
+			onOpenMenu={handleOpenMenu}
+			shouldOpenOnLongPress
+			actions={[
+				{
+					id: 'delete',
+					title: 'Delete task',
+					image: undefined,
+					attributes: { destructive: true }
+				}
+			]}
+			onPressAction={handleMenuPressAction}
+		>
+			<View style={styles.wrapper}>
+				{/* Complete background */}
 				<Animated.View
-					style={[styles.card, cardAnimatedStyle]}
-					// onLayout={(e) => {
-					// 	itemHeight.value = e.nativeEvent.layout.height
-					// }}
+					style={[styles.completeBackground, completeContainerStyle]}
 				>
-					{isByTimeBool && (
-						<Text style={styles.card__time}>
-							{formatTime(
-								data.schedules?.[0]?.start_time as string,
-								hourFormat
-							)}
-						</Text>
-					)}
-					<View style={styles.card__columns}>
-						<View style={styles.card__header}>
-							{data.category && (
-								<Text style={styles.card__category}>
-									{makeCategoryPath(data.category.id, categoryMap)}
-								</Text>
-							)}
-							<Text style={styles.card__title}>{data.title}</Text>
-						</View>
-						<View></View>
-					</View>
-					{children}
-					{totalProgressCount > 0 && (
-						<View style={styles.card__dashboard}>
-							<CircleProgress
-								progress={progress}
-								value={`${completedProgressCount}/${totalProgressCount}`}
-							/>
-						</View>
-					)}
+					<Text style={styles.completeBackground__label}>Done</Text>
 				</Animated.View>
-			</GestureDetector>
-		</View>
+
+				{/* Delete background */}
+				<Animated.View style={[styles.deleteBackground, deleteContainerStyle]}>
+					<Text style={styles.deleteBackground__label}>Delete</Text>
+				</Animated.View>
+
+				<GestureDetector gesture={composedGesture}>
+					<Animated.View
+						style={[styles.card, cardAnimatedStyle]}
+						// onLayout={(e) => {
+						// 	itemHeight.value = e.nativeEvent.layout.height
+						// }}
+					>
+						{isByTimeBool && (
+							<Text style={styles.card__time}>
+								{formatTime(
+									data.schedules?.[0]?.start_time as string,
+									hourFormat
+								)}
+							</Text>
+						)}
+						<View style={styles.card__columns}>
+							<View style={styles.card__header}>
+								{data.category && (
+									<Text style={styles.card__category}>
+										{makeCategoryPath(data.category.id, categoryMap)}
+									</Text>
+								)}
+								<Text style={styles.card__title}>{data.title}</Text>
+							</View>
+							<View></View>
+						</View>
+						{children}
+						{totalProgressCount > 0 && (
+							<View style={styles.card__dashboard}>
+								<CircleProgress
+									progress={progress}
+									value={`${completedProgressCount}/${totalProgressCount}`}
+								/>
+							</View>
+						)}
+					</Animated.View>
+				</GestureDetector>
+			</View>
+		</MenuView>
 	)
 }
 
