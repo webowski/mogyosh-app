@@ -1,5 +1,10 @@
 import { forwardRef, useEffect, useRef } from 'react'
-import { Platform, type StyleProp, type ViewStyle } from 'react-native'
+import {
+	Platform,
+	type StyleProp,
+	type TextStyle,
+	type ViewStyle
+} from 'react-native'
 import {
 	EnrichedMarkdownTextInput,
 	type EnrichedMarkdownTextInputInstance
@@ -9,13 +14,14 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 interface MarkdownInputProps {
 	subitemText: string
+	style?: StyleProp<AnimatedStyle<ViewStyle>>
+	textStyle?: StyleProp<TextStyle>
 	onChangeText?: (text: string) => void
 	onChangeMarkdown?: (markdown: string) => void
 	onEnterPress?: () => void
 	onBackspaceOnEmpty?: () => void
 	onFocus?: () => void
 	onBlur?: () => void
-	style?: StyleProp<AnimatedStyle<ViewStyle>>
 }
 
 export const MarkdownInput = forwardRef<
@@ -25,13 +31,14 @@ export const MarkdownInput = forwardRef<
 	(
 		{
 			subitemText,
+			style,
+			textStyle,
 			onChangeText,
 			onChangeMarkdown,
 			onEnterPress,
 			onBackspaceOnEmpty,
 			onFocus,
-			onBlur,
-			style
+			onBlur
 		},
 		ref
 	) => {
@@ -41,12 +48,13 @@ export const MarkdownInput = forwardRef<
 			return (
 				<Animated.View style={style}>
 					<WebDivInput
+						divRef={ref as React.Ref<HTMLDivElement>}
 						subitemText={subitemText}
+						textStyle={textStyle}
 						onChangeText={onChangeText}
 						onEnterPress={onEnterPress}
 						onBackspaceOnEmpty={onBackspaceOnEmpty}
 						onFocus={onFocus}
-						divRef={ref as React.Ref<HTMLDivElement>}
 					/>
 				</Animated.View>
 			)
@@ -58,7 +66,7 @@ export const MarkdownInput = forwardRef<
 					ref={
 						ref as unknown as React.RefObject<EnrichedMarkdownTextInputInstance>
 					}
-					style={styles.Input}
+					style={StyleSheet.flatten([styles.Input, textStyle]) as TextStyle}
 					defaultValue={subitemText}
 					placeholderTextColor={theme.colors.minor}
 					scrollEnabled={false}
@@ -107,25 +115,28 @@ const styles = StyleSheet.create((theme) => ({
 }))
 
 interface WebDivInputProps {
+	divRef: React.Ref<HTMLDivElement>
 	subitemText: string
+	textStyle?: StyleProp<TextStyle>
 	onChangeText?: (text: string) => void
 	onEnterPress?: () => void
 	onBackspaceOnEmpty?: () => void
 	onFocus?: () => void
-	divRef: React.Ref<HTMLDivElement>
 }
 
 function WebDivInput({
+	divRef,
 	subitemText,
+	textStyle,
 	onChangeText,
 	onEnterPress,
 	onBackspaceOnEmpty,
-	onFocus,
-	divRef
+	onFocus
 }: WebDivInputProps) {
 	const { theme } = useUnistyles()
 	const localRef = useRef<HTMLDivElement>(null)
 	const resolvedRef = (divRef as React.RefObject<HTMLDivElement>) ?? localRef
+	const flattenedTextStyle = StyleSheet.flatten(textStyle) ?? {}
 
 	useEffect(
 		() => {
@@ -167,7 +178,8 @@ function WebDivInput({
 				paddingBlock: 0,
 				outline: 'none',
 				minHeight: 22,
-				wordBreak: 'break-word'
+				wordBreak: 'break-word',
+				...flattenedTextStyle
 			}}
 		/>
 	)
