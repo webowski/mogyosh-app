@@ -391,14 +391,16 @@ const styles = StyleSheet.create((theme, rt) => ({
 		flexDirection: 'row',
 		alignItems: 'center',
 		gap: 10,
-		paddingVertical: 10,
-		paddingHorizontal: 12
+		paddingVertical: 8,
+		paddingHorizontal: 14
 	},
 	TypeMenu_row_active: {
 		backgroundColor: theme.colors.surfaceAlter
 	},
 	TypeMenu__label: {
 		fontSize: 14,
+		lineHeight: 14 * 1.4,
+		fontWeight: '500',
 		color: theme.colors.major
 	}
 }))
