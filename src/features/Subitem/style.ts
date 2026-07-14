@@ -42,6 +42,13 @@ export const subitemStyles = StyleSheet.create((theme) => ({
 		fontWeight: 500
 	},
 
+	Expandible: {
+		flexDirection: 'row',
+		alignItems: 'flex-start',
+		gap: 8,
+		paddingVertical: 6
+	},
+
 	text: {
 		flex: 1,
 		fontSize: 16,

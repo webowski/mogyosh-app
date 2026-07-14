@@ -14,8 +14,8 @@ import { useDragSortRow } from '@/shared/modules/DragSort'
 import { getOrderedSiblingIndex } from './model/subitem.utils'
 import { useUpdateSubitemState } from './model/useUpdateSubitemState'
 import BulletedSubitem from './variants/BulletedSubitem'
-import CollapsibleSubitem from './variants/CollapsibleSubitem'
 import CounterSubitem from './variants/CounterSubitem'
+import ExpandableSubitem from './variants/ExpandableSubitem'
 import HeadingSubitem from './variants/HeadingSubitem'
 import OrderedSubitem from './variants/OrderedSubitem'
 import ParagraphSubitem from './variants/ParagraphSubitem'
@@ -63,9 +63,9 @@ export default function SubitemNode({
 	let content
 
 	switch (variant) {
-		case 'details':
+		case 'expandable':
 			content = (
-				<CollapsibleSubitem
+				<ExpandableSubitem
 					data={data}
 					onCheckToggle={(checked) => handleToggleSubitem(data.id, checked)}
 					onExpandToggle={(expanded) => setIsChildShown(expanded)}

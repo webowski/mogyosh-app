@@ -1,32 +1,52 @@
-import { MaterialIcons } from '@expo/vector-icons'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Pressable, View } from 'react-native'
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
 	withTiming
 } from 'react-native-reanimated'
-import { StyleSheet, useUnistyles } from 'react-native-unistyles'
+import { useUnistyles } from 'react-native-unistyles'
 
-import { STYLE_VARS } from '@/shared/styles/common'
+import type { SubitemInputRefsMap, SubitemProps } from '@/shared/domain/subitem'
 import Checkbox from '@/shared/ui/Checkbox'
-import { SubitemProps } from '../index'
+import { MarkdownInput } from '@/shared/ui/MarkdownInput'
+import { MaterialIcons } from '@expo/vector-icons'
+import { useSubitemLogic } from '../model/useSubitemLogic'
+import { subitemStyles } from '../style'
 
-type CollapsibleSubitemProps = SubitemProps & {
+type ExpandableSubitemProps = SubitemProps & {
+	inputRefs?: SubitemInputRefsMap
 	onExpandToggle: (expanded: boolean) => void
 }
 
-export default function CollapsibleSubitem({
+export default function ExpandableSubitem({
+	inputRefs,
 	data,
-	onExpandToggle,
-	onCheckToggle
-}: CollapsibleSubitemProps) {
+	pendingFocusId,
+	onCheckToggle,
+	onAddAfter,
+	onRemove,
+	onExpandToggle
+}: ExpandableSubitemProps) {
+	const {
+		inputRef,
+		checked,
+		checkedStyle,
+		handleChangeText,
+		handlePressCheckbox,
+		handleFocus,
+		handleAddAfter
+	} = useSubitemLogic({
+		data,
+		onCheckToggle,
+		inputRefs,
+		onAddAfter,
+		pendingFocusId,
+		subitemType: 'expandable'
+	})
 	const { theme } = useUnistyles()
 	const rotationProgress = useSharedValue(1) // 1 = expanded (90deg), 0 = collapsed
-
-	const [checked, setChecked] = useState(data.state === 'done')
 	const [isExpanded, setIsExpanded] = useState(false)
-
 	const animationProgress = useSharedValue(checked ? 1 : 0)
 
 	useEffect(
@@ -36,21 +56,6 @@ export default function CollapsibleSubitem({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[checked]
 	)
-
-	const handlePressCheckbox = useCallback(
-		() => {
-			setChecked(!checked)
-			onCheckToggle?.(!checked)
-		},
-		// eslint-disable-next-line
-		[checked]
-	)
-
-	const textStyle = useAnimatedStyle(() => ({
-		opacity: withTiming(checked ? STYLE_VARS.checkedOpacity : 1, {
-			duration: STYLE_VARS.duration.md
-		})
-	}))
 
 	const animatedIconStyle = useAnimatedStyle(() => ({
 		transform: [{ rotate: `${rotationProgress.value * 90}deg` }]
@@ -64,7 +69,7 @@ export default function CollapsibleSubitem({
 	}
 
 	return (
-		<View style={styles.container}>
+		<View style={subitemStyles.Expandible}>
 			<Pressable
 				onPress={toggleExpand}
 				style={{ marginRight: 4, marginTop: 2 }}
@@ -77,29 +82,24 @@ export default function CollapsibleSubitem({
 					/>
 				</Animated.View>
 			</Pressable>
-
-			<Animated.Text style={[styles.text, textStyle]}>
-				{data.info}
-			</Animated.Text>
-
+			<MarkdownInput
+				ref={inputRef}
+				subitemText={data.info}
+				onChangeMarkdown={handleChangeText}
+				onEnterPress={handleAddAfter}
+				onFocus={handleFocus}
+				style={[subitemStyles.text, checkedStyle]}
+				onBackspaceOnEmpty={() => {
+					onRemove?.()
+				}}
+			/>
 			{data.settings?.checkable && (
-				<Checkbox checked={checked} onPress={handlePressCheckbox} />
+				<Checkbox
+					style={subitemStyles.Block__checkbox}
+					checked={checked}
+					onPress={handlePressCheckbox}
+				/>
 			)}
 		</View>
 	)
 }
-
-const styles = StyleSheet.create((theme) => ({
-	container: {
-		flexDirection: 'row',
-		alignItems: 'flex-start',
-		gap: 8,
-		paddingVertical: 6
-	},
-	text: {
-		flex: 1,
-		fontSize: 16,
-		fontWeight: 500,
-		color: theme.colors.major
-	}
-}))
