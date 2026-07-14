@@ -176,7 +176,7 @@ function WebDivInput({
 			style={{
 				flex: 1,
 				fontSize: 16,
-				fontWeight: 500,
+				fontWeight: '500',
 				color: theme.colors.major,
 				paddingBlock: 0,
 				outline: 'none',

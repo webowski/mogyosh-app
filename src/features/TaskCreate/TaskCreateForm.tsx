@@ -362,7 +362,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 	InputHeading: {
 		fontSize: 24,
 		lineHeight: 24 * 1.1,
-		fontWeight: 700,
+		fontWeight: '700' as const,
 		padding: 0,
 		color: theme.colors.major,
 		outline: 'none',

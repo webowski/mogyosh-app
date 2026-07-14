@@ -23,7 +23,7 @@ export const pillStyles = StyleSheet.create((theme, rt) => ({
 	},
 	pill__text: {
 		fontSize: 14,
-		fontWeight: 500,
+		fontWeight: '500' as const,
 		color: theme.colors.major
 	},
 	pill__text_active: {

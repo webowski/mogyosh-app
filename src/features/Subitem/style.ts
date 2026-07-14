@@ -24,7 +24,7 @@ export const subitemStyles = StyleSheet.create((theme) => ({
 		paddingTop: 1,
 		fontSize: 28,
 		lineHeight: 28,
-		fontWeight: 500
+		fontWeight: '500' as const
 	},
 
 	Ordered: {
@@ -39,7 +39,7 @@ export const subitemStyles = StyleSheet.create((theme) => ({
 		paddingTop: 4,
 		fontSize: 16,
 		lineHeight: 22,
-		fontWeight: 500
+		fontWeight: '500' as const
 	},
 
 	Expandible: {
@@ -53,14 +53,14 @@ export const subitemStyles = StyleSheet.create((theme) => ({
 	text: {
 		flex: 1,
 		fontSize: 16,
-		fontWeight: 500,
+		fontWeight: '500' as const,
 		color: theme.colors.major
 	},
 
 	heading: (headingFontSize: number) => ({
 		flex: 1,
 		fontSize: headingFontSize,
-		fontWeight: 700,
+		fontWeight: '700' as const,
 		color: theme.colors.major
 	}),
 

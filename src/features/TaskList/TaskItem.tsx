@@ -210,7 +210,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 	completeBackground__label: {
 		color: theme.colors.inverse,
 		fontSize: 12 * rt.fontScale,
-		fontWeight: 600
+		fontWeight: '600' as const
 	},
 
 	deleteBackground: {
@@ -228,7 +228,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 	deleteBackground__label: {
 		color: theme.colors.inverse,
 		fontSize: 12 * rt.fontScale,
-		fontWeight: 600
+		fontWeight: '600' as const
 	},
 
 	card: {
@@ -258,12 +258,12 @@ const styles = StyleSheet.create((theme, rt) => ({
 	card__title: {
 		color: theme.colors.major,
 		fontSize: 15 * rt.fontScale,
-		fontWeight: 600
+		fontWeight: '600' as const
 		// letterSpacing: (16 / 100) * -1
 	},
 	card__time: {
 		fontSize: 12 * rt.fontScale,
-		fontWeight: 600,
+		fontWeight: '600' as const,
 		position: 'absolute',
 		top: 0,
 		right: 0,
