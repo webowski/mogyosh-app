@@ -15,6 +15,7 @@ import { getOrderedSiblingIndex } from './model/subitem.utils'
 import { useUpdateSubitemState } from './model/useUpdateSubitemState'
 import BulletedSubitem from './variants/BulletedSubitem'
 import CounterSubitem from './variants/CounterSubitem'
+import ExpandableHeadingSubitem from './variants/ExpandableHeadingSubitem'
 import ExpandableSubitem from './variants/ExpandableSubitem'
 import HeadingSubitem from './variants/HeadingSubitem'
 import OrderedSubitem from './variants/OrderedSubitem'
@@ -82,6 +83,20 @@ export default function SubitemNode({
 					variant={variant}
 					data={data}
 					onCheckToggle={(checked) => handleToggleSubitem(data.id, checked)}
+				/>
+			)
+			break
+
+		case 'expandable-h1':
+		case 'expandable-h2':
+		case 'expandable-h3':
+		case 'expandable-h4':
+			content = (
+				<ExpandableHeadingSubitem
+					variant={variant}
+					data={data}
+					onCheckToggle={(checked) => handleToggleSubitem(data.id, checked)}
+					onExpandToggle={(expanded) => setIsChildShown(expanded)}
 				/>
 			)
 			break

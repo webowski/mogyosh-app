@@ -33,6 +33,26 @@ const BLOCK_TYPE_OPTIONS: {
 	{ type: 'ul', icon: 'format-list-bulleted', label: 'Bulleted list' },
 	{ type: 'ol', icon: 'format-list-numbered', label: 'Numbered list' },
 	{ type: 'expandable', icon: 'arrow-drop-down', label: 'Expandable' },
+	{
+		type: 'expandable-h1',
+		icon: 'arrow-drop-down',
+		label: 'Expandable Heading 1'
+	},
+	{
+		type: 'expandable-h2',
+		icon: 'arrow-drop-down',
+		label: 'Expandable Heading 2'
+	},
+	{
+		type: 'expandable-h3',
+		icon: 'arrow-drop-down',
+		label: 'Expandable Heading 3'
+	},
+	{
+		type: 'expandable-h4',
+		icon: 'arrow-drop-down',
+		label: 'Expandable Heading 4'
+	},
 	{ type: 'timer', icon: 'timer', label: 'Timer' }
 ]
 

@@ -11,6 +11,7 @@ import { STYLE_VARS } from '@/shared/styles/common'
 import { TEXT_VARS } from '@/shared/styles/text'
 import Checkbox from '@/shared/ui/Checkbox'
 import { SubitemProps } from '../index'
+import { subitemStyles } from '../style'
 
 type HeadingVariant = 'h1' | 'h2' | 'h3' | 'h4'
 
@@ -60,7 +61,7 @@ export default function HeadingSubitem({
 	return (
 		<View style={styles.container}>
 			<Animated.Text
-				style={[styles.heading(HEADING_SIZES[variant]), textStyle]}
+				style={[subitemStyles.heading(HEADING_SIZES[variant]), textStyle]}
 			>
 				{data.info}
 			</Animated.Text>
@@ -85,12 +86,5 @@ const styles = StyleSheet.create((theme) => ({
 
 	SubitemCheckbox: {
 		marginBottom: -3
-	},
-
-	heading: (headingFontSize: number) => ({
-		flex: 1,
-		fontSize: headingFontSize,
-		fontWeight: 700,
-		color: theme.colors.major
-	})
+	}
 }))

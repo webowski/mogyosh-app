@@ -72,7 +72,7 @@ export default function ExpandableSubitem({
 		<View style={subitemStyles.Expandible}>
 			<Pressable
 				onPress={toggleExpand}
-				style={{ marginRight: 4, marginTop: 2 }}
+				style={subitemStyles.Expandible__button}
 			>
 				<Animated.View style={animatedIconStyle}>
 					<MaterialIcons

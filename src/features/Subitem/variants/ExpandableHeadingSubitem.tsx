@@ -8,18 +8,34 @@ import Animated, {
 import { useUnistyles } from 'react-native-unistyles'
 
 import type { SubitemInputRefsMap, SubitemProps } from '@/shared/domain/subitem'
+import { TEXT_VARS } from '@/shared/styles/text'
 import Checkbox from '@/shared/ui/Checkbox'
 import { MarkdownInput } from '@/shared/ui/MarkdownInput'
 import { MaterialIcons } from '@expo/vector-icons'
 import { useSubitemLogic } from '../model/useSubitemLogic'
 import { subitemStyles } from '../style'
 
+type ExpandableHeadingVariant =
+	| 'expandable-h1'
+	| 'expandable-h2'
+	| 'expandable-h3'
+	| 'expandable-h4'
+
+const HEADING_SIZES: Record<ExpandableHeadingVariant, number> = {
+	'expandable-h1': TEXT_VARS['h1'],
+	'expandable-h2': TEXT_VARS['h2'],
+	'expandable-h3': TEXT_VARS['h3'],
+	'expandable-h4': TEXT_VARS['h4']
+}
+
 type ExpandableHeadingSubitemProps = SubitemProps & {
+	variant: ExpandableHeadingVariant
 	inputRefs?: SubitemInputRefsMap
 	onExpandToggle: (expanded: boolean) => void
 }
 
 export default function ExpandableHeadingSubitem({
+	variant,
 	inputRefs,
 	data,
 	pendingFocusId,
@@ -88,7 +104,7 @@ export default function ExpandableHeadingSubitem({
 				onChangeMarkdown={handleChangeText}
 				onEnterPress={handleAddAfter}
 				onFocus={handleFocus}
-				style={[subitemStyles.text, checkedStyle]}
+				style={[subitemStyles.heading(HEADING_SIZES[variant]), checkedStyle]}
 				onBackspaceOnEmpty={() => {
 					onRemove?.()
 				}}

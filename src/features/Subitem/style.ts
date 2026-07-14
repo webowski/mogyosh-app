@@ -48,6 +48,7 @@ export const subitemStyles = StyleSheet.create((theme) => ({
 		gap: 8,
 		paddingVertical: 6
 	},
+	Expandible__button: { marginTop: 4 },
 
 	text: {
 		flex: 1,
@@ -55,6 +56,13 @@ export const subitemStyles = StyleSheet.create((theme) => ({
 		fontWeight: 500,
 		color: theme.colors.major
 	},
+
+	heading: (headingFontSize: number) => ({
+		flex: 1,
+		fontSize: headingFontSize,
+		fontWeight: 700,
+		color: theme.colors.major
+	}),
 
 	Block__checkbox: {
 		marginTop: 3
