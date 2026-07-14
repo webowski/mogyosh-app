@@ -78,7 +78,7 @@ export default function TimerSubitem({ data }: TimerSubitemProps) {
 	return (
 		<View style={styles.Timer}>
 			<View style={styles.Timer__body}>
-				<Text style={styles.Timer__label}>{data.info}</Text>
+				<Text style={styles.Timer__label}>{data.text_content}</Text>
 				<View style={{}}>
 					<Text style={styles.Timer__time}>{durationString}</Text>
 				</View>

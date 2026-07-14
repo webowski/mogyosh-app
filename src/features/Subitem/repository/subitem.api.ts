@@ -23,7 +23,7 @@ const makeSubitemObject = (subitemRow: SubitemRow): SubitemEntity => ({
 	task_id: subitemRow.task_id,
 	parent_id: subitemRow.parent_id,
 	type: subitemRow.type,
-	info: subitemRow.info,
+	text_content: subitemRow.text_content,
 	status: subitemRow.status,
 	settings: subitemRow.settings,
 	state: subitemRow.subitem_states?.[0]?.state ?? null,
@@ -121,7 +121,7 @@ const createSubitem = async (
 	const { data, error } = await supabaseClient
 		.from('subitems')
 		.insert({
-			info: payload.info,
+			text_content: payload.text_content,
 			task_id: payload.task_id ?? null,
 			parent_id: payload.parent_id ?? null,
 			type: payload.type ?? 'p',

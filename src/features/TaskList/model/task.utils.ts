@@ -12,7 +12,7 @@ export const filterTasks = (
 	return tasks.filter((task) => {
 		if (filters?.searchQuery) {
 			const query = filters.searchQuery.toLowerCase()
-			if (!task.info.toLowerCase().includes(query)) {
+			if (!task.text_content.toLowerCase().includes(query)) {
 				return false
 			}
 		}

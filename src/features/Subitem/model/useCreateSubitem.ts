@@ -13,7 +13,7 @@ export const useCreateSubitem = () => {
 
 	const mutate = (
 		payload: {
-			info: string
+			text_content: string
 			task_id: TaskId | null
 			parent_id?: SubitemId | null
 			type?: SubitemEntity['type']
@@ -38,7 +38,7 @@ export const useCreateSubitem = () => {
 			task_id: taskId,
 			parent_id: payload.parent_id ?? null,
 			type: payload.type ?? 'p',
-			info: payload.info,
+			text_content: payload.text_content,
 			status: null,
 			settings: null,
 			state: null,

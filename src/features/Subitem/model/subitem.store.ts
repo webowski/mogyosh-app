@@ -28,7 +28,7 @@ export type SubitemOperationUpdate = {
 	patch: Partial<
 		Pick<
 			SubitemEntity,
-			'info' | 'type' | 'sort_order' | 'settings' | 'parent_id'
+			'text_content' | 'type' | 'sort_order' | 'settings' | 'parent_id'
 		>
 	>
 }
@@ -304,7 +304,11 @@ export const useSubitemStore = create<SubitemStore>()(
 								...state.subitemsByTask,
 								[taskId]: current.map((s) =>
 									s.id === tempId
-										? { ...realSubitem, info: s.info, stableKey: tempId }
+										? {
+												...realSubitem,
+												text_content: s.text_content,
+												stableKey: tempId
+											}
 										: s
 								)
 							}

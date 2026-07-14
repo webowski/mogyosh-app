@@ -50,7 +50,7 @@ export default function StopwatchSubitem({ data }: StopwatchSubitemProps) {
 	return (
 		<View style={styles.Stopwatch}>
 			<View style={styles.Stopwatch__body}>
-				<Text style={styles.Stopwatch__label}>{data.info}</Text>
+				<Text style={styles.Stopwatch__label}>{data.text_content}</Text>
 				<Text style={styles.Stopwatch__time}>{formatTime(displayMs)}</Text>
 			</View>
 			<View style={styles.Stopwatch__actions}>

@@ -39,7 +39,7 @@ export default function CounterSubitem({
 	return (
 		<View style={styles.Timer}>
 			<View style={styles.Timer__body}>
-				<Text style={styles.Timer__label}>{data.info}</Text>
+				<Text style={styles.Timer__label}>{data.text_content}</Text>
 				<View style={styles.CounterSet}>
 					<View style={styles.Counter}>
 						<Text style={styles.Counter__value}>50</Text>

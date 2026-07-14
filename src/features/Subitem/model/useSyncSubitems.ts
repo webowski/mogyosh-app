@@ -21,7 +21,7 @@ const syncCreate = async (subitem: SubitemEntity, tempId: SubitemId) => {
 	const { data, error } = await supabaseClient
 		.from('subitems')
 		.insert({
-			info: subitem.info,
+			text_content: subitem.text_content,
 			task_id: subitem.task_id,
 			parent_id: subitem.parent_id ?? null,
 			type: subitem.type,
@@ -32,24 +32,24 @@ const syncCreate = async (subitem: SubitemEntity, tempId: SubitemId) => {
 
 	if (error) throw error
 
-	// Get current info from store (user may have typed while syncing)
+	// Get current text_content from store (user may have typed while syncing)
 	const { subitemsByTask } = useSubitemStore.getState()
 	const taskSubitems = subitemsByTask[subitem.task_id] ?? []
 	const currentSubitem = taskSubitems.find((s) => s.id === tempId)
-	const currentInfo = currentSubitem?.info ?? subitem.info
+	const currentInfo = currentSubitem?.text_content ?? subitem.text_content
 
 	useSubitemStore.getState().replaceOptimisticSubitem(tempId, subitem.task_id, {
 		...data,
-		info: currentInfo
+		text_content: currentInfo
 	})
 
 	// If user typed something while syncing — enqueue an update to persist it
-	if (currentInfo !== subitem.info) {
+	if (currentInfo !== subitem.text_content) {
 		useSubitemStore.getState().enqueueOperation({
 			type: 'update',
 			id: data.id,
 			taskId: subitem.task_id,
-			patch: { info: currentInfo }
+			patch: { text_content: currentInfo }
 		})
 	}
 

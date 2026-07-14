@@ -33,7 +33,7 @@ const TASKS_SELECT = `
 
 const makeTaskObject = (task: TaskRow): TaskEntity => ({
 	id: task.id,
-	info: task.info,
+	text_content: task.text_content,
 	type: task.type,
 	status: task.status,
 	state: task.states?.[0]?.state ?? null,
@@ -77,7 +77,7 @@ const getTasks = async (filters?: TaskFilters) => {
 	}
 
 	if (filters?.searchQuery) {
-		query = query.ilike('info', `%${filters.searchQuery}%`)
+		query = query.ilike('text_content', `%${filters.searchQuery}%`)
 	}
 
 	const { data, error } = await query
@@ -191,7 +191,7 @@ const getTaskById = async (taskId: TaskId): Promise<TaskEntity | null> => {
 }
 
 type CreateTaskPayload = {
-	info: string
+	text_content: string
 	parent_id?: string | null
 	category_id?: string | null
 }
@@ -203,7 +203,7 @@ const createTask = async (payload: CreateTaskPayload): Promise<TaskEntity> => {
 	const { data, error } = await supabaseClient
 		.from('tasks')
 		.insert({
-			info: payload.info,
+			text_content: payload.text_content,
 			user_id: userId,
 			parent_id: payload.parent_id ?? null,
 			category_id: payload.category_id ?? null

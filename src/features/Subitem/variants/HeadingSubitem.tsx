@@ -63,7 +63,7 @@ export default function HeadingSubitem({
 			<Animated.Text
 				style={[subitemStyles.heading(HEADING_SIZES[variant]), textStyle]}
 			>
-				{data.info}
+				{data.text_content}
 			</Animated.Text>
 			{data.settings?.checkable && (
 				<Checkbox

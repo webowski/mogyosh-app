@@ -44,7 +44,7 @@ export type SubitemEntity = {
 	task_id: TaskId
 	parent_id?: SubitemId | null
 	type: SubitemType
-	info: string
+	text_content: string
 	status?: SubitemStatus | null
 	settings: SubitemSettings
 	priority?: number | null
@@ -60,7 +60,7 @@ export type SubitemRow = {
 	task_id: TaskId
 	parent_id: SubitemId | null
 	type: SubitemType
-	info: string
+	text_content: string
 	settings: SubitemSettings
 	status: SubitemStatus
 	priority: number
@@ -72,7 +72,7 @@ export type SubitemRow = {
 }
 
 export type SubitemCreatePayload = {
-	info: string
+	text_content: string
 	type?: SubitemType
 	task_id?: string | null
 	parent_id?: string | null
@@ -82,13 +82,13 @@ export type SubitemCreatePayload = {
 
 export type SubitemInsert = {
 	id: SubitemId
-	info: string
+	text_content: string
 	type: SubitemType
 }
 
 export type SubitemUpdate = {
 	id: SubitemId
-	info?: string
+	text_content?: string
 	type?: SubitemType
 }
 

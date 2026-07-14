@@ -145,12 +145,12 @@ export function TaskCreateForm({ onClose }: Props) {
 
 	const onSubmit = async (data: TaskFormData) => {
 		const parentTask = await createTask.mutateAsync({
-			info: data.title,
+			text_content: data.title,
 			category_id: selectedCategoryId
 		})
 
 		const filledSubitemsChecklist = subitemsChecklist.filter((checklistItem) =>
-			checklistItem.info.trim()
+			checklistItem.text_content.trim()
 		)
 		if (filledSubitemsChecklist.length > 0 && parentTask.id) {
 			// возможно надо оптимизировать чтобы создавать subitems пачкой а не по одному
@@ -163,7 +163,7 @@ export function TaskCreateForm({ onClose }: Props) {
 			await Promise.all(
 				filledSubitemsChecklist.map((checklistItem, index) =>
 					subitemAPI.createSubitem({
-						info: checklistItem.info,
+						text_content: checklistItem.text_content,
 						task_id: parentTask.id,
 						sort_order: positions[index]
 					})

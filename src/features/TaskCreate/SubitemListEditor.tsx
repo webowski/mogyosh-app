@@ -60,7 +60,7 @@ export function SubitemListEditor({
 	const addSubitemAfter = (index: number) => {
 		const newSubitem: SubitemInsert = {
 			id: Date.now().toString(),
-			info: '',
+			text_content: '',
 			type: 'p'
 		}
 		const next = [...subitems]
@@ -74,7 +74,7 @@ export function SubitemListEditor({
 
 	const removeSubitem = (index: number) => {
 		if (subitems.length < 1) {
-			onChange([{ ...subitems[0], info: '' }])
+			onChange([{ ...subitems[0], text_content: '' }])
 			return
 		}
 
@@ -89,16 +89,16 @@ export function SubitemListEditor({
 		}, 50)
 	}
 
-	const updateSubitem = (id: string, info: string) => {
+	const updateSubitem = (id: string, text_content: string) => {
 		const subitemIndex = subitems.findIndex((subitem) => subitem.id === id)
 		const updatedItems = subitems.map((subitem) =>
-			subitem.id === id ? { ...subitem, info } : subitem
+			subitem.id === id ? { ...subitem, text_content } : subitem
 		)
 		onChange(updatedItems)
 
 		// Auto-remove empty subitem when field is cleared
-		// if (info === '' && subitems.length > 1) {
-		if (info === '') {
+		// if (text_content === '' && subitems.length > 1) {
+		if (text_content === '') {
 			removeSubitem(subitemIndex)
 		}
 	}
@@ -109,8 +109,10 @@ export function SubitemListEditor({
 				<View key={subitem.id} style={styles.row}>
 					<MarkdownInput
 						ref={getRefForSubitemInput(subitem.id)}
-						subitemText={subitem.info as string}
-						onChangeText={(info) => updateSubitem(subitem.id, info)}
+						subitemText={subitem.text_content as string}
+						onChangeText={(text_content) =>
+							updateSubitem(subitem.id, text_content)
+						}
 						onChangeMarkdown={(markdown) => updateSubitem(subitem.id, markdown)}
 						onEnterPress={() => addSubitemAfter(index)}
 						onBackspaceOnEmpty={() => removeSubitem(index)}

@@ -100,7 +100,7 @@ export default function ExpandableHeadingSubitem({
 			</Pressable>
 			<MarkdownInput
 				ref={inputRef}
-				subitemText={data.info}
+				subitemText={data.text_content}
 				style={[{ flex: 1 }, checkedStyle]}
 				textStyle={subitemStyles.heading(HEADING_SIZES[variant])}
 				onChangeMarkdown={handleChangeText}

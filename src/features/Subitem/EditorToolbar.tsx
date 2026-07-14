@@ -158,7 +158,7 @@ export default function EditorToolbar() {
 		pendingFocusId.current = optimisticId
 
 		createSubitem.mutate({
-			info: '',
+			text_content: '',
 			task_id: activeItemId,
 			parent_id: null,
 			type: 'ul',
@@ -219,7 +219,7 @@ export default function EditorToolbar() {
 		pendingFocusId.current = optimisticId
 
 		createSubitem.mutate({
-			info: '',
+			text_content: '',
 			task_id: activeItemId,
 			parent_id: parentId,
 			type,

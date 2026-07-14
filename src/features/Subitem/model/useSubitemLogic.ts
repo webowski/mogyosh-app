@@ -72,7 +72,7 @@ export function useSubitemLogic({
 				updateSubitem.mutate({
 					id: data.id,
 					taskId: data.task_id,
-					patch: { info: value }
+					patch: { text_content: value }
 				})
 			}, 500)
 		},
@@ -120,7 +120,7 @@ export function useSubitemLogic({
 
 		// Fallback: create directly if no onAddAfter provided (standalone usage)
 		createSubitem.mutate({
-			info: '',
+			text_content: '',
 			task_id: data.task_id,
 			parent_id: data.parent_id ?? null,
 			type: subitemType

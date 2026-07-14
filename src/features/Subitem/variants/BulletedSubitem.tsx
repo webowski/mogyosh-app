@@ -46,7 +46,7 @@ export default function BulletedSubitem({
 			</Animated.Text>
 			<MarkdownInput
 				ref={inputRef}
-				subitemText={data.info}
+				subitemText={data.text_content}
 				style={[{ flex: 1 }, checkedStyle]}
 				textStyle={subitemStyles.text}
 				onChangeMarkdown={handleChangeText}

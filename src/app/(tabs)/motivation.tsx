@@ -83,7 +83,7 @@ export default function MotivationScreen() {
 		pendingFocusId.current = optimisticId
 
 		createSubitem.mutate({
-			info: initialText ?? '',
+			text_content: initialText ?? '',
 			task_id: motivationTaskId,
 			parent_id: null,
 			type: 'p',

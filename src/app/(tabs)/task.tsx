@@ -78,7 +78,7 @@ export default function TaskScreen() {
 		pendingFocusId.current = optimisticId
 
 		createSubitem.mutate({
-			info: initialText ?? '',
+			text_content: initialText ?? '',
 			task_id: selectedTaskId,
 			parent_id: null,
 			type: 'p',

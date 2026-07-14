@@ -7,7 +7,7 @@ export const useUpdateSubitem = () => {
 		id: SubitemId
 		taskId: TaskId
 		patch: Partial<
-			Pick<SubitemEntity, 'info' | 'type' | 'sort_order' | 'settings'>
+			Pick<SubitemEntity, 'text_content' | 'type' | 'sort_order' | 'settings'>
 		>
 	}) => {
 		const { updateSubitem, enqueueOperation } = useSubitemStore.getState()
