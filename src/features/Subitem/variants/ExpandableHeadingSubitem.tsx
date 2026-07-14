@@ -58,7 +58,7 @@ export default function ExpandableHeadingSubitem({
 		inputRefs,
 		onAddAfter,
 		pendingFocusId,
-		subitemType: 'expandable'
+		subitemType: variant
 	})
 	const { theme } = useUnistyles()
 	const rotationProgress = useSharedValue(1) // 1 = expanded (90deg), 0 = collapsed
