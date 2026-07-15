@@ -23,8 +23,8 @@ export type BlockType =
 	| 'counter'
 	| 'image'
 
-export type BlockStatus = 'active' | 'completed' | 'archived'
-export type BlockState = 'done' | 'active' | 'archived'
+export type BlockStatus = 'active' | 'archived'
+export type BlockState = 'done' | 'active'
 
 export type BlockStateEntity = {
 	id: BlockStateId

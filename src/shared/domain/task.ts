@@ -23,9 +23,9 @@ export type CategoryEntity = {
 
 export type CategoryMap = Record<CategoryId, CategoryEntity | undefined>
 
-export type TaskStatus = 'active' | 'completed' | 'archived'
+export type TaskLifecycle = 'active' | 'archived' | 'deleted'
 
-export type TaskState = 'done' | 'active' | 'archived'
+export type TaskState = 'done' | 'active'
 
 export type StateEntity = {
 	id: string
@@ -41,7 +41,7 @@ export type TaskEntity = {
 	id: TaskId
 	title: string
 	type: TaskType
-	status?: TaskStatus
+	lifecycle?: TaskLifecycle
 	state?: TaskState | null
 	priority?: number | null
 	category?: CategoryEntity | null
@@ -55,7 +55,7 @@ export type TaskRow = {
 	id: string
 	title: string
 	type: TaskType
-	status: TaskStatus
+	lifecycle: TaskLifecycle
 	priority: number
 	categories: any
 	parent_id: string | null

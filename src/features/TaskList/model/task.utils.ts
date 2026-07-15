@@ -3,7 +3,7 @@ import { CategoryMap, TaskEntity } from '@/shared/domain/task'
 import { TaskFilters, TaskSection } from './task.types'
 
 /**
- * Filter tasks by search query, category, status, and priority
+ * Filter tasks by search query, category, lifecycle, and priority
  */
 export const filterTasks = (
 	tasks: TaskEntity[],
@@ -21,7 +21,7 @@ export const filterTasks = (
 			return false
 		}
 
-		if (filters?.status && task.status !== filters.status) {
+		if (filters?.lifecycle && task.lifecycle !== filters.lifecycle) {
 			return false
 		}
 

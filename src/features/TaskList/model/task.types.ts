@@ -1,10 +1,10 @@
 import { TaskId } from '@/shared/domain/ids'
-import { CategoryEntity, TaskEntity, TaskStatus } from '@/shared/domain/task'
+import { CategoryEntity, TaskEntity, TaskLifecycle } from '@/shared/domain/task'
 
 export type TaskFilters = {
 	searchQuery?: string
 	categoryId?: string | string[] | 'uncategorized'
-	status?: TaskStatus
+	lifecycle?: TaskLifecycle
 	priority?: number
 }
 

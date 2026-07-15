@@ -1,7 +1,7 @@
 import { blockAPI } from '@/features/Block'
 import { supabaseClient } from '@/shared/api/supabaseClient'
 import { TaskId } from '@/shared/domain/ids'
-import { TaskEntity, TaskRow } from '@/shared/domain/task'
+import { TaskEntity, TaskRow, TaskState } from '@/shared/domain/task'
 import { TaskFilters } from '../model/task.types'
 
 const TASKS_SELECT = `
@@ -35,7 +35,7 @@ const makeTaskObject = (task: TaskRow): TaskEntity => ({
 	id: task.id,
 	title: task.title,
 	type: task.type,
-	status: task.status,
+	lifecycle: task.lifecycle,
 	state: task.states?.[0]?.state ?? null,
 	priority: task.priority,
 	category: task.categories,
@@ -68,8 +68,8 @@ const getTasks = async (filters?: TaskFilters) => {
 		}
 	}
 
-	if (filters?.status) {
-		query = query.eq('status', filters.status)
+	if (filters?.lifecycle) {
+		query = query.eq('lifecycle', filters.lifecycle)
 	}
 
 	if (filters?.priority) {
@@ -222,7 +222,7 @@ const createTask = async (payload: CreateTaskPayload): Promise<TaskEntity> => {
  */
 const updateTaskState = async (
 	taskId: TaskId,
-	state: 'done' | 'active' | 'archived'
+	state: TaskState
 ): Promise<TaskEntity> => {
 	// Check if state record exists for this task
 	const { data: existingState, error: checkError } = await supabaseClient
