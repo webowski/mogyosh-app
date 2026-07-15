@@ -1,3 +1,4 @@
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons'
 import { useEffect, useState } from 'react'
 import { Pressable, View } from 'react-native'
 import Animated, {
@@ -10,7 +11,6 @@ import { useUnistyles } from 'react-native-unistyles'
 import type { BlockInputRefsMap, BlockProps } from '@/shared/domain/block'
 import Checkbox from '@/shared/ui/Checkbox'
 import { MarkdownInput } from '@/shared/ui/MarkdownInput'
-import { MaterialIcons } from '@expo/vector-icons'
 import { useBlockLogic } from '../model/useBlockLogic'
 import { blockStyles } from '../style'
 
@@ -72,8 +72,8 @@ export default function ExpandableBlock({
 		<View style={blockStyles.Expandible}>
 			<Pressable onPress={toggleExpand} style={blockStyles.Expandible__button}>
 				<Animated.View style={animatedIconStyle}>
-					<MaterialIcons
-						name='play-arrow'
+					<MaterialDesignIcons
+						name='play'
 						size={16}
 						color={theme.colors.major}
 					/>

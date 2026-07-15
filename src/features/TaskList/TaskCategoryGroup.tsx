@@ -1,9 +1,9 @@
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons'
 import { useState } from 'react'
 import { Pressable, Text, View } from 'react-native'
+import { useUnistyles } from 'react-native-unistyles'
 
 import { TaskCategoryGroupEntity } from '@/features/TaskList'
-import { MaterialIcons } from '@expo/vector-icons'
-import { useUnistyles } from 'react-native-unistyles'
 import TaskListItem from './TaskListItem'
 
 type TaskCategoryGroupProps = {
@@ -70,15 +70,15 @@ export default function TaskCategoryGroup({
 				<View style={{ marginRight: 4, paddingTop: 2 }}>
 					{isExpanded ? (
 						<View style={{ transform: [{ rotate: '90deg' }] }}>
-							<MaterialIcons
-								name='play-arrow'
+							<MaterialDesignIcons
+								name='play'
 								size={18}
 								color={theme.colors.primary}
 							/>
 						</View>
 					) : (
-						<MaterialIcons
-							name='play-arrow'
+						<MaterialDesignIcons
+							name='play'
 							size={18}
 							color={theme.colors.primary}
 						/>

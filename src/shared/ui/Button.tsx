@@ -1,4 +1,4 @@
-import { MaterialIcons } from '@expo/vector-icons'
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons'
 import { LinearGradient } from 'expo-linear-gradient'
 import React from 'react'
 import {
@@ -378,8 +378,8 @@ export const Button: React.FC<ButtonProps> = ({
 						</Text>
 					)}
 					{!loading && arrow && (
-						<MaterialIcons
-							name='arrow-drop-down'
+						<MaterialDesignIcons
+							name='menu-down'
 							size={18}
 							color={theme.colors.major}
 							style={{ marginLeft: 2, marginRight: -6 }}
@@ -404,8 +404,8 @@ export const Button: React.FC<ButtonProps> = ({
 						children
 					)}
 					{!loading && arrow && (
-						<MaterialIcons
-							name='arrow-drop-down'
+						<MaterialDesignIcons
+							name='menu-down'
 							size={18}
 							style={{ marginLeft: 2, marginRight: -6 }}
 						/>

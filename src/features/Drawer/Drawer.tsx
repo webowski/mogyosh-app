@@ -14,7 +14,7 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 import { useNavStore } from '@/features/Navigation/model/navStore'
 import SVGAppLogoBig from '@/shared/images/mogyosh-logo-big.svg'
-import { MaterialIcons } from '@expo/vector-icons'
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { scheduleOnRN } from 'react-native-worklets'
@@ -150,8 +150,8 @@ export default function Drawer() {
 									setTimeout(() => setIsDrawerShown(false), 200)
 								}}
 							>
-								<MaterialIcons
-									name='info-outline'
+								<MaterialDesignIcons
+									name='information-slab-circle-outline'
 									size={26}
 									color={theme.colors.mutedTextStrong}
 								/>
@@ -164,8 +164,8 @@ export default function Drawer() {
 									setTimeout(() => setIsDrawerShown(false), 200)
 								}}
 							>
-								<MaterialIcons
-									name='alternate-email'
+								<MaterialDesignIcons
+									name='at'
 									size={26}
 									color={theme.colors.mutedTextStrong}
 								/>
@@ -178,8 +178,8 @@ export default function Drawer() {
 									setTimeout(() => setIsDrawerShown(false), 200)
 								}}
 							>
-								<MaterialIcons
-									name='settings'
+								<MaterialDesignIcons
+									name='cog'
 									size={26}
 									color={theme.colors.mutedTextStrong}
 								/>

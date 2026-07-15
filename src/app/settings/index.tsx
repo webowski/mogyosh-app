@@ -1,18 +1,17 @@
-import { MaterialIcons } from '@expo/vector-icons'
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons'
 import { router } from 'expo-router'
+import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
 import { useUnistyles } from 'react-native-unistyles'
 
 import { ActionsPanel } from '@/features/ActionsPanel/ActionsPanel'
 import { SettingsItem } from '@/features/Settings/SettingsItem'
-
 import { WeekStartDayIndex } from '@/services/settings/domain'
 import { useSettingsStore } from '@/services/settings/model/settingsStore'
 import { HourFormat } from '@/shared/domain/time'
 import { Button } from '@/shared/ui/Button'
 import ScrollBox from '@/shared/ui/ScrollBox'
 import { ToggleGroup } from '@/shared/ui/ToggleGroup'
-import { useTranslation } from 'react-i18next'
 
 export default function SettingsScreen() {
 	const { theme } = useUnistyles()
@@ -115,8 +114,8 @@ export default function SettingsScreen() {
 
 			<ActionsPanel>
 				<Button round onPress={() => router.back()}>
-					<MaterialIcons
-						name='arrow-back'
+					<MaterialDesignIcons
+						name='arrow-left'
 						size={28}
 						color={theme.colors.buttonText}
 					/>

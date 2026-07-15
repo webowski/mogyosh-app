@@ -1,4 +1,4 @@
-import { MaterialIcons } from '@expo/vector-icons'
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons'
 import { router } from 'expo-router'
 import { Pressable, Text, View } from 'react-native'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
@@ -49,8 +49,8 @@ export default function LanguageScreen() {
 
 			<ActionsPanel>
 				<Button round onPress={() => router.back()}>
-					<MaterialIcons
-						name='arrow-back'
+					<MaterialDesignIcons
+						name='arrow-left'
 						size={28}
 						color={theme.colors.buttonText}
 					/>

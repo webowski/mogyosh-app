@@ -1,4 +1,4 @@
-import { MaterialIcons } from '@expo/vector-icons'
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons'
 import { useEffect, useRef, useState } from 'react'
 import { Pressable, Text, View } from 'react-native'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
@@ -55,8 +55,8 @@ export default function StopwatchBlock({ data }: StopwatchBlockProps) {
 			</View>
 			<View style={styles.Stopwatch__actions}>
 				<Pressable onPress={handleToggle} onLongPress={() => reset(data.id)}>
-					<MaterialIcons
-						name={isRunning ? 'pause' : 'play-arrow'}
+					<MaterialDesignIcons
+						name={isRunning ? 'pause' : 'play'}
 						size={24}
 						color={theme.colors.primary}
 					/>

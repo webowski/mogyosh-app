@@ -1,5 +1,5 @@
-import { MaterialIcons } from '@expo/vector-icons'
 import { TrueSheet } from '@lodev09/react-native-true-sheet'
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons'
 import { useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -121,8 +121,8 @@ export default function AllTasksScreen() {
 				]}
 			>
 				<View style={{ position: 'relative' }}>
-					<MaterialIcons
-						name='search'
+					<MaterialDesignIcons
+						name='magnify'
 						size={20}
 						color={theme.colors.mutedTextStrong}
 						style={{

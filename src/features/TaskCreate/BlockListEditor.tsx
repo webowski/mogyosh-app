@@ -1,4 +1,4 @@
-import { MaterialIcons } from '@expo/vector-icons'
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons'
 import { useRef } from 'react'
 import { Platform, Pressable, View } from 'react-native'
 import { type EnrichedMarkdownTextInputInstance } from 'react-native-enriched-markdown'
@@ -120,7 +120,11 @@ export function BlockListEditor({ blocks, onChange }: BlockListEditorProps) {
 				style={styles.addButton}
 				onPress={() => addBlockAfter(blocks.length - 1)}
 			>
-				<MaterialIcons name='add' size={28} color={theme.colors.minor} />
+				<MaterialDesignIcons
+					name='plus-thick'
+					size={28}
+					color={theme.colors.minor}
+				/>
 			</Pressable>
 		</View>
 	)

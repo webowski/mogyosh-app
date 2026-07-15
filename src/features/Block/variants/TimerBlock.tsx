@@ -1,4 +1,4 @@
-import { MaterialIcons } from '@expo/vector-icons'
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons'
 import { useEffect, useRef, useState } from 'react'
 import { Pressable, Text, View } from 'react-native'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
@@ -87,14 +87,14 @@ export default function TimerBlock({ data }: TimerBlockProps) {
 				<Pressable onPress={handleToggle} onLongPress={handleReset}>
 					<CircleProgress ref={circleRef} size={40} progress={progress}>
 						{isRunning ? (
-							<MaterialIcons
+							<MaterialDesignIcons
 								name='pause'
 								size={22}
 								color={theme.colors.primary}
 							/>
 						) : (
-							<MaterialIcons
-								name={isFinished ? 'check' : 'play-arrow'}
+							<MaterialDesignIcons
+								name={isFinished ? 'check' : 'play'}
 								size={24}
 								color={theme.colors.primary}
 							/>

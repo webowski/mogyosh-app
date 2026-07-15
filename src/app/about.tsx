@@ -1,11 +1,12 @@
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons'
+import { router } from 'expo-router'
+import { Text, View } from 'react-native'
+import { useUnistyles } from 'react-native-unistyles'
+
 import { ActionsPanel } from '@/features/ActionsPanel/ActionsPanel'
 import { textStyles } from '@/shared/styles/text'
 import { Button } from '@/shared/ui/Button'
 import ScrollBox from '@/shared/ui/ScrollBox'
-import { MaterialIcons } from '@expo/vector-icons'
-import { router } from 'expo-router'
-import { Text, View } from 'react-native'
-import { useUnistyles } from 'react-native-unistyles'
 
 export default function AboutScreen() {
 	const { theme } = useUnistyles()
@@ -20,8 +21,8 @@ export default function AboutScreen() {
 
 			<ActionsPanel>
 				<Button round onPress={() => router.back()}>
-					<MaterialIcons
-						name='arrow-back'
+					<MaterialDesignIcons
+						name='arrow-left'
 						size={28}
 						color={theme.colors.buttonText}
 					/>

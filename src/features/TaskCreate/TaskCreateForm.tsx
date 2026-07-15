@@ -1,6 +1,6 @@
-import { MaterialIcons } from '@expo/vector-icons'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { TrueSheet } from '@lodev09/react-native-true-sheet'
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons'
 import { generateNKeysBetween } from 'fractional-indexing'
 import { t } from 'i18next'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -250,8 +250,8 @@ export function TaskCreateForm({ onClose }: Props) {
 					loading={isSubmitting || createTask.isPending}
 					style={{ marginLeft: 'auto' }}
 				>
-					<MaterialIcons
-						name='check'
+					<MaterialDesignIcons
+						name='check-bold'
 						size={28}
 						color={theme.colors.buttonText}
 					/>

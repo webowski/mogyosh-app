@@ -1,4 +1,4 @@
-import { MaterialIcons } from '@expo/vector-icons'
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons'
 import { useState } from 'react'
 import { Platform, Pressable, Text, View } from 'react-native'
 import { EnrichedMarkdownTextInputInstance } from 'react-native-enriched-markdown'
@@ -26,31 +26,31 @@ import { useUpdateBlock } from './model/useUpdateBlock'
 
 const BLOCK_TYPE_OPTIONS: {
 	type: BlockType
-	icon: keyof typeof MaterialIcons.glyphMap
+	icon: React.ComponentProps<typeof MaterialDesignIcons>['name']
 	label: string
 }[] = [
-	{ type: 'p', icon: 'notes', label: 'Paragraph' },
-	{ type: 'ul', icon: 'format-list-bulleted', label: 'Bulleted list' },
+	{ type: 'p', icon: 'text', label: 'Paragraph' },
+	{ type: 'ul', icon: 'format-list-bulleted-square', label: 'Bulleted list' },
 	{ type: 'ol', icon: 'format-list-numbered', label: 'Numbered list' },
-	{ type: 'expandable', icon: 'arrow-drop-down', label: 'Expandable' },
+	{ type: 'expandable', icon: 'arrow-expand-vertical', label: 'Expandable' },
 	{
 		type: 'expandable-h1',
-		icon: 'arrow-drop-down',
+		icon: 'arrow-expand-vertical',
 		label: 'Expandable Heading 1'
 	},
 	{
 		type: 'expandable-h2',
-		icon: 'arrow-drop-down',
+		icon: 'arrow-expand-vertical',
 		label: 'Expandable Heading 2'
 	},
 	{
 		type: 'expandable-h3',
-		icon: 'arrow-drop-down',
+		icon: 'arrow-expand-vertical',
 		label: 'Expandable Heading 3'
 	},
 	{
 		type: 'expandable-h4',
-		icon: 'arrow-drop-down',
+		icon: 'arrow-expand-vertical',
 		label: 'Expandable Heading 4'
 	},
 	{ type: 'timer', icon: 'timer', label: 'Timer' }
@@ -267,7 +267,7 @@ export default function EditorToolbar() {
 						}}
 					>
 						<Button variant='bare' onPress={openAddBlockMenu} preventFocusSteal>
-							<MaterialIcons name='add' size={24} />
+							<MaterialDesignIcons name='plus' size={24} />
 						</Button>
 
 						<Button
@@ -276,11 +276,11 @@ export default function EditorToolbar() {
 							disabled={!focusedBlock}
 							preventFocusSteal
 						>
-							<MaterialIcons name='swap-horiz' size={24} />
+							<MaterialDesignIcons name='swap-horizontal-bold' size={24} />
 						</Button>
 
 						<Button variant='bare' onPress={() => {}} preventFocusSteal>
-							<MaterialIcons name='edit-square' size={24} />
+							<MaterialDesignIcons name='pencil-box' size={24} />
 						</Button>
 
 						<Button
@@ -289,7 +289,7 @@ export default function EditorToolbar() {
 							onPress={handleMoveUp}
 							preventFocusSteal
 						>
-							<MaterialIcons name='arrow-upward' size={24} />
+							<MaterialDesignIcons name='arrow-up-bold' size={24} />
 						</Button>
 
 						<Button
@@ -298,11 +298,11 @@ export default function EditorToolbar() {
 							onPress={handleMoveDown}
 							preventFocusSteal
 						>
-							<MaterialIcons name='arrow-downward' size={24} />
+							<MaterialDesignIcons name='arrow-down-bold' size={24} />
 						</Button>
 
 						<Button variant='bare' onPress={handleRemove}>
-							<MaterialIcons name='delete' size={24} />
+							<MaterialDesignIcons name='delete-forever' size={24} />
 						</Button>
 
 						<Button variant='bare' onPress={() => {}}>
@@ -314,7 +314,7 @@ export default function EditorToolbar() {
 						</Button>
 
 						<Button variant='bare' onPress={() => {}}>
-							<MaterialIcons name='link' size={24} />
+							<MaterialDesignIcons name='link' size={24} />
 						</Button>
 					</ScrollView>
 				</KeyboardToolbar.Content>
@@ -347,7 +347,7 @@ export default function EditorToolbar() {
 								closeBlockTypeMenu()
 							}}
 						>
-							<MaterialIcons
+							<MaterialDesignIcons
 								name={option.icon}
 								size={20}
 								color={theme.colors.major}

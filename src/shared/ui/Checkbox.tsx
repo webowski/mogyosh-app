@@ -1,4 +1,3 @@
-import { MaterialIcons } from '@expo/vector-icons'
 import { useEffect } from 'react'
 import { Pressable, PressableProps, ViewStyle } from 'react-native'
 import Animated, {
@@ -10,6 +9,7 @@ import Animated, {
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 import { triggerHapticLight } from '@/shared/ui/Haptic'
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons'
 
 type CheckboxProps = {
 	checked: boolean
@@ -62,7 +62,11 @@ export default function Checkbox({
 			{...props}
 		>
 			{checked && (
-				<MaterialIcons name='check' size={16} color={theme.colors.inverse} />
+				<MaterialDesignIcons
+					name='check-bold'
+					size={16}
+					color={theme.colors.inverse}
+				/>
 			)}
 		</AnimatedPressable>
 	)
