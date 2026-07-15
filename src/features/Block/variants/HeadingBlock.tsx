@@ -1,23 +1,13 @@
-import { useCallback, useEffect, useState } from 'react'
 import { View } from 'react-native'
-import Animated, {
-	useAnimatedStyle,
-	useSharedValue,
-	withTiming
-} from 'react-native-reanimated'
-import { StyleSheet } from 'react-native-unistyles'
 
-import { STYLE_VARS } from '@/shared/styles/common'
+import type { BlockInputRefsMap, BlockProps } from '@/shared/domain/block'
 import { TEXT_VARS } from '@/shared/styles/text'
 import Checkbox from '@/shared/ui/Checkbox'
-import { BlockProps } from '../index'
+import { MarkdownInput } from '@/shared/ui/MarkdownInput'
+import { useBlockLogic } from '../model/useBlockLogic'
 import { blockStyles } from '../style'
 
 type HeadingVariant = 'h1' | 'h2' | 'h3' | 'h4'
-
-type HeadingProps = BlockProps & {
-	variant: HeadingVariant
-}
 
 const HEADING_SIZES: Record<HeadingVariant, number> = {
 	h1: TEXT_VARS.h1,
@@ -26,48 +16,56 @@ const HEADING_SIZES: Record<HeadingVariant, number> = {
 	h4: TEXT_VARS.h4
 }
 
+type HeadingBlockProps = BlockProps & {
+	variant: HeadingVariant
+	inputRefs?: BlockInputRefsMap
+	onExpandToggle: (expanded: boolean) => void
+}
+
 export default function HeadingBlock({
-	data,
 	variant,
-	onCheckToggle
-}: HeadingProps) {
-	const [checked, setChecked] = useState(data.state === 'done')
-
-	const animationProgress = useSharedValue(checked ? 1 : 0)
-
-	useEffect(
-		() => {
-			animationProgress.value = withTiming(checked ? 1 : 0, { duration: 250 })
-		},
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[checked]
-	)
-
-	const handlePressCheckbox = useCallback(
-		() => {
-			setChecked(!checked)
-			onCheckToggle?.(!checked)
-		},
-		// eslint-disable-next-line
-		[checked]
-	)
-
-	const textStyle = useAnimatedStyle(() => ({
-		opacity: withTiming(checked ? STYLE_VARS.checkedOpacity : 1, {
-			duration: STYLE_VARS.duration.md
-		})
-	}))
+	inputRefs,
+	data,
+	pendingFocusId,
+	onCheckToggle,
+	onAddAfter,
+	onRemove,
+	onExpandToggle
+}: HeadingBlockProps) {
+	const {
+		inputRef,
+		checked,
+		checkedStyle,
+		handleChangeText,
+		handlePressCheckbox,
+		handleFocus,
+		handleAddAfter
+	} = useBlockLogic({
+		data,
+		onCheckToggle,
+		inputRefs,
+		onAddAfter,
+		pendingFocusId,
+		blockType: variant
+	})
 
 	return (
-		<View style={styles.container}>
-			<Animated.Text
-				style={[blockStyles.heading(HEADING_SIZES[variant]), textStyle]}
-			>
-				{data.text_content}
-			</Animated.Text>
+		<View style={blockStyles.Expandible}>
+			<MarkdownInput
+				ref={inputRef}
+				blockText={data.text_content}
+				style={[{ flex: 1 }, checkedStyle]}
+				textStyle={blockStyles.heading(HEADING_SIZES[variant])}
+				onChangeMarkdown={handleChangeText}
+				onEnterPress={handleAddAfter}
+				onFocus={handleFocus}
+				onBackspaceOnEmpty={() => {
+					onRemove?.()
+				}}
+			/>
 			{data.settings?.checkable && (
 				<Checkbox
-					style={styles.BlockCheckbox}
+					style={blockStyles.Block__checkbox}
 					checked={checked}
 					onPress={handlePressCheckbox}
 				/>
@@ -75,16 +73,3 @@ export default function HeadingBlock({
 		</View>
 	)
 }
-
-const styles = StyleSheet.create((theme) => ({
-	container: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		gap: 8,
-		paddingVertical: 6
-	},
-
-	BlockCheckbox: {
-		marginBottom: -3
-	}
-}))

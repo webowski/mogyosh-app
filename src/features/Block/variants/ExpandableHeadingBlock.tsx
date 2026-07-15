@@ -1,5 +1,5 @@
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Pressable, View } from 'react-native'
 import Animated, {
 	useAnimatedStyle,
@@ -63,15 +63,6 @@ export default function ExpandableHeadingBlock({
 	const { theme } = useUnistyles()
 	const rotationProgress = useSharedValue(1) // 1 = expanded (90deg), 0 = collapsed
 	const [isExpanded, setIsExpanded] = useState(false)
-	const animationProgress = useSharedValue(checked ? 1 : 0)
-
-	useEffect(
-		() => {
-			animationProgress.value = withTiming(checked ? 1 : 0, { duration: 250 })
-		},
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[checked]
-	)
 
 	const animatedIconStyle = useAnimatedStyle(() => ({
 		transform: [{ rotate: `${rotationProgress.value * 90}deg` }]
