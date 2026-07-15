@@ -76,7 +76,12 @@ const getVariantConfigs = (
 		[
 			'secondary',
 			{
-				background: { borderRadius, backgroundColor: theme.colors.surface },
+				background: {
+					borderRadius,
+					backgroundColor: theme.colors.surface,
+					borderWidth: 1,
+					borderColor: theme.colors.primary
+				},
 				text: { color: theme.colors.major },
 				rippleColor: theme.colors.ripple,
 				noShadow: true

@@ -3,13 +3,13 @@ import { StyleSheet } from 'react-native-unistyles'
 export const formStyles = StyleSheet.create((theme, rt) => ({
 	input: {
 		paddingHorizontal: 20,
-		paddingVertical: 10,
+		paddingVertical: 11,
 		backgroundColor: theme.colors.surface,
 		borderRadius: 24,
 		borderWidth: 0,
 		border: 0,
-		fontSize: 15 * rt.fontScale,
-		lineHeight: 15 * 1.25 * rt.fontScale
+		fontSize: 16 * rt.fontScale,
+		lineHeight: 16 * 1.25 * rt.fontScale
 	},
 
 	formRow: {

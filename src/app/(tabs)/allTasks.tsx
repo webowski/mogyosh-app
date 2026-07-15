@@ -14,6 +14,7 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 import {
 	getCategoryIdsWithSubcategories,
 	useCategories,
+	useCreateCategory,
 	useTasks
 } from '@/features/TaskList'
 import TaskListItem from '@/features/TaskList/TaskListItem'
@@ -35,6 +36,9 @@ export default function AllTasksScreen() {
 	const sheetRef = useRef<TrueSheet>(null)
 
 	const { data: categories } = useCategories()
+	const createCategory = useCreateCategory()
+	const [isCreatingCategory, setIsCreatingCategory] = useState(false)
+	const [newCategoryName, setNewCategoryName] = useState('')
 
 	const {
 		data: tasks,
@@ -107,6 +111,22 @@ export default function AllTasksScreen() {
 			setSelectedCategory(category)
 		}
 		sheetRef.current?.dismiss()
+	}
+
+	const handleCreateCategory = async () => {
+		const name = newCategoryName.trim()
+		if (!name) return
+
+		try {
+			const category = await createCategory.mutateAsync({ name })
+			setIsUncategorized(false)
+			setSelectedCategory(category)
+			setNewCategoryName('')
+			setIsCreatingCategory(false)
+			sheetRef.current?.dismiss()
+		} catch (error) {
+			console.error('Failed to create category:', error)
+		}
 	}
 
 	return (
@@ -196,6 +216,10 @@ export default function AllTasksScreen() {
 				cornerRadius={STYLE_VARS.radius_2xl}
 				backgroundColor={theme.colors.surface}
 				grabberOptions={{ color: theme.colors.mutedTextStrong }}
+				onDidDismiss={() => {
+					setIsCreatingCategory(false)
+					setNewCategoryName('')
+				}}
 			>
 				<View
 					style={{
@@ -203,24 +227,78 @@ export default function AllTasksScreen() {
 						gap: 12
 					}}
 				>
-					{pickerItems.map((item) => {
-						const isSelected =
-							item.value === 'uncategorized'
-								? isUncategorized
-								: item.value === null
-									? !isUncategorized && selectedCategory === null
-									: selectedCategory?.id === item.value
-
-						return (
-							<RadioButton
-								key={String(item.value)}
-								title={item.label}
-								checked={isSelected}
-								onPress={() => handlePickerChange({ item })}
-								style={{ marginLeft: 26 * item.depth }}
+					{isCreatingCategory ? (
+						<View style={{ gap: theme.spacing.md }}>
+							<TextInput
+								style={[
+									formStyles.input,
+									{ backgroundColor: theme.colors.surfaceAlter }
+								]}
+								placeholder='Название категории'
+								placeholderTextColor={theme.colors.mutedTextStrong}
+								value={newCategoryName}
+								onChangeText={setNewCategoryName}
+								autoFocus
+								onSubmitEditing={handleCreateCategory}
+								returnKeyType='done'
 							/>
-						)
-					})}
+							<View
+								style={{
+									flexDirection: 'row',
+									gap: theme.spacing.sm
+								}}
+							>
+								<Button
+									variant='secondary'
+									style={{ flex: 1 }}
+									onPress={() => {
+										setIsCreatingCategory(false)
+										setNewCategoryName('')
+									}}
+								>
+									Отмена
+								</Button>
+								<Button
+									style={{ flex: 1 }}
+									onPress={handleCreateCategory}
+									disabled={!newCategoryName.trim() || createCategory.isPending}
+								>
+									Создать
+								</Button>
+							</View>
+						</View>
+					) : (
+						<>
+							{pickerItems.map((item) => {
+								const isSelected =
+									item.value === 'uncategorized'
+										? isUncategorized
+										: item.value === null
+											? !isUncategorized && selectedCategory === null
+											: selectedCategory?.id === item.value
+
+								return (
+									<RadioButton
+										key={String(item.value)}
+										title={item.label}
+										checked={isSelected}
+										onPress={() => handlePickerChange({ item })}
+										style={{ marginLeft: 26 * item.depth }}
+									/>
+								)
+							})}
+							<Button
+								variant='secondary'
+								style={{
+									marginTop: theme.spacing.sm,
+									alignSelf: 'flex-start'
+								}}
+								onPress={() => setIsCreatingCategory(true)}
+							>
+								+ Создать категорию
+							</Button>
+						</>
+					)}
 				</View>
 			</TrueSheet>
 		</>
