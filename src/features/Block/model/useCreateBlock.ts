@@ -17,6 +17,7 @@ export const useCreateBlock = () => {
 			task_id: TaskId | null
 			parent_id?: BlockId | null
 			type?: BlockEntity['type']
+			settings?: BlockEntity['settings']
 			optimisticId?: BlockId
 			afterId?: BlockId | null
 		},
@@ -40,7 +41,7 @@ export const useCreateBlock = () => {
 			type: payload.type ?? 'p',
 			text_content: payload.text_content,
 			status: null,
-			settings: null,
+			settings: payload.settings ?? null,
 			state: null,
 			priority: null,
 			sort_order,

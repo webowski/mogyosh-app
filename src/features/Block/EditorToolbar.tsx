@@ -103,6 +103,7 @@ export default function EditorToolbar() {
 	const handleMoveUp = () => {
 		if (!focusedBlockId) return
 		// blurBlock(focusedBlockId) // см. ниже
+		pushUndoAction({ type: 'move', id: focusedBlockId, direction: 'down' })
 		moveBlock.mutate({
 			id: focusedBlockId,
 			taskId: activeItemId as TaskId,
@@ -115,6 +116,7 @@ export default function EditorToolbar() {
 	}
 	const handleMoveDown = () => {
 		if (!focusedBlockId) return
+		pushUndoAction({ type: 'move', id: focusedBlockId, direction: 'up' })
 		moveBlock.mutate({
 			id: focusedBlockId,
 			taskId: activeItemId as TaskId,
@@ -139,6 +141,23 @@ export default function EditorToolbar() {
 	const removeBlock = useRemoveBlock()
 	const handleRemove = () => {
 		if (!focusedBlockId) return
+
+		const blocks = selectBlocks(activeItemId)(useBlockStore.getState())
+		const removedBlock = blocks.find((block) => block.id === focusedBlockId)
+
+		if (removedBlock) {
+			const siblings = blocks.filter(
+				(block) =>
+					(block.parent_id ?? null) === (removedBlock.parent_id ?? null)
+			)
+			const removedIndex = siblings.findIndex(
+				(block) => block.id === focusedBlockId
+			)
+			const afterId = removedIndex > 0 ? siblings[removedIndex - 1].id : null
+
+			pushUndoAction({ type: 'remove', removedBlock, afterId })
+		}
+
 		removeBlock.mutate({
 			id: focusedBlockId,
 			taskId: activeItemId as TaskId
@@ -147,6 +166,9 @@ export default function EditorToolbar() {
 
 	const pendingFocusId = useEditorToolbarStore((state) => state.pendingFocusId)
 	const createBlock = useCreateBlock()
+	const undoStack = useEditorToolbarStore((state) => state.undoStack)
+	const pushUndoAction = useEditorToolbarStore((state) => state.pushUndoAction)
+	const popUndoAction = useEditorToolbarStore((state) => state.popUndoAction)
 
 	const handleAddBlock = () => {
 		const blocks = selectBlocks(activeItemId)(useBlockStore.getState())
@@ -195,6 +217,12 @@ export default function EditorToolbar() {
 	const handleChangeBlockType = (type: BlockType) => {
 		if (!focusedBlock) return
 
+		pushUndoAction({
+			type: 'update',
+			id: focusedBlock.id,
+			previousPatch: { type: focusedBlock.type }
+		})
+
 		updateBlock.mutate({
 			id: focusedBlock.id,
 			taskId: activeItemId as TaskId,
@@ -229,6 +257,42 @@ export default function EditorToolbar() {
 	const handleSelectBlockType = (type: BlockType) => {
 		if (blockTypeMenuMode === 'change') handleChangeBlockType(type)
 		if (blockTypeMenuMode === 'add') handleAddBlockWithType(type)
+	}
+
+	const handleUndo = () => {
+		const action = popUndoAction()
+		if (!action) return
+
+		if (action.type === 'remove') {
+			const optimisticId = `optimistic-${Date.now()}` as BlockId
+			pendingFocusId.current = optimisticId
+
+			createBlock.mutate({
+				text_content: action.removedBlock.text_content,
+				task_id: activeItemId,
+				parent_id: action.removedBlock.parent_id,
+				type: action.removedBlock.type,
+				settings: action.removedBlock.settings,
+				optimisticId,
+				afterId: action.afterId
+			})
+		}
+
+		if (action.type === 'update') {
+			updateBlock.mutate({
+				id: action.id,
+				taskId: activeItemId as TaskId,
+				patch: action.previousPatch
+			})
+		}
+
+		if (action.type === 'move') {
+			moveBlock.mutate({
+				id: action.id,
+				taskId: activeItemId as TaskId,
+				direction: action.direction
+			})
+		}
 	}
 
 	return (
@@ -305,7 +369,11 @@ export default function EditorToolbar() {
 							<MaterialDesignIcons name='delete-forever' size={24} />
 						</Button>
 
-						<Button variant='bare' onPress={() => {}}>
+						<Button
+							variant='bare'
+							disabled={undoStack.length === 0}
+							onPress={handleUndo}
+						>
 							<MaterialDesignIcons name='arrow-u-left-top-bold' size={24} />
 						</Button>
 
