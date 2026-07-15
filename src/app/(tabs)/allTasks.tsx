@@ -28,6 +28,14 @@ import { formStyles } from '@/shared/styles/form'
 import { Button } from '@/shared/ui/Button'
 import RadioButton from '@/shared/ui/RadioButton'
 
+type SortOption = 'alphabetical' | 'created_at' | 'updated_at'
+
+const SORT_OPTIONS: { value: SortOption; label: string }[] = [
+	{ value: 'alphabetical', label: 'По алфавиту' },
+	{ value: 'created_at', label: 'По дате создания' },
+	{ value: 'updated_at', label: 'По дате изменения' }
+]
+
 export default function AllTasksScreen() {
 	const { theme } = useUnistyles()
 	const { t, i18n } = useTranslation()
@@ -38,6 +46,9 @@ export default function AllTasksScreen() {
 	const [isUncategorized, setIsUncategorized] = useState(false)
 
 	const sheetRef = useRef<TrueSheet>(null)
+
+	const [sortOption, setSortOption] = useState<SortOption>('created_at')
+	const sortSheetRef = useRef<TrueSheet>(null)
 
 	const { data: categories } = useCategories()
 	const createCategory = useCreateCategory()
@@ -109,6 +120,38 @@ export default function AllTasksScreen() {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[categories, i18n.language]
 	)
+
+	const sortedTasks = useMemo(() => {
+		if (!tasks) return tasks
+
+		const tasksCopy = [...tasks]
+
+		switch (sortOption) {
+			case 'alphabetical':
+				return tasksCopy.sort((taskA, taskB) =>
+					taskA.title.localeCompare(taskB.title, i18n.language)
+				)
+			case 'created_at':
+				return tasksCopy.sort(
+					(taskA, taskB) =>
+						new Date(taskB.created_at).getTime() -
+						new Date(taskA.created_at).getTime()
+				)
+			case 'updated_at':
+				return tasksCopy.sort((taskA, taskB) => {
+					const dateA = new Date(taskA.updated_at ?? taskA.created_at).getTime()
+					const dateB = new Date(taskB.updated_at ?? taskB.created_at).getTime()
+					return dateB - dateA
+				})
+			default:
+				return tasksCopy
+		}
+	}, [tasks, sortOption, i18n.language])
+
+	const handleSortChange = (value: SortOption) => {
+		setSortOption(value)
+		sortSheetRef.current?.dismiss()
+	}
 
 	const handlePickerChange = (object: { item: { value: string | null } }) => {
 		if (object.item.value === 'uncategorized') {
@@ -223,7 +266,7 @@ export default function AllTasksScreen() {
 					paddingBottom: STYLE_VARS.sidePadding / 2,
 					gap: 4
 				}}
-				data={tasks}
+				data={sortedTasks}
 				keyExtractor={(item) => item.id}
 				alwaysBounceVertical={false}
 				bounces={false}
@@ -245,6 +288,16 @@ export default function AllTasksScreen() {
 			/>
 
 			<View style={styles.SubPanel}>
+				<Button
+					variant='pill'
+					size='sm'
+					widthMode='fitContent'
+					style={{ width: 'auto' }}
+					onPress={() => sortSheetRef.current?.present()}
+				>
+					{SORT_OPTIONS.find((option) => option.value === sortOption)?.label}
+				</Button>
+
 				<Button
 					variant='pill'
 					size='sm'
@@ -419,6 +472,25 @@ export default function AllTasksScreen() {
 					)}
 				</View>
 			</TrueSheet>
+
+			<TrueSheet
+				ref={sortSheetRef}
+				detents={['auto']}
+				cornerRadius={STYLE_VARS.radius_2xl}
+				backgroundColor={theme.colors.surface}
+				grabberOptions={{ color: theme.colors.mutedTextStrong }}
+			>
+				<View style={{ padding: STYLE_VARS.sidePadding_xl, gap: 12 }}>
+					{SORT_OPTIONS.map((option) => (
+						<RadioButton
+							key={option.value}
+							title={option.label}
+							checked={sortOption === option.value}
+							onPress={() => handleSortChange(option.value)}
+						/>
+					))}
+				</View>
+			</TrueSheet>
 		</>
 	)
 }
@@ -429,6 +501,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		paddingTop: 20,
 		paddingBottom: 24 + STYLE_VARS.navPanelUnderlap,
 		flexDirection: 'row',
-		justifyContent: 'center'
+		justifyContent: 'center',
+		gap: 12
 	}
 }))
