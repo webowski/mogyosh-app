@@ -38,7 +38,7 @@ INSERT INTO "public"."categories" ("id", "user_id", "name", "parent_id", "create
 -- Data for Name: tasks; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO "public"."tasks" ("id", "user_id", "created_at", "parent_id", "category_id", "title", "status", "priority", "updated_at", "type") VALUES
+INSERT INTO "public"."tasks" ("id", "user_id", "created_at", "parent_id", "category_id", "title", "lifecycle", "priority", "updated_at", "type") VALUES
 	('dd59ae40-2f61-4a73-87f3-76244fbd3ec6', '86048ba9-73fc-40ce-aa14-7ad4c93224e6', '2026-05-26 11:25:41.257816+00', NULL, 'a865b5b8-c974-41b6-9192-3fef3e4d86f6', 'Продукты', 'active', NULL, '2026-05-27 10:57:28.225153+00', 'task'),
 	('e132331a-fe81-4e34-a41c-02643e1ae8b0', '86048ba9-73fc-40ce-aa14-7ad4c93224e6', '2026-06-05 15:48:57.627531+00', NULL, '2fbe35a8-4704-4ca7-93fb-9d4fcc626d65', 'task2', 'active', NULL, '2026-06-05 15:48:57.627531+00', 'task'),
 	('a6b33c0b-f10d-49af-8db4-e4ad6773ff99', '86048ba9-73fc-40ce-aa14-7ad4c93224e6', '2026-06-05 16:18:41.980208+00', NULL, '2fbe35a8-4704-4ca7-93fb-9d4fcc626d65', 'task7', 'active', NULL, '2026-06-05 16:18:41.980208+00', 'task'),
