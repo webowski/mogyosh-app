@@ -10,10 +10,15 @@ import Animated, {
 	useSharedValue,
 	withTiming
 } from 'react-native-reanimated'
-import { StyleSheet } from 'react-native-unistyles'
+import { StyleSheet, useUnistyles } from 'react-native-unistyles'
+import { scheduleOnRN } from 'react-native-worklets'
 
 import { useNavStore } from '@/features/Navigation/model/navStore'
-import { useDeleteTask, useTaskProgress } from '@/features/TaskList'
+import {
+	useDeleteTask,
+	useTaskProgress,
+	useUpdateTaskState
+} from '@/features/TaskList'
 import { useCategoriesStore } from '@/features/TaskList/model/categoriesStore'
 import {
 	isByTime,
@@ -26,7 +31,6 @@ import { useTaskStore } from '@/shared/model/task.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 import CircleProgress from '@/shared/ui/CircleProgress'
 import { triggerHapticLight } from '@/shared/ui/Haptic'
-import { scheduleOnRN } from 'react-native-worklets'
 
 const DELETE_THRESHOLD = -80
 const DELETE_ZONE_WIDTH = 72
@@ -46,6 +50,7 @@ export default function TaskItem({
 	onDelete,
 	onComplete
 }: TaskItemProps) {
+	const { theme } = useUnistyles()
 	const router = useRouter()
 	const categoryMap = useCategoriesStore((store) => store.entities)
 	const setSelectedTaskId = useTaskStore((store) => store.setSelectedTaskId)
@@ -53,8 +58,10 @@ export default function TaskItem({
 	const hourFormat = useSettingsStore((store) => store.hourFormat)
 	const { data: progressData } = useTaskProgress(data.id)
 	const deleteTaskMutation = useDeleteTask()
+	const updateTaskStateMutation = useUpdateTaskState()
 
 	const isByTimeBool = isByTime(data)
+	const isCompleted = data.state === 'done'
 
 	// Shared values for swipe animation
 	const translateX = useSharedValue(0)
@@ -67,29 +74,31 @@ export default function TaskItem({
 		onDelete?.(data.id)
 	}
 
-	const completeTask = () => {
+	const toggleCompleteTask = () => {
+		const newState = isCompleted ? 'active' : 'done'
+		updateTaskStateMutation.mutate({ taskId: data.id, state: newState })
 		onComplete?.(data.id)
 	}
 
 	const panGesture = Gesture.Pan()
 		.activeOffsetX([-10, 10])
 		.onUpdate((event) => {
-			// translateX.value = event.translationX
 			if (event.translationX < 0) {
 				// // Swipe left — delete zone
+				// translateX.value = event.translationX
 				// deleteOpacity.value = Math.min(
 				// 	1,
 				// 	Math.abs(event.translationX) / Math.abs(DELETE_THRESHOLD)
 				// )
 				// completeOpacity.value = 0
 			} else {
-				translateX.value = event.translationX
 				// Swipe right — complete zone
+				translateX.value = event.translationX
+				deleteOpacity.value = 0
 				completeOpacity.value = Math.min(
 					1,
 					event.translationX / COMPLETE_THRESHOLD
 				)
-				deleteOpacity.value = 0
 			}
 		})
 		.onEnd((event) => {
@@ -98,11 +107,9 @@ export default function TaskItem({
 				// // itemHeight.value = withTiming(0, { duration: 300 })
 				// scheduleOnRN(deleteTask)
 			} else if (event.translationX > COMPLETE_THRESHOLD) {
-				translateX.value = withTiming(500, { duration: 300 })
-				// itemHeight.value = withTiming(0, { duration: 300 })
-				scheduleOnRN(completeTask)
+				translateX.value = withTiming(0, { duration: 300 })
+				scheduleOnRN(toggleCompleteTask)
 			} else {
-				// Snap back
 				translateX.value = withTiming(0, { duration: 250 })
 				deleteOpacity.value = withTiming(0, { duration: 250 })
 				completeOpacity.value = withTiming(0, { duration: 250 })
@@ -131,8 +138,17 @@ export default function TaskItem({
 	}))
 
 	const completeContainerStyle = useAnimatedStyle(() => ({
-		opacity: completeOpacity.value
+		opacity: isCompleted ? 1 : completeOpacity.value
 	}))
+
+	const cardBackgroundColorStyle = useAnimatedStyle(() => {
+		const bgColor = isCompleted
+			? theme.colors.successSubtlest
+			: theme.colors.surface
+		return {
+			backgroundColor: bgColor
+		}
+	})
 
 	const progress = progressData?.progress ?? 0
 	const totalProgressCount = progressData?.totalCount ?? 0
@@ -188,11 +204,24 @@ export default function TaskItem({
 
 					<GestureDetector gesture={composedGesture}>
 						<Animated.View
-							style={[styles.card, cardAnimatedStyle]}
+							style={[
+								styles.card,
+								cardAnimatedStyle,
+								cardBackgroundColorStyle,
+								isCompleted && styles.card_completed
+							]}
 							// onLayout={(e) => {
 							// 	itemHeight.value = e.nativeEvent.layout.height
 							// }}
 						>
+							{isCompleted && (
+								<Animated.View
+									style={[
+										styles.card__completedBackground,
+										completeContainerStyle
+									]}
+								/>
+							)}
 							{isByTimeBool && (
 								<Text style={styles.card__time}>
 									{formatTime(
@@ -245,7 +274,8 @@ const styles = StyleSheet.create((theme, rt) => ({
 		backgroundColor: theme.colors.success,
 		alignItems: 'center',
 		justifyContent: 'center',
-		borderRadius: STYLE_VARS.radius_sm
+		borderRadius: STYLE_VARS.radius_sm,
+		opacity: 0
 	},
 
 	completeBackground__label: {
@@ -263,7 +293,8 @@ const styles = StyleSheet.create((theme, rt) => ({
 		backgroundColor: theme.colors.danger,
 		alignItems: 'center',
 		justifyContent: 'center',
-		borderRadius: STYLE_VARS.radius_sm
+		borderRadius: STYLE_VARS.radius_sm,
+		opacity: 0
 	},
 
 	deleteBackground__label: {
@@ -279,6 +310,21 @@ const styles = StyleSheet.create((theme, rt) => ({
 		boxShadow: theme.colors.shadeCard,
 		borderRadius: STYLE_VARS.radius_sm,
 		gap: 8
+	},
+
+	card_completed: {
+		backgroundColor: theme.colors.successSubtlest
+	},
+
+	card__completedBackground: {
+		position: 'absolute',
+		left: 0,
+		top: 0,
+		bottom: 0,
+		width: 4,
+		backgroundColor: theme.colors.success,
+		borderTopLeftRadius: STYLE_VARS.radius_sm,
+		borderBottomLeftRadius: STYLE_VARS.radius_sm
 	},
 
 	card__header: {

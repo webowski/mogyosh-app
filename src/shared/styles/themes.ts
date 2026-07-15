@@ -77,7 +77,8 @@ export const lightTheme = {
 		mutedSubtleFill: 'hsl(225, 37%, 95%)',
 
 		buttonText: 'hsl(0, 0%, 100%)',
-		success: 'hsl(148, 100%, 66%)',
+		success: 'hsl(160, 70%, 50%)',
+		successSubtlest: 'hsl(160, 70%, 98.5%)',
 		danger: 'hsl(355, 100%, 75%)',
 		dangerFill: 'hsl(355, 100%, 94%)',
 		inverse: 'hsl(0, 0%, 100%)',
@@ -156,6 +157,7 @@ export const darkTheme = {
 		mutedSubtlestText: 'hsl(225, 15%, 42%)',
 		buttonText: 'hsl(0, 0%, 100%)',
 		success: 'hsl(148, 80%, 58%)',
+		successSubtlest: 'hsl(148, 75%, 78%)',
 		danger: 'hsl(355, 85%, 68%)',
 		inverse: 'hsl(0, 0%, 8%)',
 		currentFill: 'hsl(225, 100%, 28%)',
