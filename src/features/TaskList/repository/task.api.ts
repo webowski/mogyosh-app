@@ -269,10 +269,31 @@ const updateTaskState = async (
 }
 
 /**
- * Delete a task by ID (soft delete with cascading)
- * @param taskId - Task ID to delete
+ * Soft delete a task by ID (marks lifecycle as 'deleted', keeps all data intact)
+ * Cascades to child blocks so they also disappear from active views
+ * @param taskId - Task ID to soft delete
  */
 const deleteTask = async (taskId: TaskId): Promise<void> => {
+	const { error: taskError } = await supabaseClient
+		.from('tasks')
+		.update({ lifecycle: 'deleted' })
+		.eq('id', taskId)
+
+	if (taskError) throw taskError
+
+	// Cascade soft delete to child blocks
+	const blocks = await blockAPI.getBlocks(taskId)
+	for (const block of blocks) {
+		await deleteTask(block.id)
+	}
+}
+
+/**
+ * Permanently delete a task by ID (hard delete with cascading)
+ * Intended to be used for tasks already in the trash (lifecycle: 'deleted')
+ * @param taskId - Task ID to delete permanently
+ */
+const deleteTaskPermanently = async (taskId: TaskId): Promise<void> => {
 	// Delete task states first
 	const { error: statesError } = await supabaseClient
 		.from('states')
@@ -292,7 +313,7 @@ const deleteTask = async (taskId: TaskId): Promise<void> => {
 	// Delete blocks recursively
 	const blocks = await blockAPI.getBlocks(taskId)
 	for (const block of blocks) {
-		await deleteTask(block.id)
+		await deleteTaskPermanently(block.id)
 	}
 
 	// Delete the task itself
@@ -312,5 +333,6 @@ export const taskAPI = {
 	getTaskById,
 	createTask,
 	updateTaskState,
-	deleteTask
+	deleteTask,
+	deleteTaskPermanently
 }
