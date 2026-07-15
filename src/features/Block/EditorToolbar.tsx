@@ -306,6 +306,10 @@ export default function EditorToolbar() {
 						</Button>
 
 						<Button variant='bare' onPress={() => {}}>
+							<MaterialDesignIcons name='arrow-u-left-top-bold' size={24} />
+						</Button>
+
+						<Button variant='bare' onPress={() => {}}>
 							B
 						</Button>
 
