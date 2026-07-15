@@ -36,7 +36,37 @@ const createCategory = async (
 	return data
 }
 
+type UpdateCategoryPayload = {
+	id: CategoryId
+	name: string
+}
+
+const updateCategory = async (
+	payload: UpdateCategoryPayload
+): Promise<CategoryEntity> => {
+	const { data, error } = await supabaseClient
+		.from('categories')
+		.update({ name: payload.name })
+		.eq('id', payload.id)
+		.select('id, name, parent_id')
+		.single()
+
+	if (error) throw error
+	return data
+}
+
+const deleteCategory = async (categoryId: CategoryId): Promise<void> => {
+	const { error } = await supabaseClient
+		.from('categories')
+		.delete()
+		.eq('id', categoryId)
+
+	if (error) throw error
+}
+
 export const categoryAPI = {
 	getCategories,
-	createCategory
+	createCategory,
+	updateCategory,
+	deleteCategory
 }

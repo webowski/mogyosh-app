@@ -4,7 +4,9 @@ import { useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	ActivityIndicator,
+	Alert,
 	FlatList,
+	Pressable,
 	Text,
 	TextInput,
 	View
@@ -15,7 +17,9 @@ import {
 	getCategoryIdsWithSubcategories,
 	useCategories,
 	useCreateCategory,
-	useTasks
+	useDeleteCategory,
+	useTasks,
+	useUpdateCategory
 } from '@/features/TaskList'
 import TaskListItem from '@/features/TaskList/TaskListItem'
 import type { CategoryEntity } from '@/shared/domain/task'
@@ -39,6 +43,12 @@ export default function AllTasksScreen() {
 	const createCategory = useCreateCategory()
 	const [isCreatingCategory, setIsCreatingCategory] = useState(false)
 	const [newCategoryName, setNewCategoryName] = useState('')
+	const updateCategory = useUpdateCategory()
+	const deleteCategory = useDeleteCategory()
+	const [editingCategory, setEditingCategory] = useState<CategoryEntity | null>(
+		null
+	)
+	const [editCategoryName, setEditCategoryName] = useState('')
 
 	const {
 		data: tasks,
@@ -127,6 +137,43 @@ export default function AllTasksScreen() {
 		} catch (error) {
 			console.error('Failed to create category:', error)
 		}
+	}
+
+	const handleUpdateCategory = async () => {
+		const name = editCategoryName.trim()
+		if (!name || !editingCategory) return
+
+		try {
+			await updateCategory.mutateAsync({ id: editingCategory.id, name })
+			setEditingCategory(null)
+			setEditCategoryName('')
+		} catch (error) {
+			console.error('Failed to update category:', error)
+		}
+	}
+
+	const handleDeleteCategory = (category: CategoryEntity) => {
+		Alert.alert(
+			'Удалить категорию?',
+			`Категория «${category.name}» будет удалена.`,
+			[
+				{ text: 'Отмена', style: 'cancel' },
+				{
+					text: 'Удалить',
+					style: 'destructive',
+					onPress: async () => {
+						try {
+							await deleteCategory.mutateAsync(category.id)
+							if (selectedCategory?.id === category.id) {
+								setSelectedCategory(null)
+							}
+						} catch (error) {
+							console.error('Failed to delete category:', error)
+						}
+					}
+				}
+			]
+		)
 	}
 
 	return (
@@ -219,6 +266,8 @@ export default function AllTasksScreen() {
 				onDidDismiss={() => {
 					setIsCreatingCategory(false)
 					setNewCategoryName('')
+					setEditingCategory(null)
+					setEditCategoryName('')
 				}}
 			>
 				<View
@@ -242,12 +291,7 @@ export default function AllTasksScreen() {
 								onSubmitEditing={handleCreateCategory}
 								returnKeyType='done'
 							/>
-							<View
-								style={{
-									flexDirection: 'row',
-									gap: theme.spacing.sm
-								}}
-							>
+							<View style={{ flexDirection: 'row', gap: theme.spacing.sm }}>
 								<Button
 									variant='secondary'
 									style={{ flex: 1 }}
@@ -267,6 +311,43 @@ export default function AllTasksScreen() {
 								</Button>
 							</View>
 						</View>
+					) : editingCategory ? (
+						<View style={{ gap: theme.spacing.md }}>
+							<TextInput
+								style={[
+									formStyles.input,
+									{ backgroundColor: theme.colors.surfaceAlter }
+								]}
+								placeholder='Название категории'
+								placeholderTextColor={theme.colors.mutedTextStrong}
+								value={editCategoryName}
+								onChangeText={setEditCategoryName}
+								autoFocus
+								onSubmitEditing={handleUpdateCategory}
+								returnKeyType='done'
+							/>
+							<View style={{ flexDirection: 'row', gap: theme.spacing.sm }}>
+								<Button
+									variant='secondary'
+									style={{ flex: 1 }}
+									onPress={() => {
+										setEditingCategory(null)
+										setEditCategoryName('')
+									}}
+								>
+									Отмена
+								</Button>
+								<Button
+									style={{ flex: 1 }}
+									onPress={handleUpdateCategory}
+									disabled={
+										!editCategoryName.trim() || updateCategory.isPending
+									}
+								>
+									Сохранить
+								</Button>
+							</View>
+						</View>
 					) : (
 						<>
 							{pickerItems.map((item) => {
@@ -277,22 +358,59 @@ export default function AllTasksScreen() {
 											? !isUncategorized && selectedCategory === null
 											: selectedCategory?.id === item.value
 
+								const category =
+									item.value && item.value !== 'uncategorized'
+										? (categories?.find((c) => c.id === item.value) ?? null)
+										: null
+
 								return (
-									<RadioButton
+									<View
 										key={String(item.value)}
-										title={item.label}
-										checked={isSelected}
-										onPress={() => handlePickerChange({ item })}
-										style={{ marginLeft: 26 * item.depth }}
-									/>
+										style={{
+											flexDirection: 'row',
+											alignItems: 'flex-start',
+											marginLeft: 26 * item.depth
+										}}
+									>
+										<RadioButton
+											title={item.label}
+											checked={isSelected}
+											onPress={() => handlePickerChange({ item })}
+											style={{ flex: 1 }}
+										/>
+										{category && (
+											<View style={{ flexDirection: 'row', gap: 10 }}>
+												<Pressable
+													onPress={() => {
+														setEditingCategory(category)
+														setEditCategoryName(category.name)
+													}}
+													hitSlop={8}
+												>
+													<MaterialDesignIcons
+														name='square-edit-outline'
+														size={24}
+														color={theme.colors.mutedTextStrong}
+													/>
+												</Pressable>
+												<Pressable
+													onPress={() => handleDeleteCategory(category)}
+													hitSlop={8}
+												>
+													<MaterialDesignIcons
+														name='trash-can-outline'
+														size={24}
+														color={theme.colors.mutedTextStrong}
+													/>
+												</Pressable>
+											</View>
+										)}
+									</View>
 								)
 							})}
 							<Button
 								variant='secondary'
-								style={{
-									marginTop: theme.spacing.sm,
-									alignSelf: 'flex-start'
-								}}
+								style={{ marginTop: theme.spacing.sm, alignSelf: 'flex-start' }}
 								onPress={() => setIsCreatingCategory(true)}
 							>
 								+ Создать категорию
