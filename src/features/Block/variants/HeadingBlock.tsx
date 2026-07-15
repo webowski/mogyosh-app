@@ -29,8 +29,7 @@ export default function HeadingBlock({
 	pendingFocusId,
 	onCheckToggle,
 	onAddAfter,
-	onRemove,
-	onExpandToggle
+	onRemove
 }: HeadingBlockProps) {
 	const {
 		inputRef,
