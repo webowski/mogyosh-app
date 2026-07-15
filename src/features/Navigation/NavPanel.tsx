@@ -14,6 +14,7 @@ import SVGIconTarget from '@/shared/images/icons/target.svg'
 
 import { SwipeSwitchItems } from '@/features/Navigation/model/navTypes'
 import { useTaskCreateStore } from '@/features/TaskCreate/model/taskCreate.store'
+import { AllTasksActionSheetMenu } from '@/features/TaskList'
 import { useCalendarStore } from '@/shared/model/calendar.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 import ActionSheet from './ActionSheet'
@@ -45,6 +46,7 @@ export default function NavPanel({
 	// Get selected date and swipe switch items from store
 	const selectedDate = useCalendarStore((state) => state.selectedDate)
 	const swipeSwitchItems = useNavStore((state) => state.swipeSwitchItems)
+	const actionSheetItem = useNavStore((state) => state.actionSheetItem)
 	const openCreateTaskSheet = useTaskCreateStore((state) => state.open)
 
 	// Track current route for transition effects - ensure correct initialization
@@ -78,6 +80,13 @@ export default function NavPanel({
 		return false
 	}
 
+	// Определяет для какого роута сейчас открыт ActionSheet
+	const actionSheetRouteName = actionSheetItem
+		? Object.keys(
+				swipeSwitchItems[actionSheetItem.row]?.[actionSheetItem.col] ?? {}
+			)[0]
+		: null
+
 	// Handle SwipeSwitch press for navigation
 	const handleSwipeSwitchPress = (row: number, col: number) => {
 		const routeItem = swipeSwitchItems[row]?.[col]
@@ -102,7 +111,18 @@ export default function NavPanel({
 
 	return (
 		<View style={styles.NavPanelWrap}>
-			<ActionSheet />
+			<ActionSheet>
+				{actionSheetRouteName === 'allTasks' ? (
+					<AllTasksActionSheetMenu
+						onSelect={() => {
+							setIsActionSheetOpen(false)
+							if (currentRoute !== 'allTasks') {
+								navigation.navigate('allTasks')
+							}
+						}}
+					/>
+				) : undefined}
+			</ActionSheet>
 			<View
 				style={[
 					styles.NavPanel,

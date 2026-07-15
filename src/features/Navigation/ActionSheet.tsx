@@ -1,6 +1,6 @@
 import { useNavigation } from 'expo-router'
-import { useEffect, useState } from 'react'
-import { Pressable, Text, View } from 'react-native'
+import { type PropsWithChildren, useEffect, useState } from 'react'
+import { Pressable, View } from 'react-native'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import Animated, {
 	Easing,
@@ -18,7 +18,7 @@ import { STYLE_VARS } from '@/shared/styles/common'
 // const SHEET_HEIGHT = Dimensions.get('window').height * 0.4
 const SHEET_HEIGHT = 220
 
-export default function ActionSheet() {
+export default function ActionSheet({ children }: PropsWithChildren) {
 	const insets = useSafeAreaInsets()
 	const [isMounted, setIsMounted] = useState(false)
 	// const { theme } = useUnistyles()
@@ -120,9 +120,7 @@ export default function ActionSheet() {
 					]}
 				>
 					<View style={styles.grabber} />
-					<View style={styles.content}>
-						<Text>{label}</Text>
-					</View>
+					<View style={styles.content}>{children}</View>
 				</Animated.View>
 			</GestureDetector>
 		</>

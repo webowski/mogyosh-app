@@ -18,6 +18,7 @@ import {
 	useCategories,
 	useCreateCategory,
 	useDeleteCategory,
+	useTaskListViewStore,
 	useTasks,
 	useUpdateCategory
 } from '@/features/TaskList'
@@ -45,6 +46,11 @@ export default function AllTasksScreen() {
 		useState<CategoryEntity | null>(null)
 	const [isUncategorized, setIsUncategorized] = useState(false)
 
+	const lifecycleFilter = useTaskListViewStore((state) => state.lifecycleFilter)
+	const setLifecycleFilter = useTaskListViewStore(
+		(state) => state.setLifecycleFilter
+	)
+
 	const sheetRef = useRef<TrueSheet>(null)
 
 	const [sortOption, setSortOption] = useState<SortOption>('created_at')
@@ -66,6 +72,7 @@ export default function AllTasksScreen() {
 		isLoading,
 		error
 	} = useTasks({
+		lifecycle: lifecycleFilter,
 		searchQuery: searchQuery.trim() || undefined,
 		categoryId: isUncategorized
 			? 'uncategorized'
@@ -252,6 +259,15 @@ export default function AllTasksScreen() {
 					/>
 				</View>
 			</View>
+
+			{lifecycleFilter === 'deleted' && (
+				<View style={styles.DeletedBanner}>
+					<Text style={styles.DeletedBanner__title}>Удалённые задачи</Text>
+					<Pressable onPress={() => setLifecycleFilter('active')} hitSlop={8}>
+						<Text style={styles.DeletedBanner__back}>Назад</Text>
+					</Pressable>
+				</View>
+			)}
 
 			<FlatList
 				style={
@@ -496,6 +512,23 @@ export default function AllTasksScreen() {
 }
 
 const styles = StyleSheet.create((theme, rt) => ({
+	DeletedBanner: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		paddingHorizontal: STYLE_VARS.sidePadding,
+		paddingBottom: 12
+	},
+	DeletedBanner__title: {
+		fontSize: 16,
+		fontWeight: '600',
+		color: theme.colors.major
+	},
+	DeletedBanner__back: {
+		fontSize: 15,
+		color: theme.colors.primary
+	},
+
 	SubPanel: {
 		paddingHorizontal: STYLE_VARS.sidePadding,
 		paddingTop: 20,
