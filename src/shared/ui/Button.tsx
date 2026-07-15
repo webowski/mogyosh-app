@@ -148,7 +148,7 @@ const styles = StyleSheet.create((theme) => ({
 	},
 
 	Button_bare: {
-		padding: 0,
+		paddingHorizontal: 10,
 		boxShadow: 'none'
 	}
 }))

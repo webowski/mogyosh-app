@@ -331,7 +331,7 @@ export default function EditorToolbar() {
 						}}
 					>
 						<Button variant='bare' onPress={openAddBlockMenu} preventFocusSteal>
-							<MaterialDesignIcons name='plus' size={24} />
+							<MaterialDesignIcons name='plus-thick' size={24} />
 						</Button>
 
 						<Button
