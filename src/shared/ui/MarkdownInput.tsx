@@ -78,9 +78,10 @@ export const MarkdownInput = forwardRef<
 								ref as React.RefObject<EnrichedMarkdownTextInputInstance>
 							).current?.setValue(blockText.trim())
 							onEnterPress?.()
-						} else if (text === '') {
-							onBackspaceOnEmpty?.()
 						}
+						// else if (text === '') {
+						// 	onBackspaceOnEmpty?.()
+						// }
 					}}
 					onChangeMarkdown={(markdown) => {
 						onChangeMarkdown?.(
