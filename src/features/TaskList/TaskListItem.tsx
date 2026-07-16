@@ -1,11 +1,13 @@
+import { MenuView } from '@expo/ui/community/menu'
 import { useRouter } from 'expo-router'
-import { Pressable, Text } from 'react-native'
+import { Alert, Pressable, Text } from 'react-native'
+import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 import { useNavStore } from '@/features/Navigation/model/navStore'
+import { useDeleteTaskPermanently } from '@/features/TaskList'
 import { TaskEntity } from '@/shared/domain/task'
 import { useTaskStore } from '@/shared/model/task.store'
 import { STYLE_VARS } from '@/shared/styles/common'
-import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 type TaskListItemProps = {
 	data: TaskEntity
@@ -17,6 +19,9 @@ export default function TaskListItem({ data }: TaskListItemProps) {
 
 	const setSelectedTaskId = useTaskStore((store) => store.setSelectedTaskId)
 	const setSwipeRoute = useNavStore((store) => store.setSwipeRoute)
+	const deleteTaskPermanentlyMutation = useDeleteTaskPermanently()
+
+	const isDeleted = data.lifecycle === 'deleted'
 
 	const handlePress = () => {
 		setSelectedTaskId(data.id)
@@ -24,36 +29,76 @@ export default function TaskListItem({ data }: TaskListItemProps) {
 		router.push('/task')
 	}
 
+	const handleDeletePermanently = () => {
+		Alert.alert(
+			'Удалить навсегда?',
+			`Задача «${data.title}» будет удалена без возможности восстановления.`,
+			[
+				{ text: 'Отмена', style: 'cancel' },
+				{
+					text: 'Удалить навсегда',
+					style: 'destructive',
+					onPress: () => {
+						deleteTaskPermanentlyMutation.mutate(data.id)
+					}
+				}
+			]
+		)
+	}
+
+	const handleMenuPressAction = (event: { nativeEvent: { event: string } }) => {
+		if (event.nativeEvent.event === 'deletePermanently') {
+			handleDeletePermanently()
+		}
+	}
+
 	return (
-		<Pressable onPress={handlePress} style={styles.taskListItem}>
-			<Text
-				style={{ fontSize: 15, fontWeight: '500', color: theme.colors.major }}
-			>
-				{data.title}
-			</Text>
-			{data.priority !== null && data.priority !== undefined && (
+		<MenuView
+			shouldOpenOnLongPress={isDeleted}
+			actions={
+				isDeleted
+					? [
+							{
+								id: 'deletePermanently',
+								title: 'Удалить навсегда',
+								image: undefined,
+								attributes: { destructive: true }
+							}
+						]
+					: []
+			}
+			onPressAction={handleMenuPressAction}
+		>
+			<Pressable onPress={handlePress} style={styles.taskListItem}>
 				<Text
-					style={{
-						fontSize: 12,
-						color: theme.colors.mutedTextStrong,
-						marginTop: 4
-					}}
+					style={{ fontSize: 15, fontWeight: '500', color: theme.colors.major }}
 				>
-					Priority: {data.priority}
+					{data.title}
 				</Text>
-			)}
-			{data.state && (
-				<Text
-					style={{
-						fontSize: 12,
-						color: theme.colors.mutedTextStrong,
-						marginTop: 2
-					}}
-				>
-					State: {data.state}
-				</Text>
-			)}
-		</Pressable>
+				{data.priority !== null && data.priority !== undefined && (
+					<Text
+						style={{
+							fontSize: 12,
+							color: theme.colors.mutedTextStrong,
+							marginTop: 4
+						}}
+					>
+						Priority: {data.priority}
+					</Text>
+				)}
+				{data.state && (
+					<Text
+						style={{
+							fontSize: 12,
+							color: theme.colors.mutedTextStrong,
+							marginTop: 2
+						}}
+					>
+						State: {data.state}
+					</Text>
+				)}
+			</Pressable>
+		</MenuView>
 	)
 }
 
