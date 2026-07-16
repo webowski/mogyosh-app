@@ -1,6 +1,6 @@
 import { MenuView } from '@expo/ui/community/menu'
 import { useRouter } from 'expo-router'
-import { Alert, Pressable, Text } from 'react-native'
+import { Alert, Text, View } from 'react-native'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 import { useNavStore } from '@/features/Navigation/model/navStore'
@@ -8,6 +8,8 @@ import { useDeleteTaskPermanently } from '@/features/TaskList'
 import { TaskEntity } from '@/shared/domain/task'
 import { useTaskStore } from '@/shared/model/task.store'
 import { STYLE_VARS } from '@/shared/styles/common'
+import { Gesture, GestureDetector } from 'react-native-gesture-handler'
+import { scheduleOnRN } from 'react-native-worklets'
 
 type TaskListItemProps = {
 	data: TaskEntity
@@ -28,6 +30,10 @@ export default function TaskListItem({ data }: TaskListItemProps) {
 		setSwipeRoute('task')
 		router.push('/task')
 	}
+
+	const tapGesture = Gesture.Tap().onEnd(() => {
+		scheduleOnRN(handlePress)
+	})
 
 	const handleDeletePermanently = () => {
 		Alert.alert(
@@ -53,40 +59,42 @@ export default function TaskListItem({ data }: TaskListItemProps) {
 	}
 
 	const content = (
-		<Pressable onPress={handlePress} style={styles.taskListItem}>
-			<Text
-				style={{ fontSize: 15, fontWeight: '500', color: theme.colors.major }}
-			>
-				{data.title}
-			</Text>
-			{data.priority !== null && data.priority !== undefined && (
+		<GestureDetector gesture={tapGesture}>
+			<View style={styles.taskListItem}>
 				<Text
-					style={{
-						fontSize: 12,
-						color: theme.colors.mutedTextStrong,
-						marginTop: 4
-					}}
+					style={{ fontSize: 15, fontWeight: '500', color: theme.colors.major }}
 				>
-					Priority: {data.priority}
+					{data.title}
 				</Text>
-			)}
-			{data.state && (
-				<Text
-					style={{
-						fontSize: 12,
-						color: theme.colors.mutedTextStrong,
-						marginTop: 2
-					}}
-				>
-					State: {data.state}
-				</Text>
-			)}
-		</Pressable>
+				{data.priority !== null && data.priority !== undefined && (
+					<Text
+						style={{
+							fontSize: 12,
+							color: theme.colors.mutedTextStrong,
+							marginTop: 4
+						}}
+					>
+						Priority: {data.priority}
+					</Text>
+				)}
+				{data.state && (
+					<Text
+						style={{
+							fontSize: 12,
+							color: theme.colors.mutedTextStrong,
+							marginTop: 2
+						}}
+					>
+						State: {data.state}
+					</Text>
+				)}
+			</View>
+		</GestureDetector>
 	)
 
-	if (!isDeleted) {
-		return content
-	}
+	// if (!isDeleted) {
+	// 	return content
+	// }
 
 	return (
 		<MenuView
