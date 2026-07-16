@@ -59,37 +59,43 @@ export default function TaskListItem({ data }: TaskListItemProps) {
 	}
 
 	const content = (
-		<GestureDetector gesture={tapGesture}>
-			<View style={styles.taskListItem}>
-				<Text
-					style={{ fontSize: 15, fontWeight: '500', color: theme.colors.major }}
-				>
-					{data.title}
-				</Text>
-				{data.priority !== null && data.priority !== undefined && (
+		<View>
+			<GestureDetector gesture={tapGesture}>
+				<View style={styles.taskListItem}>
 					<Text
 						style={{
-							fontSize: 12,
-							color: theme.colors.mutedTextStrong,
-							marginTop: 4
+							fontSize: 15,
+							fontWeight: '500',
+							color: theme.colors.major
 						}}
 					>
-						Priority: {data.priority}
+						{data.title}
 					</Text>
-				)}
-				{data.state && (
-					<Text
-						style={{
-							fontSize: 12,
-							color: theme.colors.mutedTextStrong,
-							marginTop: 2
-						}}
-					>
-						State: {data.state}
-					</Text>
-				)}
-			</View>
-		</GestureDetector>
+					{data.priority !== null && data.priority !== undefined && (
+						<Text
+							style={{
+								fontSize: 12,
+								color: theme.colors.mutedTextStrong,
+								marginTop: 4
+							}}
+						>
+							Priority: {data.priority}
+						</Text>
+					)}
+					{data.state && (
+						<Text
+							style={{
+								fontSize: 12,
+								color: theme.colors.mutedTextStrong,
+								marginTop: 2
+							}}
+						>
+							State: {data.state}
+						</Text>
+					)}
+				</View>
+			</GestureDetector>
+		</View>
 	)
 
 	// if (!isDeleted) {
@@ -109,7 +115,7 @@ export default function TaskListItem({ data }: TaskListItemProps) {
 			]}
 			onPressAction={handleMenuPressAction}
 		>
-			<View>{content}</View>
+			{content}
 		</MenuView>
 	)
 }
