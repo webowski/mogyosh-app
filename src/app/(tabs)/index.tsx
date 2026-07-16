@@ -1,7 +1,11 @@
 import { useMemo } from 'react'
 import { SectionList, Text, View } from 'react-native'
 
-import { useTasksGrouped } from '@/features/TaskList'
+import {
+	TaskDragSortLayer,
+	useTaskListViewStore,
+	useTasksGrouped
+} from '@/features/TaskList'
 import { useCategories } from '@/features/TaskList/model/useCategories'
 import TaskItem from '@/features/TaskList/TaskItem'
 import { commonStyles, STYLE_VARS } from '@/shared/styles/common'
@@ -11,6 +15,7 @@ import Skeleton from '@/shared/ui/Skeleton'
 export default function DayScreen() {
 	const { data, isLoading, error, refetch } = useTasksGrouped()
 	const { isLoading: catLoading, error: catError } = useCategories()
+	const isSortMode = useTaskListViewStore((store) => store.isSortMode)
 
 	const sections = useMemo(() => data ?? [], [data])
 
@@ -29,15 +34,34 @@ export default function DayScreen() {
 		)
 	}
 
+	if (isSortMode) {
+		const duringDayTasks =
+			sections.find((section) => section.title === 'During the day')?.data ?? []
+
+		return (
+			<View
+				style={[
+					commonStyles.mainArea,
+					{
+						paddingHorizontal: STYLE_VARS.sidePadding,
+						paddingTop: STYLE_VARS.sidePadding,
+						paddingBottom:
+							STYLE_VARS.sidePadding * 1.5 + STYLE_VARS.navPanelUnderlap
+					}
+				]}
+			>
+				<TaskDragSortLayer tasks={duringDayTasks} />
+			</View>
+		)
+	}
+
 	return (
 		<SectionList
 			style={{
-				// flex: 1
 				gap: 26
 			}}
 			contentContainerStyle={{
 				gap: 4,
-				// flexShrink: 0,
 				paddingHorizontal: STYLE_VARS.sidePadding,
 				paddingTop: STYLE_VARS.sidePadding,
 				paddingBottom:

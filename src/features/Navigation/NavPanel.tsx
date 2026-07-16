@@ -14,7 +14,10 @@ import SVGIconTarget from '@/shared/images/icons/target.svg'
 
 import { SwipeSwitchItems } from '@/features/Navigation/model/navTypes'
 import { useTaskCreateStore } from '@/features/TaskCreate/model/taskCreate.store'
-import { AllTasksActionSheetMenu } from '@/features/TaskList'
+import {
+	AllTasksActionSheetMenu,
+	useTaskListViewStore
+} from '@/features/TaskList'
 import { useCalendarStore } from '@/shared/model/calendar.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons'
@@ -49,6 +52,8 @@ export default function NavPanel({
 	const swipeSwitchItems = useNavStore((state) => state.swipeSwitchItems)
 	const actionSheetItem = useNavStore((state) => state.actionSheetItem)
 	const openCreateTaskSheet = useTaskCreateStore((state) => state.open)
+	const isSortMode = useTaskListViewStore((state) => state.isSortMode)
+	const setSortMode = useTaskListViewStore((state) => state.setSortMode)
 
 	// Track current route for transition effects - ensure correct initialization
 	const currentRoute = state.routes[state.index]?.name || 'index'
@@ -129,12 +134,18 @@ export default function NavPanel({
 				{actionSheetRouteName === 'index' ? (
 					<View style={{ gap: 12 }}>
 						<Pressable
-							onPress={() => {}}
+							onPress={() => {
+								setSortMode(!isSortMode)
+								setIsActionSheetOpen(false)
+							}}
 							style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}
 						>
-							<MaterialDesignIcons name='sort' size={24} />
+							<MaterialDesignIcons
+								name={isSortMode ? 'check' : 'sort'}
+								size={24}
+							/>
 							<Text style={{ fontWeight: '500', fontSize: 16 }}>
-								Сортировать
+								{isSortMode ? 'Готово' : 'Сортировать'}
 							</Text>
 						</Pressable>
 					</View>

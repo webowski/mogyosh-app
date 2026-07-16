@@ -16,6 +16,7 @@ import { scheduleOnRN } from 'react-native-worklets'
 import { useNavStore } from '@/features/Navigation/model/navStore'
 import {
 	useDeleteTask,
+	useTaskListViewStore,
 	useTaskProgress,
 	useUpdateTaskState
 } from '@/features/TaskList'
@@ -57,6 +58,7 @@ export default function TaskItem({
 	const setSelectedTaskId = useTaskStore((store) => store.setSelectedTaskId)
 	const setSwipeRoute = useNavStore((store) => store.setSwipeRoute)
 	const hourFormat = useSettingsStore((store) => store.hourFormat)
+	const isSortMode = useTaskListViewStore((store) => store.isSortMode)
 	const { data: progressData } = useTaskProgress(data.id)
 	const deleteTaskMutation = useDeleteTask()
 	const updateTaskStateMutation = useUpdateTaskState()
@@ -82,6 +84,7 @@ export default function TaskItem({
 	}
 
 	const panGesture = Gesture.Pan()
+		.enabled(!isSortMode)
 		.activeOffsetX([-10, 10])
 		.onUpdate((event) => {
 			if (event.translationX < 0) {
@@ -123,11 +126,15 @@ export default function TaskItem({
 		router.push('/task')
 	}
 
-	const tapGesture = Gesture.Tap().onEnd(() => {
-		scheduleOnRN(goTaskScreen)
-	})
+	const tapGesture = Gesture.Tap()
+		.enabled(!isSortMode)
+		.onEnd(() => {
+			scheduleOnRN(goTaskScreen)
+		})
 
 	// Combine tap and pan — pan has priority and blocks tap
+	// Disabled entirely while sort mode is active: dragging is handled
+	// externally by TaskDragSort's own gesture, not by this component
 	const composedGesture = Gesture.Exclusive(panGesture, tapGesture)
 
 	const cardAnimatedStyle = useAnimatedStyle(() => ({
@@ -177,7 +184,7 @@ export default function TaskItem({
 		>
 			<MenuView
 				onOpenMenu={handleOpenMenu}
-				shouldOpenOnLongPress
+				shouldOpenOnLongPress={!isSortMode}
 				actions={[
 					{
 						id: 'delete',
@@ -223,6 +230,7 @@ export default function TaskItem({
 									]}
 								/>
 							)}
+
 							{isByTimeBool && (
 								<Text style={styles.card__time}>
 									{formatTime(
@@ -231,13 +239,17 @@ export default function TaskItem({
 									)}
 								</Text>
 							)}
-							<View style={{ position: 'absolute', left: -8 }}>
-								<MaterialDesignIcons
-									name='drag-vertical'
-									size={28}
-									style={{ flex: 0 }}
-								/>
-							</View>
+
+							{isSortMode && (
+								<View style={{ position: 'absolute', left: -8 }}>
+									<MaterialDesignIcons
+										name='drag-vertical'
+										size={28}
+										style={{ flex: 0 }}
+									/>
+								</View>
+							)}
+
 							<View style={styles.card__columns}>
 								<View style={styles.card__header}>
 									{data.category && (

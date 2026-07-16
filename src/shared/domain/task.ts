@@ -47,6 +47,7 @@ export type TaskEntity = {
 	category?: CategoryEntity | null
 	parent_id?: TaskId | null
 	schedules?: ScheduleEntity[]
+	sort_order?: string | null
 	created_at: string
 	updated_at?: string | null
 }
@@ -61,6 +62,7 @@ export type TaskRow = {
 	parent_id: string | null
 	states: StateEntity[]
 	schedules: ScheduleEntity[]
+	sort_order?: string | null
 	created_at: string
 	updated_at: string
 }

@@ -1,5 +1,6 @@
-import { CategoryId } from '@/shared/domain/ids'
+import { CategoryId, TaskId } from '@/shared/domain/ids'
 import { CategoryMap, TaskEntity } from '@/shared/domain/task'
+import { generateKeyBetween } from 'fractional-indexing'
 import { TaskFilters, TaskSection } from './task.types'
 
 /**
@@ -133,6 +134,25 @@ export const countTasksByDay = (
 
 export const isByTime = (task: TaskEntity): boolean => {
 	return typeof task.schedules?.[0]?.start_time === 'string'
+}
+
+export const generateTaskSortOrder = (
+	prevOrder: string | null,
+	nextOrder: string | null
+): string => generateKeyBetween(prevOrder, nextOrder)
+
+export const buildDuringDaySortOrderSeed = (
+	tasks: TaskEntity[]
+): { id: TaskId; sort_order: string }[] | null => {
+	if (tasks.every((task) => task.sort_order)) return null
+
+	let previousOrder: string | null = null
+
+	return tasks.map((task) => {
+		const sortOrder = generateKeyBetween(previousOrder, null)
+		previousOrder = sortOrder
+		return { id: task.id, sort_order: sortOrder }
+	})
 }
 
 export const makeCategoryPath = (

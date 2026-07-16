@@ -41,6 +41,7 @@ const makeTaskObject = (task: TaskRow): TaskEntity => ({
 	category: task.categories,
 	parent_id: task.parent_id,
 	schedules: task.schedules,
+	sort_order: task.sort_order ?? null,
 	created_at: task.created_at,
 	updated_at: task.updated_at
 })
@@ -51,6 +52,7 @@ const getTasks = async (filters?: TaskFilters) => {
 		.select(TASKS_SELECT)
 		.eq('type', 'task')
 		.is('parent_id', null)
+		.order('sort_order', { ascending: true, nullsFirst: false })
 		.order('created_at', { ascending: false })
 
 	if (filters?.categoryId) {
@@ -325,6 +327,34 @@ const deleteTaskPermanently = async (taskId: TaskId): Promise<void> => {
 	if (taskError) throw taskError
 }
 
+const updateTaskSortOrder = async (
+	taskId: TaskId,
+	sortOrder: string
+): Promise<void> => {
+	const { error } = await supabaseClient
+		.from('tasks')
+		.update({ sort_order: sortOrder })
+		.eq('id', taskId)
+
+	if (error) throw error
+}
+
+const updateTasksSortOrder = async (
+	updates: { id: TaskId; sort_order: string }[]
+): Promise<void> => {
+	const results = await Promise.all(
+		updates.map((update) =>
+			supabaseClient
+				.from('tasks')
+				.update({ sort_order: update.sort_order })
+				.eq('id', update.id)
+		)
+	)
+
+	const failed = results.find((result) => result.error)
+	if (failed?.error) throw failed.error
+}
+
 export const taskAPI = {
 	getTasks,
 	getAllTasks,
@@ -334,5 +364,7 @@ export const taskAPI = {
 	createTask,
 	updateTaskState,
 	deleteTask,
-	deleteTaskPermanently
+	deleteTaskPermanently,
+	updateTaskSortOrder,
+	updateTasksSortOrder
 }

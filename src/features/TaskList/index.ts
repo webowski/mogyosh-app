@@ -38,3 +38,4 @@ export { useUpdateCategory } from './model/useUpdateCategory'
 export { useUpdateTaskState } from './model/useUpdateTaskState'
 
 export { default as AllTasksActionSheetMenu } from './AllTasksActionSheetMenu'
+export { TaskDragSortLayer } from './TaskDragSort'
