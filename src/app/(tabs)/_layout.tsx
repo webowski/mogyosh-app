@@ -31,6 +31,15 @@ export default function NavPanelLayout() {
 				}}
 			>
 				<Tabs.Screen
+					name='index'
+					options={{
+						title: t('screen.Today'),
+						href: null,
+						headerShown: true,
+						header: (props) => <HeaderDay {...props} />
+					}}
+				/>
+				<Tabs.Screen
 					name='motivation'
 					options={{
 						title: t('screen.Motivation'),
@@ -55,15 +64,6 @@ export default function NavPanelLayout() {
 						href: null,
 						headerShown: true,
 						header: (props) => <Header {...props} />
-					}}
-				/>
-				<Tabs.Screen
-					name='index'
-					options={{
-						title: t('screen.Today'),
-						href: null,
-						headerShown: true,
-						header: (props) => <HeaderDay {...props} />
 					}}
 				/>
 				<Tabs.Screen
