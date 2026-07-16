@@ -52,52 +52,56 @@ export default function TaskListItem({ data }: TaskListItemProps) {
 		}
 	}
 
+	const content = (
+		<Pressable onPress={handlePress} style={styles.taskListItem}>
+			<Text
+				style={{ fontSize: 15, fontWeight: '500', color: theme.colors.major }}
+			>
+				{data.title}
+			</Text>
+			{data.priority !== null && data.priority !== undefined && (
+				<Text
+					style={{
+						fontSize: 12,
+						color: theme.colors.mutedTextStrong,
+						marginTop: 4
+					}}
+				>
+					Priority: {data.priority}
+				</Text>
+			)}
+			{data.state && (
+				<Text
+					style={{
+						fontSize: 12,
+						color: theme.colors.mutedTextStrong,
+						marginTop: 2
+					}}
+				>
+					State: {data.state}
+				</Text>
+			)}
+		</Pressable>
+	)
+
+	if (!isDeleted) {
+		return content
+	}
+
 	return (
 		<MenuView
-			shouldOpenOnLongPress={isDeleted}
-			actions={
-				isDeleted
-					? [
-							{
-								id: 'deletePermanently',
-								title: 'Удалить навсегда',
-								image: undefined,
-								attributes: { destructive: true }
-							}
-						]
-					: []
-			}
+			shouldOpenOnLongPress
+			actions={[
+				{
+					id: 'deletePermanently',
+					title: 'Удалить навсегда',
+					image: undefined,
+					attributes: { destructive: true }
+				}
+			]}
 			onPressAction={handleMenuPressAction}
 		>
-			<Pressable onPress={handlePress} style={styles.taskListItem}>
-				<Text
-					style={{ fontSize: 15, fontWeight: '500', color: theme.colors.major }}
-				>
-					{data.title}
-				</Text>
-				{data.priority !== null && data.priority !== undefined && (
-					<Text
-						style={{
-							fontSize: 12,
-							color: theme.colors.mutedTextStrong,
-							marginTop: 4
-						}}
-					>
-						Priority: {data.priority}
-					</Text>
-				)}
-				{data.state && (
-					<Text
-						style={{
-							fontSize: 12,
-							color: theme.colors.mutedTextStrong,
-							marginTop: 2
-						}}
-					>
-						State: {data.state}
-					</Text>
-				)}
-			</Pressable>
+			{content}
 		</MenuView>
 	)
 }
