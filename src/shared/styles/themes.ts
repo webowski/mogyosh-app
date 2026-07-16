@@ -104,8 +104,8 @@ export const lightTheme = {
 
 		shadeHeader: '0 0px 6px hsla(225, 74%, 40%, .09)',
 		shadeDrawer: '0 0px 40px hsla(225, 74%, 40%, .55)',
-		shadeNavPanelWrap: '0 0px 32px hsla(225, 74%, 40%, .12)',
-		shadeNavPanel: '0 0px 4px hsla(225, 74%, 40%, .12)',
+		shadeNavPanelWrap: '0 -1px 32px hsla(225, 74%, 40%, .085)',
+		shadeNavPanel: '0 0px 4px hsla(225, 74%, 40%, .10)',
 		shadeActionSheet: '0 0px 20px hsla(225, 74%, 40%, .12)',
 
 		shadeCard: '0px 2px 4px hsla(225, 74%, 40%, .09)',
