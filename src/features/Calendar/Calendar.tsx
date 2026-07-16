@@ -221,6 +221,14 @@ export default function Calendar() {
 
 	const swipeTranslationValue = useSharedValue(0)
 
+	const [isNeighborMonthsReady, setIsNeighborMonthsReady] = useState(false)
+
+	useEffect(() => {
+		setTimeout(() => {
+			setIsNeighborMonthsReady(true)
+		}, 10)
+	}, [])
+
 	useEffect(() => {
 		const sub = Dimensions.addEventListener('change', ({ window }) => {
 			setDimensions(window)
@@ -320,16 +328,21 @@ export default function Calendar() {
 			<WeekdayHeader weekStartDayIndex={weekStartDayIndex} />
 			<GestureDetector gesture={panGesture}>
 				<View style={styles.container(calendarWidth, calendarHeight)}>
-					{monthsDataArray.map((monthData, index) => (
-						<Month
-							key={monthData.monthDate.getTime()}
-							monthData={monthData}
-							index={index}
-							swipeTranslationValue={swipeTranslationValue}
-							calendarWidth={calendarWidth}
-							calendarHeight={calendarHeight}
-						/>
-					))}
+					{monthsDataArray.map((monthData, index) => {
+						const isCurrentMonthIndex = index === 2
+						if (!isCurrentMonthIndex && !isNeighborMonthsReady) return null
+
+						return (
+							<Month
+								key={monthData.monthDate.getTime()}
+								monthData={monthData}
+								index={index}
+								swipeTranslationValue={swipeTranslationValue}
+								calendarWidth={calendarWidth}
+								calendarHeight={calendarHeight}
+							/>
+						)
+					})}
 				</View>
 			</GestureDetector>
 		</View>
