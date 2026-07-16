@@ -4,11 +4,12 @@ import { Alert, Text, View } from 'react-native'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 import { useNavStore } from '@/features/Navigation/model/navStore'
-import { useDeleteTaskPermanently } from '@/features/TaskList'
+import { useDeleteTask, useDeleteTaskPermanently } from '@/features/TaskList'
 import { TaskEntity } from '@/shared/domain/task'
 import { useTaskStore } from '@/shared/model/task.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
+import Animated, { FadeOut, LinearTransition } from 'react-native-reanimated'
 import { scheduleOnRN } from 'react-native-worklets'
 
 type TaskListItemProps = {
@@ -22,6 +23,7 @@ export default function TaskListItem({ data }: TaskListItemProps) {
 	const setSelectedTaskId = useTaskStore((store) => store.setSelectedTaskId)
 	const setSwipeRoute = useNavStore((store) => store.setSwipeRoute)
 	const deleteTaskPermanentlyMutation = useDeleteTaskPermanently()
+	const deleteTaskMutation = useDeleteTask()
 
 	const isDeleted = data.lifecycle === 'deleted'
 
@@ -56,67 +58,100 @@ export default function TaskListItem({ data }: TaskListItemProps) {
 		if (event.nativeEvent.event === 'deletePermanently') {
 			handleDeletePermanently()
 		}
+
+		if (event.nativeEvent.event === 'delete') {
+			deleteTaskMutation.mutate(data.id)
+		}
 	}
 
 	const content = (
-		<View>
-			<GestureDetector gesture={tapGesture}>
-				<View style={styles.taskListItem}>
+		<GestureDetector gesture={tapGesture}>
+			<View style={styles.taskListItem}>
+				<Text
+					style={{
+						fontSize: 15,
+						fontWeight: '500',
+						color: theme.colors.major
+					}}
+				>
+					{data.title}
+				</Text>
+				{data.priority !== null && data.priority !== undefined && (
 					<Text
 						style={{
-							fontSize: 15,
-							fontWeight: '500',
-							color: theme.colors.major
+							fontSize: 12,
+							color: theme.colors.mutedTextStrong,
+							marginTop: 4
 						}}
 					>
-						{data.title}
+						Priority: {data.priority}
 					</Text>
-					{data.priority !== null && data.priority !== undefined && (
-						<Text
-							style={{
-								fontSize: 12,
-								color: theme.colors.mutedTextStrong,
-								marginTop: 4
-							}}
-						>
-							Priority: {data.priority}
-						</Text>
-					)}
-					{data.state && (
-						<Text
-							style={{
-								fontSize: 12,
-								color: theme.colors.mutedTextStrong,
-								marginTop: 2
-							}}
-						>
-							State: {data.state}
-						</Text>
-					)}
-				</View>
-			</GestureDetector>
-		</View>
+				)}
+				{data.state && (
+					<Text
+						style={{
+							fontSize: 12,
+							color: theme.colors.mutedTextStrong,
+							marginTop: 2
+						}}
+					>
+						State: {data.state}
+					</Text>
+				)}
+			</View>
+		</GestureDetector>
 	)
 
-	// if (!isDeleted) {
-	// 	return content
-	// }
+	if (!isDeleted) {
+		return (
+			<Animated.View
+				layout={LinearTransition.duration(250)}
+				exiting={FadeOut.duration(200)}
+			>
+				<MenuView
+					shouldOpenOnLongPress
+					actions={[
+						{
+							id: 'delete',
+							title: 'Удалить',
+							image: undefined,
+							attributes: { destructive: true }
+						}
+					]}
+					onPressAction={handleMenuPressAction}
+				>
+					{content}
+				</MenuView>
+			</Animated.View>
+		)
+	}
 
 	return (
-		<MenuView
-			shouldOpenOnLongPress
-			actions={[
-				{
-					id: 'deletePermanently',
-					title: 'Удалить навсегда',
-					image: undefined,
-					attributes: { destructive: true }
-				}
-			]}
-			onPressAction={handleMenuPressAction}
+		<Animated.View
+			layout={LinearTransition.duration(250)}
+			exiting={FadeOut.duration(200)}
 		>
-			{content}
-		</MenuView>
+			<MenuView
+				shouldOpenOnLongPress
+				actions={[
+					{
+						id: 'deletePermanently',
+						title: 'Удалить навсегда',
+						image: undefined,
+						attributes: { destructive: true }
+					},
+					{
+						id: 'restore',
+						title: 'Восстановить',
+						image: undefined,
+						attributes: { destructive: false }
+					}
+				]}
+				onPressAction={handleMenuPressAction}
+			>
+				{content}
+			</MenuView>
+		</Animated.View>
 	)
 }
 
