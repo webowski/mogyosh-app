@@ -14,12 +14,6 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 import { scheduleOnRN } from 'react-native-worklets'
 
 import { useNavStore } from '@/features/Navigation/model/navStore'
-import {
-	useDeleteTask,
-	useTaskListViewStore,
-	useTaskProgress,
-	useUpdateTaskState
-} from '@/features/TaskList'
 import { useCategoriesStore } from '@/features/TaskList/model/categoriesStore'
 import {
 	isByTime,
@@ -33,6 +27,10 @@ import { STYLE_VARS } from '@/shared/styles/common'
 import CircleProgress from '@/shared/ui/CircleProgress'
 import { triggerHapticLight } from '@/shared/ui/Haptic'
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons'
+import { useTaskListViewStore } from './model/taskListView.store'
+import { useDeleteTask } from './model/useDeleteTask'
+import { useTaskProgress } from './model/useTaskProgress'
+import { useUpdateTaskState } from './model/useUpdateTaskState'
 
 const DELETE_THRESHOLD = -80
 const DELETE_ZONE_WIDTH = 72
