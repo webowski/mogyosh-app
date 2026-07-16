@@ -109,7 +109,7 @@ export default function TaskListItem({ data }: TaskListItemProps) {
 			]}
 			onPressAction={handleMenuPressAction}
 		>
-			{content}
+			<View>{content}</View>
 		</MenuView>
 	)
 }
