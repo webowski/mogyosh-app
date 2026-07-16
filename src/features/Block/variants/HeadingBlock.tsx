@@ -19,7 +19,6 @@ const HEADING_SIZES: Record<HeadingVariant, number> = {
 type HeadingBlockProps = BlockProps & {
 	variant: HeadingVariant
 	inputRefs?: BlockInputRefsMap
-	onExpandToggle: (expanded: boolean) => void
 }
 
 export default function HeadingBlock({
