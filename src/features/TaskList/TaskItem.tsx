@@ -31,6 +31,7 @@ import { useTaskStore } from '@/shared/model/task.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 import CircleProgress from '@/shared/ui/CircleProgress'
 import { triggerHapticLight } from '@/shared/ui/Haptic'
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons'
 
 const DELETE_THRESHOLD = -80
 const DELETE_ZONE_WIDTH = 72
@@ -230,6 +231,13 @@ export default function TaskItem({
 									)}
 								</Text>
 							)}
+							<View style={{ position: 'absolute', left: -8 }}>
+								<MaterialDesignIcons
+									name='drag-vertical'
+									size={28}
+									style={{ flex: 0 }}
+								/>
+							</View>
 							<View style={styles.card__columns}>
 								<View style={styles.card__header}>
 									{data.category && (
@@ -334,7 +342,8 @@ const styles = StyleSheet.create((theme, rt) => ({
 	card__columns: {
 		flexDirection: 'row',
 		gap: 12,
-		justifyContent: 'space-between'
+		// justifyContent: 'space-between'
+		justifyContent: 'flex-start'
 	},
 	card__category: {
 		color: theme.colors.mutedTextStrong,

@@ -1,5 +1,5 @@
 import { BottomTabBarProps } from 'expo-router/js-tabs'
-import { View } from 'react-native'
+import { Pressable, Text, View } from 'react-native'
 
 import { ParamListBase, TabNavigationState } from 'expo-router/react-navigation'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -17,6 +17,7 @@ import { useTaskCreateStore } from '@/features/TaskCreate/model/taskCreate.store
 import { AllTasksActionSheetMenu } from '@/features/TaskList'
 import { useCalendarStore } from '@/shared/model/calendar.store'
 import { STYLE_VARS } from '@/shared/styles/common'
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons'
 import ActionSheet from './ActionSheet'
 import { useNavStore } from './model/navStore'
 
@@ -112,6 +113,7 @@ export default function NavPanel({
 	return (
 		<View style={styles.NavPanelWrap}>
 			<ActionSheet>
+				{/* AllTasks */}
 				{actionSheetRouteName === 'allTasks' ? (
 					<AllTasksActionSheetMenu
 						onSelect={() => {
@@ -121,6 +123,21 @@ export default function NavPanel({
 							}
 						}}
 					/>
+				) : undefined}
+
+				{/* Today */}
+				{actionSheetRouteName === 'index' ? (
+					<View style={{ gap: 12 }}>
+						<Pressable
+							onPress={() => {}}
+							style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}
+						>
+							<MaterialDesignIcons name='sort' size={24} />
+							<Text style={{ fontWeight: '500', fontSize: 16 }}>
+								Сортировать
+							</Text>
+						</Pressable>
+					</View>
 				) : undefined}
 			</ActionSheet>
 			<View
