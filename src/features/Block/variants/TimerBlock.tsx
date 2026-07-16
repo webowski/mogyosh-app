@@ -1,18 +1,47 @@
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons'
 import { useEffect, useRef, useState } from 'react'
 import { Pressable, Text, View } from 'react-native'
-import { StyleSheet, useUnistyles } from 'react-native-unistyles'
+import { useUnistyles } from 'react-native-unistyles'
 
-import type { BlockProps } from '@/shared/domain/block'
+import type { BlockInputRefsMap, BlockProps } from '@/shared/domain/block'
+import { formatTimerTime } from '@/shared/lib/time'
 import { useTimerStore } from '@/shared/model/timer.store'
 import CircleProgress, {
 	type CircleProgressRef
 } from '@/shared/ui/CircleProgress'
-import { SUBITEM_VARS } from '../style'
+import { MarkdownInput } from '@/shared/ui/MarkdownInput'
+import { useBlockLogic } from '../model/useBlockLogic'
+import { blockStyles } from '../style'
 
-type TimerBlockProps = BlockProps & {}
+type TimerBlockProps = BlockProps & {
+	inputRefs?: BlockInputRefsMap
+}
 
-export default function TimerBlock({ data }: TimerBlockProps) {
+export default function TimerBlock({
+	data,
+	onCheckToggle,
+	inputRefs,
+	onAddAfter,
+	onRemove,
+	pendingFocusId
+}: TimerBlockProps) {
+	const {
+		inputRef,
+		checked,
+		checkedStyle,
+		handleChangeText,
+		handlePressCheckbox,
+		handleFocus,
+		handleAddAfter
+	} = useBlockLogic({
+		data,
+		onCheckToggle,
+		inputRefs,
+		onAddAfter,
+		pendingFocusId,
+		blockType: 'timer'
+	})
+
 	const { theme } = useUnistyles()
 
 	const circleRef = useRef<CircleProgressRef>(null)
@@ -73,17 +102,28 @@ export default function TimerBlock({ data }: TimerBlockProps) {
 		}
 	}
 	const progress = durationMs > 0 ? 1 - displayMs / durationMs : 0
-	const durationString = durationMs > 0 ? formatTime(displayMs) : '--:--:--'
+	const durationString =
+		durationMs > 0 ? formatTimerTime(displayMs) : '--:--:--'
 
 	return (
-		<View style={styles.Timer}>
-			<View style={styles.Timer__body}>
-				<Text style={styles.Timer__label}>{data.text_content}</Text>
-				<View style={{}}>
-					<Text style={styles.Timer__time}>{durationString}</Text>
-				</View>
+		<View style={blockStyles.Timer}>
+			<View style={blockStyles.Timer__body}>
+				<MarkdownInput
+					ref={inputRef}
+					blockText={data.text_content}
+					style={[{ flex: 1 }, checkedStyle]}
+					textStyle={blockStyles.text}
+					onChangeMarkdown={handleChangeText}
+					onEnterPress={handleAddAfter}
+					onFocus={handleFocus}
+					onBackspaceOnEmpty={() => {
+						onRemove?.()
+					}}
+				/>
+				{/* <Text style={styles.Timer__label}>{data.text_content}</Text> */}
+				<Text style={blockStyles.Timer__time}>{durationString}</Text>
 			</View>
-			<View style={styles.Timer__actions}>
+			<View style={blockStyles.Timer__actions}>
 				<Pressable onPress={handleToggle} onLongPress={handleReset}>
 					<CircleProgress ref={circleRef} size={40} progress={progress}>
 						{isRunning ? (
@@ -104,59 +144,4 @@ export default function TimerBlock({ data }: TimerBlockProps) {
 			</View>
 		</View>
 	)
-}
-
-const styles = StyleSheet.create((theme) => ({
-	Timer: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		gap: 10,
-		backgroundColor: theme.colors.surface,
-		borderRadius: 6,
-		borderWidth: 1,
-		borderColor: theme.colors.borderSubtlest
-	},
-
-	Timer__body: {
-		flex: 1,
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		gap: 0,
-		paddingHorizontal: 12,
-		paddingVertical: 8
-	},
-
-	Timer__label: {
-		fontSize: 16,
-		fontWeight: '500',
-		color: theme.colors.major
-	},
-
-	Timer__time: {
-		fontSize: 17,
-		fontWeight: '400',
-		color: theme.colors.minor,
-		fontVariantNumeric: 'tabular-nums'
-	},
-
-	Timer__actions: {
-		minHeight: 52,
-		width: SUBITEM_VARS.actionWidth,
-		padding: 8,
-		borderLeftWidth: 1,
-		borderColor: theme.colors.borderSubtlest,
-		justifyContent: 'center',
-		alignItems: 'center',
-		alignSelf: 'stretch'
-	}
-}))
-
-const formatTime = (ms: number): string => {
-	const totalSeconds = Math.floor(ms / 1000)
-	const hrs = Math.floor(totalSeconds / 3600)
-	const mins = Math.floor((totalSeconds % 3600) / 60)
-	const secs = totalSeconds % 60
-
-	return [hrs, mins, secs].map((v) => String(v).padStart(2, '0')).join(':')
-	// return [mins, secs].map((v) => String(v).padStart(2, '0')).join(':')
 }

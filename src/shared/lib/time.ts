@@ -77,3 +77,13 @@ export const formatTime = (time: string, hourFormat: HourFormat = '24') => {
 	const pattern = hourFormat === '24' ? 'H:mm' : 'h:mm a'
 	return format(parsed, pattern)
 }
+
+export const formatTimerTime = (ms: number): string => {
+	const totalSeconds = Math.floor(ms / 1000)
+	const hrs = Math.floor(totalSeconds / 3600)
+	const mins = Math.floor((totalSeconds % 3600) / 60)
+	const secs = totalSeconds % 60
+
+	return [hrs, mins, secs].map((v) => String(v).padStart(2, '0')).join(':')
+	// return [mins, secs].map((v) => String(v).padStart(2, '0')).join(':')
+}

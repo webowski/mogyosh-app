@@ -50,6 +50,49 @@ export const blockStyles = StyleSheet.create((theme) => ({
 	},
 	Expandible__button: { marginTop: 4 },
 
+	Timer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		gap: 10,
+		backgroundColor: theme.colors.surface,
+		borderRadius: 6,
+		borderWidth: 1,
+		borderColor: theme.colors.borderSubtlest
+	},
+
+	Timer__body: {
+		flex: 1,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		gap: 0,
+		paddingHorizontal: 12,
+		paddingVertical: 8
+	},
+
+	Timer__label: {
+		fontSize: 16,
+		fontWeight: '500',
+		color: theme.colors.major
+	},
+
+	Timer__time: {
+		fontSize: 17,
+		fontWeight: '400',
+		color: theme.colors.minor,
+		fontVariantNumeric: 'tabular-nums'
+	},
+
+	Timer__actions: {
+		minHeight: 52,
+		width: SUBITEM_VARS.actionWidth,
+		padding: 8,
+		borderLeftWidth: 1,
+		borderColor: theme.colors.borderSubtlest,
+		justifyContent: 'center',
+		alignItems: 'center',
+		alignSelf: 'stretch'
+	},
+
 	text: {
 		flex: 1,
 		fontSize: 16,
