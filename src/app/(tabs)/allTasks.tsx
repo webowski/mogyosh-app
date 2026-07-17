@@ -24,7 +24,7 @@ import {
 } from '@/features/TaskList'
 import TaskListItem from '@/features/TaskList/TaskListItem'
 import type { CategoryEntity } from '@/shared/domain/task'
-import { STYLE_VARS } from '@/shared/styles/common'
+import { commonStyles, STYLE_VARS } from '@/shared/styles/common'
 import { formStyles } from '@/shared/styles/form'
 import { Button } from '@/shared/ui/Button'
 import RadioButton from '@/shared/ui/RadioButton'
@@ -296,9 +296,17 @@ export default function AllTasksScreen() {
 					isLoading ? (
 						<ActivityIndicator />
 					) : error ? (
-						<Text>Ошибка загрузки</Text>
+						<View style={commonStyles.SystemContentMessage}>
+							<Text style={commonStyles.SystemContentMessage__text}>
+								Ошибка загрузки.
+							</Text>
+						</View>
 					) : (
-						<Text>Нет задач, соответствующих выбранным параметрам</Text>
+						<View style={commonStyles.SystemContentMessage}>
+							<Text style={commonStyles.SystemContentMessage__text}>
+								Нет задач, соответствующих {'\n'} выбранным параметрам.
+							</Text>
+						</View>
 					)
 				}
 			/>
