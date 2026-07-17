@@ -13,7 +13,7 @@ export default function SettingsLayout() {
 			screenOptions={{
 				headerShown: false,
 				contentStyle: {
-					backgroundColor: theme.colors.surfaceAlter
+					backgroundColor: theme.colors.surfaceDeep
 				}
 			}}
 		>

@@ -39,7 +39,7 @@ export default function HeaderCalendar({
 	return (
 		<View
 			style={[
-				commonStyles.header,
+				commonStyles.Header,
 				{
 					paddingTop: insets.top + STYLE_VARS.insetPlus
 				}

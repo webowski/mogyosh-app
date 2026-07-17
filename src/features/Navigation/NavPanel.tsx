@@ -217,7 +217,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
-		backgroundColor: theme.colors.surface,
+		backgroundColor: theme.colors.surfaceClosest,
 		borderTopLeftRadius: STYLE_VARS.radius_3xl,
 		borderTopRightRadius: STYLE_VARS.radius_3xl,
 		borderCurve: 'continuous',

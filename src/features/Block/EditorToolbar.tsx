@@ -499,7 +499,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		paddingHorizontal: 14
 	},
 	TypeMenu_row_active: {
-		backgroundColor: theme.colors.surfaceAlter
+		backgroundColor: theme.colors.surfaceDeep
 	},
 	TypeMenu__label: {
 		fontSize: 14,

@@ -269,7 +269,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 	containerShadow: {
 		...StyleSheet.absoluteFillObject,
 		boxShadow: theme.colors.shadeDrawer,
-		backgroundColor: theme.colors.surface
+		backgroundColor: theme.colors.surfaceClosest
 	},
 	container: {
 		position: 'absolute',
@@ -277,7 +277,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		bottom: 0,
 		left: 0,
 		width: '80%',
-		backgroundColor: theme.colors.surface,
+		backgroundColor: theme.colors.surfaceClosest,
 		zIndex: 52
 	}
 }))

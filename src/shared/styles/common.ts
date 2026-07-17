@@ -26,7 +26,7 @@ export const STYLE_VARS = {
 
 export const commonStyles = StyleSheet.create((theme, rt) => ({
 	scene: {
-		backgroundColor: theme.colors.surfaceAlter
+		backgroundColor: theme.colors.surfaceDeep
 	},
 
 	mainArea: {
@@ -43,8 +43,8 @@ export const commonStyles = StyleSheet.create((theme, rt) => ({
 		paddingBottom: STYLE_VARS.sidePadding
 	},
 
-	header: {
-		backgroundColor: theme.colors.surface,
+	Header: {
+		backgroundColor: theme.colors.surfaceClosest,
 		paddingHorizontal: STYLE_VARS.sidePadding,
 		paddingTop: STYLE_VARS.insetPlus,
 		paddingBottom: 14,

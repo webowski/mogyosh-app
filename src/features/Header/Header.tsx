@@ -13,7 +13,7 @@ export default function Header({ options, navigation, route }: HeaderProps) {
 	return (
 		<View
 			style={[
-				commonStyles.header,
+				commonStyles.Header,
 				{
 					paddingTop: insets.top + STYLE_VARS.insetPlus
 				}

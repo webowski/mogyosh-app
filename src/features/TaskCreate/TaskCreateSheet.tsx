@@ -29,7 +29,7 @@ export function TaskCreateSheet() {
 			ref={sheetRef}
 			detents={['auto']}
 			cornerRadius={STYLE_VARS.radius_2xl}
-			backgroundColor={theme.colors.surfaceAlter}
+			backgroundColor={theme.colors.surfaceDeep}
 			grabberOptions={{ color: theme.colors.minor }}
 			onDidDismiss={close}
 		>

@@ -26,7 +26,7 @@ export default function NavPanelLayout() {
 					headerShown: false,
 					// tabBarButton: HapticTab,
 					sceneStyle: {
-						backgroundColor: theme.colors.surfaceAlter
+						backgroundColor: theme.colors.surfaceDeep
 					}
 				}}
 			>

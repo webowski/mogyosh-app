@@ -350,7 +350,7 @@ export default function AllTasksScreen() {
 							<TextInput
 								style={[
 									formStyles.input,
-									{ backgroundColor: theme.colors.surfaceAlter }
+									{ backgroundColor: theme.colors.surfaceDeep }
 								]}
 								placeholder='Название категории'
 								placeholderTextColor={theme.colors.mutedTextStrong}
@@ -385,7 +385,7 @@ export default function AllTasksScreen() {
 							<TextInput
 								style={[
 									formStyles.input,
-									{ backgroundColor: theme.colors.surfaceAlter }
+									{ backgroundColor: theme.colors.surfaceDeep }
 								]}
 								placeholder='Название категории'
 								placeholderTextColor={theme.colors.mutedTextStrong}

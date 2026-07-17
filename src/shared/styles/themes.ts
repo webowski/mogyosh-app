@@ -79,9 +79,14 @@ export const lightTheme = {
 		mutedSubtlestFill: 'hsl(225, 37%, 95%)',
 
 		buttonText: 'hsl(0, 0%, 100%)',
+
 		success: 'hsl(160, 70%, 50%)',
 		successSubtlest: 'hsl(160, 70%, 98.5%)',
+
+		successSurface: 'hsl(160, 70%, 98.5%)',
+
 		danger: 'hsl(355, 100%, 75%)',
+
 		dangerFill: 'hsl(355, 100%, 94%)',
 
 		inverse: 'hsl(0, 0%, 100%)',
@@ -91,7 +96,11 @@ export const lightTheme = {
 		selectedText: 'hsl(0, 0%, 100%)',
 
 		surface: 'hsl(0, 0%, 100%)',
-		surfaceAlter: 'hsl(220, 23%, 98%)',
+		surfaceSubtle: 'hsl(0, 0%, 99%)',
+
+		surfaceDeep: 'hsl(220, 23%, 98%)',
+
+		surfaceClosest: 'hsl(0, 0%, 100%)',
 
 		border: 'hsl(225, 35%, 79%)',
 		borderSubtle: 'hsl(225, 35%, 92%)',
@@ -167,18 +176,26 @@ export const darkTheme = {
 
 		buttonText: 'hsl(0, 0%, 100%)',
 
-		success: 'hsl(148, 80%, 58%)',
-		successSubtlest: 'hsl(148, 75%, 78%)',
+		success: 'hsl(160, 92%, 40%)',
+
+		successSurface: 'hsl(160, 6%, 12%)',
+
 		danger: 'hsl(355, 85%, 68%)',
+
 		inverse: 'hsl(0, 0%, 8%)',
 
-		currentFill: 'hsl(225, 100%, 28%)',
+		// calendar
+		currentFill: 'hsl(225, 30%, 38%)',
 		currentText: 'hsl(225, 100%, 72%)',
 		selectedFill: 'hsl(225, 100%, 65%)',
 		selectedText: 'hsl(0, 0%, 100%)',
 
-		surface: 'hsl(220, 6%, 10%)',
-		surfaceAlter: 'hsl(240, 6%, 7%)',
+		surface: 'hsl(220, 6%, 12%)',
+		surfaceSubtle: 'hsl(220, 6%, 12.5%)',
+
+		surfaceDeep: 'hsl(220, 6%, 9%)',
+
+		surfaceClosest: 'hsl(220, 6%, 14%)',
 
 		border: 'hsl(225, 15%, 24%)',
 		borderSubtle: 'hsl(225, 15%, 19%)',
@@ -192,7 +209,7 @@ export const darkTheme = {
 		rippleSubtle: 'rgba(255,255,255,0.08)',
 
 		shadeHeader: '0 0px 6px hsla(0, 0%, 0%, .10)',
-		shadeDrawer: '0 0px 40px hsla(0, 0%, 0%, .15)',
+		shadeDrawer: '0 0px 40px hsla(0, 0%, 0%, .30)',
 		shadeNavPanelWrap: '0 0px 32px hsla(0, 0%, 0%, .085)',
 		shadeNavPanel: '0 0px 4px hsla(0, 0%, 0%, .10)',
 		shadeActionSheet: '0 0px 20px hsla(0, 0%, 0%, .12)',

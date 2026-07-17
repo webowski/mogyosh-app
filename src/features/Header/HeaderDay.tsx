@@ -34,7 +34,7 @@ export default function HeaderDay({ options, navigation, route }: HeaderProps) {
 	return (
 		<View
 			style={[
-				commonStyles.header,
+				commonStyles.Header,
 				{
 					paddingTop: insets.top + STYLE_VARS.insetPlus - 6,
 					paddingBottom: 6

@@ -28,7 +28,7 @@ export default function HeaderTask({
 	return (
 		<View
 			style={[
-				commonStyles.header,
+				commonStyles.Header,
 				{
 					paddingTop: insets.top + STYLE_VARS.insetPlus
 				}

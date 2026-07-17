@@ -147,14 +147,14 @@ export default function TaskItem({
 		opacity: isCompleted ? 1 : completeOpacity.value
 	}))
 
-	const cardBackgroundColorStyle = useAnimatedStyle(() => {
-		const bgColor = isCompleted
-			? theme.colors.successSubtlest
-			: theme.colors.surface
-		return {
-			backgroundColor: bgColor
-		}
-	})
+	// const cardBackgroundColorStyle = useAnimatedStyle(() => {
+	// 	const bgColor = isCompleted
+	// 		? theme.colors.surfaceSubtle
+	// 		: theme.colors.surface
+	// 	return {
+	// 		backgroundColor: bgColor
+	// 	}
+	// })
 
 	const progress = progressData?.progress ?? 0
 	const totalProgressCount = progressData?.totalCount ?? 0
@@ -212,9 +212,9 @@ export default function TaskItem({
 						<Animated.View
 							style={[
 								styles.card,
-								cardAnimatedStyle,
-								cardBackgroundColorStyle,
-								isCompleted && styles.card_completed
+								cardAnimatedStyle
+								// cardBackgroundColorStyle,
+								// isCompleted && styles.card_completed
 							]}
 							// onLayout={(e) => {
 							// 	itemHeight.value = e.nativeEvent.layout.height
@@ -331,7 +331,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 	},
 
 	card_completed: {
-		backgroundColor: theme.colors.successSubtlest
+		// backgroundColor: theme.colors.surfaceSubtle
 	},
 
 	card__completedBackground: {
@@ -339,7 +339,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		left: 0,
 		top: 0,
 		bottom: 0,
-		width: 4,
+		width: 3,
 		backgroundColor: theme.colors.success,
 		borderTopLeftRadius: STYLE_VARS.radius_sm,
 		borderBottomLeftRadius: STYLE_VARS.radius_sm

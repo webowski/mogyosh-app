@@ -91,7 +91,7 @@ export default function RootLayout() {
 			<Stack
 				screenOptions={{
 					contentStyle: {
-						backgroundColor: theme.colors.surfaceAlter
+						backgroundColor: theme.colors.surfaceDeep
 					}
 				}}
 			>

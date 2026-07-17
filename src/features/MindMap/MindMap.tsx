@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { StyleSheet, View } from 'react-native'
 import {
 	Gesture,
@@ -176,7 +176,7 @@ export function MindMap({ data, width, height, onTaskPress }: MindMapProps) {
 				<View
 					style={[
 						styles.canvas,
-						{ width, height, backgroundColor: theme.colors.surfaceAlter }
+						{ width, height, backgroundColor: theme.colors.surfaceDeep }
 					]}
 				>
 					<MindMapCanvas
