@@ -36,7 +36,7 @@ export default function SettingsLayout() {
 			<Stack.Screen
 				name='theme'
 				options={{
-					title: t('screen.Color theme'),
+					title: t('screen.Theme'),
 					headerShown: true,
 					header: (props) => <Header {...props} />
 				}}

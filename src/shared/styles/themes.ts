@@ -42,21 +42,6 @@ export const STATIC_COLORS = {
 
 export const lightTheme = {
 	colors: {
-		// Tertiary / disabled text and subtle backgrounds
-		// muted500: 'hsl(225, 36%, 75%)',
-		// muted600: 'hsl(225, 36%, 82%)',
-		// muted700: 'hsl(225, 36%, 87%)',
-		// muted800: 'hsl(225, 37%, 93%)',
-		// muted900: 'hsl(225, 37%, 96%)',
-
-		// Primary scale: 100-400 darker → 500 base → 600-900 lighter (light theme)
-		// primary300: 'hsl(225, 60%, 55%)',
-		// primary500: 'hsl(225, 100%, 70%)',
-		// primary600: 'hsl(225, 100%, 75%)',
-		// primary700: 'hsl(225, 100%, 81%)',
-		// primary800: 'hsl(225, 100%, 92%)',
-		// primary900: 'hsl(225, 100%, 97%)',
-
 		brandSubtlest: 'hsl(225, 100%, 97%)',
 
 		// text
@@ -75,9 +60,9 @@ export const lightTheme = {
 		mutedSubtlerText: 'hsl(225, 36%, 87%)',
 		mutedSubtlestText: 'hsl(225, 37%, 93%)',
 
-		mutedSubtleFill: 'hsl(225, 37%, 95%)',
-		mutedSubtlerFill: 'hsl(225, 37%, 95%)',
-		mutedSubtlestFill: 'hsl(225, 37%, 95%)',
+		mutedSubtleFill: 'hsl(225, 37%, 82%)',
+		mutedSubtlerFill: 'hsl(225, 37%, 87%)',
+		mutedSubtlestFill: 'hsl(225, 37%, 94%)',
 
 		buttonText: 'hsl(0, 0%, 100%)',
 

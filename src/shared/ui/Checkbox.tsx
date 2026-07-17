@@ -65,7 +65,7 @@ export default function Checkbox({
 			{checked && (
 				<MaterialDesignIcons
 					name='check-bold'
-					size={16}
+					size={18}
 					color={STATIC_COLORS.white}
 				/>
 			)}
@@ -75,8 +75,8 @@ export default function Checkbox({
 
 const styles = StyleSheet.create((theme) => ({
 	checkbox: {
-		width: 22,
-		height: 22,
+		width: 24,
+		height: 24,
 		borderRadius: 4,
 		borderWidth: 2,
 		alignItems: 'center',
