@@ -53,7 +53,9 @@ const BLOCK_TYPE_OPTIONS: {
 		icon: 'arrow-expand-vertical',
 		label: 'Expandable Heading 4'
 	},
-	{ type: 'timer', icon: 'timer', label: 'Timer' }
+	{ type: 'timer', icon: 'timer', label: 'Timer' },
+	{ type: 'stopwatch', icon: 'timer', label: 'Stopwatch' },
+	{ type: 'counter', icon: 'counter', label: 'Counter' }
 ]
 
 export default function EditorToolbar() {

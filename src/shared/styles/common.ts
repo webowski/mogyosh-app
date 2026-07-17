@@ -17,7 +17,7 @@ export const STYLE_VARS = {
 	// всё что относится к открытию клавиатуры телефона
 	editorToolbarHeight: 48,
 
-	checkedOpacity: 0.45,
+	checkedOpacity: 0.34,
 
 	duration: {
 		md: 120
