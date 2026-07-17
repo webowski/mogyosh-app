@@ -171,10 +171,10 @@ export default function BlockNode({
 	}
 
 	return (
-		<View style={{ paddingLeft: depth * 16 }}>
+		<View style={styles.indent(depth)}>
 			<GestureDetector gesture={gesture}>
 				<Animated.View style={dragRowStyle}>
-					<View onLayout={onLayout} style={styles.block}>
+					<View onLayout={onLayout} style={styles.Block}>
 						{content}
 					</View>
 					{isChildShown &&
@@ -198,8 +198,10 @@ export default function BlockNode({
 }
 
 const styles = StyleSheet.create((theme) => ({
-	block: {
-		borderRadius: 8
-		// backgroundColor: theme.colors.thFill
+	indent: (depth: number) => ({
+		paddingLeft: depth * 16
+	}),
+	Block: {
+		paddingBottom: 2
 	}
 }))

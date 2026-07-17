@@ -138,7 +138,7 @@ const styles = StyleSheet.create((theme) => ({
 		boxShadow: theme.colors.shadeButton
 	},
 	disabled: {
-		opacity: 0.5
+		opacity: 0.35
 	},
 	text: {
 		includeFontPadding: false

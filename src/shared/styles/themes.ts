@@ -75,12 +75,15 @@ export const lightTheme = {
 		mutedSubtlestText: 'hsl(225, 37%, 93%)',
 
 		mutedSubtleFill: 'hsl(225, 37%, 95%)',
+		mutedSubtlerFill: 'hsl(225, 37%, 95%)',
+		mutedSubtlestFill: 'hsl(225, 37%, 95%)',
 
 		buttonText: 'hsl(0, 0%, 100%)',
 		success: 'hsl(160, 70%, 50%)',
 		successSubtlest: 'hsl(160, 70%, 98.5%)',
 		danger: 'hsl(355, 100%, 75%)',
 		dangerFill: 'hsl(355, 100%, 94%)',
+
 		inverse: 'hsl(0, 0%, 100%)',
 		currentFill: 'hsl(225, 100%, 92%)',
 		currentText: 'hsl(225, 100%, 70%)',
@@ -149,24 +152,33 @@ export const darkTheme = {
 		primarySubtle: 'hsl(225, 100%, 65%)',
 		primarySubtler: 'hsl(225, 60%, 45%)',
 
-		major: 'hsl(0, 0%, 98%)',
-		minor: 'hsl(225, 20%, 72%)',
+		major: 'hsl(220, 9%, 94%)',
+		minor: 'hsl(216, 7%, 71%)',
+
+		mutedTextStrong: 'hsl(216, 7%, 71%)',
 		mutedText: 'hsl(225, 15%, 62%)',
 		mutedSubtleText: 'hsl(225, 15%, 55%)',
 		mutedSubtlerText: 'hsl(225, 15%, 48%)',
 		mutedSubtlestText: 'hsl(225, 15%, 42%)',
+
+		mutedSubtleFill: 'hsl(225, 15%, 40%)',
+		mutedSubtlerFill: 'hsl(225, 15%, 26%)',
+		mutedSubtlestFill: 'hsl(225, 15%, 16%)',
+
 		buttonText: 'hsl(0, 0%, 100%)',
+
 		success: 'hsl(148, 80%, 58%)',
 		successSubtlest: 'hsl(148, 75%, 78%)',
 		danger: 'hsl(355, 85%, 68%)',
 		inverse: 'hsl(0, 0%, 8%)',
+
 		currentFill: 'hsl(225, 100%, 28%)',
 		currentText: 'hsl(225, 100%, 72%)',
 		selectedFill: 'hsl(225, 100%, 65%)',
 		selectedText: 'hsl(0, 0%, 100%)',
 
-		surface: 'hsl(225, 18%, 9%)',
-		surfaceAlter: 'hsl(225, 20%, 13%)',
+		surface: 'hsl(220, 6%, 10%)',
+		surfaceAlter: 'hsl(240, 6%, 7%)',
 
 		border: 'hsl(225, 15%, 24%)',
 		borderSubtle: 'hsl(225, 15%, 19%)',
@@ -179,11 +191,11 @@ export const darkTheme = {
 		ripple: 'rgba(120, 140, 255, 0.18)',
 		rippleSubtle: 'rgba(255,255,255,0.08)',
 
-		shadeHeader: '0 0px 6px hsla(225, 0%, 0%, .3)',
-		shadeDrawer: '0 0px 40px hsla(225, 0%, 0%, .35)',
-		shadeNavPanelWrap: '0 0px 32px hsla(225, 0%, 0%, .2)',
-		shadeNavPanel: '0 0px 4px hsla(225, 0%, 0%, .12)',
-		shadeActionSheet: '0 0px 20px hsla(225, 0%, 0%, .12)',
+		shadeHeader: '0 0px 6px hsla(0, 0%, 0%, .10)',
+		shadeDrawer: '0 0px 40px hsla(0, 0%, 0%, .15)',
+		shadeNavPanelWrap: '0 0px 32px hsla(0, 0%, 0%, .085)',
+		shadeNavPanel: '0 0px 4px hsla(0, 0%, 0%, .10)',
+		shadeActionSheet: '0 0px 20px hsla(0, 0%, 0%, .12)',
 
 		shadeCard: '0px 2px 4px hsla(225, 0%, 0%, .12)',
 

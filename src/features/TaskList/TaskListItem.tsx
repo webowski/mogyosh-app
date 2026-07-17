@@ -87,17 +87,6 @@ export default function TaskListItem({ data }: TaskListItemProps) {
 						Priority: {data.priority}
 					</Text>
 				)}
-				{data.state && (
-					<Text
-						style={{
-							fontSize: 12,
-							color: theme.colors.mutedTextStrong,
-							marginTop: 2
-						}}
-					>
-						State: {data.state}
-					</Text>
-				)}
 			</View>
 		</GestureDetector>
 	)

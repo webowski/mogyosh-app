@@ -331,7 +331,11 @@ export default function EditorToolbar() {
 						}}
 					>
 						<Button variant='bare' onPress={openAddBlockMenu} preventFocusSteal>
-							<MaterialDesignIcons name='plus-thick' size={24} />
+							<MaterialDesignIcons
+								name='plus-thick'
+								color={theme.colors.major}
+								size={24}
+							/>
 						</Button>
 
 						<Button
@@ -340,11 +344,19 @@ export default function EditorToolbar() {
 							disabled={!focusedBlock}
 							preventFocusSteal
 						>
-							<MaterialDesignIcons name='swap-horizontal-bold' size={24} />
+							<MaterialDesignIcons
+								name='swap-horizontal-bold'
+								color={theme.colors.major}
+								size={24}
+							/>
 						</Button>
 
 						<Button variant='bare' onPress={() => {}} preventFocusSteal>
-							<MaterialDesignIcons name='pencil-box' size={24} />
+							<MaterialDesignIcons
+								name='pencil-box'
+								color={theme.colors.major}
+								size={24}
+							/>
 						</Button>
 
 						<Button
@@ -353,7 +365,11 @@ export default function EditorToolbar() {
 							onPress={handleMoveUp}
 							preventFocusSteal
 						>
-							<MaterialDesignIcons name='arrow-up-bold' size={24} />
+							<MaterialDesignIcons
+								name='arrow-up-bold'
+								color={theme.colors.major}
+								size={24}
+							/>
 						</Button>
 
 						<Button
@@ -362,11 +378,19 @@ export default function EditorToolbar() {
 							onPress={handleMoveDown}
 							preventFocusSteal
 						>
-							<MaterialDesignIcons name='arrow-down-bold' size={24} />
+							<MaterialDesignIcons
+								name='arrow-down-bold'
+								color={theme.colors.major}
+								size={24}
+							/>
 						</Button>
 
 						<Button variant='bare' onPress={handleRemove}>
-							<MaterialDesignIcons name='delete-forever' size={24} />
+							<MaterialDesignIcons
+								name='delete-forever'
+								color={theme.colors.major}
+								size={24}
+							/>
 						</Button>
 
 						<Button
@@ -374,7 +398,11 @@ export default function EditorToolbar() {
 							disabled={undoStack.length === 0}
 							onPress={handleUndo}
 						>
-							<MaterialDesignIcons name='arrow-u-left-top-bold' size={24} />
+							<MaterialDesignIcons
+								name='arrow-u-left-top-bold'
+								color={theme.colors.major}
+								size={24}
+							/>
 						</Button>
 
 						<Button variant='bare' onPress={() => {}}>
@@ -386,7 +414,11 @@ export default function EditorToolbar() {
 						</Button>
 
 						<Button variant='bare' onPress={() => {}}>
-							<MaterialDesignIcons name='link' size={24} />
+							<MaterialDesignIcons
+								name='link'
+								color={theme.colors.major}
+								size={24}
+							/>
 						</Button>
 					</ScrollView>
 				</KeyboardToolbar.Content>

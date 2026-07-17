@@ -1,11 +1,11 @@
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons'
 import { useEffect, useRef, useState } from 'react'
 import { Pressable, Text, View } from 'react-native'
-import { StyleSheet, useUnistyles } from 'react-native-unistyles'
+import { useUnistyles } from 'react-native-unistyles'
 
 import type { BlockProps } from '@/shared/domain/block'
 import { useStopwatchStore } from '@/shared/model/stopwatch.store'
-import { SUBITEM_VARS } from '../style'
+import { blockStyles } from '../style'
 
 type StopwatchBlockProps = BlockProps & {}
 
@@ -48,12 +48,12 @@ export default function StopwatchBlock({ data }: StopwatchBlockProps) {
 	}
 
 	return (
-		<View style={styles.Stopwatch}>
-			<View style={styles.Stopwatch__body}>
-				<Text style={styles.Stopwatch__label}>{data.text_content}</Text>
-				<Text style={styles.Stopwatch__time}>{formatTime(displayMs)}</Text>
+		<View style={blockStyles.Penoblok}>
+			<View style={blockStyles.Stopwatch__body}>
+				<Text style={blockStyles.Stopwatch__label}>{data.text_content}</Text>
+				<Text style={blockStyles.Stopwatch__time}>{formatTime(displayMs)}</Text>
 			</View>
-			<View style={styles.Stopwatch__actions}>
+			<View style={blockStyles.Stopwatch__actions}>
 				<Pressable onPress={handleToggle} onLongPress={() => reset(data.id)}>
 					<MaterialDesignIcons
 						name={isRunning ? 'pause' : 'play'}
@@ -65,51 +65,6 @@ export default function StopwatchBlock({ data }: StopwatchBlockProps) {
 		</View>
 	)
 }
-
-const styles = StyleSheet.create((theme) => ({
-	Stopwatch: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		gap: 10,
-		backgroundColor: theme.colors.surface,
-		borderRadius: 6,
-		borderWidth: 1,
-		borderColor: theme.colors.borderSubtlest
-	},
-
-	Stopwatch__body: {
-		flex: 1,
-		gap: 0,
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		paddingHorizontal: 12,
-		paddingVertical: 8
-	},
-
-	Stopwatch__label: {
-		fontSize: 16,
-		fontWeight: '500',
-		color: theme.colors.major
-	},
-
-	Stopwatch__time: {
-		fontSize: 17,
-		fontWeight: '400',
-		color: theme.colors.minor,
-		fontVariantNumeric: 'tabular-nums'
-	},
-
-	Stopwatch__actions: {
-		minHeight: 52,
-		width: SUBITEM_VARS.actionWidth,
-		padding: 8,
-		borderLeftWidth: 1,
-		borderColor: theme.colors.borderSubtlest,
-		justifyContent: 'center',
-		alignItems: 'center',
-		alignSelf: 'stretch'
-	}
-}))
 
 const formatTime = (ms: number): string => {
 	const totalSeconds = Math.floor(ms / 1000)

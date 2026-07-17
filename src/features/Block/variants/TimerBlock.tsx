@@ -106,7 +106,7 @@ export default function TimerBlock({
 		durationMs > 0 ? formatTimerTime(displayMs) : '--:--:--'
 
 	return (
-		<View style={blockStyles.Timer}>
+		<View style={blockStyles.Penoblok}>
 			<View style={blockStyles.Timer__body}>
 				<MarkdownInput
 					ref={inputRef}
@@ -132,10 +132,16 @@ export default function TimerBlock({
 								size={22}
 								color={theme.colors.primary}
 							/>
+						) : isFinished ? (
+							<MaterialDesignIcons
+								name='check-bold'
+								size={18}
+								color={theme.colors.minor}
+							/>
 						) : (
 							<MaterialDesignIcons
-								name={isFinished ? 'check' : 'play'}
-								size={24}
+								name='play'
+								size={22}
 								color={theme.colors.primary}
 							/>
 						)}
