@@ -240,13 +240,13 @@ export default function AllTasksScreen() {
 				<View style={{ position: 'relative' }}>
 					<MaterialDesignIcons
 						name='magnify'
-						size={20}
+						size={22}
 						color={theme.colors.mutedTextStrong}
 						style={{
 							position: 'absolute',
 							left: 12,
 							top: '50%',
-							transform: [{ translateY: -9 }],
+							transform: [{ translateY: -10 }],
 							zIndex: 1
 						}}
 					/>
@@ -255,7 +255,7 @@ export default function AllTasksScreen() {
 						onChangeText={setSearchQuery}
 						placeholder='Поиск'
 						placeholderTextColor={theme.colors.mutedTextStrong}
-						style={[formStyles.input, { paddingLeft: 38 }]}
+						style={[formStyles.input, { paddingLeft: 40 }]}
 					/>
 				</View>
 			</View>
