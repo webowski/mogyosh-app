@@ -2,14 +2,15 @@ import { StyleSheet } from 'react-native-unistyles'
 
 export const formStyles = StyleSheet.create((theme, rt) => ({
 	input: {
-		paddingHorizontal: 20,
-		paddingVertical: 11,
+		paddingHorizontal: 22,
+		paddingVertical: 12,
 		backgroundColor: theme.colors.surface,
-		borderRadius: 24,
+		borderRadius: 28,
 		borderWidth: 0,
 		border: 0,
-		fontSize: 16 * rt.fontScale,
-		lineHeight: 16 * 1.25 * rt.fontScale
+		color: theme.colors.major,
+		fontSize: 18 * rt.fontScale,
+		lineHeight: 18 * 1.25 * rt.fontScale
 	},
 
 	formRow: {

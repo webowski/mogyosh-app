@@ -301,7 +301,7 @@ export default function EditorToolbar() {
 				<KeyboardToolbar.Background>
 					<View
 						style={{
-							backgroundColor: theme.colors.surface,
+							backgroundColor: theme.colors.surfaceClosest,
 							position: 'absolute',
 							top: 0,
 							left: 0,

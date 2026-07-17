@@ -368,16 +368,16 @@ const styles = StyleSheet.create((theme, rt) => ({
 		// letterSpacing: (16 / 100) * -1
 	},
 	Card__time: {
-		fontSize: 12 * rt.fontScale,
-		fontWeight: '600' as const,
+		fontSize: 13 * rt.fontScale,
+		fontWeight: '500' as const,
 		position: 'absolute',
 		top: 0,
 		right: 0,
-		color: theme.colors.mutedTextStrong,
-		backgroundColor: theme.colors.mutedSubtlestText,
+		color: theme.colors.minor,
+		backgroundColor: theme.colors.mutedSubtlerFill,
 		borderTopRightRadius: STYLE_VARS.radius_sm,
 		borderBottomLeftRadius: STYLE_VARS.radius_sm,
-		paddingVertical: 3,
+		paddingVertical: 2,
 		paddingRight: 12,
 		paddingLeft: 10
 	},

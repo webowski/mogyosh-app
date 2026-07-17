@@ -273,7 +273,10 @@ export function TaskCreateForm({ onClose }: Props) {
 					{isCreatingCategory ? (
 						<View style={{ gap: theme.spacing.md }}>
 							<TextInput
-								style={styles.input}
+								style={[
+									formStyles.input,
+									{ backgroundColor: theme.colors.surfaceDeep }
+								]}
 								placeholder='Название категории'
 								placeholderTextColor={theme.colors.minor}
 								value={newCategoryName}

@@ -161,8 +161,8 @@ export const darkTheme = {
 		primarySubtle: 'hsl(225, 100%, 65%)',
 		primarySubtler: 'hsl(225, 60%, 45%)',
 
-		major: 'hsl(220, 9%, 94%)',
-		minor: 'hsl(216, 7%, 71%)',
+		major: 'hsl(220, 10%, 94%)',
+		minor: 'hsl(220, 11%, 71%)',
 
 		mutedTextStrong: 'hsl(216, 7%, 71%)',
 		mutedText: 'hsl(225, 15%, 62%)',
@@ -171,8 +171,8 @@ export const darkTheme = {
 		mutedSubtlestText: 'hsl(225, 15%, 42%)',
 
 		mutedSubtleFill: 'hsl(225, 15%, 40%)',
-		mutedSubtlerFill: 'hsl(225, 15%, 26%)',
-		mutedSubtlestFill: 'hsl(225, 15%, 16%)',
+		mutedSubtlerFill: 'hsl(225, 15%, 24%)',
+		mutedSubtlestFill: 'hsl(225, 15%, 18%)',
 
 		buttonText: 'hsl(0, 0%, 100%)',
 
@@ -190,10 +190,10 @@ export const darkTheme = {
 		selectedFill: 'hsl(225, 100%, 65%)',
 		selectedText: 'hsl(0, 0%, 100%)',
 
+		surfaceDeep: 'hsl(220, 6%, 9%)',
+
 		surface: 'hsl(220, 6%, 12%)',
 		surfaceSubtle: 'hsl(220, 6%, 12.5%)',
-
-		surfaceDeep: 'hsl(220, 6%, 9%)',
 
 		surfaceClosest: 'hsl(220, 6%, 14%)',
 

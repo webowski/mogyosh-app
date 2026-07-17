@@ -12,6 +12,7 @@ import {
 	ViewStyle
 } from 'react-native'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
+import { STATIC_COLORS } from '../styles/themes'
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -69,7 +70,7 @@ const getVariantConfigs = (
 			{
 				useGradient: true,
 				background: { borderRadius },
-				text: { color: theme.colors.inverse },
+				text: { color: STATIC_COLORS.white },
 				rippleColor: theme.colors.rippleSubtle
 			}
 		],

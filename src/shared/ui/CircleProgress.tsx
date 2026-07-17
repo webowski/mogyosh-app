@@ -49,7 +49,7 @@ const CircleProgress = forwardRef<CircleProgressRef, CircleProgressProps>(
 		const { theme } = useUnistyles()
 		const color = theme.colors.primary
 
-		const trackColor = theme.colors.mutedSubtlerFill
+		const trackColor = theme.colors.mutedSubtlestFill
 
 		const radius = (size - strokeWidth) / 2
 		const circumference = 2 * Math.PI * radius
