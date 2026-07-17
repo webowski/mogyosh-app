@@ -1,44 +1,56 @@
-import { useCallback, useEffect, useState } from 'react'
 import { Text, View } from 'react-native'
 
-import { BlockProps } from '@/shared/domain/block'
+import { BlockInputRefsMap, BlockProps } from '@/shared/domain/block'
 import Checkbox from '@/shared/ui/Checkbox'
-import { useSharedValue, withTiming } from 'react-native-reanimated'
+import { MarkdownInput } from '@/shared/ui/MarkdownInput'
+import { useBlockLogic } from '../model/useBlockLogic'
 import { blockStyles } from '../style'
 
 type CounterBlockProps = BlockProps & {
 	// onExpandToggle: (expanded: boolean) => void
+	inputRefs?: BlockInputRefsMap
 }
 
 export default function CounterBlock({
 	data,
-	onCheckToggle
+	onCheckToggle,
+	inputRefs,
+	onAddAfter,
+	onRemove,
+	pendingFocusId
 }: CounterBlockProps) {
-	const [checked, setChecked] = useState(data.state === 'done')
-
-	const animationProgress = useSharedValue(checked ? 1 : 0)
-
-	useEffect(
-		() => {
-			animationProgress.value = withTiming(checked ? 1 : 0, { duration: 250 })
-		},
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[checked]
-	)
-
-	const handlePressCheckbox = useCallback(
-		() => {
-			setChecked(!checked)
-			onCheckToggle?.(!checked)
-		},
-		// eslint-disable-next-line
-		[checked]
-	)
+	const {
+		inputRef,
+		checked,
+		checkedStyle,
+		handleChangeText,
+		handlePressCheckbox,
+		handleFocus,
+		handleAddAfter
+	} = useBlockLogic({
+		data,
+		onCheckToggle,
+		inputRefs,
+		onAddAfter,
+		pendingFocusId,
+		blockType: 'counter'
+	})
 
 	return (
 		<View style={blockStyles.Penoblok}>
 			<View style={blockStyles.Timer__body}>
-				<Text style={blockStyles.Timer__label}>{data.text_content}</Text>
+				<MarkdownInput
+					ref={inputRef}
+					blockText={data.text_content}
+					style={[{ flex: 1 }, checkedStyle]}
+					textStyle={blockStyles.text}
+					onChangeMarkdown={handleChangeText}
+					onEnterPress={handleAddAfter}
+					onFocus={handleFocus}
+					onBackspaceOnEmpty={() => {
+						onRemove?.()
+					}}
+				/>
 				<View style={blockStyles.CounterSet}>
 					<View style={blockStyles.Counter}>
 						<Text style={blockStyles.Counter__value}>50</Text>

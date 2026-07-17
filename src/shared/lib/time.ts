@@ -87,3 +87,17 @@ export const formatTimerTime = (ms: number): string => {
 	return [hrs, mins, secs].map((v) => String(v).padStart(2, '0')).join(':')
 	// return [mins, secs].map((v) => String(v).padStart(2, '0')).join(':')
 }
+
+export const formatStopwatchTime = (ms: number): string => {
+	const totalSeconds = Math.floor(ms / 1000)
+	const hrs = Math.floor(totalSeconds / 3600)
+	const mins = Math.floor((totalSeconds % 3600) / 60)
+	const secs = totalSeconds % 60
+	const tenths = Math.floor((ms % 1000) / 100)
+
+	return (
+		[hrs, mins, secs].map((v) => String(v).padStart(2, '0')).join(':') +
+		'.' +
+		tenths
+	)
+}
