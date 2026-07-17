@@ -211,7 +211,7 @@ export default function TaskItem({
 					<GestureDetector gesture={composedGesture}>
 						<Animated.View
 							style={[
-								styles.card,
+								styles.Card,
 								cardAnimatedStyle
 								// cardBackgroundColorStyle,
 								// isCompleted && styles.card_completed
@@ -223,14 +223,14 @@ export default function TaskItem({
 							{isCompleted && (
 								<Animated.View
 									style={[
-										styles.card__completedBackground,
+										styles.Card__completedBackground,
 										completeContainerStyle
 									]}
 								/>
 							)}
 
 							{isByTimeBool && (
-								<Text style={styles.card__time}>
+								<Text style={styles.Card__time}>
 									{formatTime(
 										data.schedules?.[0]?.start_time as string,
 										hourFormat
@@ -248,20 +248,20 @@ export default function TaskItem({
 								</View>
 							)}
 
-							<View style={styles.card__columns}>
-								<View style={styles.card__header}>
+							<View style={styles.Card__columns}>
+								<View style={styles.Card__header}>
 									{data.category && (
-										<Text style={styles.card__category}>
+										<Text style={styles.Card__category}>
 											{makeCategoryPath(data.category.id, categoryMap)}
 										</Text>
 									)}
-									<Text style={styles.card__title}>{data.title}</Text>
+									<Text style={styles.Card__title}>{data.title}</Text>
 								</View>
 								<View></View>
 							</View>
 							{children}
 							{totalProgressCount > 0 && (
-								<View style={styles.card__dashboard}>
+								<View style={styles.Card__dashboard}>
 									<CircleProgress
 										progress={progress}
 										value={`${completedProgressCount}/${totalProgressCount}`}
@@ -321,7 +321,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		fontWeight: '600' as const
 	},
 
-	card: {
+	Card: {
 		paddingHorizontal: 13,
 		paddingVertical: 13,
 		backgroundColor: theme.colors.surface,
@@ -330,11 +330,11 @@ const styles = StyleSheet.create((theme, rt) => ({
 		gap: 8
 	},
 
-	card_completed: {
-		// backgroundColor: theme.colors.surfaceSubtle
-	},
+	// card_completed: {
+	// 	backgroundColor: theme.colors.surfaceSubtle
+	// },
 
-	card__completedBackground: {
+	Card__completedBackground: {
 		position: 'absolute',
 		left: 0,
 		top: 0,
@@ -345,29 +345,29 @@ const styles = StyleSheet.create((theme, rt) => ({
 		borderBottomLeftRadius: STYLE_VARS.radius_sm
 	},
 
-	card__header: {
+	Card__header: {
 		maxWidth: '100%'
 	},
 
-	card__columns: {
+	Card__columns: {
 		flexDirection: 'row',
 		gap: 12,
 		// justifyContent: 'space-between'
 		justifyContent: 'flex-start'
 	},
-	card__category: {
+	Card__category: {
 		color: theme.colors.mutedTextStrong,
 		fontSize: 13 * rt.fontScale,
 		lineHeight: 13 * rt.fontScale * 1.2
 		// letterSpacing: (14 / 100) * -1
 	},
-	card__title: {
+	Card__title: {
 		color: theme.colors.major,
 		fontSize: 15 * rt.fontScale,
 		fontWeight: '600' as const
 		// letterSpacing: (16 / 100) * -1
 	},
-	card__time: {
+	Card__time: {
 		fontSize: 12 * rt.fontScale,
 		fontWeight: '600' as const,
 		position: 'absolute',
@@ -382,7 +382,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		paddingLeft: 10
 	},
 
-	card__dashboard: {
+	Card__dashboard: {
 		flexDirection: 'row',
 		gap: 12
 	}
