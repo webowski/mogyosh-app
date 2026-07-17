@@ -64,6 +64,7 @@ export const lightTheme = {
 		primary: 'hsl(225, 100%, 70%)',
 		primarySubtle: 'hsl(225, 100%, 75%)',
 		primarySubtler: 'hsl(225, 100%, 92%)',
+		primarySubtlest: 'hsl(225, 100%, 92%)',
 
 		major: 'hsl(224, 20%, 28%)',
 		minor: 'hsl(225, 22%, 55%)', // Secondary text (subtitles, placeholders, icons)
@@ -158,8 +159,9 @@ export const darkTheme = {
 		// text
 		primaryStronger: 'hsl(225, 100%, 78%)',
 		primary: 'hsl(225, 100%, 72%)',
-		primarySubtle: 'hsl(225, 100%, 65%)',
-		primarySubtler: 'hsl(225, 60%, 45%)',
+		primarySubtle: 'hsl(225, 62%, 54%)',
+		primarySubtler: 'hsl(225, 48%, 38%)',
+		primarySubtlest: 'hsl(225, 31%, 16%)',
 
 		major: 'hsl(220, 10%, 94%)',
 		minor: 'hsl(220, 11%, 71%)',
@@ -190,12 +192,12 @@ export const darkTheme = {
 		selectedFill: 'hsl(225, 100%, 65%)',
 		selectedText: 'hsl(0, 0%, 100%)',
 
-		surfaceDeep: 'hsl(220, 6%, 9%)',
+		surfaceDeep: 'hsl(220, 6%, 7.5%)',
 
 		surface: 'hsl(220, 6%, 12%)',
-		surfaceSubtle: 'hsl(220, 6%, 12.5%)',
+		surfaceSubtle: 'hsl(220, 6%, 10.5%)',
 
-		surfaceClosest: 'hsl(220, 6%, 14%)',
+		surfaceClosest: 'hsl(220, 6%, 12%)',
 
 		border: 'hsl(225, 15%, 24%)',
 		borderSubtle: 'hsl(225, 15%, 19%)',

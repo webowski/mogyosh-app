@@ -11,6 +11,7 @@ import Header from '@/features/Header/Header'
 import { useNavStore } from '@/features/Navigation/model/navStore'
 import { Providers } from '@/features/Providers'
 import { login } from '@/shared/api/auth'
+import { STATIC_COLORS } from '@/shared/styles/themes'
 
 SplashScreen.preventAutoHideAsync()
 SplashScreen.setOptions({
@@ -72,7 +73,7 @@ export default function RootLayout() {
 					backgroundColor: theme.colors.primary
 				}}
 			>
-				<ActivityIndicator color={theme.colors.inverse} size={32} />
+				<ActivityIndicator color={STATIC_COLORS.white} size={32} />
 			</View>
 		)
 	if (loginError) return <Text>Ошибка логина: {loginError}</Text>

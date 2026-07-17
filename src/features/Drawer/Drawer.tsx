@@ -214,11 +214,11 @@ const styles = StyleSheet.create((theme, rt) => ({
 		position: 'relative'
 	},
 	brandFigure__subtitle: {
-		marginTop: 10,
+		marginTop: 22,
 		marginLeft: '27%',
-		paddingTop: 3,
+		paddingTop: 4,
 		borderTopWidth: 11,
-		borderColor: theme.colors.brandSubtlest,
+		borderColor: theme.colors.primarySubtler,
 		color: theme.colors.mutedSubtleText,
 		fontSize: 13 * rt.fontScale,
 		fontWeight: '400'
@@ -230,14 +230,14 @@ const styles = StyleSheet.create((theme, rt) => ({
 		top: -300,
 		left: -430,
 		borderRadius: 600,
-		backgroundColor: theme.colors.brandSubtlest
+		backgroundColor: theme.colors.primarySubtlest
 	},
 
 	menu: {
 		paddingTop: 40 + rt.insets.top,
 		paddingBottom: 40 + 20 + rt.insets.bottom,
 		paddingHorizontal: '16%',
-		gap: 10
+		gap: 14
 	},
 	menuItem: {
 		paddingVertical: 4,

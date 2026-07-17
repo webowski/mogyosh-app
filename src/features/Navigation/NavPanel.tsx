@@ -3,7 +3,7 @@ import { Pressable, Text, View } from 'react-native'
 
 import { ParamListBase, TabNavigationState } from 'expo-router/react-navigation'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { StyleSheet } from 'react-native-unistyles'
+import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 import NavButton from './NavButton'
 import SwipeSwitch from './SwipeSwitch'
@@ -41,6 +41,7 @@ export default function NavPanel({
 }: NavPanelProps) {
 	// const { buildHref } = useLinkBuilder()
 	const insets = useSafeAreaInsets()
+	const { theme } = useUnistyles()
 
 	const setIsDrawerShown = useNavStore((state) => state.setIsDrawerShown)
 	const setIsActionSheetOpen = useNavStore(
@@ -143,8 +144,9 @@ export default function NavPanel({
 							<MaterialDesignIcons
 								name={isSortMode ? 'check' : 'sort'}
 								size={24}
+								color={theme.colors.major}
 							/>
-							<Text style={{ fontWeight: '500', fontSize: 16 }}>
+							<Text style={styles.ActionItem}>
 								{isSortMode ? 'Готово' : 'Сортировать'}
 							</Text>
 						</Pressable>
@@ -222,6 +224,12 @@ const styles = StyleSheet.create((theme, rt) => ({
 		borderTopRightRadius: STYLE_VARS.radius_3xl,
 		borderCurve: 'continuous',
 		boxShadow: theme.colors.shadeNavPanel
+	},
+
+	ActionItem: {
+		fontWeight: '500',
+		fontSize: 16,
+		color: theme.colors.major
 	}
 }))
 
