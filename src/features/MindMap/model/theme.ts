@@ -1,15 +1,36 @@
+import { STATIC_COLORS } from '@/shared/styles/themes'
+import { UnistylesRuntime } from 'react-native-unistyles'
 import type { NodeType } from './types'
 
+const colors = UnistylesRuntime.getTheme(UnistylesRuntime.themeName).colors
+
 export function getNodeColors(type: NodeType) {
+	// const colors = UnistylesRuntime.getTheme(UnistylesRuntime.themeName).colors
+
 	return {
-		root: { bg: '#2D3250', text: '#FFFFFF', border: '#2D3250' },
-		category: { bg: '#6B8CFF', text: '#FFFFFF', border: '#6B8CFF' },
-		subcategory: { bg: '#97A2C4', text: '#fff', border: '#97A2C4' },
-		task: { bg: '#FFFFFF', text: '#444444', border: '#97A2C4' }
+		root: {
+			bg: colors.mutedSubtlestFill,
+			text: STATIC_COLORS.white,
+			border: colors.primary
+		},
+		category: {
+			bg: colors.primary,
+			text: STATIC_COLORS.white,
+			border: colors.primary
+		},
+		subcategory: {
+			bg: colors.mutedSubtleFill,
+			text: STATIC_COLORS.white,
+			border: colors.mutedSubtleFill
+		},
+		task: {
+			bg: colors.surface,
+			text: colors.major,
+			border: colors.mutedSubtlerFill
+		}
 	}[type]
 }
 
-export const LINE_MINOR_COLOR = '#97A2C4'
-export const EDGE_COLOR = '#6B8CFF'
-// deprecated: MindMap canvas background should use theme.colors.surfaceDeep
-export const CANVAS_BG = '#F7F8FC'
+export const LINE_MINOR_COLOR = colors.mutedSubtlerFill
+export const EDGE_COLOR = colors.primary
+export const CANVAS_BG = colors.surfaceDeep
