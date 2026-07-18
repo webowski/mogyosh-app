@@ -32,7 +32,6 @@ const TASKS_SELECT = `
 		id,
 		state,
 		completed,
-		state_date,
 		created_at
 	)
 `
@@ -257,8 +256,7 @@ const updateTaskState = async ({
 			.from('states')
 			.update({
 				state,
-				completed,
-				state_date: new Date().toISOString()
+				completed
 			})
 			.eq('task_id', taskId)
 
@@ -268,8 +266,7 @@ const updateTaskState = async ({
 		const { error: insertError } = await supabaseClient.from('states').insert({
 			task_id: taskId,
 			state,
-			completed,
-			state_date: new Date().toISOString()
+			completed
 		})
 
 		if (insertError) throw insertError

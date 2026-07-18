@@ -33,7 +33,6 @@ export type StateEntity = {
 	task_id: TaskId
 	state: TaskState
 	completed: TaskCompleted
-	state_date?: string | null
 	created_at: string
 }
 
