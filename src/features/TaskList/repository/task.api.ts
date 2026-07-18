@@ -410,6 +410,51 @@ const updateTasksSortOrder = async (
 	if (failed?.error) throw failed.error
 }
 
+type MonthCompletionRow = {
+	task_id: string
+	day_of_month: number
+	completed: boolean
+}
+
+export type TasksMonthCompletion = Map<string, Set<number>> // taskId -> set of completed day numbers
+
+/**
+ * Batch-fetches per-day completion for a set of tasks within one month.
+ * Used by calendar month-grid views to avoid parsing bitmap per task on the client.
+ */
+const getTasksMonthCompletion = async (
+	taskIds: TaskId[],
+	month: Date
+): Promise<TasksMonthCompletion> => {
+	if (taskIds.length === 0) return new Map()
+
+	const monthStart = getMonthStart(month)
+
+	const { data, error } = await supabaseClient.rpc(
+		'get_tasks_month_completion',
+		{
+			p_task_ids: taskIds,
+			p_month: monthStart
+		}
+	)
+
+	if (error) throw error
+
+	const result: TasksMonthCompletion = new Map()
+
+	for (const row of data as MonthCompletionRow[]) {
+		if (!row.completed) continue
+
+		if (!result.has(row.task_id)) {
+			result.set(row.task_id, new Set())
+		}
+
+		result.get(row.task_id)?.add(row.day_of_month)
+	}
+
+	return result
+}
+
 export const taskAPI = {
 	getTasks,
 	getAllTasks,
@@ -422,5 +467,6 @@ export const taskAPI = {
 	deleteTaskPermanently,
 	updateTaskSortOrder,
 	updateTasksSortOrder,
-	setTaskDayCompleted
+	setTaskDayCompleted,
+	getTasksMonthCompletion
 }
