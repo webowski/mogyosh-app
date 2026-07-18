@@ -265,7 +265,7 @@ const updateTaskState = async ({
 	} else {
 		const { error: insertError } = await supabaseClient.from('states').insert({
 			task_id: taskId,
-			state,
+			state: state ?? 'active',
 			completed,
 			created_at: targetDate.toISOString()
 		})
