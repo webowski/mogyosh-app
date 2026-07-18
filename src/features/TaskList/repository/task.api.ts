@@ -43,6 +43,7 @@ const makeTaskObject = (task: TaskRow): TaskEntity => ({
 	type: task.type,
 	lifecycle: task.lifecycle,
 	state: task.states?.[0]?.state ?? null,
+	completed: task.states?.[0]?.completed ?? false,
 	priority: task.priority,
 	category: task.categories,
 	parent_id: task.parent_id,

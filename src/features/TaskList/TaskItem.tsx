@@ -76,12 +76,9 @@ export default function TaskItem({
 	}
 
 	const toggleCompleteTask = () => {
-		const newCompleted = !isCompleted
-
-		console.log('toggleCompleteTask', { newCompleted })
 		updateTaskStateMutation.mutate({
 			taskId: data.id,
-			completed: newCompleted
+			completed: !isCompleted
 		})
 		onComplete?.(data.id)
 	}
@@ -149,7 +146,7 @@ export default function TaskItem({
 	}))
 
 	const completeContainerStyle = useAnimatedStyle(() => ({
-		opacity: isCompleted ? 1 : completeOpacity.value
+		opacity: completeOpacity.value
 	}))
 
 	// const cardBackgroundColorStyle = useAnimatedStyle(() => {
