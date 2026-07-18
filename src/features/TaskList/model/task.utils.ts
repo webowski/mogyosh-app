@@ -1,11 +1,9 @@
-import { isSameDay } from 'date-fns'
 import { generateKeyBetween } from 'fractional-indexing'
 
 import type { CategoryId, TaskId } from '@/shared/domain/ids'
 import type {
 	CategoryMap,
 	MonthStateEntity,
-	StateEntity,
 	TaskEntity
 } from '@/shared/domain/task'
 import { getMonthStart, isDayBitSet, parseByteaHex } from './task.bitmap'
@@ -198,16 +196,4 @@ export const isTaskCompletedOnDate = (
 
 	const completedBytes = parseByteaHex(monthState.completed)
 	return isDayBitSet(completedBytes, date.getDate())
-}
-
-/**
- * Finds the states row that belongs to a specific calendar day
- */
-export const findStateForDate = (
-	states: StateEntity[] | undefined,
-	date: Date
-): StateEntity | undefined => {
-	return states?.find((taskState) =>
-		isSameDay(new Date(taskState.created_at), date)
-	)
 }
