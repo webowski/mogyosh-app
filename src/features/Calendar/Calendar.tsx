@@ -12,12 +12,15 @@ import Animated, {
 import { StyleSheet } from 'react-native-unistyles'
 import { scheduleOnRN } from 'react-native-worklets'
 
+import { useTasksMonthCompletion } from '@/features/TaskList/model/useTasksMonthCompletion'
 import { useSettingsStore } from '@/services/settings/model/settingsStore'
+import { TaskId } from '@/shared/domain/ids'
 import { getDateFnsLocale } from '@/shared/i18n/dateFnsLocale'
 import { useLanguageChange } from '@/shared/i18n/useLanguageChange'
 import { capitalize } from '@/shared/lib/string'
 import { useCalendarStore } from '@/shared/model/calendar.store'
 import { STYLE_VARS } from '@/shared/styles/common'
+import { useTasks } from '../TaskList'
 
 const { width: BASE_WINDOW_WIDTH } = Dimensions.get('window')
 const BASE_CALENDAR_WIDTH = BASE_WINDOW_WIDTH - STYLE_VARS.sidePadding * 2
@@ -131,9 +134,15 @@ function WeekdayHeader({ weekStartDayIndex }: WeekdayHeaderProps) {
 
 type DayCellProps = {
 	cell: DayCell
+	completedCount: number
+	totalCount: number
 }
 
-const DayCellView = React.memo(function DayCellView({ cell }: DayCellProps) {
+const DayCellView = React.memo(function DayCellView({
+	cell,
+	completedCount,
+	totalCount
+}: DayCellProps) {
 	const isDaySelected = useCalendarStore((state) =>
 		isSameDay(state.selectedDate, cell.date)
 	)
@@ -161,16 +170,18 @@ const DayCellView = React.memo(function DayCellView({ cell }: DayCellProps) {
 			>
 				{cell.dayNumber}
 			</Text>
-			<Text
-				style={[
-					styles.day__counter,
-					!cell.isCurrentMonth && styles.text_muted,
-					isDaySelected && styles.selectedText,
-					cell.isToday && !isDaySelected && styles.text_today
-				]}
-			>
-				1/5
-			</Text>
+			{totalCount > 0 && (
+				<Text
+					style={[
+						styles.day__counter,
+						!cell.isCurrentMonth && styles.text_muted,
+						isDaySelected && styles.selectedText,
+						cell.isToday && !isDaySelected && styles.text_today
+					]}
+				>
+					{completedCount}/{totalCount}
+				</Text>
+			)}
 		</Pressable>
 	)
 })
@@ -181,6 +192,8 @@ type MonthProps = {
 	swipeTranslationValue: SharedValue<number>
 	calendarWidth: number
 	calendarHeight: number
+	taskIds: TaskId[]
+	totalTaskCount: number
 }
 
 const Month = React.memo(function Month({
@@ -188,7 +201,9 @@ const Month = React.memo(function Month({
 	index,
 	swipeTranslationValue,
 	calendarWidth,
-	calendarHeight
+	calendarHeight,
+	taskIds,
+	totalTaskCount
 }: MonthProps) {
 	const animatedStyle = useAnimatedStyle(() => ({
 		transform: [
@@ -196,13 +211,33 @@ const Month = React.memo(function Month({
 		]
 	}))
 
+	const { data: monthCompletion } = useTasksMonthCompletion(
+		taskIds,
+		monthData.monthDate
+	)
+
 	return (
 		<Animated.View style={[styles.month(calendarWidth), animatedStyle]}>
 			{monthData.weeks.map((week, weekIndex) => (
 				<View key={weekIndex} style={styles.week(calendarHeight)}>
-					{week.map((cell) => (
-						<DayCellView key={cell.date.getTime()} cell={cell} />
-					))}
+					{week.map((cell) => {
+						const completedCount = taskIds.reduce(
+							(count, taskId) =>
+								monthCompletion?.get(taskId)?.has(cell.dayNumber)
+									? count + 1
+									: count,
+							0
+						)
+
+						return (
+							<DayCellView
+								key={cell.date.getTime()}
+								cell={cell}
+								completedCount={completedCount}
+								totalCount={cell.isCurrentMonth ? totalTaskCount : 0}
+							/>
+						)
+					})}
 				</View>
 			))}
 		</Animated.View>
@@ -222,6 +257,12 @@ export default function Calendar() {
 	const swipeTranslationValue = useSharedValue(0)
 
 	const [isNeighborMonthsReady, setIsNeighborMonthsReady] = useState(false)
+
+	const { data: allTasks } = useTasks()
+	const taskIds = useMemo(
+		() => allTasks?.map((task) => task.id) ?? [],
+		[allTasks]
+	)
 
 	useEffect(() => {
 		setTimeout(() => {
@@ -340,6 +381,8 @@ export default function Calendar() {
 								swipeTranslationValue={swipeTranslationValue}
 								calendarWidth={calendarWidth}
 								calendarHeight={calendarHeight}
+								taskIds={taskIds}
+								totalTaskCount={taskIds.length}
 							/>
 						)
 					})}
