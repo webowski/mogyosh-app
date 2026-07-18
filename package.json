@@ -43,6 +43,7 @@
     "expo-web-browser": "~57.0.0",
     "fractional-indexing": "^4.0.0",
     "i18next": "^26.3.6",
+    "msgpackr": "^2.0.4",
     "react": "19.2.3",
     "react-content-loader": "^7.1.2",
     "react-dom": "19.2.3",
