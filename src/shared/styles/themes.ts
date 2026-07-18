@@ -172,7 +172,7 @@ export const darkTheme = {
 		inverse: 'hsl(0, 0%, 8%)',
 
 		// calendar
-		currentFill: 'hsl(225, 30%, 38%)',
+		currentFill: 'hsl(225, 48%, 38%)',
 		currentText: 'hsl(225, 100%, 72%)',
 		selectedFill: 'hsl(225, 100%, 65%)',
 		selectedText: 'hsl(0, 0%, 100%)',

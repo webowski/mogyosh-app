@@ -1,7 +1,12 @@
 import { blockAPI } from '@/features/Block'
 import { supabaseClient } from '@/shared/api/supabaseClient'
 import { TaskId } from '@/shared/domain/ids'
-import { TaskEntity, TaskRow, TaskState } from '@/shared/domain/task'
+import {
+	TaskCompleted,
+	TaskEntity,
+	TaskRow,
+	TaskState
+} from '@/shared/domain/task'
 import { TaskFilters } from '../model/task.types'
 
 const TASKS_SELECT = `
@@ -26,6 +31,7 @@ const TASKS_SELECT = `
 	states (
 		id,
 		state,
+		completed,
 		state_date,
 		created_at
 	)
@@ -217,15 +223,22 @@ const createTask = async (payload: CreateTaskPayload): Promise<TaskEntity> => {
 	return data
 }
 
+type UpdateTaskStateParams = {
+	taskId: TaskId
+	completed?: TaskCompleted
+	state?: TaskState
+}
+
 /**
  * Update task state (done/active/archived)
  * @param taskId - Task ID to update
  * @param state - New state value
  */
-const updateTaskState = async (
-	taskId: TaskId,
-	state: TaskState
-): Promise<TaskEntity> => {
+const updateTaskState = async ({
+	taskId,
+	completed,
+	state
+}: UpdateTaskStateParams): Promise<TaskEntity> => {
 	// Check if state record exists for this task
 	const { data: existingState, error: checkError } = await supabaseClient
 		.from('states')
@@ -243,6 +256,7 @@ const updateTaskState = async (
 			.from('states')
 			.update({
 				state,
+				completed,
 				state_date: new Date().toISOString()
 			})
 			.eq('task_id', taskId)
@@ -253,6 +267,7 @@ const updateTaskState = async (
 		const { error: insertError } = await supabaseClient.from('states').insert({
 			task_id: taskId,
 			state,
+			completed,
 			state_date: new Date().toISOString()
 		})
 

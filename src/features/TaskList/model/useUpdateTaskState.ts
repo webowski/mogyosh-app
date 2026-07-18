@@ -1,12 +1,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { TaskId } from '@/shared/domain/ids'
-import { TaskEntity, TaskState } from '@/shared/domain/task'
+import { TaskCompleted, TaskEntity, TaskState } from '@/shared/domain/task'
 import { taskAPI } from '../repository/task.api'
 
 type TaskStateMutationParams = {
 	taskId: TaskId
-	state: TaskState
+	completed?: TaskCompleted
+	state?: TaskState
 }
 
 /**
@@ -17,8 +18,12 @@ export const useUpdateTaskState = () => {
 	const queryClient = useQueryClient()
 
 	return useMutation({
-		mutationFn: async ({ taskId, state }: TaskStateMutationParams) => {
-			return await taskAPI.updateTaskState(taskId, state)
+		mutationFn: async ({
+			taskId,
+			completed,
+			state
+		}: TaskStateMutationParams) => {
+			return await taskAPI.updateTaskState({ taskId, completed, state })
 		},
 		onSuccess: (_, variables) => {
 			queryClient.invalidateQueries({ queryKey: ['task', variables.taskId] })

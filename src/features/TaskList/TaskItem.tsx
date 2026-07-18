@@ -62,7 +62,7 @@ export default function TaskItem({
 	const updateTaskStateMutation = useUpdateTaskState()
 
 	const isByTimeBool = isByTime(data)
-	const isCompleted = data.state === 'done'
+	const isCompleted = data.completed === true
 
 	// Shared values for swipe animation
 	const translateX = useSharedValue(0)
@@ -76,8 +76,13 @@ export default function TaskItem({
 	}
 
 	const toggleCompleteTask = () => {
-		const newState = isCompleted ? 'active' : 'done'
-		updateTaskStateMutation.mutate({ taskId: data.id, state: newState })
+		const newCompleted = !isCompleted
+
+		console.log('toggleCompleteTask', { newCompleted })
+		updateTaskStateMutation.mutate({
+			taskId: data.id,
+			completed: newCompleted
+		})
 		onComplete?.(data.id)
 	}
 
