@@ -36,6 +36,14 @@ export type StateEntity = {
 	created_at: string
 }
 
+export type MonthStateEntity = {
+	task_id: TaskId
+	month: string // "2026-07-01"
+	completed: string // hex-encoded bytea, e.g. "\\x0000001f"
+	created_at: string
+	updated_at: string
+}
+
 export type TaskType = 'task' | 'motivation'
 
 export type TaskEntity = {
@@ -43,7 +51,7 @@ export type TaskEntity = {
 	title: string
 	type: TaskType
 	lifecycle?: TaskLifecycle
-	states?: StateEntity[]
+	states?: MonthStateEntity[] // one row per month the task has interactions in
 	priority?: number | null
 	category?: CategoryEntity | null
 	parent_id?: TaskId | null
@@ -61,7 +69,7 @@ export type TaskRow = {
 	priority: number
 	categories: any
 	parent_id: string | null
-	states: StateEntity[]
+	states: MonthStateEntity[]
 	schedules: ScheduleEntity[]
 	sort_order?: string | null
 	created_at: string

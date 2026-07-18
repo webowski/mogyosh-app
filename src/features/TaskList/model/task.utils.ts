@@ -1,8 +1,14 @@
 import { isSameDay } from 'date-fns'
 import { generateKeyBetween } from 'fractional-indexing'
 
-import { CategoryId, TaskId } from '@/shared/domain/ids'
-import { CategoryMap, StateEntity, TaskEntity } from '@/shared/domain/task'
+import type { CategoryId, TaskId } from '@/shared/domain/ids'
+import type {
+	CategoryMap,
+	MonthStateEntity,
+	StateEntity,
+	TaskEntity
+} from '@/shared/domain/task'
+import { getMonthStart, isDayBitSet, parseByteaHex } from './task.bitmap'
 import { TaskFilters, TaskSection } from './task.types'
 
 /**
@@ -177,18 +183,21 @@ export const makeCategoryPath = (
 }
 
 /**
- * Checks whether a task is marked completed for a specific calendar day
+ * Checks whether a task is marked completed on a specific calendar day
  */
 export const isTaskCompletedOnDate = (
-	states: StateEntity[] | undefined,
+	states: MonthStateEntity[] | undefined,
 	date: Date
 ): boolean => {
 	if (!states || states.length === 0) return false
 
-	return states.some(
-		(taskState) =>
-			taskState.completed && isSameDay(new Date(taskState.created_at), date)
-	)
+	const monthStart = getMonthStart(date)
+	const monthState = states.find((taskState) => taskState.month === monthStart)
+
+	if (!monthState) return false
+
+	const completedBytes = parseByteaHex(monthState.completed)
+	return isDayBitSet(completedBytes, date.getDate())
 }
 
 /**

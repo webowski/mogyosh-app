@@ -63,9 +63,6 @@ export default function TaskItem({
 	const deleteTaskMutation = useDeleteTask()
 	const updateTaskStateMutation = useUpdateTaskState()
 
-	const selectedDate = useCalendarStore((store) => store.selectedDate)
-	const isCompleted = isTaskCompletedOnDate(data.states, selectedDate)
-
 	const isByTimeBool = isByTime(data)
 
 	// Shared values for swipe animation
@@ -79,13 +76,14 @@ export default function TaskItem({
 		onDelete?.(data.id)
 	}
 
-	const toggleCompleteTask = () => {
-		const newCompleted = !isCompleted
+	const selectedDate = useCalendarStore((store) => store.selectedDate)
+	const isCompleted = isTaskCompletedOnDate(data.states, selectedDate)
 
+	const toggleCompleteTask = () => {
 		updateTaskStateMutation.mutate({
 			taskId: data.id,
-			completed: newCompleted,
-			date: selectedDate
+			date: selectedDate,
+			completed: !isCompleted
 		})
 		onComplete?.(data.id)
 	}

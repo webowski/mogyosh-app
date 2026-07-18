@@ -8,6 +8,7 @@ import {
 	TaskState
 } from '@/shared/domain/task'
 import { endOfDay, startOfDay } from 'date-fns'
+import { getMonthStart } from '../model/task.bitmap'
 import { TaskFilters } from '../model/task.types'
 
 const TASKS_SELECT = `
@@ -30,10 +31,11 @@ const TASKS_SELECT = `
 		end_date
 	),
 	states (
-		id,
-		state,
+		task_id,
+		month,
 		completed,
-		created_at
+		created_at,
+		updated_at
 	)
 `
 
@@ -42,7 +44,7 @@ const makeTaskObject = (task: TaskRow): TaskEntity => ({
 	title: task.title,
 	type: task.type,
 	lifecycle: task.lifecycle,
-	states: task.states ?? [],
+	states: task.states,
 	priority: task.priority,
 	category: task.categories,
 	parent_id: task.parent_id,
@@ -283,6 +285,46 @@ const updateTaskState = async ({
 	return makeTaskObject(data)
 }
 
+type SetTaskDayCompletedParams = {
+	taskId: TaskId
+	date: Date
+	completed: boolean
+}
+
+/**
+ * Toggles a single day's completion bit via an atomic RPC call.
+ * The Postgres function handles row creation, bit math, and concurrency.
+ */
+const setTaskDayCompleted = async ({
+	taskId,
+	date,
+	completed
+}: SetTaskDayCompletedParams): Promise<TaskEntity> => {
+	const monthStart = getMonthStart(date)
+	const dayOfMonth = date.getDate()
+
+	const { error: rpcError } = await supabaseClient.rpc(
+		'set_task_day_completed',
+		{
+			p_task_id: taskId,
+			p_month: monthStart,
+			p_day_of_month: dayOfMonth,
+			p_completed: completed
+		}
+	)
+
+	if (rpcError) throw rpcError
+
+	const { data, error } = await supabaseClient
+		.from('tasks')
+		.select(TASKS_SELECT)
+		.eq('id', taskId)
+		.single()
+
+	if (error) throw error
+	return makeTaskObject(data)
+}
+
 /**
  * Soft delete a task by ID (marks lifecycle as 'deleted', keeps all data intact)
  * Cascades to child blocks so they also disappear from active views
@@ -379,5 +421,6 @@ export const taskAPI = {
 	deleteTask,
 	deleteTaskPermanently,
 	updateTaskSortOrder,
-	updateTasksSortOrder
+	updateTasksSortOrder,
+	setTaskDayCompleted
 }
