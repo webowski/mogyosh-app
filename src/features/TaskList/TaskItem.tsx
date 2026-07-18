@@ -18,11 +18,13 @@ import { useNavStore } from '@/features/Navigation/model/navStore'
 import { useCategoriesStore } from '@/features/TaskList/model/categoriesStore'
 import {
 	isByTime,
+	isTaskCompletedOnDate,
 	makeCategoryPath
 } from '@/features/TaskList/model/task.utils'
 import { useSettingsStore } from '@/services/settings/model/settingsStore'
 import type { TaskEntity } from '@/shared/domain/task'
 import { formatTime } from '@/shared/lib/time'
+import { useCalendarStore } from '@/shared/model/calendar.store'
 import { useTaskStore } from '@/shared/model/task.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 import CircleProgress from '@/shared/ui/CircleProgress'
@@ -61,8 +63,10 @@ export default function TaskItem({
 	const deleteTaskMutation = useDeleteTask()
 	const updateTaskStateMutation = useUpdateTaskState()
 
+	const selectedDate = useCalendarStore((store) => store.selectedDate)
+	const isCompleted = isTaskCompletedOnDate(data.states, selectedDate)
+
 	const isByTimeBool = isByTime(data)
-	const isCompleted = data.completed === true
 
 	// Shared values for swipe animation
 	const translateX = useSharedValue(0)
@@ -76,9 +80,12 @@ export default function TaskItem({
 	}
 
 	const toggleCompleteTask = () => {
+		const newCompleted = !isCompleted
+
 		updateTaskStateMutation.mutate({
 			taskId: data.id,
-			completed: !isCompleted
+			completed: newCompleted,
+			date: selectedDate
 		})
 		onComplete?.(data.id)
 	}

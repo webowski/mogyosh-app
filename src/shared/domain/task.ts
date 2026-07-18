@@ -43,8 +43,7 @@ export type TaskEntity = {
 	title: string
 	type: TaskType
 	lifecycle?: TaskLifecycle
-	state?: TaskState | null
-	completed?: TaskCompleted
+	states?: StateEntity[]
 	priority?: number | null
 	category?: CategoryEntity | null
 	parent_id?: TaskId | null

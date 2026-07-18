@@ -1,6 +1,8 @@
-import { CategoryId, TaskId } from '@/shared/domain/ids'
-import { CategoryMap, TaskEntity } from '@/shared/domain/task'
+import { isSameDay } from 'date-fns'
 import { generateKeyBetween } from 'fractional-indexing'
+
+import { CategoryId, TaskId } from '@/shared/domain/ids'
+import { CategoryMap, StateEntity, TaskEntity } from '@/shared/domain/task'
 import { TaskFilters, TaskSection } from './task.types'
 
 /**
@@ -172,4 +174,31 @@ export const makeCategoryPath = (
 	}
 
 	return parts.join(' • ')
+}
+
+/**
+ * Checks whether a task is marked completed for a specific calendar day
+ */
+export const isTaskCompletedOnDate = (
+	states: StateEntity[] | undefined,
+	date: Date
+): boolean => {
+	if (!states || states.length === 0) return false
+
+	return states.some(
+		(taskState) =>
+			taskState.completed && isSameDay(new Date(taskState.created_at), date)
+	)
+}
+
+/**
+ * Finds the states row that belongs to a specific calendar day
+ */
+export const findStateForDate = (
+	states: StateEntity[] | undefined,
+	date: Date
+): StateEntity | undefined => {
+	return states?.find((taskState) =>
+		isSameDay(new Date(taskState.created_at), date)
+	)
 }

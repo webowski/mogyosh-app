@@ -7,6 +7,7 @@ import {
 	TaskRow,
 	TaskState
 } from '@/shared/domain/task'
+import { endOfDay, startOfDay } from 'date-fns'
 import { TaskFilters } from '../model/task.types'
 
 const TASKS_SELECT = `
@@ -41,8 +42,7 @@ const makeTaskObject = (task: TaskRow): TaskEntity => ({
 	title: task.title,
 	type: task.type,
 	lifecycle: task.lifecycle,
-	state: task.states?.[0]?.state ?? null,
-	completed: task.states?.[0]?.completed ?? false,
+	states: task.states ?? [],
 	priority: task.priority,
 	category: task.categories,
 	parent_id: task.parent_id,
@@ -227,52 +227,52 @@ type UpdateTaskStateParams = {
 	taskId: TaskId
 	completed?: TaskCompleted
 	state?: TaskState
+	date?: Date
 }
 
 /**
- * Update task state (done/active/archived)
+ * Update task state for a specific day (upserts a states row scoped to that calendar day)
  * @param taskId - Task ID to update
- * @param state - New state value
+ * @param date - Calendar day this state applies to (defaults to now)
  */
 const updateTaskState = async ({
 	taskId,
 	completed,
-	state
+	state,
+	date
 }: UpdateTaskStateParams): Promise<TaskEntity> => {
-	// Check if state record exists for this task
+	const targetDate = date ?? new Date()
+	const dayStart = startOfDay(targetDate).toISOString()
+	const dayEnd = endOfDay(targetDate).toISOString()
+
 	const { data: existingState, error: checkError } = await supabaseClient
 		.from('states')
 		.select('id')
 		.eq('task_id', taskId)
-		.single()
+		.gte('created_at', dayStart)
+		.lte('created_at', dayEnd)
+		.maybeSingle()
 
-	if (checkError && checkError.code !== 'PGRST116') {
-		throw checkError
-	}
+	if (checkError) throw checkError
 
 	if (existingState) {
-		// Update existing state record
 		const { error: updateError } = await supabaseClient
 			.from('states')
-			.update({
-				state,
-				completed
-			})
-			.eq('task_id', taskId)
+			.update({ state, completed })
+			.eq('id', existingState.id)
 
 		if (updateError) throw updateError
 	} else {
-		// Insert new state record
 		const { error: insertError } = await supabaseClient.from('states').insert({
 			task_id: taskId,
 			state,
-			completed
+			completed,
+			created_at: targetDate.toISOString()
 		})
 
 		if (insertError) throw insertError
 	}
 
-	// Fetch updated task with all relations
 	const { data, error } = await supabaseClient
 		.from('tasks')
 		.select(TASKS_SELECT)

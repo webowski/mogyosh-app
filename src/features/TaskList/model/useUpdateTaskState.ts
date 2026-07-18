@@ -1,26 +1,64 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { isSameDay } from 'date-fns'
 
 import { TaskId } from '@/shared/domain/ids'
-import { TaskCompleted, TaskEntity, TaskState } from '@/shared/domain/task'
+import {
+	StateEntity,
+	TaskCompleted,
+	TaskEntity,
+	TaskState
+} from '@/shared/domain/task'
 import { taskAPI } from '../repository/task.api'
 import { TaskSection } from './task.types'
-
-const applyTaskUpdate = (
-	task: TaskEntity,
-	taskId: TaskId,
-	completed?: TaskCompleted,
-	state?: TaskState
-): TaskEntity => (task.id === taskId ? { ...task, completed, state } : task)
 
 type TaskStateMutationParams = {
 	taskId: TaskId
 	completed?: TaskCompleted
 	state?: TaskState
+	date?: Date
+}
+
+const applyOptimisticState = (
+	task: TaskEntity,
+	taskId: TaskId,
+	targetDate: Date,
+	completed?: TaskCompleted,
+	state?: TaskState
+): TaskEntity => {
+	if (task.id !== taskId) return task
+
+	const existingStates = task.states ?? []
+	const hasStateForDate = existingStates.some((taskState) =>
+		isSameDay(new Date(taskState.created_at), targetDate)
+	)
+
+	const updatedStates: StateEntity[] = hasStateForDate
+		? existingStates.map((taskState) =>
+				isSameDay(new Date(taskState.created_at), targetDate)
+					? {
+							...taskState,
+							completed: completed ?? taskState.completed,
+							state: state ?? taskState.state
+						}
+					: taskState
+			)
+		: [
+				...existingStates,
+				{
+					id: `optimistic-${taskId}-${targetDate.toISOString()}`,
+					task_id: taskId,
+					state: state ?? 'active',
+					completed: completed ?? false,
+					created_at: targetDate.toISOString()
+				}
+			]
+
+	return { ...task, states: updatedStates }
 }
 
 /**
  * Update task state mutation
- * Used for toggling block completion status
+ * Used for toggling task completion status for a specific calendar day
  */
 export const useUpdateTaskState = () => {
 	const queryClient = useQueryClient()
@@ -29,9 +67,10 @@ export const useUpdateTaskState = () => {
 		mutationFn: async ({
 			taskId,
 			completed,
-			state
+			state,
+			date
 		}: TaskStateMutationParams) => {
-			return await taskAPI.updateTaskState({ taskId, completed, state })
+			return await taskAPI.updateTaskState({ taskId, completed, state, date })
 		},
 		onSuccess: (_, variables) => {
 			queryClient.invalidateQueries({ queryKey: ['task', variables.taskId] })
@@ -40,7 +79,9 @@ export const useUpdateTaskState = () => {
 			queryClient.invalidateQueries({ queryKey: ['tasks'] })
 			queryClient.invalidateQueries({ queryKey: ['tasks-grouped'] })
 		},
-		onMutate: async ({ taskId, completed, state }) => {
+		onMutate: async ({ taskId, completed, state, date }) => {
+			const targetDate = date ?? new Date()
+
 			await queryClient.cancelQueries({ queryKey: ['blocks'] })
 			await queryClient.cancelQueries({ queryKey: ['tasks'] })
 			await queryClient.cancelQueries({ queryKey: ['tasks-grouped'] })
@@ -59,7 +100,7 @@ export const useUpdateTaskState = () => {
 				{ queryKey: ['blocks'] },
 				(old: TaskEntity[] | undefined) => {
 					return old?.map((task) =>
-						applyTaskUpdate(task, taskId, completed, state)
+						applyOptimisticState(task, taskId, targetDate, completed, state)
 					)
 				}
 			)
@@ -68,7 +109,7 @@ export const useUpdateTaskState = () => {
 				{ queryKey: ['tasks'] },
 				(old: TaskEntity[] | undefined) => {
 					return old?.map((task) =>
-						applyTaskUpdate(task, taskId, completed, state)
+						applyOptimisticState(task, taskId, targetDate, completed, state)
 					)
 				}
 			)
@@ -79,7 +120,7 @@ export const useUpdateTaskState = () => {
 					return old?.map((section) => ({
 						...section,
 						data: section.data.map((task) =>
-							applyTaskUpdate(task, taskId, completed, state)
+							applyOptimisticState(task, taskId, targetDate, completed, state)
 						)
 					}))
 				}
