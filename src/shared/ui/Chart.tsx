@@ -1,4 +1,4 @@
-import { DashPathEffect, Line } from '@shopify/react-native-skia'
+import { Line } from '@shopify/react-native-skia'
 import { View } from 'react-native'
 import { useUnistyles } from 'react-native-unistyles'
 import { CartesianChart, Line as VictoryLine } from 'victory-native'
@@ -45,9 +45,9 @@ export function Chart() {
 								p1={{ x: chartBounds.left, y: maxY }}
 								p2={{ x: chartBounds.right, y: maxY }}
 								color={theme.colors.success}
-								strokeWidth={3}
+								strokeWidth={1}
 							>
-								<DashPathEffect intervals={[6, 6]} />
+								{/* <DashPathEffect intervals={[6, 6]} /> */}
 							</Line>
 
 							<Line
@@ -56,13 +56,13 @@ export function Chart() {
 								color={theme.colors.mutedSubtleFill}
 								strokeWidth={2}
 							>
-								<DashPathEffect intervals={[6, 6]} />
+								{/* <DashPathEffect intervals={[6, 6]} /> */}
 							</Line>
 
 							<VictoryLine
 								points={points.count}
-								color='#4F8CFF'
-								strokeWidth={2}
+								color={theme.colors.primary}
+								strokeWidth={3}
 							/>
 						</>
 					)
