@@ -12,7 +12,6 @@ import type {
 import type { BlockId } from '@/shared/domain/ids'
 import { useDragSortRow } from '@/shared/modules/DragSort'
 import { getOrderedSiblingIndex } from './model/block.utils'
-import { useUpdateBlockState } from './model/useUpdateBlockState'
 import BulletedBlock from './variants/BulletedBlock'
 import CounterBlock from './variants/CounterBlock'
 import ExpandableBlock from './variants/ExpandableBlock'
@@ -45,21 +44,8 @@ export default function BlockNode({
 	pendingFocusId
 }: BlockNodeProps) {
 	const [isChildShown, setIsChildShown] = useState(true)
-	// const hasChildren = data.children.length > 0
-
-	let HAS_CHECKBOX = true
 
 	const { gesture, dragRowStyle, onLayout } = useDragSortRow(data.id, depth)
-
-	const updateBlockState = useUpdateBlockState()
-
-	const handleToggleBlock = (blockId: BlockId, completed: boolean) => {
-		updateBlockState.mutate({
-			blockId,
-			taskId: data.task_id,
-			state: completed ? 'done' : 'active'
-		})
-	}
 
 	let content
 
@@ -68,7 +54,6 @@ export default function BlockNode({
 			content = (
 				<ExpandableBlock
 					data={data}
-					onCheckToggle={(checked) => handleToggleBlock(data.id, checked)}
 					onExpandToggle={(expanded) => setIsChildShown(expanded)}
 				/>
 			)
@@ -78,13 +63,7 @@ export default function BlockNode({
 		case 'h2':
 		case 'h3':
 		case 'h4':
-			content = (
-				<HeadingBlock
-					variant={variant}
-					data={data}
-					onCheckToggle={(checked) => handleToggleBlock(data.id, checked)}
-				/>
-			)
+			content = <HeadingBlock variant={variant} data={data} />
 			break
 
 		case 'expandable-h1':
@@ -95,7 +74,6 @@ export default function BlockNode({
 				<ExpandableHeadingBlock
 					variant={variant}
 					data={data}
-					onCheckToggle={(checked) => handleToggleBlock(data.id, checked)}
 					onExpandToggle={(expanded) => setIsChildShown(expanded)}
 				/>
 			)
@@ -107,7 +85,6 @@ export default function BlockNode({
 					data={data}
 					depth={depth}
 					inputRefs={inputRefs}
-					onCheckToggle={(checked) => handleToggleBlock(data.id, checked)}
 					onAddAfter={() => onAddAfter?.(data.id)}
 					onRemove={() => onRemove?.(data.id)}
 					pendingFocusId={pendingFocusId}
@@ -122,7 +99,6 @@ export default function BlockNode({
 					depth={depth}
 					orderIndex={getOrderedSiblingIndex(siblings ?? [data], data.id)}
 					inputRefs={inputRefs}
-					onCheckToggle={(checked) => handleToggleBlock(data.id, checked)}
 					onAddAfter={() => onAddAfter?.(data.id)}
 					onRemove={() => onRemove?.(data.id)}
 					pendingFocusId={pendingFocusId}
@@ -135,7 +111,6 @@ export default function BlockNode({
 				<TimerBlock
 					data={data}
 					// depth={depth}
-					onCheckToggle={(checked) => handleToggleBlock(data.id, checked)}
 				/>
 			)
 			break
@@ -145,7 +120,6 @@ export default function BlockNode({
 				<StopwatchBlock
 					data={data}
 					// depth={depth}
-					onCheckToggle={(checked) => handleToggleBlock(data.id, checked)}
 				/>
 			)
 			break
@@ -155,19 +129,13 @@ export default function BlockNode({
 				<CounterBlock
 					data={data}
 					// depth={depth}
-					onCheckToggle={(checked) => handleToggleBlock(data.id, checked)}
 				/>
 			)
 			break
 
 		// case 'p':
 		default:
-			content = (
-				<ParagraphBlock
-					data={data}
-					onCheckToggle={(checked) => handleToggleBlock(data.id, checked)}
-				/>
-			)
+			content = <ParagraphBlock data={data} />
 	}
 
 	return (
