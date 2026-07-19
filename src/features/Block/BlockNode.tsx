@@ -167,7 +167,7 @@ export default function BlockNode({
 
 const styles = StyleSheet.create((theme) => ({
 	indent: (depth: number) => ({
-		paddingLeft: depth * 24
+		paddingLeft: depth ? 24 : 0
 	}),
 	Block: {
 		paddingBottom: 2
