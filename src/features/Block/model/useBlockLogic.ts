@@ -7,15 +7,18 @@ import {
 	withTiming
 } from 'react-native-reanimated'
 
+import { isBlockCompletedOnDate } from '@/features/BlockState/model/blockState.utils'
 import type {
 	BlockInputRefsMap,
 	BlockProps,
 	BlockType
 } from '@/shared/domain/block'
+import { useCalendarStore } from '@/shared/model/calendar.store'
 import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 import { useCreateBlock } from './useCreateBlock'
 import { useUpdateBlock } from './useUpdateBlock'
+import { useUpdateBlockState } from './useUpdateBlockState'
 
 type UseBlockLogicParams = BlockProps & {
 	inputRefs?: BlockInputRefsMap
@@ -80,7 +83,17 @@ export function useBlockLogic({
 		[data.id]
 	)
 
-	const [checked, setChecked] = useState(data.state === 'done')
+	const selectedDate = useCalendarStore((store) => store.selectedDate)
+	const updateBlockState = useUpdateBlockState()
+
+	const [checked, setChecked] = useState(
+		isBlockCompletedOnDate(data.states, selectedDate)
+	)
+
+	useEffect(() => {
+		setChecked(isBlockCompletedOnDate(data.states, selectedDate))
+	}, [data.states, selectedDate])
+
 	const animationProgress = useSharedValue(checked ? 1 : 0)
 	useEffect(
 		() => {
@@ -97,11 +110,18 @@ export function useBlockLogic({
 
 	const handlePressCheckbox = useCallback(
 		() => {
-			setChecked(!checked)
-			onCheckToggle?.(!checked)
+			const newChecked = !checked
+			setChecked(newChecked)
+			updateBlockState.mutate({
+				blockId: data.id,
+				taskId: data.task_id,
+				date: selectedDate,
+				completed: newChecked
+			})
+			onCheckToggle?.(newChecked)
 		},
 		// eslint-disable-next-line
-		[checked]
+		[checked, selectedDate, data.id, data.task_id]
 	)
 
 	const handleFocus = () => setFocusedBlockId(data.id)

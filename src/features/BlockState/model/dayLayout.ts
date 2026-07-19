@@ -76,3 +76,28 @@ export const writeDayPayload = (
 
 	return result
 }
+
+/**
+ * Supabase (PostgREST) returns bytea as a hex-encoded string like "\\x0100..."
+ */
+export const parseByteaHex = (hex: string | null | undefined): Uint8Array => {
+	if (!hex) return new Uint8Array(0)
+
+	const cleanHex = hex.startsWith('\\x') ? hex.slice(2) : hex
+	const bytes = new Uint8Array(cleanHex.length / 2)
+
+	for (let byteIndex = 0; byteIndex < bytes.length; byteIndex++) {
+		bytes[byteIndex] = parseInt(
+			cleanHex.substring(byteIndex * 2, byteIndex * 2 + 2),
+			16
+		)
+	}
+
+	return bytes
+}
+
+export const getMonthStart = (date: Date): string => {
+	return new Date(Date.UTC(date.getFullYear(), date.getMonth(), 1))
+		.toISOString()
+		.slice(0, 10)
+}

@@ -1,5 +1,6 @@
 import { generateKeyBetween } from 'fractional-indexing'
 
+import { setBlockDayState } from '@/features/BlockState/repository/blockState.api'
 import { supabaseClient } from '@/shared/api/supabaseClient'
 import type {
 	BlockCreatePayload,
@@ -11,10 +12,12 @@ import { BlockId, TaskId } from '@/shared/domain/ids'
 const SUBITEMS_SELECT = `
 	*,
 	block_states (
-		id,
+		block_id,
+		month,
+		encoding,
 		state,
-		state_date,
-		created_at
+		created_at,
+		updated_at
 	)
 `
 
@@ -26,7 +29,7 @@ const makeBlockObject = (blockRow: BlockRow): BlockEntity => ({
 	text_content: blockRow.text_content,
 	status: blockRow.status,
 	settings: blockRow.settings,
-	state: blockRow.block_states?.[0]?.state ?? null,
+	states: blockRow.block_states ?? [],
 	priority: blockRow.priority,
 	sort_order: blockRow.sort_order,
 	// schedules: blockRow.schedules,
@@ -45,7 +48,6 @@ const getBlocks = async (taskId: TaskId): Promise<BlockEntity[]> => {
 			.select(SUBITEMS_SELECT)
 			.eq('task_id', taskId)
 			.order('sort_order', { ascending: true })
-		// .order('created_at', { ascending: true })
 
 		if (error) {
 			console.error('Error fetching blocks:', error)
@@ -60,51 +62,27 @@ const getBlocks = async (taskId: TaskId): Promise<BlockEntity[]> => {
 	}
 }
 
+type SetBlockCompletedParams = {
+	blockId: BlockId
+	date: Date
+	completed: boolean
+}
+
 /**
- * Update block state (done/active/archived)
- * @param blockId - Block ID to update
- * @param state - New state value
+ * Toggles a checkbox block's completion for a specific calendar day
  */
-const updateBlockState = async (
-	blockId: BlockId,
-	state: 'done' | 'active' | 'archived'
-): Promise<BlockEntity> => {
-	// Check if state record exists for this block
-	const { data: existingState, error: checkError } = await supabaseClient
-		.from('block_states')
-		.select('id')
-		.eq('block_id', blockId)
-		.single()
+const setBlockCompleted = async ({
+	blockId,
+	date,
+	completed
+}: SetBlockCompletedParams): Promise<BlockEntity> => {
+	await setBlockDayState({
+		blockId,
+		blockType: 'checkbox',
+		date,
+		state: completed
+	})
 
-	if (checkError && checkError.code !== 'PGRST116') {
-		throw checkError
-	}
-
-	if (existingState) {
-		// Update existing state record
-		const { error: updateError } = await supabaseClient
-			.from('block_states')
-			.update({
-				state,
-				state_date: new Date().toISOString()
-			})
-			.eq('block_id', blockId)
-
-		if (updateError) throw updateError
-	} else {
-		// Insert new state record
-		const { error: insertError } = await supabaseClient
-			.from('block_states')
-			.insert({
-				block_id: blockId,
-				state,
-				state_date: new Date().toISOString()
-			})
-
-		if (insertError) throw insertError
-	}
-
-	// Fetch updated block with all relations
 	const { data, error } = await supabaseClient
 		.from('blocks')
 		.select(SUBITEMS_SELECT)
@@ -145,7 +123,7 @@ const deleteBlock = async (blockId: BlockId): Promise<void> => {
 
 export const blockAPI = {
 	getBlocks,
-	updateBlockState,
+	setBlockCompleted,
 	createBlock,
 	deleteBlock
 }

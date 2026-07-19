@@ -39,6 +39,15 @@ export type BlockSettings = {
 	duration?: number
 } | null
 
+export type BlockMonthStateEntity = {
+	block_id: BlockId
+	month: string // "2026-07-01"
+	encoding: number
+	state: string // hex-encoded bytea, e.g. "\\x01000200c301c2..."
+	created_at: string
+	updated_at: string
+}
+
 export type BlockEntity = {
 	id: BlockId
 	task_id: TaskId
@@ -49,7 +58,7 @@ export type BlockEntity = {
 	settings: BlockSettings
 	priority?: number | null
 	sort_order: string | null
-	state?: BlockState | null
+	states?: BlockMonthStateEntity[]
 	// schedules?: BlockScheduleEntity[]
 	created_at: string
 	updated_at?: string | null
@@ -65,7 +74,7 @@ export type BlockRow = {
 	status: BlockStatus
 	priority: number
 	sort_order: string | null
-	block_states: BlockStateEntity[]
+	block_states: BlockMonthStateEntity[]
 	// schedules: BlockScheduleEntity[]
 	created_at: string
 	updated_at: string
