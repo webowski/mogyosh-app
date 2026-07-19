@@ -101,3 +101,14 @@ export const getMonthStart = (date: Date): string => {
 		.toISOString()
 		.slice(0, 10)
 }
+
+/**
+ * Converts bytes to a hex string for RPC transmission — supabase-js does not
+ * serialize Uint8Array into a valid bytea wire format on its own, so bytea
+ * RPC params must be sent as hex text and decoded server-side.
+ */
+export const bytesToHex = (bytes: Uint8Array): string => {
+	return Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join(
+		''
+	)
+}

@@ -5,7 +5,7 @@ import {
 	getLatestCodec,
 	type BlockType
 } from '../model/codecs/registry'
-import { getMonthStart, readDayPayload } from '../model/dayLayout'
+import { bytesToHex, getMonthStart, readDayPayload } from '../model/dayLayout'
 
 type SetBlockDayStateParams<TState> = {
 	blockId: BlockId
@@ -14,11 +14,6 @@ type SetBlockDayStateParams<TState> = {
 	state: TState
 }
 
-/**
- * Encodes one day's block state client-side and sends only that day's payload
- * to the RPC — the server splices it into the existing month bytea without
- * touching the other 30 days. The client never sends the full month state.
- */
 export const setBlockDayState = async <TState>({
 	blockId,
 	blockType,
@@ -28,8 +23,6 @@ export const setBlockDayState = async <TState>({
 	const codec = getLatestCodec<TState>(blockType)
 	const encodedState = codec.encode(state)
 
-	// Prefix the payload with the codec version so decode() knows which codec to use later,
-	// independent of block_states.encoding (which only versions the offsets-table layout)
 	const dayPayload = new Uint8Array(1 + encodedState.length)
 	dayPayload[0] = codec.version
 	dayPayload.set(encodedState, 1)
@@ -38,16 +31,12 @@ export const setBlockDayState = async <TState>({
 		p_block_id: blockId,
 		p_month: getMonthStart(date),
 		p_day_of_month: date.getDate(),
-		p_day_payload: dayPayload
+		p_day_payload_hex: bytesToHex(dayPayload)
 	})
 
 	if (error) throw error
 }
 
-/**
- * Decodes a specific day's state out of an already-fetched month bytea.
- * Returns null when no state has been recorded for that day yet.
- */
 export const getBlockDayState = <TState>(
 	blockType: BlockType,
 	monthBytes: Uint8Array,
