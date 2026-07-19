@@ -465,8 +465,8 @@ const styles = StyleSheet.create((theme) => ({
 		width: SLIDE_WIDTH,
 		height: SLIDE_HEIGHT,
 		paddingBottom: 3,
-		paddingLeft: 52,
-		paddingRight: 10,
+		paddingLeft: 56,
+		paddingRight: 12,
 		justifyContent: 'center',
 		alignItems: 'center'
 	},
