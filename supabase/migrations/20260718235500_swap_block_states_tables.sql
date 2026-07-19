@@ -1,0 +1,6 @@
+ALTER TABLE block_states RENAME TO block_states_legacy;
+ALTER INDEX block_states_block_id_idx RENAME TO block_states_legacy_block_id_idx;
+
+ALTER TABLE block_states_monthly RENAME TO block_states;
+ALTER INDEX block_states_monthly_block_id_idx RENAME TO block_states_block_id_idx;
+ALTER TABLE block_states RENAME CONSTRAINT block_states_monthly_month_is_first_day TO block_states_month_is_first_day;
