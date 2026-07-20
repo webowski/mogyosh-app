@@ -19,6 +19,7 @@ import { STYLE_VARS } from '@/shared/styles/common'
 import { Button } from '@/shared/ui/Button'
 import Animated from 'react-native-reanimated'
 import { selectBlocks, useBlockStore } from './model/block.store'
+import { useBlockSettingsSheetStore } from './model/blockSettingsSheet.store'
 import { useCreateBlock } from './model/useCreateBlock'
 import { useMoveBlock } from './model/useMoveBlock'
 import { useRemoveBlock } from './model/useRemoveBlock'
@@ -212,6 +213,10 @@ export default function EditorToolbar() {
 
 	const updateBlock = useUpdateBlock()
 
+	const openBlockSettingsSheet = useBlockSettingsSheetStore(
+		(state) => state.open
+	)
+
 	const currentTypeOption =
 		BLOCK_TYPE_OPTIONS.find((option) => option.type === focusedBlock?.type) ??
 		null
@@ -353,7 +358,12 @@ export default function EditorToolbar() {
 							/>
 						</Button>
 
-						<Button variant='bare' onPress={() => {}} preventFocusSteal>
+						<Button
+							variant='bare'
+							onPress={openBlockSettingsSheet}
+							disabled={!focusedBlock}
+							preventFocusSteal
+						>
 							<MaterialDesignIcons
 								name='cog-box'
 								color={theme.colors.major}
