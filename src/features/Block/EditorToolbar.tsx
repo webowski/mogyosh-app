@@ -355,7 +355,7 @@ export default function EditorToolbar() {
 
 						<Button variant='bare' onPress={() => {}} preventFocusSteal>
 							<MaterialDesignIcons
-								name='pencil-box'
+								name='cog-box'
 								color={theme.colors.major}
 								size={24}
 							/>
