@@ -34,10 +34,31 @@ export type BlockStateEntity = {
 	created_at: string
 }
 
-export type BlockSettings = {
+export type CommonBlockSettings = {
 	checkable?: boolean
+	journaled?: boolean
+}
+
+export type TimerBlockSettings = CommonBlockSettings & {
 	duration?: number
-} | null
+	mode?: 'increasing' | 'decreasing'
+}
+
+export type StopwatchBlockSettings = CommonBlockSettings & {
+	duration?: number
+}
+
+export type CounterBlockSettings = CommonBlockSettings & {
+	goal?: number
+	start?: number
+	units?: string
+}
+
+// Loose superset used across UI components (data.settings?.duration и т.п.) —
+// какие поля реально есть, определяется block.type, а не типом на уровне TS
+export type BlockSettings = CommonBlockSettings &
+	Partial<TimerBlockSettings> &
+	Partial<CounterBlockSettings>
 
 export type BlockMonthStateEntity = {
 	block_id: BlockId
@@ -70,7 +91,7 @@ export type BlockRow = {
 	parent_id: BlockId | null
 	type: BlockType
 	text_content: string
-	settings: BlockSettings
+	settings: string // hex-encoded bytea, decoded via decodeBlockSettingsFromHex(type, settings)
 	status: BlockStatus
 	priority: number
 	sort_order: string | null

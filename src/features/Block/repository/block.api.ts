@@ -8,6 +8,7 @@ import type {
 	BlockRow
 } from '@/shared/domain/block'
 import { BlockId, TaskId } from '@/shared/domain/ids'
+import { decodeBlockSettingsFromHex } from '../model/blockSettingsCodec'
 
 const SUBITEMS_SELECT = `
 	*,
@@ -28,11 +29,10 @@ const makeBlockObject = (blockRow: BlockRow): BlockEntity => ({
 	type: blockRow.type,
 	text_content: blockRow.text_content,
 	status: blockRow.status,
-	settings: blockRow.settings,
+	settings: decodeBlockSettingsFromHex(blockRow.type, blockRow.settings),
 	states: blockRow.block_states ?? [],
 	priority: blockRow.priority,
 	sort_order: blockRow.sort_order,
-	// schedules: blockRow.schedules,
 	created_at: blockRow.created_at,
 	updated_at: blockRow.updated_at
 })

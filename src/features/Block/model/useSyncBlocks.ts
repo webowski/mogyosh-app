@@ -3,13 +3,17 @@ import { AppState } from 'react-native'
 
 import { supabaseClient } from '@/shared/api/supabaseClient'
 import { BlockEntity } from '@/shared/domain/block'
-import { BlockId } from '@/shared/domain/ids'
+import { BlockId, TaskId } from '@/shared/domain/ids'
 import {
 	BlockOperation,
 	BlockOperationUpdate,
 	selectPendingOperations,
 	useBlockStore
 } from './block.store'
+import {
+	decodeBlockSettingsFromHex,
+	encodeBlockSettingsToHex
+} from './blockSettingsCodec'
 
 const SYNC_DEBOUNCE_MS = 400
 
@@ -25,14 +29,14 @@ const syncCreate = async (block: BlockEntity, tempId: BlockId) => {
 			task_id: block.task_id,
 			parent_id: block.parent_id ?? null,
 			type: block.type,
-			sort_order: block.sort_order
+			sort_order: block.sort_order,
+			settings: encodeBlockSettingsToHex(block.type, block.settings ?? {})
 		})
 		.select()
 		.single()
 
 	if (error) throw error
 
-	// Get current text_content from store (user may have typed while syncing)
 	const { blocksByTask } = useBlockStore.getState()
 	const taskBlocks = blocksByTask[block.task_id] ?? []
 	const currentBlock = taskBlocks.find((s) => s.id === tempId)
@@ -40,10 +44,10 @@ const syncCreate = async (block: BlockEntity, tempId: BlockId) => {
 
 	useBlockStore.getState().replaceOptimisticBlock(tempId, block.task_id, {
 		...data,
+		settings: decodeBlockSettingsFromHex(data.type, data.settings),
 		text_content: currentInfo
 	})
 
-	// If user typed something while syncing — enqueue an update to persist it
 	if (currentInfo !== block.text_content) {
 		useBlockStore.getState().enqueueOperation({
 			type: 'update',
@@ -58,13 +62,28 @@ const syncCreate = async (block: BlockEntity, tempId: BlockId) => {
 
 const syncUpdate = async (
 	id: BlockId,
+	taskId: TaskId,
 	patch: BlockOperationUpdate['patch']
 ) => {
-	// if (Object.keys(patch).length === 0) return // guard: skip empty patch
+	let dbPatch: Record<string, unknown> = { ...patch }
+
+	if (patch.settings) {
+		const blockType =
+			useBlockStore
+				.getState()
+				.blocksByTask[taskId]?.find((block) => block.id === id)?.type ??
+			patch.type ??
+			'p'
+
+		dbPatch = {
+			...dbPatch,
+			settings: encodeBlockSettingsToHex(blockType, patch.settings)
+		}
+	}
 
 	const { error } = await supabaseClient
 		.from('blocks')
-		.update(patch)
+		.update(dbPatch)
 		.eq('id', id)
 
 	if (error) throw error
@@ -105,8 +124,7 @@ const flushQueue = async (operations: BlockOperation[]) => {
 			if (operation.type === 'create') {
 				await syncCreate(operation.block, operation.tempId)
 			} else if (operation.type === 'update') {
-				// console.log('[SyncBlocks] full operation:', JSON.stringify(operation))
-				await syncUpdate(operation.id, operation.patch)
+				await syncUpdate(operation.id, operation.taskId, operation.patch)
 			} else if (operation.type === 'delete') {
 				await syncDelete(operation.id)
 			}
