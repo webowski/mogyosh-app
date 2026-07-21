@@ -7,7 +7,7 @@ import {
 	withTiming
 } from 'react-native-reanimated'
 
-import { isBlockCompletedOnDate } from '@/features/BlockState/model/blockState.utils'
+import { isBlockChecked } from '@/features/BlockState/model/blockState.utils'
 import type {
 	BlockInputRefsMap,
 	BlockProps,
@@ -18,6 +18,7 @@ import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 import { useCreateBlock } from './useCreateBlock'
 import { useUpdateBlock } from './useUpdateBlock'
+import { useUpdateBlockPersistentState } from './useUpdateBlockPersistentState'
 import { useUpdateBlockState } from './useUpdateBlockState'
 
 type UseBlockLogicParams = BlockProps & {
@@ -85,14 +86,19 @@ export function useBlockLogic({
 
 	const selectedDate = useCalendarStore((store) => store.selectedDate)
 	const updateBlockState = useUpdateBlockState()
+	const updateBlockPersistentState = useUpdateBlockPersistentState()
 
-	const [checked, setChecked] = useState(
-		isBlockCompletedOnDate(data.states, selectedDate)
+	const isJournaled = data.settings?.journaled ?? false
+
+	const [checked, setChecked] = useState(isBlockChecked(data, selectedDate))
+
+	useEffect(
+		() => {
+			setChecked(isBlockChecked(data, selectedDate))
+		},
+		// eslint-disable-next-line
+		[data.states, data.settings, selectedDate]
 	)
-
-	useEffect(() => {
-		setChecked(isBlockCompletedOnDate(data.states, selectedDate))
-	}, [data.states, selectedDate])
 
 	const animationProgress = useSharedValue(checked ? 1 : 0)
 	useEffect(
@@ -112,16 +118,26 @@ export function useBlockLogic({
 		() => {
 			const newChecked = !checked
 			setChecked(newChecked)
-			updateBlockState.mutate({
-				blockId: data.id,
-				taskId: data.task_id,
-				date: selectedDate,
-				completed: newChecked
-			})
+
+			if (isJournaled) {
+				updateBlockState.mutate({
+					blockId: data.id,
+					taskId: data.task_id,
+					date: selectedDate,
+					completed: newChecked
+				})
+			} else {
+				updateBlockPersistentState.mutate({
+					blockId: data.id,
+					taskId: data.task_id,
+					completed: newChecked
+				})
+			}
+
 			onCheckToggle?.(newChecked)
 		},
 		// eslint-disable-next-line
-		[checked, selectedDate, data.id, data.task_id]
+		[checked, isJournaled, selectedDate, data.id, data.task_id]
 	)
 
 	const handleFocus = () => setFocusedBlockId(data.id)
