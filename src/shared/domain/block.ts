@@ -62,7 +62,7 @@ export type BlockSettings = CommonBlockSettings &
 
 export type BlockMonthStateEntity = {
 	block_id: BlockId
-	month: string // "2026-07-01"
+	month: string | null // "2026-07-01"
 	encoding: number
 	state: string // hex-encoded bytea, e.g. "\\x01000200c301c2..."
 	created_at: string

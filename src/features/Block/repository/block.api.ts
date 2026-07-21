@@ -1,6 +1,9 @@
 import { generateKeyBetween } from 'fractional-indexing'
 
-import { setBlockDayState } from '@/features/BlockState/repository/blockState.api'
+import {
+	setBlockDayState,
+	setBlockPersistentState
+} from '@/features/BlockState/repository/blockState.api'
 import { supabaseClient } from '@/shared/api/supabaseClient'
 import type {
 	BlockCreatePayload,
@@ -121,9 +124,35 @@ const deleteBlock = async (blockId: BlockId): Promise<void> => {
 	if (error) throw error
 }
 
+type SetBlockPersistentCompletedParams = {
+	blockId: BlockId
+	completed: boolean
+}
+
+const setBlockPersistentCompleted = async ({
+	blockId,
+	completed
+}: SetBlockPersistentCompletedParams): Promise<BlockEntity> => {
+	await setBlockPersistentState({
+		blockId,
+		blockType: 'checkbox',
+		state: completed
+	})
+
+	const { data, error } = await supabaseClient
+		.from('blocks')
+		.select(SUBITEMS_SELECT)
+		.eq('id', blockId)
+		.single()
+
+	if (error) throw error
+	return makeBlockObject(data)
+}
+
 export const blockAPI = {
 	getBlocks,
 	setBlockCompleted,
 	createBlock,
-	deleteBlock
+	deleteBlock,
+	setBlockPersistentCompleted
 }
