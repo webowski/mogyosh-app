@@ -16,6 +16,7 @@ type CheckboxProps = {
 	checked: boolean
 	style?: ViewStyle | ViewStyle[]
 	onPress?: () => void
+	activeColor?: string
 } & Omit<PressableProps, 'style' | 'onPress'>
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
@@ -24,10 +25,11 @@ export default function Checkbox({
 	checked,
 	style,
 	onPress,
+	activeColor,
 	...props
 }: CheckboxProps) {
 	const { theme } = useUnistyles()
-
+	const resolvedActiveColor = activeColor ?? theme.colors.primary
 	const animationProgress = useSharedValue(checked ? 1 : 0)
 
 	useEffect(
@@ -47,12 +49,12 @@ export default function Checkbox({
 		backgroundColor: interpolateColor(
 			animationProgress.value,
 			[0, 1],
-			['transparent', theme.colors.primary]
+			['transparent', resolvedActiveColor]
 		),
 		borderColor: interpolateColor(
 			animationProgress.value,
 			[0, 1],
-			[theme.colors.border, theme.colors.primary]
+			[theme.colors.border, resolvedActiveColor]
 		)
 	}))
 

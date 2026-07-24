@@ -4,6 +4,7 @@ import type { BlockInputRefsMap, BlockProps } from '@/shared/domain/block'
 import Checkbox from '@/shared/ui/Checkbox'
 import { MarkdownInput } from '@/shared/ui/MarkdownInput'
 import Animated from 'react-native-reanimated'
+import { useUnistyles } from 'react-native-unistyles'
 import { getBulletedMarker } from '../model/block.utils'
 import { useBlockLogic } from '../model/useBlockLogic'
 import { blockStyles } from '../style'
@@ -22,6 +23,8 @@ export default function BulletedBlock({
 	onRemove,
 	pendingFocusId
 }: BulletedBlockProps) {
+	const { theme } = useUnistyles()
+
 	const {
 		inputRef,
 		checked,
@@ -59,6 +62,9 @@ export default function BulletedBlock({
 			{data.settings?.checkable && (
 				<Checkbox
 					style={blockStyles.Block__checkbox}
+					activeColor={
+						data.settings?.journaled ? theme.colors.success : undefined
+					}
 					checked={checked}
 					onPress={handlePressCheckbox}
 				/>
