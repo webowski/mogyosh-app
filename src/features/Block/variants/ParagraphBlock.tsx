@@ -1,4 +1,5 @@
 import { View } from 'react-native'
+import { useUnistyles } from 'react-native-unistyles'
 
 import type { BlockInputRefsMap, BlockProps } from '@/shared/domain/block'
 import Checkbox from '@/shared/ui/Checkbox'
@@ -35,6 +36,8 @@ export default function ParagraphBlock({
 		blockType: 'p'
 	})
 
+	const { theme } = useUnistyles()
+
 	return (
 		<View style={blockStyles.Paragraph}>
 			<MarkdownInput
@@ -52,6 +55,9 @@ export default function ParagraphBlock({
 			{data.settings?.checkable && (
 				<Checkbox
 					style={blockStyles.Block__checkbox}
+					activeColor={
+						data.settings?.journaled ? theme.colors.success : undefined
+					}
 					checked={checked}
 					onPress={handlePressCheckbox}
 				/>

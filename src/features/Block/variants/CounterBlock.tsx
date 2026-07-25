@@ -1,4 +1,5 @@
 import { Text, View } from 'react-native'
+import { useUnistyles } from 'react-native-unistyles'
 
 import { BlockInputRefsMap, BlockProps } from '@/shared/domain/block'
 import Checkbox from '@/shared/ui/Checkbox'
@@ -19,6 +20,8 @@ export default function CounterBlock({
 	onRemove,
 	pendingFocusId
 }: CounterBlockProps) {
+	const { theme } = useUnistyles()
+
 	const {
 		inputRef,
 		checked,
@@ -64,7 +67,13 @@ export default function CounterBlock({
 			</View>
 			<View style={blockStyles.Timer__actions}>
 				{data.settings?.checkable && (
-					<Checkbox checked={checked} onPress={handlePressCheckbox} />
+					<Checkbox
+						activeColor={
+							data.settings?.journaled ? theme.colors.success : undefined
+						}
+						checked={checked}
+						onPress={handlePressCheckbox}
+					/>
 				)}
 			</View>
 		</View>

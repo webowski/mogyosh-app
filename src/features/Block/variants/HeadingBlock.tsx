@@ -4,6 +4,7 @@ import type { BlockInputRefsMap, BlockProps } from '@/shared/domain/block'
 import { TEXT_VARS } from '@/shared/styles/text'
 import Checkbox from '@/shared/ui/Checkbox'
 import { MarkdownInput } from '@/shared/ui/MarkdownInput'
+import { useUnistyles } from 'react-native-unistyles'
 import { useBlockLogic } from '../model/useBlockLogic'
 import { blockStyles } from '../style'
 
@@ -47,6 +48,8 @@ export default function HeadingBlock({
 		blockType: variant
 	})
 
+	const { theme } = useUnistyles()
+
 	return (
 		<View style={blockStyles.Expandible}>
 			<MarkdownInput
@@ -64,6 +67,9 @@ export default function HeadingBlock({
 			{data.settings?.checkable && (
 				<Checkbox
 					style={blockStyles.Block__checkbox}
+					activeColor={
+						data.settings?.journaled ? theme.colors.success : undefined
+					}
 					checked={checked}
 					onPress={handlePressCheckbox}
 				/>

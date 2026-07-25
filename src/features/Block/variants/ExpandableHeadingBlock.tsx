@@ -104,6 +104,9 @@ export default function ExpandableHeadingBlock({
 			{data.settings?.checkable && (
 				<Checkbox
 					style={blockStyles.Block__checkbox}
+					activeColor={
+						data.settings?.journaled ? theme.colors.success : undefined
+					}
 					checked={checked}
 					onPress={handlePressCheckbox}
 				/>
