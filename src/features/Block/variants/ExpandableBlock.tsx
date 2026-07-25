@@ -94,9 +94,7 @@ export default function ExpandableBlock({
 			{data.settings?.checkable && (
 				<Checkbox
 					style={blockStyles.Block__checkbox}
-					activeColor={
-						data.settings?.journaled ? theme.colors.success : undefined
-					}
+					appearance={data.settings?.journaled ? 'success' : 'default'}
 					checked={checked}
 					onPress={handlePressCheckbox}
 				/>

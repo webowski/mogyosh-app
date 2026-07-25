@@ -12,11 +12,13 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 import { triggerHapticLight } from '@/shared/ui/Haptic'
 import { STATIC_COLORS } from '../styles/themes'
 
+type CheckboxAppearance = 'default' | 'success'
+
 type CheckboxProps = {
 	checked: boolean
 	style?: ViewStyle | ViewStyle[]
+	appearance?: CheckboxAppearance
 	onPress?: () => void
-	activeColor?: string
 } & Omit<PressableProps, 'style' | 'onPress'>
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
@@ -24,13 +26,17 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 export default function Checkbox({
 	checked,
 	style,
+	appearance = 'default',
 	onPress,
-	activeColor,
 	...props
 }: CheckboxProps) {
 	const { theme } = useUnistyles()
-	const resolvedActiveColor = activeColor ?? theme.colors.primary
 	const animationProgress = useSharedValue(checked ? 1 : 0)
+
+	const activeColor = {
+		default: theme.colors.primary,
+		success: theme.colors.success
+	}[appearance]
 
 	useEffect(
 		() => {
@@ -49,12 +55,12 @@ export default function Checkbox({
 		backgroundColor: interpolateColor(
 			animationProgress.value,
 			[0, 1],
-			['transparent', resolvedActiveColor]
+			['transparent', activeColor]
 		),
 		borderColor: interpolateColor(
 			animationProgress.value,
 			[0, 1],
-			[theme.colors.border, resolvedActiveColor]
+			[theme.colors.border, activeColor]
 		)
 	}))
 

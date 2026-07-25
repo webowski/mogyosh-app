@@ -4,7 +4,6 @@ import type { BlockInputRefsMap, BlockProps } from '@/shared/domain/block'
 import Checkbox from '@/shared/ui/Checkbox'
 import { MarkdownInput } from '@/shared/ui/MarkdownInput'
 import Animated from 'react-native-reanimated'
-import { useUnistyles } from 'react-native-unistyles'
 import { getOrderedMarker } from '../model/block.utils'
 import { useBlockLogic } from '../model/useBlockLogic'
 import { blockStyles } from '../style'
@@ -42,8 +41,6 @@ export default function OrderedBlock({
 		blockType: 'ol'
 	})
 
-	const { theme } = useUnistyles()
-
 	return (
 		<View style={blockStyles.Ordered}>
 			<Animated.Text style={[blockStyles.Ordered__marker, checkedStyle]}>
@@ -64,9 +61,7 @@ export default function OrderedBlock({
 			{data.settings?.checkable && (
 				<Checkbox
 					style={blockStyles.Block__checkbox}
-					activeColor={
-						data.settings?.journaled ? theme.colors.success : undefined
-					}
+					appearance={data.settings?.journaled ? 'success' : 'default'}
 					checked={checked}
 					onPress={handlePressCheckbox}
 				/>
