@@ -64,6 +64,8 @@ export default function BulletedBlock({
 					onPress={handlePressCheckbox}
 				/>
 			)}
+
+			<View style={blockStyles.Block__journaled} />
 		</View>
 	)
 }

@@ -12,6 +12,7 @@ import type {
 import type { BlockId } from '@/shared/domain/ids'
 import { useDragSortRow } from '@/shared/modules/DragSort'
 import { getOrderedSiblingIndex } from './model/block.utils'
+import { blockStyles } from './style'
 import BulletedBlock from './variants/BulletedBlock'
 import CounterBlock from './variants/CounterBlock'
 import ExpandableBlock from './variants/ExpandableBlock'
@@ -142,7 +143,7 @@ export default function BlockNode({
 		<View style={styles.indent(depth)}>
 			<GestureDetector gesture={gesture}>
 				<Animated.View style={dragRowStyle}>
-					<View onLayout={onLayout} style={styles.Block}>
+					<View onLayout={onLayout} style={blockStyles.Block}>
 						{content}
 					</View>
 					{isChildShown &&
@@ -168,8 +169,5 @@ export default function BlockNode({
 const styles = StyleSheet.create((theme) => ({
 	indent: (depth: number) => ({
 		paddingLeft: depth ? 24 : 0
-	}),
-	Block: {
-		paddingBottom: 2
-	}
+	})
 }))

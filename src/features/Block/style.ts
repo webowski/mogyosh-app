@@ -5,6 +5,25 @@ export const SUBITEM_VARS = {
 } as const
 
 export const blockStyles = StyleSheet.create((theme, rt) => ({
+	Block: {
+		paddingBottom: 2,
+		position: 'relative'
+	},
+
+	Block__journaled: {
+		// position: 'absolute',
+		top: 0,
+		bottom: 0,
+		alignSelf: 'center',
+		// marginTop: 'auto',
+		right: -7,
+		zIndex: 100,
+		width: 2,
+		height: 16,
+		borderRadius: 2,
+		backgroundColor: theme.colors.mutedSubtlerFill
+	},
+
 	Paragraph: {
 		flexDirection: 'row',
 		alignItems: 'flex-start',
