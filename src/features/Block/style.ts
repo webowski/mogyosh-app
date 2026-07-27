@@ -1,3 +1,4 @@
+import { STYLE_VARS } from '@/shared/styles/common'
 import { StyleSheet } from 'react-native-unistyles'
 
 export const SUBITEM_VARS = {
@@ -11,17 +12,23 @@ export const blockStyles = StyleSheet.create((theme, rt) => ({
 	},
 
 	Block__journaled: {
-		// position: 'absolute',
-		top: 0,
+		position: 'absolute',
+		top: 10,
 		bottom: 0,
+		right: STYLE_VARS.sidePadding * -1,
+		// right: STYLE_VARS.sidePadding * -0.7,
 		alignSelf: 'center',
 		// marginTop: 'auto',
-		right: -7,
 		zIndex: 100,
-		width: 2,
-		height: 16,
-		borderRadius: 2,
-		backgroundColor: theme.colors.mutedSubtlerFill
+		width: 4,
+		height: 14,
+		// height: 6,
+		borderTopLeftRadius: 4,
+		borderBottomLeftRadius: 4,
+		// borderRadius: 4,
+		// backgroundColor: theme.colors.success
+		backgroundColor: theme.colors.primarySubtle
+		// backgroundColor: theme.colors.mutedSubtlerFill
 	},
 
 	Paragraph: {

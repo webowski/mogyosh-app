@@ -94,7 +94,6 @@ export default function ExpandableBlock({
 			{data.settings?.checkable && (
 				<Checkbox
 					style={blockStyles.Block__checkbox}
-					appearance={data.settings?.journaled ? 'success' : 'default'}
 					checked={checked}
 					onPress={handlePressCheckbox}
 				/>

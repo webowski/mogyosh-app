@@ -64,11 +64,7 @@ export default function CounterBlock({
 			</View>
 			<View style={blockStyles.Timer__actions}>
 				{data.settings?.checkable && (
-					<Checkbox
-						appearance={data.settings?.journaled ? 'success' : 'default'}
-						checked={checked}
-						onPress={handlePressCheckbox}
-					/>
+					<Checkbox checked={checked} onPress={handlePressCheckbox} />
 				)}
 			</View>
 		</View>

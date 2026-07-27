@@ -145,6 +145,9 @@ export default function BlockNode({
 				<Animated.View style={dragRowStyle}>
 					<View onLayout={onLayout} style={blockStyles.Block}>
 						{content}
+						{data.settings?.journaled && (
+							<View style={blockStyles.Block__journaled} />
+						)}
 					</View>
 					{isChildShown &&
 						data.children.map((child) => (
