@@ -1,6 +1,7 @@
 import { Text, View } from 'react-native'
 
 import { BlockInputRefsMap, BlockProps } from '@/shared/domain/block'
+import { findUnitById } from '@/shared/domain/units'
 import Checkbox from '@/shared/ui/Checkbox'
 import { MarkdownInput } from '@/shared/ui/MarkdownInput'
 import { useBlockLogic } from '../model/useBlockLogic'
@@ -54,7 +55,9 @@ export default function CounterBlock({
 				<View style={blockStyles.CounterSet}>
 					<View style={blockStyles.Counter}>
 						<Text style={blockStyles.Counter__value}>50</Text>
-						<Text style={blockStyles.Counter__units}>кг</Text>
+						<Text style={blockStyles.Counter__units}>
+							{findUnitById(data.settings?.units)?.label ?? ''}
+						</Text>
 					</View>
 					<View style={blockStyles.Counter}>
 						<Text style={blockStyles.Counter__value}>10</Text>

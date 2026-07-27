@@ -1,8 +1,11 @@
+import { MenuView } from '@expo/ui/community/menu'
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons'
+import { useMemo } from 'react'
 import { Switch, Text, TextInput, View } from 'react-native'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 import type { BlockEntity, BlockSettings } from '@/shared/domain/block'
+import { findUnitById, type UnitCategory, UNITS } from '@/shared/domain/units'
 import { STYLE_VARS } from '@/shared/styles/common'
 
 type BlockSettingsFormProps = {
@@ -18,6 +21,32 @@ type BlockSettingsFormProps = {
 export function BlockSettingsForm({ block, onChange }: BlockSettingsFormProps) {
 	const { theme } = useUnistyles()
 	const settings = block.settings ?? {}
+
+	const UNIT_CATEGORY_LABELS: Record<UnitCategory, string> = {
+		weight: 'Вес',
+		distance: 'Расстояние',
+		volume: 'Объём',
+		quantity: 'Количество'
+	}
+
+	const unitMenuActions = useMemo(
+		() => {
+			const categories = Array.from(new Set(UNITS.map((unit) => unit.category)))
+			return categories.map((category) => ({
+				id: category,
+				title: UNIT_CATEGORY_LABELS[category],
+				subactions: UNITS.filter((unit) => unit.category === category).map(
+					(unit) => ({
+						id: unit.id,
+						title: `${unit.label} (${unit.system === 'metric' ? 'метр.' : 'имп.'})`,
+						state: settings.units === unit.id ? 'on' : 'off'
+					})
+				)
+			}))
+		},
+		// eslint-disable-next-line
+		[settings.units]
+	)
 
 	return (
 		<View style={styles.Form}>
@@ -119,13 +148,16 @@ export function BlockSettingsForm({ block, onChange }: BlockSettingsFormProps) {
 					</View>
 					<View style={styles.Form__row}>
 						<Text style={styles.Form__labelText}>Единицы</Text>
-						<TextInput
-							style={styles.Form__input}
-							defaultValue={settings.units ?? ''}
-							onEndEditing={(event) =>
-								onChange({ units: event.nativeEvent.text })
+						<MenuView
+							actions={unitMenuActions}
+							onPressAction={(event) =>
+								onChange({ units: event.nativeEvent.event })
 							}
-						/>
+						>
+							<Text style={styles.Form__input}>
+								{findUnitById(settings.units)?.label ?? 'Выбрать'}
+							</Text>
+						</MenuView>
 					</View>
 				</>
 			)}
