@@ -27,6 +27,7 @@ export const blockStyles = StyleSheet.create((theme, rt) => ({
 		borderBottomLeftRadius: 4,
 		// borderRadius: 4,
 		// backgroundColor: theme.colors.success
+		// boxShadow: `0 0 0 6px ${theme.colors.success}`,
 		backgroundColor: theme.colors.primarySubtle
 		// backgroundColor: theme.colors.mutedSubtlerFill
 	},
