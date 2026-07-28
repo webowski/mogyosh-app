@@ -7,6 +7,7 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 import type { BlockEntity, BlockSettings } from '@/shared/domain/block'
 import { findUnitById, type UnitCategory, UNITS } from '@/shared/domain/units'
 import { STYLE_VARS } from '@/shared/styles/common'
+import { useTranslation } from 'react-i18next'
 
 type BlockSettingsFormProps = {
 	block: BlockEntity
@@ -20,6 +21,7 @@ type BlockSettingsFormProps = {
  */
 export function BlockSettingsForm({ block, onChange }: BlockSettingsFormProps) {
 	const { theme } = useUnistyles()
+	const { t } = useTranslation()
 	const settings = block.settings ?? {}
 
 	const UNIT_CATEGORY_LABELS: Record<UnitCategory, string> = {
@@ -29,24 +31,20 @@ export function BlockSettingsForm({ block, onChange }: BlockSettingsFormProps) {
 		quantity: 'Количество'
 	}
 
-	const unitMenuActions = useMemo(
-		() => {
-			const categories = Array.from(new Set(UNITS.map((unit) => unit.category)))
-			return categories.map((category) => ({
-				id: category,
-				title: UNIT_CATEGORY_LABELS[category],
-				subactions: UNITS.filter((unit) => unit.category === category).map(
-					(unit) => ({
-						id: unit.id,
-						title: `${unit.label} (${unit.system === 'metric' ? 'метр.' : 'имп.'})`,
-						state: (settings.units === unit.id ? 'on' : 'off') as 'on' | 'off'
-					})
-				)
-			}))
-		},
-		// eslint-disable-next-line
-		[settings.units]
-	)
+	const unitMenuActions = useMemo(() => {
+		const categories = Array.from(new Set(UNITS.map((unit) => unit.category)))
+		return categories.map((category) => ({
+			id: category,
+			title: t(`units.category.${category}` as UnitCategory),
+			subactions: UNITS.filter((unit) => unit.category === category).map(
+				(unit) => ({
+					id: unit.id,
+					title: `${t(unit.labelKey)} (${t(`units.system.${unit.system}`)})`,
+					state: (settings.units === unit.id ? 'on' : 'off') as 'on' | 'off'
+				})
+			)
+		}))
+	}, [settings.units, t])
 
 	return (
 		<View style={styles.Form}>
@@ -147,7 +145,7 @@ export function BlockSettingsForm({ block, onChange }: BlockSettingsFormProps) {
 						/>
 					</View>
 					<View style={styles.Form__row}>
-						<Text style={styles.Form__labelText}>Единицы</Text>
+						<Text style={styles.Form__labelText}>{t('form.units')}</Text>
 						<MenuView
 							actions={unitMenuActions}
 							onPressAction={(event) =>
@@ -155,7 +153,9 @@ export function BlockSettingsForm({ block, onChange }: BlockSettingsFormProps) {
 							}
 						>
 							<Text style={styles.Form__input}>
-								{findUnitById(settings.units)?.label ?? 'Выбрать'}
+								{findUnitById(settings.units)
+									? t(findUnitById(settings.units)!.labelKey)
+									: t('units.selectPlaceholder')}
 							</Text>
 						</MenuView>
 					</View>

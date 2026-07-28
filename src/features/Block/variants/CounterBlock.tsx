@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
 import { BlockInputRefsMap, BlockProps } from '@/shared/domain/block'
@@ -20,6 +21,8 @@ export default function CounterBlock({
 	onRemove,
 	pendingFocusId
 }: CounterBlockProps) {
+	const { t } = useTranslation()
+
 	const {
 		inputRef,
 		checked,
@@ -56,12 +59,14 @@ export default function CounterBlock({
 					<View style={blockStyles.Counter}>
 						<Text style={blockStyles.Counter__value}>50</Text>
 						<Text style={blockStyles.Counter__units}>
-							{findUnitById(data.settings?.units)?.label ?? ''}
+							{findUnitById(data.settings?.units)
+								? t(findUnitById(data.settings?.units)!.labelKey)
+								: ''}
 						</Text>
 					</View>
 					<View style={blockStyles.Counter}>
 						<Text style={blockStyles.Counter__value}>10</Text>
-						<Text style={blockStyles.Counter__units}>пвт.</Text>
+						<Text style={blockStyles.Counter__units}>{t('units.reps')}</Text>
 					</View>
 				</View>
 			</View>

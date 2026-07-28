@@ -55,7 +55,32 @@
 		"24": "24時間制"
 	},
 	"form": {
-		"title": "タイトル"
+		"title": "タイトル",
+		"units": "単位"
+	},
+	"units": {
+		"reps": "回",
+		"kg": "kg",
+		"g": "g",
+		"lb": "lbs",
+		"oz": "oz",
+		"km": "km",
+		"m": "m",
+		"mi": "mi",
+		"ft": "ft",
+		"l": "l",
+		"ml": "ml",
+		"gal": "gal",
+		"floz": "fl oz",
+		"pcs": "個",
+		"selectPlaceholder": "選択",
+		"category": {
+			"weight": "重量",
+			"distance": "距離",
+			"volume": "容量",
+			"quantity": "数量"
+		},
+		"system": { "metric": "メートル法", "imperial": "ヤードポンド法" }
 	},
 	"error": {
 		"Enter the task title": "タスクのタイトルを入力してください。"

@@ -55,7 +55,32 @@
 		"24": "24-hour"
 	},
 	"form": {
-		"title": "Title"
+		"title": "Title",
+		"units": "Units"
+	},
+	"units": {
+		"reps": "reps",
+		"kg": "kg",
+		"g": "g",
+		"lb": "lbs",
+		"oz": "oz",
+		"km": "km",
+		"m": "m",
+		"mi": "mi",
+		"ft": "ft",
+		"l": "l",
+		"ml": "ml",
+		"gal": "gal",
+		"floz": "fl oz",
+		"pcs": "pcs",
+		"selectPlaceholder": "Select",
+		"category": {
+			"weight": "Weight",
+			"distance": "Distance",
+			"volume": "Volume",
+			"quantity": "Quantity"
+		},
+		"system": { "metric": "metric", "imperial": "imperial" }
 	},
 	"error": {
 		"Enter the task title": "Enter the task title"

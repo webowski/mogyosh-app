@@ -55,7 +55,32 @@
 		"24": "24 horas"
 	},
 	"form": {
-		"title": "Título"
+		"title": "Título",
+		"units": "Unidades"
+	},
+	"units": {
+		"reps": "reps",
+		"kg": "kg",
+		"g": "g",
+		"lb": "lbs",
+		"oz": "oz",
+		"km": "km",
+		"m": "m",
+		"mi": "mi",
+		"ft": "ft",
+		"l": "l",
+		"ml": "ml",
+		"gal": "gal",
+		"floz": "fl oz",
+		"pcs": "uds.",
+		"selectPlaceholder": "Seleccionar",
+		"category": {
+			"weight": "Peso",
+			"distance": "Distancia",
+			"volume": "Volumen",
+			"quantity": "Cantidad"
+		},
+		"system": { "metric": "métrico", "imperial": "imperial" }
 	},
 	"error": {
 		"Enter the task title": "Introduce el título del trabajo"

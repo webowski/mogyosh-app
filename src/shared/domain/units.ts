@@ -3,25 +3,30 @@ export type UnitSystem = 'metric' | 'imperial'
 
 export type UnitDefinition = {
 	id: string
-	label: string
+	labelKey: string
 	category: UnitCategory
 	system: UnitSystem
 }
 
 export const UNITS: UnitDefinition[] = [
-	{ id: 'kg', label: 'кг', category: 'weight', system: 'metric' },
-	{ id: 'g', label: 'г', category: 'weight', system: 'metric' },
-	{ id: 'lb', label: 'lbs', category: 'weight', system: 'imperial' },
-	{ id: 'oz', label: 'oz', category: 'weight', system: 'imperial' },
-	{ id: 'km', label: 'км', category: 'distance', system: 'metric' },
-	{ id: 'm', label: 'м', category: 'distance', system: 'metric' },
-	{ id: 'mi', label: 'mi', category: 'distance', system: 'imperial' },
-	{ id: 'ft', label: 'ft', category: 'distance', system: 'imperial' },
-	{ id: 'l', label: 'л', category: 'volume', system: 'metric' },
-	{ id: 'ml', label: 'мл', category: 'volume', system: 'metric' },
-	{ id: 'gal', label: 'gal', category: 'volume', system: 'imperial' },
-	{ id: 'floz', label: 'fl oz', category: 'volume', system: 'imperial' },
-	{ id: 'pcs', label: 'шт.', category: 'quantity', system: 'metric' }
+	{ id: 'kg', labelKey: 'units.kg', category: 'weight', system: 'metric' },
+	{ id: 'g', labelKey: 'units.g', category: 'weight', system: 'metric' },
+	{ id: 'lb', labelKey: 'units.lb', category: 'weight', system: 'imperial' },
+	{ id: 'oz', labelKey: 'units.oz', category: 'weight', system: 'imperial' },
+	{ id: 'km', labelKey: 'units.km', category: 'distance', system: 'metric' },
+	{ id: 'm', labelKey: 'units.m', category: 'distance', system: 'metric' },
+	{ id: 'mi', labelKey: 'units.mi', category: 'distance', system: 'imperial' },
+	{ id: 'ft', labelKey: 'units.ft', category: 'distance', system: 'imperial' },
+	{ id: 'l', labelKey: 'units.l', category: 'volume', system: 'metric' },
+	{ id: 'ml', labelKey: 'units.ml', category: 'volume', system: 'metric' },
+	{ id: 'gal', labelKey: 'units.gal', category: 'volume', system: 'imperial' },
+	{
+		id: 'floz',
+		labelKey: 'units.floz',
+		category: 'volume',
+		system: 'imperial'
+	},
+	{ id: 'pcs', labelKey: 'units.pcs', category: 'quantity', system: 'metric' }
 ]
 
 export const findUnitById = (unitId?: string): UnitDefinition | undefined =>

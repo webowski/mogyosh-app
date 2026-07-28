@@ -55,7 +55,32 @@
 		"24": "24-часовой"
 	},
 	"form": {
-		"title": "Заголовок"
+		"title": "Заголовок",
+		"units": "Единицы"
+	},
+	"units": {
+		"reps": "пвт.",
+		"kg": "кг",
+		"g": "г",
+		"lb": "lbs",
+		"oz": "oz",
+		"km": "км",
+		"m": "м",
+		"mi": "mi",
+		"ft": "ft",
+		"l": "л",
+		"ml": "мл",
+		"gal": "gal",
+		"floz": "fl oz",
+		"pcs": "шт.",
+		"selectPlaceholder": "Выбрать",
+		"category": {
+			"weight": "Вес",
+			"distance": "Расстояние",
+			"volume": "Объём",
+			"quantity": "Количество"
+		},
+		"system": { "metric": "метр.", "imperial": "имп." }
 	},
 	"error": {
 		"Enter the task title": "Введите заголовок задачи"
