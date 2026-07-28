@@ -39,7 +39,7 @@ export function BlockSettingsForm({ block, onChange }: BlockSettingsFormProps) {
 					(unit) => ({
 						id: unit.id,
 						title: `${unit.label} (${unit.system === 'metric' ? 'метр.' : 'имп.'})`,
-						state: settings.units === unit.id ? 'on' : 'off'
+						state: (settings.units === unit.id ? 'on' : 'off') as 'on' | 'off'
 					})
 				)
 			}))
