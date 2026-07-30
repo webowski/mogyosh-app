@@ -29,6 +29,8 @@ export default function HeaderCalendar({
 		setCalendarTitle(formatCalendarTitle(selectedMonth))
 	})
 
+	console.log('render component')
+
 	useEffect(
 		function effectOnMonthChange() {
 			setCalendarTitle(formatCalendarTitle(selectedMonth))
