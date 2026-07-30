@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTaskById } from '@/features/TaskList'
 import { useCategoriesStore } from '@/features/TaskList/model/categoriesStore'
 import { makeCategoryPath } from '@/features/TaskList/model/task.utils'
+import { useCalendarStore } from '@/shared/model/calendar.store'
 import { useTaskStore } from '@/shared/model/task.store'
 import { commonStyles, STYLE_VARS } from '@/shared/styles/common'
 
@@ -20,6 +21,7 @@ export default function HeaderTask({
 
 	const categoryMap = useCategoriesStore((state) => state.entities)
 	const selectedTaskId = useTaskStore((state) => state.selectedTaskId)
+	const selectedDate = useCalendarStore((state) => state.selectedDate)
 
 	const { data, isLoading, error } = useTaskById(selectedTaskId)
 
@@ -40,6 +42,12 @@ export default function HeaderTask({
 					: ' '}
 			</Text>
 			<Text style={commonStyles.headerTitle}>{!error && data?.title}</Text>
+			<Text style={commonStyles.headerSubtitle}>
+				{selectedDate.toLocaleDateString('ru-RU', {
+					day: 'numeric',
+					month: 'long'
+				})}
+			</Text>
 		</View>
 	)
 }
