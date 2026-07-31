@@ -1,15 +1,18 @@
 import { NativeStackHeaderProps } from 'expo-router/build/react-navigation/native-stack'
 import { BottomTabHeaderProps } from 'expo-router/js-tabs'
+import { useEffect, useState } from 'react'
 import { Text, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { StyleSheet } from 'react-native-unistyles'
 
 import { useTaskById } from '@/features/TaskList'
 import { useCategoriesStore } from '@/features/TaskList/model/categoriesStore'
 import { makeCategoryPath } from '@/features/TaskList/model/task.utils'
+import { useLanguageChange } from '@/shared/i18n/useLanguageChange'
+import { formatNavDate } from '@/shared/lib/time'
 import { useCalendarStore } from '@/shared/model/calendar.store'
 import { useTaskStore } from '@/shared/model/task.store'
 import { commonStyles, STYLE_VARS } from '@/shared/styles/common'
-import { StyleSheet } from 'react-native-unistyles'
 
 type HeaderProps = BottomTabHeaderProps | NativeStackHeaderProps
 
@@ -26,7 +29,20 @@ export default function HeaderTask({
 
 	const { data, isLoading, error } = useTaskById(selectedTaskId)
 
+	const [titleDate, setTitleDate] = useState(formatNavDate(selectedDate))
+
 	// if (isLoading) return <ActivityIndicator />
+
+	useLanguageChange(() => {
+		setTitleDate(formatNavDate(selectedDate))
+	})
+
+	useEffect(
+		function effectOnDateChange() {
+			setTitleDate(formatNavDate(selectedDate))
+		},
+		[selectedDate]
+	)
 
 	return (
 		<View
@@ -48,10 +64,11 @@ export default function HeaderTask({
 			</View>
 			<View style={styles.HeaderTask__dateBadge}>
 				<Text style={styles.HeaderTask__dateBadgeText}>
-					{selectedDate.toLocaleDateString('ru-RU', {
+					{titleDate}
+					{/* {selectedDate.toLocaleDateString('ru-RU', {
 						day: 'numeric',
 						month: 'long'
-					})}
+					})} */}
 				</Text>
 			</View>
 		</View>
