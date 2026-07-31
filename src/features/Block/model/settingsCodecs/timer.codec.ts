@@ -12,12 +12,14 @@ export const timerSettingsCodecV1: BlockSettingsCodec<TimerBlockSettings> = {
 	encode: (settings) => [
 		settings.checkable ?? false,
 		settings.journaled ?? false,
+		settings.in_stats ?? false,
 		settings.duration ?? 0,
 		MODE_CODE[settings.mode ?? 'increasing']
 	],
-	decode: ([checkable, journaled, duration, modeCode]) => ({
+	decode: ([checkable, journaled, inStats, duration, modeCode]) => ({
 		checkable: Boolean(checkable),
 		journaled: Boolean(journaled),
+		in_stats: Boolean(inStats),
 		duration: Number(duration ?? 0),
 		mode: MODE_FROM_CODE[Number(modeCode ?? 0)]
 	})

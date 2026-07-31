@@ -5,10 +5,12 @@ export const defaultSettingsCodecV1: BlockSettingsCodec<CommonBlockSettings> = {
 	version: 1,
 	encode: (settings) => [
 		settings.checkable ?? false,
-		settings.journaled ?? false
+		settings.journaled ?? false,
+		settings.in_stats ?? false
 	],
-	decode: ([checkable, journaled]) => ({
+	decode: ([checkable, journaled, inStats]) => ({
 		checkable: Boolean(checkable),
-		journaled: Boolean(journaled)
+		journaled: Boolean(journaled),
+		in_stats: Boolean(inStats)
 	})
 }
