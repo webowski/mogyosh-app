@@ -79,6 +79,21 @@ export function BlockSettingsForm({ block, onChange }: BlockSettingsFormProps) {
 				/>
 			</View>
 
+			<View style={styles.Form__row}>
+				<View style={styles.Form__rowLabel}>
+					<MaterialDesignIcons
+						name='chart-line'
+						size={20}
+						color={theme.colors.major}
+					/>
+					<Text style={styles.Form__labelText}>Показывать в статистике</Text>
+				</View>
+				<Toggle
+					value={settings.in_stats ?? false}
+					onChange={(in_stats) => onChange({ in_stats })}
+				/>
+			</View>
+
 			{(block.type === 'timer' || block.type === 'stopwatch') && (
 				<View style={styles.Form__row}>
 					<Text style={styles.Form__labelText}>Длительность (сек)</Text>
