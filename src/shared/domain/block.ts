@@ -37,6 +37,7 @@ export type BlockStateEntity = {
 export type CommonBlockSettings = {
 	checkable?: boolean
 	journaled?: boolean
+	in_stats?: boolean
 }
 
 export type TimerBlockSettings = CommonBlockSettings & {

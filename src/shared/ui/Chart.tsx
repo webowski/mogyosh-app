@@ -3,21 +3,15 @@ import { View } from 'react-native'
 import { useUnistyles } from 'react-native-unistyles'
 import { CartesianChart, Line as VictoryLine } from 'victory-native'
 
-const weeklyData = [
-	{ week: 'Нед 1', count: 8 },
-	{ week: 'Нед 2', count: 9 },
-	{ week: 'Нед 3', count: 10 },
-	{ week: 'Нед 4', count: 12 },
-	{ week: 'Нед 5', count: 12 },
-	{ week: 'Нед 6', count: 14 },
-	{ week: 'Нед 7', count: 14 },
-	{ week: 'Нед 8', count: 15 }
-]
+type ChartPoint = { label: string; value: number }
 
-const MAX_VALUE = 20
-const MIN_VALUE = 8
+type ChartProps = {
+	data: ChartPoint[]
+	minValue: number
+	maxValue: number
+}
 
-export function Chart() {
+export function Chart({ data, minValue, maxValue }: ChartProps) {
 	const { theme } = useUnistyles()
 
 	return (
@@ -29,15 +23,15 @@ export function Chart() {
 			}}
 		>
 			<CartesianChart
-				data={weeklyData}
-				xKey='week'
-				yKeys={['count']}
-				domain={{ y: [MIN_VALUE, MAX_VALUE] }}
+				data={data}
+				xKey='label'
+				yKeys={['value']}
+				domain={{ y: [minValue, maxValue] }}
 				padding={{ top: 24, bottom: 24, left: 16, right: 16 }}
 			>
 				{({ points, chartBounds, yScale }) => {
-					const maxY = yScale(MAX_VALUE)
-					const minY = yScale(MIN_VALUE)
+					const maxY = yScale(maxValue)
+					const minY = yScale(minValue)
 
 					return (
 						<>
@@ -46,21 +40,15 @@ export function Chart() {
 								p2={{ x: chartBounds.right, y: maxY }}
 								color={theme.colors.success}
 								strokeWidth={1}
-							>
-								{/* <DashPathEffect intervals={[6, 6]} /> */}
-							</Line>
-
+							/>
 							<Line
 								p1={{ x: chartBounds.left, y: minY }}
 								p2={{ x: chartBounds.right, y: minY }}
 								color={theme.colors.mutedSubtleFill}
 								strokeWidth={2}
-							>
-								{/* <DashPathEffect intervals={[6, 6]} /> */}
-							</Line>
-
+							/>
 							<VictoryLine
-								points={points.count}
+								points={points.value}
 								color={theme.colors.primary}
 								strokeWidth={3}
 							/>

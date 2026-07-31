@@ -1,31 +1,45 @@
-import { ScrollView, Text } from 'react-native'
+import { ScrollView, Text, View } from 'react-native'
 
+import { useStatsBlocks } from '@/features/BlockState/model/useStatsBlocks'
 import { staticStyles } from '@/shared/styles/common'
 import { textStyles } from '@/shared/styles/text'
 import { Chart } from '@/shared/ui/Chart'
 
-const weeklyData = [
-	{ week: 'Нед 1', count: 8 },
-	{ week: 'Нед 2', count: 10 },
-	{ week: 'Нед 3', count: 9 },
-	{ week: 'Нед 4', count: 12 },
-	{ week: 'Нед 5', count: 15 },
-	{ week: 'Нед 6', count: 14 },
-	{ week: 'Нед 7', count: 18 },
-	{ week: 'Нед 8', count: 20 }
-]
+const formatDayLabel = (date: Date): string =>
+	`${date.getDate()}.${date.getMonth() + 1}`
 
 export default function ProgressScreen() {
+	const { data: statsBlocks, isLoading } = useStatsBlocks()
+
+	if (isLoading) return null
+
 	return (
 		<ScrollView
 			style={staticStyles.ScrollBox}
 			contentContainerStyle={staticStyles.ScrollBox__inner}
 			overScrollMode='never'
 		>
-			<Text style={[textStyles.heading2, { marginBottom: 8 }]}>
-				Подтягивания
-			</Text>
-			<Chart />
+			{statsBlocks?.map(({ block, series }) => {
+				const values = series.map((point) => point.value)
+				const minValue = Math.min(...values)
+				const maxValue = Math.max(...values)
+
+				return (
+					<View key={block.id} style={{ marginBottom: 24 }}>
+						<Text style={[textStyles.heading2, { marginBottom: 8 }]}>
+							{block.text_content}
+						</Text>
+						<Chart
+							data={series.map((point) => ({
+								label: formatDayLabel(point.date),
+								value: point.value
+							}))}
+							minValue={minValue}
+							maxValue={maxValue}
+						/>
+					</View>
+				)
+			})}
 		</ScrollView>
 	)
 }

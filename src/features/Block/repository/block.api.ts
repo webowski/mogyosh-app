@@ -149,10 +149,24 @@ const setBlockPersistentCompleted = async ({
 	return makeBlockObject(data)
 }
 
+const getStatsBlocks = async (): Promise<BlockEntity[]> => {
+	const { data, error } = await supabaseClient
+		.from('blocks')
+		.select(SUBITEMS_SELECT)
+		.eq('status', 'active')
+
+	if (error) throw error
+
+	return (data ?? [])
+		.map(makeBlockObject)
+		.filter((block) => block.settings?.in_stats)
+}
+
 export const blockAPI = {
 	getBlocks,
 	setBlockCompleted,
 	createBlock,
 	deleteBlock,
-	setBlockPersistentCompleted
+	setBlockPersistentCompleted,
+	getStatsBlocks
 }
