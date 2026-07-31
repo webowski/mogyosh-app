@@ -67,7 +67,9 @@ export default function CounterBlock({
 						</Text>
 					</View>
 					<View style={blockStyles.Counter}>
-						<Text style={blockStyles.Counter__value}>10</Text>
+						<Text style={blockStyles.Counter__value}>
+							{data.settings?.count}
+						</Text>
 						<Text style={blockStyles.Counter__units}>{t('units.reps')}</Text>
 					</View>
 				</View>

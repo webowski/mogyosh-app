@@ -49,10 +49,15 @@ export type StopwatchBlockSettings = CommonBlockSettings & {
 }
 
 export type CounterBlockSettings = CommonBlockSettings & {
-	goal?: number
-	start?: number
 	value?: number
 	units?: string
+	start?: number
+	goal?: number
+
+	count?: number
+	countUnits?: string
+	startCount?: number
+	goalCount?: number
 }
 
 // Loose superset used across UI components (data.settings?.duration и т.п.) —

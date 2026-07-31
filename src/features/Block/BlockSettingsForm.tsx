@@ -170,6 +170,17 @@ export function BlockSettingsForm({ block, onChange }: BlockSettingsFormProps) {
 							</Text>
 						</MenuView>
 					</View>
+					<View style={styles.Form__row}>
+						<Text style={styles.Form__labelText}>Количество повторений</Text>
+						<TextInput
+							style={styles.Form__input}
+							keyboardType='numeric'
+							defaultValue={String(settings.count ?? 0)}
+							onEndEditing={(event) =>
+								onChange({ count: Number(event.nativeEvent.text || 0) })
+							}
+						/>
+					</View>
 				</>
 			)}
 		</View>
