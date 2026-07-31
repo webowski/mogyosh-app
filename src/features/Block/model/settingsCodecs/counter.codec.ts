@@ -7,15 +7,19 @@ export const counterSettingsCodecV1: BlockSettingsCodec<CounterBlockSettings> =
 		encode: (settings) => [
 			settings.checkable ?? false,
 			settings.journaled ?? false,
-			settings.goal ?? 0,
+			settings.value ?? 0,
+			settings.units ?? '',
 			settings.start ?? 0,
-			settings.units ?? ''
+			settings.goal ?? 0,
+			settings.count ?? 0
 		],
-		decode: ([checkable, journaled, goal, start, units]) => ({
+		decode: ([checkable, journaled, value, units, start, goal, count]) => ({
 			checkable: Boolean(checkable),
 			journaled: Boolean(journaled),
-			goal: Number(goal ?? 0),
+			value: Number(value ?? 0),
+			units: String(units ?? ''),
 			start: Number(start ?? 0),
-			units: String(units ?? '')
+			goal: Number(goal ?? 0),
+			count: Number(count ?? 0)
 		})
 	}
