@@ -20,8 +20,7 @@ module.exports = function (api) {
 					// check available babel options
 					root: 'src'
 				}
-			],
-			'react-native-worklets/plugin'
+			]
 		]
 	}
 }
