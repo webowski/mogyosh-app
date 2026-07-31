@@ -51,6 +51,7 @@ export type StopwatchBlockSettings = CommonBlockSettings & {
 export type CounterBlockSettings = CommonBlockSettings & {
 	goal?: number
 	start?: number
+	value?: number
 	units?: string
 }
 

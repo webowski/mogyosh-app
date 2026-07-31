@@ -57,7 +57,9 @@ export default function CounterBlock({
 				/>
 				<View style={blockStyles.CounterSet}>
 					<View style={blockStyles.Counter}>
-						<Text style={blockStyles.Counter__value}>50</Text>
+						<Text style={blockStyles.Counter__value}>
+							{data.settings?.value}
+						</Text>
 						<Text style={blockStyles.Counter__units}>
 							{findUnitById(data.settings?.units)
 								? t(findUnitById(data.settings?.units)!.labelKey)
