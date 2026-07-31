@@ -145,6 +145,17 @@ export function BlockSettingsForm({ block, onChange }: BlockSettingsFormProps) {
 						/>
 					</View>
 					<View style={styles.Form__row}>
+						<Text style={styles.Form__labelText}>Текущее значение</Text>
+						<TextInput
+							style={styles.Form__input}
+							keyboardType='numeric'
+							defaultValue={String(settings.value ?? 0)}
+							onEndEditing={(event) =>
+								onChange({ value: Number(event.nativeEvent.text || 0) })
+							}
+						/>
+					</View>
+					<View style={styles.Form__row}>
 						<Text style={styles.Form__labelText}>{t('form.units')}</Text>
 						<MenuView
 							actions={unitMenuActions}
