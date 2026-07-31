@@ -1,13 +1,14 @@
 import { MenuView } from '@expo/ui/community/menu'
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons'
 import { useMemo } from 'react'
-import { Switch, Text, TextInput, View } from 'react-native'
+import { useTranslation } from 'react-i18next'
+import { Text, TextInput, View } from 'react-native'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 import type { BlockEntity, BlockSettings } from '@/shared/domain/block'
 import { findUnitById, type UnitCategory, UNITS } from '@/shared/domain/units'
 import { STYLE_VARS } from '@/shared/styles/common'
-import { useTranslation } from 'react-i18next'
+import { Toggle } from '@/shared/ui/Toggle'
 
 type BlockSettingsFormProps = {
 	block: BlockEntity
@@ -57,9 +58,9 @@ export function BlockSettingsForm({ block, onChange }: BlockSettingsFormProps) {
 					/>
 					<Text style={styles.Form__labelText}>Чекбокс</Text>
 				</View>
-				<Switch
+				<Toggle
 					value={settings.checkable ?? false}
-					onValueChange={(checkable) => onChange({ checkable })}
+					onChange={(checkable) => onChange({ checkable })}
 				/>
 			</View>
 
@@ -72,9 +73,9 @@ export function BlockSettingsForm({ block, onChange }: BlockSettingsFormProps) {
 					/>
 					<Text style={styles.Form__labelText}>Журналировать по дням</Text>
 				</View>
-				<Switch
+				<Toggle
 					value={settings.journaled ?? false}
-					onValueChange={(journaled) => onChange({ journaled })}
+					onChange={(journaled) => onChange({ journaled })}
 				/>
 			</View>
 
