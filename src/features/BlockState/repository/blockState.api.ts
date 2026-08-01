@@ -3,7 +3,7 @@ import type { BlockId } from '@/shared/domain/ids'
 import {
 	getCodecByVersion,
 	getLatestCodec,
-	type BlockType
+	type BlockStateCodecKind
 } from '../model/codecs/registry'
 import {
 	bytesToHex,
@@ -14,18 +14,18 @@ import {
 
 type SetBlockDayStateParams<TState> = {
 	blockId: BlockId
-	blockType: BlockType
+	blockStateCodecKind: BlockStateCodecKind
 	date: Date
 	state: TState
 }
 
 export const setBlockDayState = async <TState>({
 	blockId,
-	blockType,
+	blockStateCodecKind,
 	date,
 	state
 }: SetBlockDayStateParams<TState>): Promise<void> => {
-	const codec = getLatestCodec<TState>(blockType)
+	const codec = getLatestCodec<TState>(blockStateCodecKind)
 	const encodedState = codec.encode(state)
 
 	const dayPayload = new Uint8Array(1 + encodedState.length)
@@ -43,7 +43,7 @@ export const setBlockDayState = async <TState>({
 }
 
 export const getBlockDayState = <TState>(
-	blockType: BlockType,
+	blockStateCodecKind: BlockStateCodecKind,
 	monthBytes: Uint8Array,
 	dayOfMonth: number
 ): TState | null => {
@@ -52,14 +52,14 @@ export const getBlockDayState = <TState>(
 
 	const codecVersion = dayPayload[0]
 	const encodedState = dayPayload.slice(1)
-	const codec = getCodecByVersion<TState>(blockType, codecVersion)
+	const codec = getCodecByVersion<TState>(blockStateCodecKind, codecVersion)
 
 	return codec.decode(encodedState, codecVersion)
 }
 
 type SetBlockPersistentStateParams<TState> = {
 	blockId: BlockId
-	blockType: BlockType
+	blockStateCodecKind: BlockStateCodecKind
 	state: TState
 }
 
@@ -69,10 +69,10 @@ type SetBlockPersistentStateParams<TState> = {
  */
 export const setBlockPersistentState = async <TState>({
 	blockId,
-	blockType,
+	blockStateCodecKind,
 	state
 }: SetBlockPersistentStateParams<TState>): Promise<void> => {
-	const codec = getLatestCodec<TState>(blockType)
+	const codec = getLatestCodec<TState>(blockStateCodecKind)
 	const encodedState = codec.encode(state)
 
 	const payload = new Uint8Array(1 + encodedState.length)
@@ -92,7 +92,7 @@ export const setBlockPersistentState = async <TState>({
  * used for the month = NULL row instead of getBlockDayState's bitmap extraction.
  */
 export const decodeBlockStatePayload = <TState>(
-	blockType: BlockType,
+	blockType: BlockStateCodecKind,
 	hex: string | null | undefined
 ): TState | null => {
 	const bytes = parseByteaHex(hex)
