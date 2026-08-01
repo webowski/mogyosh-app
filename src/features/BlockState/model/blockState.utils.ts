@@ -10,6 +10,7 @@ import { getMonthStart, parseByteaHex } from './dayLayout'
  * Checks whether a checkbox-type block is completed on a specific calendar day
  */
 export const isBlockCompletedOnDate = (
+	block: Pick<BlockEntity, 'type'>,
 	states: BlockMonthStateEntity[] | undefined,
 	date: Date
 ): boolean => {
@@ -22,12 +23,21 @@ export const isBlockCompletedOnDate = (
 	if (!monthState) return false
 
 	const monthBytes = parseByteaHex(monthState.state)
+
+	if (block.type === 'counter') {
+		const state = getBlockDayState<{ value: number }>(
+			'counter',
+			monthBytes,
+			date.getDate()
+		)
+		return state != null
+	}
+
 	const completed = getBlockDayState<boolean>(
 		'checkbox',
 		monthBytes,
 		date.getDate()
 	)
-
 	return completed ?? false
 }
 
@@ -52,5 +62,5 @@ export const isBlockChecked = (
 		)
 	}
 
-	return isBlockCompletedOnDate(block.states, date)
+	return isBlockCompletedOnDate(block, block.states, date)
 }

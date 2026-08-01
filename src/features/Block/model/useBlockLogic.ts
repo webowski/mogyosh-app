@@ -122,9 +122,11 @@ export function useBlockLogic({
 			if (isJournaled) {
 				updateBlockState.mutate({
 					blockId: data.id,
+					blockType,
 					taskId: data.task_id,
 					date: selectedDate,
-					completed: newChecked
+					completed: newChecked,
+					value: data.settings?.value
 				})
 			} else {
 				updateBlockPersistentState.mutate({

@@ -8,7 +8,8 @@ import { supabaseClient } from '@/shared/api/supabaseClient'
 import type {
 	BlockCreatePayload,
 	BlockEntity,
-	BlockRow
+	BlockRow,
+	BlockType
 } from '@/shared/domain/block'
 import { BlockId, TaskId } from '@/shared/domain/ids'
 import { decodeBlockSettingsFromHex } from '../model/blockSettingsCodec'
@@ -67,8 +68,10 @@ const getBlocks = async (taskId: TaskId): Promise<BlockEntity[]> => {
 
 type SetBlockCompletedParams = {
 	blockId: BlockId
+	blockType: BlockType
 	date: Date
 	completed: boolean
+	value?: number
 }
 
 /**
@@ -76,14 +79,16 @@ type SetBlockCompletedParams = {
  */
 const setBlockCompleted = async ({
 	blockId,
+	blockType,
 	date,
-	completed
+	completed,
+	value
 }: SetBlockCompletedParams): Promise<BlockEntity> => {
 	await setBlockDayState({
 		blockId,
-		blockType: 'checkbox',
+		blockType,
 		date,
-		state: completed
+		state: blockType === 'counter' ? { value: value ?? 0 } : completed
 	})
 
 	const { data, error } = await supabaseClient
