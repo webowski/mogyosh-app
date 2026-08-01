@@ -34,7 +34,7 @@ export const isBlockCompletedOnDate = (
 	}
 
 	const completed = getBlockDayState<boolean>(
-		'checkbox',
+		block.type,
 		monthBytes,
 		date.getDate()
 	)
@@ -47,7 +47,7 @@ export const isBlockCompletedOnDate = (
  * Journaled ("несквозной"): reads the per-day bit from the matching month's bitmap.
  */
 export const isBlockChecked = (
-	block: Pick<BlockEntity, 'states' | 'settings'>,
+	block: Pick<BlockEntity, 'type' | 'states' | 'settings'>,
 	date: Date
 ): boolean => {
 	const isJournaled = block.settings?.journaled ?? false
@@ -57,8 +57,7 @@ export const isBlockChecked = (
 		if (!persistentState) return false
 
 		return (
-			decodeBlockStatePayload<boolean>('checkbox', persistentState.state) ??
-			false
+			decodeBlockStatePayload<boolean>('ul', persistentState.state) ?? false
 		)
 	}
 
