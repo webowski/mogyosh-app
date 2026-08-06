@@ -1,11 +1,14 @@
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Text, View } from 'react-native'
+import { Pressable, Text, TextInput, View } from 'react-native'
 
 import { BlockInputRefsMap, BlockProps } from '@/shared/domain/block'
 import { findUnitById } from '@/shared/domain/units'
 import Checkbox from '@/shared/ui/Checkbox'
 import { MarkdownInput } from '@/shared/ui/MarkdownInput'
+import { KeyboardStickyView } from 'react-native-keyboard-controller'
 import { useBlockLogic } from '../model/useBlockLogic'
+import { useUpdateBlock } from '../model/useUpdateBlock'
 import { blockStyles } from '../style'
 
 type CounterBlockProps = BlockProps & {
@@ -40,6 +43,65 @@ export default function CounterBlock({
 		blockType: 'counter'
 	})
 
+	const updateBlock = useUpdateBlock()
+	const valueInputRef = useRef<TextInput>(null)
+	const hideAccessoryTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
+		null
+	)
+
+	const [isValueFocused, setIsValueFocused] = useState(false)
+	const [valueText, setValueText] = useState(String(data.settings?.value ?? 0))
+
+	useEffect(
+		() => {
+			if (!isValueFocused) setValueText(String(data.settings?.value ?? 0))
+		},
+		// eslint-disable-next-line
+		[data.settings?.value]
+	)
+
+	const commitValue = (nextValue: number) => {
+		setValueText(String(nextValue))
+		updateBlock.mutate({
+			id: data.id,
+			taskId: data.task_id,
+			patch: { settings: { ...data.settings, value: nextValue } }
+		})
+	}
+
+	const handleValueChangeText = (text: string) => {
+		setValueText(text)
+		const parsedValue = Number(text)
+		if (text !== '' && !Number.isNaN(parsedValue)) {
+			updateBlock.mutate({
+				id: data.id,
+				taskId: data.task_id,
+				patch: { settings: { ...data.settings, value: parsedValue } }
+			})
+		}
+	}
+
+	const handleValueFocus = () => {
+		if (hideAccessoryTimeoutRef.current)
+			clearTimeout(hideAccessoryTimeoutRef.current)
+		setIsValueFocused(true)
+	}
+
+	const handleValueBlur = () => {
+		hideAccessoryTimeoutRef.current = setTimeout(() => {
+			setIsValueFocused(false)
+			commitValue(Number(valueText) || 0)
+		}, 150)
+	}
+
+	const handleStep = (step: number) => {
+		if (hideAccessoryTimeoutRef.current)
+			clearTimeout(hideAccessoryTimeoutRef.current)
+		const currentValue = Number(valueText) || 0
+		commitValue(currentValue + step)
+		valueInputRef.current?.focus()
+	}
+
 	return (
 		<View style={blockStyles.Penoblok}>
 			<View style={blockStyles.Timer__body}>
@@ -57,9 +119,18 @@ export default function CounterBlock({
 				/>
 				<View style={blockStyles.CounterSet}>
 					<View style={blockStyles.Counter}>
-						<Text style={blockStyles.Counter__value}>
-							{data.settings?.value}
-						</Text>
+						<TextInput
+							ref={valueInputRef}
+							style={[
+								blockStyles.Counter__value,
+								blockStyles.Counter__valueInput
+							]}
+							value={valueText}
+							keyboardType='number-pad'
+							onFocus={handleValueFocus}
+							onBlur={handleValueBlur}
+							onChangeText={handleValueChangeText}
+						/>
 						<Text style={blockStyles.Counter__units}>
 							{findUnitById(data.settings?.units)
 								? t(findUnitById(data.settings?.units)!.labelKey)
@@ -79,6 +150,27 @@ export default function CounterBlock({
 					<Checkbox checked={checked} onPress={handlePressCheckbox} />
 				)}
 			</View>
+
+			{isValueFocused && (
+				<KeyboardStickyView style={blockStyles.CounterValueAccessory}>
+					<Pressable
+						style={blockStyles.CounterValueAccessory__button}
+						onPressIn={() => handleStep(-1)}
+					>
+						<Text style={blockStyles.CounterValueAccessory__buttonText}>
+							-1
+						</Text>
+					</Pressable>
+					<Pressable
+						style={blockStyles.CounterValueAccessory__button}
+						onPressIn={() => handleStep(1)}
+					>
+						<Text style={blockStyles.CounterValueAccessory__buttonText}>
+							+1
+						</Text>
+					</Pressable>
+				</KeyboardStickyView>
+			)}
 		</View>
 	)
 }

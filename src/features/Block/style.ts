@@ -213,6 +213,30 @@ export const blockStyles = StyleSheet.create((theme, rt) => ({
 		color: theme.colors.mutedText
 	},
 
+	Counter__valueInput: {
+		padding: 0,
+		margin: 0
+	},
+
+	CounterValueAccessory: {
+		flexDirection: 'row',
+		gap: 8,
+		padding: 8,
+		backgroundColor: theme.colors.surfaceClosest
+	},
+	CounterValueAccessory__button: {
+		flex: 1,
+		paddingVertical: 10,
+		borderRadius: STYLE_VARS.radius_md,
+		alignItems: 'center',
+		backgroundColor: theme.colors.surfaceDeep
+	},
+	CounterValueAccessory__buttonText: {
+		fontSize: 16,
+		fontWeight: '600',
+		color: theme.colors.major
+	},
+
 	text: {
 		flex: 1,
 		fontSize: 16,
