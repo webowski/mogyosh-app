@@ -2,6 +2,7 @@ import {
 	Circle,
 	Group,
 	matchFont,
+	Line as SkiaLine,
 	Text as SkiaText,
 	useFont
 } from '@shopify/react-native-skia'
@@ -67,42 +68,63 @@ export function Chart({ data, minValue, maxValue }: ChartProps) {
 					formatYLabel: (value) => `${Math.round(value)}`
 				}}
 			>
-				{({ points }) => (
-					<>
-						<VictoryLine
-							points={points.value}
-							color={theme.colors.primary}
-							strokeWidth={3}
-						/>
+				{({ points, chartBounds, yScale }) => {
+					// const maxY = yScale(maxValue)
+					// const minY = yScale(minValue)
+					const maxY = yScale(250)
+					const minY = yScale(50)
 
-						{points.value.map((point, index) => {
-							if (point.y == null) return null
+					return (
+						<>
+							<SkiaLine
+								p1={{ x: chartBounds.left, y: maxY }}
+								p2={{ x: chartBounds.right, y: maxY }}
+								color={theme.colors.success}
+								strokeWidth={2}
+							/>
 
-							const valueLabel = `${point.yValue}`
-							const labelWidth = font ? font.getTextWidth(valueLabel) : 0
+							<SkiaLine
+								p1={{ x: chartBounds.left, y: minY }}
+								p2={{ x: chartBounds.right, y: minY }}
+								color={theme.colors.danger}
+								strokeWidth={2}
+							/>
 
-							return (
-								<Group key={`${point.xValue}-${index}`}>
-									<Circle
-										cx={point.x}
-										cy={point.y}
-										r={3}
-										color={theme.colors.primary}
-									/>
-									{font && (
-										<SkiaText
-											x={point.x - labelWidth / 2}
-											y={point.y - 10}
-											text={valueLabel}
-											font={font}
-											color={theme.colors.major}
+							<VictoryLine
+								points={points.value}
+								color={theme.colors.primary}
+								strokeWidth={3}
+							/>
+
+							{points.value.map((point, index) => {
+								if (point.y == null) return null
+
+								const valueLabel = `${point.yValue}`
+								const labelWidth = font ? font.getTextWidth(valueLabel) : 0
+
+								return (
+									<Group key={`${point.xValue}-${index}`}>
+										<Circle
+											cx={point.x}
+											cy={point.y}
+											r={3}
+											color={theme.colors.primary}
 										/>
-									)}
-								</Group>
-							)
-						})}
-					</>
-				)}
+										{font && (
+											<SkiaText
+												x={point.x - labelWidth / 2}
+												y={point.y - 10}
+												text={valueLabel}
+												font={font}
+												color={theme.colors.major}
+											/>
+										)}
+									</Group>
+								)
+							})}
+						</>
+					)
+				}}
 			</CartesianChart>
 		</View>
 	)
