@@ -17,6 +17,7 @@ type PointData = {
 	date: Date
 	value: number
 }
+
 type ChartPoint = { label: string; value: number }
 
 type ChartProps = {
@@ -50,18 +51,23 @@ export function Chart({ valuesData, blockData }: ChartProps) {
 	const webFont = useFont(webFontSource, AXIS_FONT_SIZE)
 	const font = Platform.OS === 'web' ? webFont : nativeFont
 
-	const seriesData = valuesData.map((point) => ({
+	const seriesData: ChartPoint[] = valuesData.map((point) => ({
 		label: formatDayChartLabel(point.date),
 		value: point.value
 	}))
 
 	const values = seriesData.map((point) => point.value)
 
-	const minValue = Math.min(...values)
-	const maxValue = Math.max(...values)
-
-	const startValue = blockData.settings.start
-	const goalValue = blockData.settings.goal
+	const minValue = Math.min(
+		...values,
+		...(blockData.settings.start !== undefined
+			? [blockData.settings.start]
+			: [])
+	)
+	const maxValue = Math.max(
+		...values,
+		...(blockData.settings.goal !== undefined ? [blockData.settings.goal] : [])
+	)
 
 	return (
 		<View
@@ -76,7 +82,7 @@ export function Chart({ valuesData, blockData }: ChartProps) {
 				xKey='label'
 				yKeys={['value']}
 				domain={{ y: [minValue, maxValue] }}
-				domainPadding={{ left: 16, right: 16, top: 24 }}
+				domainPadding={{ left: 10, right: 10, top: 10 }}
 				padding={{ top: 28, bottom: 8, left: 8, right: 8 }}
 				axisOptions={{
 					font,
@@ -88,26 +94,28 @@ export function Chart({ valuesData, blockData }: ChartProps) {
 				}}
 			>
 				{({ points, chartBounds, yScale }) => {
-					// const maxY = yScale(maxValue)
-					// const minY = yScale(minValue)
-					const maxY = yScale(250)
-					const minY = yScale(50)
+					const startValue = yScale(blockData.settings.start)
+					const goalValue = yScale(blockData.settings.goal)
 
 					return (
 						<>
-							<SkiaLine
-								p1={{ x: chartBounds.left, y: maxY }}
-								p2={{ x: chartBounds.right, y: maxY }}
-								color={theme.colors.success}
-								strokeWidth={2}
-							/>
+							{startValue && (
+								<SkiaLine
+									p1={{ x: chartBounds.left, y: startValue }}
+									p2={{ x: chartBounds.right, y: startValue }}
+									color={theme.colors.danger}
+									strokeWidth={2}
+								/>
+							)}
 
-							<SkiaLine
-								p1={{ x: chartBounds.left, y: minY }}
-								p2={{ x: chartBounds.right, y: minY }}
-								color={theme.colors.danger}
-								strokeWidth={2}
-							/>
+							{goalValue && (
+								<SkiaLine
+									p1={{ x: chartBounds.left, y: goalValue }}
+									p2={{ x: chartBounds.right, y: goalValue }}
+									color={theme.colors.success}
+									strokeWidth={2}
+								/>
+							)}
 
 							<VictoryLine
 								points={points.value}
