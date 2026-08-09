@@ -131,11 +131,14 @@ export function Chart({ valuesData, blockData }: ChartProps) {
 
 								return (
 									<Group key={`${point.xValue}-${index}`}>
+										<Circle cx={point.x} cy={point.y} r={3} color='white' />
 										<Circle
 											cx={point.x}
 											cy={point.y}
 											r={3}
 											color={theme.colors.primary}
+											style='stroke'
+											strokeWidth={2.5}
 										/>
 										{font && (
 											<SkiaText
