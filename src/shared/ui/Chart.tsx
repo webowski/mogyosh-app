@@ -104,7 +104,7 @@ export function Chart({ valuesData, blockData }: ChartProps) {
 									p1={{ x: chartBounds.left, y: startValue }}
 									p2={{ x: chartBounds.right, y: startValue }}
 									color={theme.colors.danger}
-									strokeWidth={2}
+									strokeWidth={1.5}
 								/>
 							)}
 
@@ -113,14 +113,14 @@ export function Chart({ valuesData, blockData }: ChartProps) {
 									p1={{ x: chartBounds.left, y: goalValue }}
 									p2={{ x: chartBounds.right, y: goalValue }}
 									color={theme.colors.success}
-									strokeWidth={2}
+									strokeWidth={1.5}
 								/>
 							)}
 
 							<VictoryLine
 								points={points.value}
 								color={theme.colors.primary}
-								strokeWidth={3}
+								strokeWidth={2.5}
 							/>
 
 							{points.value.map((point, index) => {
