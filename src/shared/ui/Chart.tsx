@@ -10,12 +10,18 @@ import { Platform, View } from 'react-native'
 import { useUnistyles } from 'react-native-unistyles'
 import { CartesianChart, Line as VictoryLine } from 'victory-native'
 
+import { BlockEntity } from '@/shared/domain/block'
+import { formatDayChartLabel } from '@/shared/lib/time'
+
+type PointData = {
+	date: Date
+	value: number
+}
 type ChartPoint = { label: string; value: number }
 
 type ChartProps = {
-	data: ChartPoint[]
-	minValue: number
-	maxValue: number
+	valuesData: PointData[]
+	blockData: BlockEntity
 }
 
 const AXIS_FONT_SIZE = 11
@@ -39,10 +45,23 @@ const webFontSource =
 		? 'https://fonts.gstatic.com/s/roboto/v32/KFOmCnqEu92Fr1Me5Q.ttf'
 		: null
 
-export function Chart({ data, minValue, maxValue }: ChartProps) {
+export function Chart({ valuesData, blockData }: ChartProps) {
 	const { theme } = useUnistyles()
 	const webFont = useFont(webFontSource, AXIS_FONT_SIZE)
 	const font = Platform.OS === 'web' ? webFont : nativeFont
+
+	const seriesData = valuesData.map((point) => ({
+		label: formatDayChartLabel(point.date),
+		value: point.value
+	}))
+
+	const values = seriesData.map((point) => point.value)
+
+	const minValue = Math.min(...values)
+	const maxValue = Math.max(...values)
+
+	const startValue = blockData.settings.start
+	const goalValue = blockData.settings.goal
 
 	return (
 		<View
@@ -53,7 +72,7 @@ export function Chart({ data, minValue, maxValue }: ChartProps) {
 			}}
 		>
 			<CartesianChart
-				data={data}
+				data={seriesData}
 				xKey='label'
 				yKeys={['value']}
 				domain={{ y: [minValue, maxValue] }}
@@ -61,7 +80,7 @@ export function Chart({ data, minValue, maxValue }: ChartProps) {
 				padding={{ top: 28, bottom: 8, left: 8, right: 8 }}
 				axisOptions={{
 					font,
-					tickCount: { x: data.length, y: 5 },
+					tickCount: { x: values.length, y: 5 },
 					lineColor: theme.colors.borderSubtle,
 					labelColor: theme.colors.mutedText,
 					formatXLabel: (value) => `${value}`,

@@ -101,3 +101,6 @@ export const formatStopwatchTime = (ms: number): string => {
 		tenths
 	)
 }
+
+export const formatDayChartLabel = (date: Date): string =>
+	`${date.getDate()}.${date.getMonth() + 1}`
