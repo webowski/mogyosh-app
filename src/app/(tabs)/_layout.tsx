@@ -2,7 +2,11 @@ import { Tabs } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { useUnistyles } from 'react-native-unistyles'
 
-import { BlockSettingsSheet, EditorToolbar } from '@/features/Block'
+import {
+	BlockSettingsSheet,
+	CounterKeyboardAccessory,
+	EditorToolbar
+} from '@/features/Block'
 import Drawer from '@/features/Drawer/Drawer'
 import Header from '@/features/Header/Header'
 import HeaderCalendar from '@/features/Header/HeaderCalendar'
@@ -105,6 +109,8 @@ export default function NavPanelLayout() {
 			</Tabs>
 
 			<EditorToolbar />
+			<CounterKeyboardAccessory />
+
 			<BlockSettingsSheet />
 			<TaskCreateSheet />
 		</>

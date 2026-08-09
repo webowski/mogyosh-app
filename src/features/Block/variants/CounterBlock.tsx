@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, Text, TextInput, View } from 'react-native'
+import { Text, TextInput, View } from 'react-native'
 
 import { BlockInputRefsMap, BlockProps } from '@/shared/domain/block'
 import { findUnitById } from '@/shared/domain/units'
 import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
 import Checkbox from '@/shared/ui/Checkbox'
 import { MarkdownInput } from '@/shared/ui/MarkdownInput'
-import { KeyboardExtender } from 'react-native-keyboard-controller'
+import { useCounterAccessoryStore } from '../model/counterAccessory.store'
 import { useBlockLogic } from '../model/useBlockLogic'
 import { useUpdateBlock } from '../model/useUpdateBlock'
 import { blockStyles } from '../style'
@@ -82,6 +82,8 @@ export default function CounterBlock({
 	const handleValueBlur = () => {
 		setIsValueFocused(false)
 		useEditorToolbarStore.getState().setCustomInputFocused(false)
+		useCounterAccessoryStore.getState().setActive(false)
+		useCounterAccessoryStore.getState().stepHandlerRef.current = null
 		commitValue(Number(valueText) || 0)
 	}
 
@@ -89,6 +91,24 @@ export default function CounterBlock({
 		const currentValue = Number(valueText) || 0
 		commitValue(currentValue + step)
 	}
+
+	useEffect(() => {
+		if (isValueFocused) {
+			useCounterAccessoryStore.getState().stepHandlerRef.current = handleStep
+		}
+	})
+
+	useEffect(() => {
+		return () => {
+			if (
+				useCounterAccessoryStore.getState().stepHandlerRef.current ===
+				handleStep
+			) {
+				useCounterAccessoryStore.getState().stepHandlerRef.current = null
+			}
+		}
+		// eslint-disable-next-line
+	}, [])
 
 	return (
 		<View style={blockStyles.Penoblok}>
@@ -118,6 +138,7 @@ export default function CounterBlock({
 							onFocus={() => {
 								setIsValueFocused(true)
 								useEditorToolbarStore.getState().setCustomInputFocused(true)
+								useCounterAccessoryStore.getState().setActive(true)
 							}}
 							onBlur={handleValueBlur}
 							onChangeText={handleValueChangeText}
@@ -141,27 +162,6 @@ export default function CounterBlock({
 					<Checkbox checked={checked} onPress={handlePressCheckbox} />
 				)}
 			</View>
-
-			<KeyboardExtender enabled={isValueFocused}>
-				<View style={blockStyles.CounterValueAccessory}>
-					<Pressable
-						style={blockStyles.CounterValueAccessory__button}
-						onPress={() => handleStep(-1)}
-					>
-						<Text style={blockStyles.CounterValueAccessory__buttonText}>
-							-1
-						</Text>
-					</Pressable>
-					<Pressable
-						style={blockStyles.CounterValueAccessory__button}
-						onPress={() => handleStep(1)}
-					>
-						<Text style={blockStyles.CounterValueAccessory__buttonText}>
-							+1
-						</Text>
-					</Pressable>
-				</View>
-			</KeyboardExtender>
 		</View>
 	)
 }
