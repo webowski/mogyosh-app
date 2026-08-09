@@ -6,7 +6,7 @@ import { BlockInputRefsMap, BlockProps } from '@/shared/domain/block'
 import { findUnitById } from '@/shared/domain/units'
 import Checkbox from '@/shared/ui/Checkbox'
 import { MarkdownInput } from '@/shared/ui/MarkdownInput'
-import { KeyboardStickyView } from 'react-native-keyboard-controller'
+import { KeyboardExtender } from 'react-native-keyboard-controller'
 import { useBlockLogic } from '../model/useBlockLogic'
 import { useUpdateBlock } from '../model/useUpdateBlock'
 import { blockStyles } from '../style'
@@ -45,9 +45,6 @@ export default function CounterBlock({
 
 	const updateBlock = useUpdateBlock()
 	const valueInputRef = useRef<TextInput>(null)
-	const hideAccessoryTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
-		null
-	)
 
 	const [isValueFocused, setIsValueFocused] = useState(false)
 	const [valueText, setValueText] = useState(String(data.settings?.value ?? 0))
@@ -81,25 +78,14 @@ export default function CounterBlock({
 		}
 	}
 
-	const handleValueFocus = () => {
-		if (hideAccessoryTimeoutRef.current)
-			clearTimeout(hideAccessoryTimeoutRef.current)
-		setIsValueFocused(true)
-	}
-
 	const handleValueBlur = () => {
-		hideAccessoryTimeoutRef.current = setTimeout(() => {
-			setIsValueFocused(false)
-			commitValue(Number(valueText) || 0)
-		}, 150)
+		setIsValueFocused(false)
+		commitValue(Number(valueText) || 0)
 	}
 
 	const handleStep = (step: number) => {
-		if (hideAccessoryTimeoutRef.current)
-			clearTimeout(hideAccessoryTimeoutRef.current)
 		const currentValue = Number(valueText) || 0
 		commitValue(currentValue + step)
-		valueInputRef.current?.focus()
 	}
 
 	return (
@@ -127,7 +113,7 @@ export default function CounterBlock({
 							]}
 							value={valueText}
 							keyboardType='number-pad'
-							onFocus={handleValueFocus}
+							onFocus={() => setIsValueFocused(true)}
 							onBlur={handleValueBlur}
 							onChangeText={handleValueChangeText}
 						/>
@@ -151,11 +137,11 @@ export default function CounterBlock({
 				)}
 			</View>
 
-			{isValueFocused && (
-				<KeyboardStickyView style={blockStyles.CounterValueAccessory}>
+			<KeyboardExtender enabled={isValueFocused}>
+				<View style={blockStyles.CounterValueAccessory}>
 					<Pressable
 						style={blockStyles.CounterValueAccessory__button}
-						onPressIn={() => handleStep(-1)}
+						onPress={() => handleStep(-1)}
 					>
 						<Text style={blockStyles.CounterValueAccessory__buttonText}>
 							-1
@@ -163,14 +149,14 @@ export default function CounterBlock({
 					</Pressable>
 					<Pressable
 						style={blockStyles.CounterValueAccessory__button}
-						onPressIn={() => handleStep(1)}
+						onPress={() => handleStep(1)}
 					>
 						<Text style={blockStyles.CounterValueAccessory__buttonText}>
 							+1
 						</Text>
 					</Pressable>
-				</KeyboardStickyView>
-			)}
+				</View>
+			</KeyboardExtender>
 		</View>
 	)
 }
