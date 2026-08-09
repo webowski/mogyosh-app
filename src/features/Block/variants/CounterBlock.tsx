@@ -4,6 +4,7 @@ import { Pressable, Text, TextInput, View } from 'react-native'
 
 import { BlockInputRefsMap, BlockProps } from '@/shared/domain/block'
 import { findUnitById } from '@/shared/domain/units'
+import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
 import Checkbox from '@/shared/ui/Checkbox'
 import { MarkdownInput } from '@/shared/ui/MarkdownInput'
 import { KeyboardExtender } from 'react-native-keyboard-controller'
@@ -80,6 +81,7 @@ export default function CounterBlock({
 
 	const handleValueBlur = () => {
 		setIsValueFocused(false)
+		useEditorToolbarStore.getState().setCustomInputFocused(false)
 		commitValue(Number(valueText) || 0)
 	}
 
@@ -113,7 +115,10 @@ export default function CounterBlock({
 							]}
 							value={valueText}
 							keyboardType='number-pad'
-							onFocus={() => setIsValueFocused(true)}
+							onFocus={() => {
+								setIsValueFocused(true)
+								useEditorToolbarStore.getState().setCustomInputFocused(true)
+							}}
 							onBlur={handleValueBlur}
 							onChangeText={handleValueChangeText}
 						/>

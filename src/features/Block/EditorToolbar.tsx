@@ -66,6 +66,10 @@ export default function EditorToolbar() {
 
 	const focusedBlockId = useEditorToolbarStore((state) => state.focusedBlockId)
 
+	const isCustomInputFocused = useEditorToolbarStore(
+		(state) => state.isCustomInputFocused
+	)
+
 	const taskBlocks = useBlockStore(
 		useShallow(selectBlocks(activeItemId as TaskId))
 	)
@@ -304,7 +308,7 @@ export default function EditorToolbar() {
 
 	return (
 		<>
-			<KeyboardToolbar>
+			<KeyboardToolbar enabled={!isCustomInputFocused}>
 				<KeyboardToolbar.Background>
 					<View
 						style={{

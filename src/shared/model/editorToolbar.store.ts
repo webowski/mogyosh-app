@@ -14,6 +14,9 @@ type EditorToolbarStore = {
 	focusedBlockId: BlockId | null
 	setFocusedBlockId: (id: BlockId | null) => void
 
+	isCustomInputFocused: boolean
+	setCustomInputFocused: (isFocused: boolean) => void
+
 	pendingFocusId: RefObject<BlockId | null>
 
 	activeItemId: ItemId | null
@@ -29,6 +32,10 @@ type EditorToolbarStore = {
 export const useEditorToolbarStore = create<EditorToolbarStore>((set, get) => ({
 	focusedBlockId: null,
 	setFocusedBlockId: (id: BlockId | null) => set({ focusedBlockId: id }),
+
+	isCustomInputFocused: false,
+	setCustomInputFocused: (isFocused: boolean) =>
+		set({ isCustomInputFocused: isFocused }),
 
 	pendingFocusId: { current: null },
 
