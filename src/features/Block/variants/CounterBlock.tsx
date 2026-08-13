@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Text, TextInput, View } from 'react-native'
+import { Pressable, Text, TextInput, View } from 'react-native'
 
 import { BlockInputRefsMap, BlockProps } from '@/shared/domain/block'
 import { findUnitById } from '@/shared/domain/units'
@@ -110,6 +110,12 @@ export default function CounterBlock({
 		// eslint-disable-next-line
 	}, [])
 
+	const triggerValueFocus = () => {
+		if (!valueInputRef.current?.isFocused()) {
+			valueInputRef.current?.focus()
+		}
+	}
+
 	return (
 		<View style={blockStyles.Penoblok}>
 			<View style={blockStyles.Timer__body}>
@@ -126,7 +132,7 @@ export default function CounterBlock({
 					}}
 				/>
 				<View style={blockStyles.CounterSet}>
-					<View style={blockStyles.Counter}>
+					<Pressable style={blockStyles.Counter} onPress={triggerValueFocus}>
 						<TextInput
 							ref={valueInputRef}
 							style={[
@@ -149,7 +155,7 @@ export default function CounterBlock({
 								? t(findUnitById(data.settings?.units)!.labelKey)
 								: ''}
 						</Text>
-					</View>
+					</Pressable>
 					<View style={blockStyles.Counter}>
 						<Text style={blockStyles.Counter__value}>
 							{data.settings?.count}
