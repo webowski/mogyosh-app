@@ -140,6 +140,7 @@ export default function CounterBlock({
 								useEditorToolbarStore.getState().setCustomInputFocused(true)
 								useCounterAccessoryStore.getState().setActive(true)
 							}}
+							selectTextOnFocus
 							onBlur={handleValueBlur}
 							onChangeText={handleValueChangeText}
 						/>
