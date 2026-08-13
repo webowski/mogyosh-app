@@ -90,6 +90,20 @@ export const useCounterNumericField = (
 		// or another field took over — skip deactivating.
 		blurTimeoutRef.current = setTimeout(() => {
 			blurTimeoutRef.current = null
+
+			// Emptying the field collapses it to 0 on blur (existing behaviour).
+			// Refocus right after so `selectTextOnFocus` highlights the 0,
+			// letting the user immediately type over it instead of tapping in
+			// again and deleting a leading 0 manually.
+			if (text === '') {
+				deactivate(token)
+				inputRef.current?.focus()
+				setTimeout(() => {
+					inputRef.current?.setSelection(0, 1)
+				}, 100)
+				return
+			}
+
 			deactivate(token)
 		}, 80)
 	}
