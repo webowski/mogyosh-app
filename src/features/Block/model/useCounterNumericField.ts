@@ -58,11 +58,11 @@ export const useCounterNumericField = (
 
 	const deactivate = () => {
 		setIsFocused(false)
-		useEditorToolbarStore.getState().setCustomInputFocused(false)
-		useCounterAccessoryStore.getState().setActive(false)
 		if (
 			useCounterAccessoryStore.getState().stepHandlerRef.current === handleStep
 		) {
+			useEditorToolbarStore.getState().setCustomInputFocused(false)
+			useCounterAccessoryStore.getState().setActive(false)
 			useCounterAccessoryStore.getState().stepHandlerRef.current = null
 		}
 		commit(Number(text) || 0)
