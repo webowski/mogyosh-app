@@ -15,6 +15,7 @@ export const useCounterNumericField = (
 ) => {
 	const updateBlock = useUpdateBlock()
 	const inputRef = useRef<TextInput>(null)
+	const blurTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
 	const [isFocused, setIsFocused] = useState(false)
 	const [text, setText] = useState(String(data.settings?.[settingsKey] ?? 0))
@@ -55,18 +56,38 @@ export const useCounterNumericField = (
 		commit(currentValue + step)
 	}
 
+	const deactivate = () => {
+		setIsFocused(false)
+		useEditorToolbarStore.getState().setCustomInputFocused(false)
+		useCounterAccessoryStore.getState().setActive(false)
+		if (
+			useCounterAccessoryStore.getState().stepHandlerRef.current === handleStep
+		) {
+			useCounterAccessoryStore.getState().stepHandlerRef.current = null
+		}
+		commit(Number(text) || 0)
+	}
+
 	const handleFocus = () => {
+		if (blurTimeoutRef.current) {
+			clearTimeout(blurTimeoutRef.current)
+			blurTimeoutRef.current = null
+		}
 		setIsFocused(true)
 		useEditorToolbarStore.getState().setCustomInputFocused(true)
 		useCounterAccessoryStore.getState().setActive(true)
 	}
 
 	const handleBlur = () => {
-		setIsFocused(false)
-		useEditorToolbarStore.getState().setCustomInputFocused(false)
-		useCounterAccessoryStore.getState().setActive(false)
-		useCounterAccessoryStore.getState().stepHandlerRef.current = null
-		commit(Number(text) || 0)
+		// Some platforms briefly re-fire blur/focus when clearing the last
+		// digit with backspace. Delay deactivation so a fast refocus can
+		// cancel it and avoid flashing EditorToolbar over the accessory.
+		blurTimeoutRef.current = setTimeout(() => {
+			blurTimeoutRef.current = null
+			if (!inputRef.current?.isFocused()) {
+				deactivate()
+			}
+		}, 80)
 	}
 
 	useEffect(() => {
@@ -75,17 +96,21 @@ export const useCounterNumericField = (
 		}
 	})
 
-	useEffect(() => {
-		return () => {
-			if (
-				useCounterAccessoryStore.getState().stepHandlerRef.current ===
-				handleStep
-			) {
-				useCounterAccessoryStore.getState().stepHandlerRef.current = null
+	useEffect(
+		() => {
+			return () => {
+				if (blurTimeoutRef.current) clearTimeout(blurTimeoutRef.current)
+				if (
+					useCounterAccessoryStore.getState().stepHandlerRef.current ===
+					handleStep
+				) {
+					useCounterAccessoryStore.getState().stepHandlerRef.current = null
+				}
 			}
-		}
+		},
 		// eslint-disable-next-line
-	}, [])
+		[]
+	)
 
 	const triggerFocus = () => {
 		if (!inputRef.current?.isFocused()) {
