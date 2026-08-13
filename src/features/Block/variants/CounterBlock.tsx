@@ -1,15 +1,12 @@
-import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, TextInput, View } from 'react-native'
 
 import { BlockInputRefsMap, BlockProps } from '@/shared/domain/block'
 import { findUnitById } from '@/shared/domain/units'
-import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
 import Checkbox from '@/shared/ui/Checkbox'
 import { MarkdownInput } from '@/shared/ui/MarkdownInput'
-import { useCounterAccessoryStore } from '../model/counterAccessory.store'
 import { useBlockLogic } from '../model/useBlockLogic'
-import { useUpdateBlock } from '../model/useUpdateBlock'
+import { useCounterNumericField } from '../model/useCounterNumericField'
 import { blockStyles } from '../style'
 
 type CounterBlockProps = BlockProps & {
@@ -44,77 +41,8 @@ export default function CounterBlock({
 		blockType: 'counter'
 	})
 
-	const updateBlock = useUpdateBlock()
-	const valueInputRef = useRef<TextInput>(null)
-
-	const [isValueFocused, setIsValueFocused] = useState(false)
-	const [valueText, setValueText] = useState(String(data.settings?.value ?? 0))
-
-	useEffect(
-		() => {
-			if (!isValueFocused) setValueText(String(data.settings?.value ?? 0))
-		},
-		// eslint-disable-next-line
-		[data.settings?.value]
-	)
-
-	const commitValue = (nextValue: number) => {
-		setValueText(String(nextValue))
-		updateBlock.mutate({
-			id: data.id,
-			taskId: data.task_id,
-			patch: { settings: { ...data.settings, value: nextValue } }
-		})
-	}
-
-	const handleValueChangeText = (text: string) => {
-		setValueText(text)
-		const parsedValue = Number(text)
-		if (text !== '' && !Number.isNaN(parsedValue)) {
-			updateBlock.mutate({
-				id: data.id,
-				taskId: data.task_id,
-				patch: { settings: { ...data.settings, value: parsedValue } }
-			})
-		}
-	}
-
-	const handleValueBlur = () => {
-		setIsValueFocused(false)
-		useEditorToolbarStore.getState().setCustomInputFocused(false)
-		useCounterAccessoryStore.getState().setActive(false)
-		useCounterAccessoryStore.getState().stepHandlerRef.current = null
-		commitValue(Number(valueText) || 0)
-	}
-
-	const handleStep = (step: number) => {
-		const currentValue = Number(valueText) || 0
-		commitValue(currentValue + step)
-	}
-
-	useEffect(() => {
-		if (isValueFocused) {
-			useCounterAccessoryStore.getState().stepHandlerRef.current = handleStep
-		}
-	})
-
-	useEffect(() => {
-		return () => {
-			if (
-				useCounterAccessoryStore.getState().stepHandlerRef.current ===
-				handleStep
-			) {
-				useCounterAccessoryStore.getState().stepHandlerRef.current = null
-			}
-		}
-		// eslint-disable-next-line
-	}, [])
-
-	const triggerValueFocus = () => {
-		if (!valueInputRef.current?.isFocused()) {
-			valueInputRef.current?.focus()
-		}
-	}
+	const valueField = useCounterNumericField(data, 'value')
+	const countField = useCounterNumericField(data, 'count')
 
 	return (
 		<View style={blockStyles.Penoblok}>
@@ -132,23 +60,22 @@ export default function CounterBlock({
 					}}
 				/>
 				<View style={blockStyles.CounterSet}>
-					<Pressable style={blockStyles.Counter} onPress={triggerValueFocus}>
+					<Pressable
+						style={blockStyles.Counter}
+						onPress={valueField.triggerFocus}
+					>
 						<TextInput
-							ref={valueInputRef}
+							ref={valueField.inputRef}
 							style={[
 								blockStyles.Counter__value,
 								blockStyles.Counter__valueInput
 							]}
-							value={valueText}
+							value={valueField.text}
 							keyboardType='number-pad'
-							onFocus={() => {
-								setIsValueFocused(true)
-								useEditorToolbarStore.getState().setCustomInputFocused(true)
-								useCounterAccessoryStore.getState().setActive(true)
-							}}
+							onFocus={valueField.handleFocus}
 							selectTextOnFocus
-							onBlur={handleValueBlur}
-							onChangeText={handleValueChangeText}
+							onBlur={valueField.handleBlur}
+							onChangeText={valueField.handleChangeText}
 						/>
 						<Text style={blockStyles.Counter__units}>
 							{findUnitById(data.settings?.units)
@@ -156,12 +83,25 @@ export default function CounterBlock({
 								: ''}
 						</Text>
 					</Pressable>
-					<View style={blockStyles.Counter}>
-						<Text style={blockStyles.Counter__value}>
-							{data.settings?.count}
-						</Text>
+					<Pressable
+						style={blockStyles.Counter}
+						onPress={countField.triggerFocus}
+					>
+						<TextInput
+							ref={countField.inputRef}
+							style={[
+								blockStyles.Counter__value,
+								blockStyles.Counter__valueInput
+							]}
+							value={countField.text}
+							keyboardType='number-pad'
+							onFocus={countField.handleFocus}
+							selectTextOnFocus
+							onBlur={countField.handleBlur}
+							onChangeText={countField.handleChangeText}
+						/>
 						<Text style={blockStyles.Counter__units}>{t('units.reps')}</Text>
-					</View>
+					</Pressable>
 				</View>
 			</View>
 			<View style={blockStyles.Timer__actions}>
