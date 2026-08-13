@@ -16,6 +16,7 @@ export const useCounterNumericField = (
 	const updateBlock = useUpdateBlock()
 	const inputRef = useRef<TextInput>(null)
 	const blurTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+	const fieldTokenRef = useRef<symbol | null>(null)
 
 	const [isFocused, setIsFocused] = useState(false)
 	const [text, setText] = useState(String(data.settings?.[settingsKey] ?? 0))
@@ -56,13 +57,13 @@ export const useCounterNumericField = (
 		commit(currentValue + step)
 	}
 
-	const deactivate = () => {
+	const deactivate = (token: symbol) => {
 		setIsFocused(false)
+		useEditorToolbarStore.getState().setCustomInputFocused(false)
+		useCounterAccessoryStore.getState().deactivate(token)
 		if (
 			useCounterAccessoryStore.getState().stepHandlerRef.current === handleStep
 		) {
-			useEditorToolbarStore.getState().setCustomInputFocused(false)
-			useCounterAccessoryStore.getState().setActive(false)
 			useCounterAccessoryStore.getState().stepHandlerRef.current = null
 		}
 		commit(Number(text) || 0)
@@ -73,20 +74,23 @@ export const useCounterNumericField = (
 			clearTimeout(blurTimeoutRef.current)
 			blurTimeoutRef.current = null
 		}
+		const token = Symbol('counter-field-focus')
+		fieldTokenRef.current = token
 		setIsFocused(true)
 		useEditorToolbarStore.getState().setCustomInputFocused(true)
-		useCounterAccessoryStore.getState().setActive(true)
+		useCounterAccessoryStore.getState().activate(token)
 	}
 
 	const handleBlur = () => {
-		// Some platforms briefly re-fire blur/focus when clearing the last
-		// digit with backspace. Delay deactivation so a fast refocus can
-		// cancel it and avoid flashing EditorToolbar over the accessory.
+		const token = fieldTokenRef.current
+		if (!token) return
+
+		// If, by the time this runs, the store's activeToken is no longer
+		// this one — either this same field was refocused (backspace glitch)
+		// or another field took over — skip deactivating.
 		blurTimeoutRef.current = setTimeout(() => {
 			blurTimeoutRef.current = null
-			if (!inputRef.current?.isFocused()) {
-				deactivate()
-			}
+			deactivate(token)
 		}, 80)
 	}
 
