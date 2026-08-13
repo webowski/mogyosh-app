@@ -10,6 +10,8 @@ export default function CounterKeyboardAccessory() {
 		(state) => state.stepHandlerRef
 	)
 
+	if (!isActive) return null
+
 	const handleStep = (step: number) => {
 		stepHandlerRef.current?.(step)
 	}
