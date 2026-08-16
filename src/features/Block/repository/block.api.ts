@@ -140,7 +140,7 @@ const setBlockPersistentCompleted = async ({
 }: SetBlockPersistentCompletedParams): Promise<BlockEntity> => {
 	await setBlockPersistentState({
 		blockId,
-		blockType: 'checkbox',
+		blockType: 'ul',
 		state: completed
 	})
 
