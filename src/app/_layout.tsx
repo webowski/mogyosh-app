@@ -11,6 +11,7 @@ import Header from '@/features/Header/Header'
 import { useNavStore } from '@/features/Navigation/model/navStore'
 import { Providers } from '@/features/Providers'
 import { login } from '@/shared/api/auth'
+import { commonStyles } from '@/shared/styles/common'
 import { STATIC_COLORS } from '@/shared/styles/themes'
 
 SplashScreen.preventAutoHideAsync()
@@ -28,7 +29,7 @@ export default function RootLayout() {
 	const { t } = useTranslation()
 
 	const [isLoggedIn, setLoggedIn] = useState(false)
-	const [loginError, setLoginError] = useState<string | null>(null)
+	const [supabaseError, setSupabaseError] = useState<string | null>(null)
 
 	const pathname = usePathname()
 	const updateRoutes = useNavStore((state) => state.updateRoutes)
@@ -56,13 +57,13 @@ export default function RootLayout() {
 
 			login()
 				.then(() => setLoggedIn(true))
-				.catch((err) => setLoginError(err.message))
+				.catch((err) => setSupabaseError(err.message))
 		},
 		//
 		[]
 	)
 
-	if (!isLoggedIn && !loginError)
+	if (!isLoggedIn && !supabaseError)
 		return (
 			<View
 				onLayout={() => SplashScreen.hideAsync()}
@@ -76,7 +77,16 @@ export default function RootLayout() {
 				<ActivityIndicator color={STATIC_COLORS.white} size={32} />
 			</View>
 		)
-	if (loginError) return <Text>Ошибка логина: {loginError}</Text>
+
+	if (supabaseError) {
+		return (
+			<View style={commonStyles.SystemContentMessage}>
+				<Text style={commonStyles.SystemContentMessage__text}>
+					Ошибка: {supabaseError}
+				</Text>
+			</View>
+		)
+	}
 
 	return (
 		<Providers>
