@@ -1,5 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
+import { getLatestCodec } from '@/features/BlockState/model/codecs/registry'
+import { bytesToHex } from '@/features/BlockState/model/dayLayout'
 import type { BlockMonthStateEntity, BlockType } from '@/shared/domain/block'
 import { BlockId, TaskId } from '@/shared/domain/ids'
 import { blockAPI } from '../repository/block.api'
@@ -9,7 +11,7 @@ type BlockPersistentStateMutationParams = {
 	blockId: BlockId
 	taskId: TaskId
 	blockType: BlockType
-	completed: boolean
+	state: unknown
 }
 
 /**
@@ -19,20 +21,25 @@ type BlockPersistentStateMutationParams = {
 const applyOptimisticPersistentState = (
 	states: BlockMonthStateEntity[] | undefined,
 	blockId: BlockId,
-	completed: boolean
+	blockType: BlockType,
+	state: unknown
 ): BlockMonthStateEntity[] => {
 	const existingStates = states ?? []
 	const now = new Date().toISOString()
-	const hasPersistentRow = existingStates.some((state) => state.month === null)
+	const hasPersistentRow = existingStates.some((item) => item.month === null)
 
-	// checkbox codec v1 payload: version byte 0x01 + msgpack true(0xc3)/false(0xc2)
-	const persistentPayload = completed ? '\\x01c3' : '\\x01c2'
+	const codec = getLatestCodec(blockType)
+	const encodedState = codec.encode(state)
+	const persistentPayload = new Uint8Array(1 + encodedState.length)
+	persistentPayload[0] = codec.version
+	persistentPayload.set(encodedState, 1)
+	const persistentPayloadHex = bytesToHex(persistentPayload)
 
 	if (hasPersistentRow) {
-		return existingStates.map((state) =>
-			state.month === null
-				? { ...state, state: persistentPayload, updated_at: now }
-				: state
+		return existingStates.map((item) =>
+			item.month === null
+				? { ...item, state: persistentPayloadHex, updated_at: now }
+				: item
 		)
 	}
 
@@ -42,16 +49,13 @@ const applyOptimisticPersistentState = (
 			block_id: blockId,
 			month: null,
 			encoding: 1,
-			state: persistentPayload,
+			state: persistentPayloadHex,
 			created_at: now,
 			updated_at: now
 		}
 	]
 }
 
-/**
- * Updates a throughline ("сквозной") block's completion for non-journaled tasks
- */
 export const useUpdateBlockPersistentState = () => {
 	const queryClient = useQueryClient()
 
@@ -59,15 +63,15 @@ export const useUpdateBlockPersistentState = () => {
 		mutationFn: async ({
 			blockId,
 			blockType,
-			completed
+			state
 		}: BlockPersistentStateMutationParams) => {
 			return await blockAPI.setBlockPersistentCompleted({
 				blockId,
 				blockType,
-				completed
+				state
 			})
 		},
-		onMutate: async ({ blockId, taskId, completed }) => {
+		onMutate: async ({ blockId, taskId, blockType, state }) => {
 			const previous = useBlockStore.getState().blocksByTask[taskId]
 			const block = previous?.find((item) => item.id === blockId)
 
@@ -75,7 +79,8 @@ export const useUpdateBlockPersistentState = () => {
 				states: applyOptimisticPersistentState(
 					block?.states,
 					blockId,
-					completed
+					blockType,
+					state
 				)
 			})
 

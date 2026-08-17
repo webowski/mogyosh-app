@@ -119,28 +119,40 @@ export function useBlockLogic({
 			const newChecked = !checked
 			setChecked(newChecked)
 
+			const statePayload: unknown =
+				blockType === 'counter'
+					? { value: data.settings?.value ?? 0, completed: newChecked }
+					: newChecked
+
 			if (isJournaled) {
 				updateBlockState.mutate({
 					blockId: data.id,
 					blockType,
 					taskId: data.task_id,
 					date: selectedDate,
-					completed: newChecked,
-					value: data.settings?.value
+					state: statePayload
 				})
 			} else {
 				updateBlockPersistentState.mutate({
 					blockId: data.id,
 					taskId: data.task_id,
 					blockType,
-					completed: newChecked
+					state: statePayload
 				})
 			}
 
 			onCheckToggle?.(newChecked)
 		},
 		// eslint-disable-next-line
-		[checked, isJournaled, selectedDate, data.id, data.task_id]
+		[
+			checked,
+			isJournaled,
+			selectedDate,
+			data.id,
+			data.task_id,
+			data.settings?.value,
+			blockType
+		]
 	)
 
 	const handleFocus = () => setFocusedBlockId(data.id)

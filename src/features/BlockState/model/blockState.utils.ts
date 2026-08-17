@@ -4,6 +4,7 @@ import {
 	decodeBlockStatePayload,
 	getBlockDayState
 } from '../repository/blockState.api'
+import { CounterState } from './codecs/counter.codec'
 import { getMonthStart, parseByteaHex } from './dayLayout'
 
 /**
@@ -25,12 +26,12 @@ export const isBlockCompletedOnDate = (
 	const monthBytes = parseByteaHex(monthState.state)
 
 	if (block.type === 'counter') {
-		const state = getBlockDayState<{ value: number }>(
+		const state = getBlockDayState<CounterState>(
 			'counter',
 			monthBytes,
 			date.getDate()
 		)
-		return state != null
+		return state?.completed ?? false
 	}
 
 	const completed = getBlockDayState<boolean>(
@@ -56,10 +57,13 @@ export const isBlockChecked = (
 		const persistentState = block.states?.find((state) => state.month === null)
 		if (!persistentState) return false
 
-		// counter's own codec stores { value: number }, not a boolean —
-		// presence of the persistent row is the "completed" signal, same
-		// convention as isBlockCompletedOnDate uses for journaled counters
-		if (block.type === 'counter') return true
+		if (block.type === 'counter') {
+			const state = decodeBlockStatePayload<CounterState>(
+				'counter',
+				persistentState.state
+			)
+			return state?.completed ?? false
+		}
 
 		return (
 			decodeBlockStatePayload<boolean>(block.type, persistentState.state) ??

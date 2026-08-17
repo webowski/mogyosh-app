@@ -10,8 +10,7 @@ type BlockStateMutationParams = {
 	blockType: BlockType
 	taskId?: TaskId
 	date: Date
-	completed: boolean
-	value?: number
+	state: unknown
 }
 
 /**
@@ -25,15 +24,13 @@ export const useUpdateBlockState = () => {
 			blockId,
 			blockType,
 			date,
-			completed,
-			value
+			state
 		}: BlockStateMutationParams) => {
 			return await blockAPI.setBlockCompleted({
 				blockId,
 				blockType,
 				date,
-				completed,
-				value
+				state
 			})
 		},
 		onSuccess: (updatedBlock, variables) => {
