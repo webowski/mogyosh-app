@@ -1,6 +1,7 @@
 import { generateKeyBetween } from 'fractional-indexing'
 
 import {
+	deleteBlockDayState,
 	setBlockDayState,
 	setBlockPersistentState
 } from '@/features/BlockState/repository/blockState.api'
@@ -158,9 +159,36 @@ const getStatsBlocks = async (): Promise<BlockEntity[]> => {
 		.filter((block) => block.settings?.in_stats)
 }
 
+type ClearBlockDayStateParams = {
+	blockId: BlockId
+	date: Date
+}
+
+/**
+ * Removes a journaled counter's logged value for a day entirely — used when
+ * unchecking, instead of writing completed: false (there should be no
+ * value logged for that day at all)
+ */
+const clearBlockDayState = async ({
+	blockId,
+	date
+}: ClearBlockDayStateParams): Promise<BlockEntity> => {
+	await deleteBlockDayState({ blockId, date })
+
+	const { data, error } = await supabaseClient
+		.from('blocks')
+		.select(SUBITEMS_SELECT)
+		.eq('id', blockId)
+		.single()
+
+	if (error) throw error
+	return makeBlockObject(data)
+}
+
 export const blockAPI = {
 	getBlocks,
 	setBlockCompleted,
+	clearBlockDayState,
 	createBlock,
 	deleteBlock,
 	setBlockPersistentCompleted,

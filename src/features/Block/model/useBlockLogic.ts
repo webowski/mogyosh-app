@@ -114,30 +114,32 @@ export function useBlockLogic({
 		})
 	}))
 
+	const buildCheckboxStatePayload = (checked: boolean): unknown =>
+		blockType === 'counter'
+			? { value: data.settings?.value ?? 0, completed: checked }
+			: checked
+
 	const handlePressCheckbox = useCallback(
 		() => {
 			const newChecked = !checked
 			setChecked(newChecked)
 
-			const statePayload: unknown =
-				blockType === 'counter'
-					? { value: data.settings?.value ?? 0, completed: newChecked }
-					: newChecked
-
 			if (isJournaled) {
+				const isCounterUncheck = blockType === 'counter' && !newChecked
+
 				updateBlockState.mutate({
 					blockId: data.id,
 					blockType,
 					taskId: data.task_id,
 					date: selectedDate,
-					state: statePayload
+					state: isCounterUncheck ? null : buildCheckboxStatePayload(newChecked)
 				})
 			} else {
 				updateBlockPersistentState.mutate({
 					blockId: data.id,
 					taskId: data.task_id,
 					blockType,
-					state: statePayload
+					state: buildCheckboxStatePayload(newChecked)
 				})
 			}
 

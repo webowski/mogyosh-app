@@ -101,3 +101,26 @@ export const decodeBlockStatePayload = <TState>(
 
 	return codec.decode(encodedState, codecVersion)
 }
+
+type DeleteBlockDayStateParams = {
+	blockId: BlockId
+	date: Date
+}
+
+/**
+ * Clears a specific day's payload entirely (day slot length -> 0), as opposed
+ * to setBlockDayState which always writes a non-empty payload.
+ */
+export const deleteBlockDayState = async ({
+	blockId,
+	date
+}: DeleteBlockDayStateParams): Promise<void> => {
+	const { error } = await supabaseClient.rpc('set_block_day_state', {
+		p_block_id: blockId,
+		p_month: getMonthStart(date),
+		p_day_of_month: date.getDate(),
+		p_day_payload_hex: ''
+	})
+
+	if (error) throw error
+}
