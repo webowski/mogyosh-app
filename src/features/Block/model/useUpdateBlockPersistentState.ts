@@ -99,6 +99,7 @@ export const useUpdateBlockPersistentState = () => {
 			queryClient.invalidateQueries({ queryKey: ['task-progress'] })
 			queryClient.invalidateQueries({ queryKey: ['tasks'] })
 			queryClient.invalidateQueries({ queryKey: ['tasks-grouped'] })
+			queryClient.invalidateQueries({ queryKey: ['stats-blocks'] })
 		}
 	})
 }
