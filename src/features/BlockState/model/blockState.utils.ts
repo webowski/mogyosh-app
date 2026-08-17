@@ -57,7 +57,8 @@ export const isBlockChecked = (
 		if (!persistentState) return false
 
 		return (
-			decodeBlockStatePayload<boolean>('ul', persistentState.state) ?? false
+			decodeBlockStatePayload<boolean>(block.type, persistentState.state) ??
+			false
 		)
 	}
 

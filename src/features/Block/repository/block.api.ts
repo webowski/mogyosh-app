@@ -131,16 +131,18 @@ const deleteBlock = async (blockId: BlockId): Promise<void> => {
 
 type SetBlockPersistentCompletedParams = {
 	blockId: BlockId
+	blockType: BlockType
 	completed: boolean
 }
 
 const setBlockPersistentCompleted = async ({
 	blockId,
+	blockType,
 	completed
 }: SetBlockPersistentCompletedParams): Promise<BlockEntity> => {
 	await setBlockPersistentState({
 		blockId,
-		blockType: 'ul',
+		blockType,
 		state: completed
 	})
 

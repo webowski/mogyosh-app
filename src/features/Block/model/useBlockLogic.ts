@@ -132,6 +132,7 @@ export function useBlockLogic({
 				updateBlockPersistentState.mutate({
 					blockId: data.id,
 					taskId: data.task_id,
+					blockType,
 					completed: newChecked
 				})
 			}

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import type { BlockMonthStateEntity } from '@/shared/domain/block'
+import type { BlockMonthStateEntity, BlockType } from '@/shared/domain/block'
 import { BlockId, TaskId } from '@/shared/domain/ids'
 import { blockAPI } from '../repository/block.api'
 import { useBlockStore } from './block.store'
@@ -8,6 +8,7 @@ import { useBlockStore } from './block.store'
 type BlockPersistentStateMutationParams = {
 	blockId: BlockId
 	taskId: TaskId
+	blockType: BlockType
 	completed: boolean
 }
 
@@ -57,9 +58,14 @@ export const useUpdateBlockPersistentState = () => {
 	return useMutation({
 		mutationFn: async ({
 			blockId,
+			blockType,
 			completed
 		}: BlockPersistentStateMutationParams) => {
-			return await blockAPI.setBlockPersistentCompleted({ blockId, completed })
+			return await blockAPI.setBlockPersistentCompleted({
+				blockId,
+				blockType,
+				completed
+			})
 		},
 		onMutate: async ({ blockId, taskId, completed }) => {
 			const previous = useBlockStore.getState().blocksByTask[taskId]
