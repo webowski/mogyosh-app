@@ -83,6 +83,19 @@
 		"system": { "metric": "metric", "imperial": "imperial" }
 	},
 	"error": {
-		"Enter the task title": "Enter the task title"
+		"Enter the task title": "Enter the task title",
+		"network": {
+			"title": "No connection",
+			"description": "Check your internet connection and try again"
+		},
+		"credentials": {
+			"title": "Login failed",
+			"description": "Check your login details and try again"
+		},
+		"unknown": {
+			"title": "Something went wrong",
+			"description": "Try restarting the app"
+		},
+		"Retry": "Retry"
 	}
 }

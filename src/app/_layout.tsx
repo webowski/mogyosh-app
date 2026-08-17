@@ -2,7 +2,7 @@ import { NavigationBar } from 'expo-navigation-bar'
 import { Stack, usePathname } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import { StatusBar } from 'expo-status-bar'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ActivityIndicator, Platform, Text, View } from 'react-native'
 import { useUnistyles } from 'react-native-unistyles'
@@ -11,8 +11,10 @@ import Header from '@/features/Header/Header'
 import { useNavStore } from '@/features/Navigation/model/navStore'
 import { Providers } from '@/features/Providers'
 import { login } from '@/shared/api/auth'
+import { AuthErrorKind, getAuthErrorKind } from '@/shared/lib/getAuthErrorKind'
 import { commonStyles } from '@/shared/styles/common'
 import { STATIC_COLORS } from '@/shared/styles/themes'
+import { Button } from '@/shared/ui/Button'
 
 SplashScreen.preventAutoHideAsync()
 SplashScreen.setOptions({
@@ -28,8 +30,33 @@ export default function RootLayout() {
 	const { theme, rt } = useUnistyles()
 	const { t } = useTranslation()
 
+	const [authErrorKind, setAuthErrorKind] = useState<AuthErrorKind | null>(null)
 	const [isLoggedIn, setLoggedIn] = useState(false)
-	const [supabaseError, setSupabaseError] = useState<string | null>(null)
+
+	const attemptLogin = useCallback(() => {
+		// // Тест 1: Простой публичный API
+		// fetch('https://httpbin.org/get')
+		// 	.then((r) => r.json())
+		// 	.then((data) => console.log('HTTPBIN OK:', data.origin))
+		// 	.catch((err) => console.log('HTTPBIN FAILED:', err.message))
+
+		// // Тест 2: Прямо к Supabase REST (без auth)
+		// fetch('https://oqlbysmlbmlqviljrayc.supabase.co/rest/v1/')
+		// 	.then((r) => console.log('SUPABASE REST STATUS:', r.status))
+		// 	.catch((err) => console.log('SUPABASE REST FAILED:', err.message))
+
+		setAuthErrorKind(null)
+		login()
+			.then(() => setLoggedIn(true))
+			.catch((err) => setAuthErrorKind(getAuthErrorKind(err)))
+	}, [])
+
+	useEffect(
+		function effectDatabaseRelated() {
+			attemptLogin()
+		},
+		[attemptLogin]
+	)
 
 	const pathname = usePathname()
 	const updateRoutes = useNavStore((state) => state.updateRoutes)
@@ -42,28 +69,7 @@ export default function RootLayout() {
 		[pathname]
 	)
 
-	useEffect(
-		function effectDatabaseRelated() {
-			// // Тест 1: Простой публичный API
-			// fetch('https://httpbin.org/get')
-			// 	.then((r) => r.json())
-			// 	.then((data) => console.log('HTTPBIN OK:', data.origin))
-			// 	.catch((err) => console.log('HTTPBIN FAILED:', err.message))
-
-			// // Тест 2: Прямо к Supabase REST (без auth)
-			// fetch('https://oqlbysmlbmlqviljrayc.supabase.co/rest/v1/')
-			// 	.then((r) => console.log('SUPABASE REST STATUS:', r.status))
-			// 	.catch((err) => console.log('SUPABASE REST FAILED:', err.message))
-
-			login()
-				.then(() => setLoggedIn(true))
-				.catch((err) => setSupabaseError(err.message))
-		},
-		//
-		[]
-	)
-
-	if (!isLoggedIn && !supabaseError)
+	if (!isLoggedIn && !authErrorKind)
 		return (
 			<View
 				onLayout={() => SplashScreen.hideAsync()}
@@ -78,12 +84,18 @@ export default function RootLayout() {
 			</View>
 		)
 
-	if (supabaseError) {
+	if (authErrorKind) {
 		return (
 			<View style={commonStyles.SystemContentMessage}>
 				<Text style={commonStyles.SystemContentMessage__text}>
-					Ошибка: {supabaseError}
+					{t(`error.${authErrorKind}.title`)}
 				</Text>
+				<Text style={commonStyles.SystemContentMessage__text}>
+					{t(`error.${authErrorKind}.description`)}
+				</Text>
+				<Button onPress={attemptLogin} variant='secondary' size='md'>
+					{t('error.Retry')}
+				</Button>
 			</View>
 		)
 	}
