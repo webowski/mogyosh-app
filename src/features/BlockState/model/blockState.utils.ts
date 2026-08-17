@@ -56,6 +56,11 @@ export const isBlockChecked = (
 		const persistentState = block.states?.find((state) => state.month === null)
 		if (!persistentState) return false
 
+		// counter's own codec stores { value: number }, not a boolean —
+		// presence of the persistent row is the "completed" signal, same
+		// convention as isBlockCompletedOnDate uses for journaled counters
+		if (block.type === 'counter') return true
+
 		return (
 			decodeBlockStatePayload<boolean>(block.type, persistentState.state) ??
 			false

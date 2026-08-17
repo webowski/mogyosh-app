@@ -143,7 +143,10 @@ const setBlockPersistentCompleted = async ({
 	await setBlockPersistentState({
 		blockId,
 		blockType,
-		state: completed
+		// counter's codec expects { value: number }; the boolean "completed"
+		// flag doesn't fit its shape, so a persistent row's mere presence
+		// is what marks it done — same convention as the journaled path
+		state: blockType === 'counter' ? { value: 0 } : completed
 	})
 
 	const { data, error } = await supabaseClient
