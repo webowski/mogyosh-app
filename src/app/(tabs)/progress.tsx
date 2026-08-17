@@ -1,13 +1,16 @@
 import { ScrollView, Text, View } from 'react-native'
 
 import { useStatsBlocks } from '@/features/BlockState/model/useStatsBlocks'
+import { useTaskStore } from '@/shared/model/task.store'
 import { staticStyles } from '@/shared/styles/common'
 import { textStyles } from '@/shared/styles/text'
 import { Chart } from '@/shared/ui/Chart'
 
 export default function ProgressScreen() {
-	const { data: statsBlocks, isLoading } = useStatsBlocks()
+	const selectedTaskId = useTaskStore((state) => state.selectedTaskId)
+	const { data: statsBlocks, isLoading } = useStatsBlocks(selectedTaskId)
 
+	if (!selectedTaskId) return null
 	if (isLoading) return null
 
 	return (
