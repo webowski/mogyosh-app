@@ -87,10 +87,15 @@ export default function RootLayout() {
 	if (authErrorKind) {
 		return (
 			<View style={commonStyles.SystemContentMessage}>
-				<Text style={commonStyles.SystemContentMessage__text}>
+				<Text style={commonStyles.SystemContentMessage__heading}>
 					{t(`error.${authErrorKind}.title`)}
 				</Text>
-				<Text style={commonStyles.SystemContentMessage__text}>
+				<Text
+					style={[
+						commonStyles.SystemContentMessage__text,
+						{ marginBottom: 10 }
+					]}
+				>
 					{t(`error.${authErrorKind}.description`)}
 				</Text>
 				<Button onPress={attemptLogin} variant='secondary' size='md'>

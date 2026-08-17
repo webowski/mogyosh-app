@@ -88,16 +88,23 @@ export const commonStyles = StyleSheet.create((theme, rt) => ({
 		justifyContent: 'center',
 		alignItems: 'center'
 	},
+
 	SystemContentMessage: {
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
 		padding: STYLE_VARS.sidePadding
 	},
+	SystemContentMessage__heading: {
+		fontSize: 20 * rt.fontScale,
+		lineHeight: 20 * rt.fontScale * 1.45,
+		color: theme.colors.mutedTextStrong,
+		textAlign: 'center'
+	},
 	SystemContentMessage__text: {
 		fontSize: 16 * rt.fontScale,
 		lineHeight: 16 * rt.fontScale * 1.45,
-		color: theme.colors.mutedText,
+		color: theme.colors.mutedTextStrong,
 		textAlign: 'center'
 	}
 }))
