@@ -15,9 +15,9 @@ const mmkv = createMMKV({ id: 'supabase.auth' })
 // ─── Fetch with timeout ─────────────────────────────────────────────────────
 // Prevents auth/network errors from hanging on OS-level TCP timeout (can exceed 60s on Android)
 
-const FETCH_TIMEOUT_MS = 10_000
+const FETCH_TIMEOUT_MS = 15_000
 
-const fetchWithTimeout: typeof fetch = (input, init) => {
+const fetchWithTimeout: typeof fetch = async (input, init) => {
 	const abortController = new AbortController()
 	const timeoutId = setTimeout(() => abortController.abort(), FETCH_TIMEOUT_MS)
 
