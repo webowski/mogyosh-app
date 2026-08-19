@@ -1,5 +1,6 @@
 import { forwardRef, useEffect, useRef } from 'react'
 import {
+	NativeSyntheticEvent,
 	Platform,
 	type StyleProp,
 	type TextStyle,
@@ -7,6 +8,7 @@ import {
 } from 'react-native'
 import {
 	EnrichedMarkdownTextInput,
+	OnKeyPressEvent,
 	type EnrichedMarkdownTextInputInstance
 } from 'react-native-enriched-markdown'
 import Animated, { type AnimatedStyle } from 'react-native-reanimated'
@@ -43,6 +45,7 @@ export const MarkdownInput = forwardRef<
 		ref
 	) => {
 		const { theme } = useUnistyles()
+		const currentTextRef = useRef(blockText)
 
 		if (Platform.OS === 'web') {
 			return (
@@ -72,21 +75,19 @@ export const MarkdownInput = forwardRef<
 					scrollEnabled={false}
 					multiline
 					onFocus={onFocus}
-					onChangeText={(text) => {
-						if (text.endsWith('\n')) {
+					onKeyPress={(event: NativeSyntheticEvent<OnKeyPressEvent>) => {
+						const { key } = event.nativeEvent
+						if (key === 'Enter') {
 							;(
 								ref as React.RefObject<EnrichedMarkdownTextInputInstance>
 							).current?.setValue(blockText.trim())
 							onEnterPress?.()
+						} else if (key === 'Backspace' && currentTextRef.current === '') {
+							onBackspaceOnEmpty?.()
 						}
-						// else if (text === '') {
-						// 	onBackspaceOnEmpty?.()
-						// }
 					}}
-					onChangeMarkdown={(markdown) => {
-						onChangeMarkdown?.(
-							markdown.endsWith('\n') ? markdown.slice(0, -1) : markdown
-						)
+					onChangeText={(text) => {
+						currentTextRef.current = text
 					}}
 					markdownStyle={
 						{
