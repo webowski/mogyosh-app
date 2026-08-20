@@ -75,7 +75,7 @@ export const MarkdownInput = forwardRef<
 					onFocus={onFocus}
 					onKeyPress={(event) => {
 						const { key } = event.nativeEvent
-						console.log(event)
+						console.log(event.nativeEvent.key)
 						if (key === 'Enter') {
 							console.log('Enter')
 							// ;(
@@ -83,6 +83,7 @@ export const MarkdownInput = forwardRef<
 							// ).current?.setValue(blockText.trim())
 							event.preventDefault()
 							onEnterPress?.()
+							return false
 						} else if (key === 'Backspace' && currentTextRef.current === '') {
 							onBackspaceOnEmpty?.()
 						}
