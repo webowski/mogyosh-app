@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import type { LayoutChangeEvent } from 'react-native'
 import { Gesture } from 'react-native-gesture-handler'
 import { useAnimatedStyle, withTiming } from 'react-native-reanimated'
@@ -49,65 +49,70 @@ export function useDragSortRow<TId extends DragSortId = DragSortId>(
 		onDrop({ id: draggedId, ...target })
 	}
 
-	const gesture = Gesture.Pan()
-		.activateAfterLongPress(DRAG_SORT_LONG_PRESS_MS)
-		.onStart((e) => {
-			'worklet'
-			state.active.value = true
-			state.draggedId.value = id
-			state.draggedDepth.value = depth
-			state.translateY.value = 0
-			state.translateX.value = 0
-			state.lastAbsoluteY.value = e.absoluteY
+	const gesture = useMemo(
+		() =>
+			Gesture.Pan()
+				.activateAfterLongPress(DRAG_SORT_LONG_PRESS_MS)
+				.onStart((e) => {
+					'worklet'
+					state.active.value = true
+					state.draggedId.value = id
+					state.draggedDepth.value = depth
+					state.translateY.value = 0
+					state.translateX.value = 0
+					state.lastAbsoluteY.value = e.absoluteY
 
-			const order = state.flatOrder.value
-			const heights = state.rowHeights.value
-			const draggedIndex = order.findIndex((entry) => entry.id === id)
+					const order = state.flatOrder.value
+					const heights = state.rowHeights.value
+					const draggedIndex = order.findIndex((entry) => entry.id === id)
 
-			let originY = 0
-			for (let i = 0; i < draggedIndex; i++) {
-				originY += heights[order[i].id] ?? 0
-			}
+					let originY = 0
+					for (let i = 0; i < draggedIndex; i++) {
+						originY += heights[order[i].id] ?? 0
+					}
 
-			state.dragOriginY.value = originY
-			state.dragOwnHeight.value = heights[id] ?? 0
-			// Finger offset within the row at the moment the drag started —
-			// the indicator must track this point, not the row's center.
-			state.dragPressOffsetY.value = e.y
+					state.dragOriginY.value = originY
+					state.dragOwnHeight.value = heights[id] ?? 0
+					// Finger offset within the row at the moment the drag started —
+					// the indicator must track this point, not the row's center.
+					state.dragPressOffsetY.value = e.y
 
-			// Show the indicator at the item's own position immediately,
-			// before the finger has moved.
-			state.dropIndex.value = draggedIndex
-			state.dropDepth.value = depth
-		})
-		.onUpdate((e) => {
-			'worklet'
-			state.translateY.value = e.translationY
-			state.translateX.value = e.translationX
-			state.lastAbsoluteY.value = e.absoluteY
+					// Show the indicator at the item's own position immediately,
+					// before the finger has moved.
+					state.dropIndex.value = draggedIndex
+					state.dropDepth.value = depth
+				})
+				.onUpdate((e) => {
+					'worklet'
+					state.translateY.value = e.translationY
+					state.translateX.value = e.translationX
+					state.lastAbsoluteY.value = e.absoluteY
 
-			recomputeDragSortDropTarget(state, indentStep)
-		})
-		.onEnd(() => {
-			'worklet'
-			const draggedId = state.draggedId.value
-			if (draggedId === null) return
+					recomputeDragSortDropTarget(state, indentStep)
+				})
+				.onEnd(() => {
+					'worklet'
+					const draggedId = state.draggedId.value
+					if (draggedId === null) return
 
-			scheduleOnRN(
-				commitDrop,
-				draggedId,
-				state.dropIndex.value,
-				state.dropDepth.value
-			)
-		})
-		.onFinalize(() => {
-			'worklet'
-			state.active.value = false
-			state.draggedId.value = null
-			state.dropIndex.value = -1
-			state.translateY.value = withTiming(0)
-			state.translateX.value = withTiming(0)
-		})
+					scheduleOnRN(
+						commitDrop,
+						draggedId,
+						state.dropIndex.value,
+						state.dropDepth.value
+					)
+				})
+				.onFinalize(() => {
+					'worklet'
+					state.active.value = false
+					state.draggedId.value = null
+					state.dropIndex.value = -1
+					state.translateY.value = withTiming(0)
+					state.translateX.value = withTiming(0)
+				}),
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[id, depth, indentStep, state]
+	)
 
 	const dragRowStyle = useAnimatedStyle(() => {
 		const isDragged = state.draggedId.value === id
