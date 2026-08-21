@@ -69,7 +69,7 @@ export const MarkdownInput = forwardRef<
 			const { key } = event.nativeEvent
 
 			if (key === 'Enter') {
-				// onEnterPress?.()
+				onEnterPress?.()
 			}
 
 			if (key === 'Backspace' && markdownRef.current === '') {
