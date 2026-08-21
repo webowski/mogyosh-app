@@ -45,6 +45,18 @@ export const MarkdownInput = forwardRef<
 		const { theme } = useUnistyles()
 		const currentTextRef = useRef(blockText)
 
+		const handleTextChange = (text: string) => {
+			currentTextRef.current = text
+			onChangeText?.(text)
+		}
+
+		const handleMarkdownChange = (markdown: string) => {
+			currentTextRef.current = markdown
+			onChangeMarkdown?.(
+				markdown.endsWith('\n') ? markdown.slice(0, -1) : markdown
+			)
+		}
+
 		if (Platform.OS === 'web') {
 			return (
 				<Animated.View style={style}>
@@ -52,7 +64,8 @@ export const MarkdownInput = forwardRef<
 						divRef={ref as React.Ref<HTMLDivElement>}
 						blockText={blockText}
 						textStyle={textStyle}
-						onChangeText={onChangeText}
+						onChangeText={handleTextChange}
+						onChangeMarkdown={handleMarkdownChange}
 						onEnterPress={onEnterPress}
 						onBackspaceOnEmpty={onBackspaceOnEmpty}
 						onFocus={onFocus}
@@ -75,7 +88,6 @@ export const MarkdownInput = forwardRef<
 					onFocus={onFocus}
 					onKeyPress={(event) => {
 						const { key } = event.nativeEvent
-						console.log({ key })
 
 						if (key === 'Enter') {
 							onEnterPress?.()
@@ -89,14 +101,11 @@ export const MarkdownInput = forwardRef<
 						if (text.endsWith('\n')) {
 							;(
 								ref as React.RefObject<EnrichedMarkdownTextInputInstance>
-							).current?.setValue(blockText.trim())
+							).current?.setValue(text.trim())
 						}
+						handleTextChange(text)
 					}}
-					onChangeMarkdown={(markdown) => {
-						onChangeMarkdown?.(
-							markdown.endsWith('\n') ? markdown.slice(0, -1) : markdown
-						)
-					}}
+					onChangeMarkdown={handleMarkdownChange}
 					markdownStyle={
 						{
 							// strong: { color: 'red' }
@@ -129,6 +138,7 @@ interface WebDivInputProps {
 	blockText: string
 	textStyle?: StyleProp<TextStyle>
 	onChangeText?: (text: string) => void
+	onChangeMarkdown?: (markdown: string) => void
 	onEnterPress?: () => void
 	onBackspaceOnEmpty?: () => void
 	onFocus?: () => void
@@ -139,6 +149,7 @@ function WebDivInput({
 	blockText,
 	textStyle,
 	onChangeText,
+	onChangeMarkdown,
 	onEnterPress,
 	onBackspaceOnEmpty,
 	onFocus
@@ -167,7 +178,9 @@ function WebDivInput({
 			contentEditable
 			suppressContentEditableWarning
 			onInput={(event) => {
-				onChangeText?.((event.currentTarget as HTMLDivElement).innerText)
+				const text = (event.currentTarget as HTMLDivElement).innerText
+				onChangeText?.(text)
+				onChangeMarkdown?.(text)
 			}}
 			onFocus={onFocus}
 			onKeyDown={(event) => {
