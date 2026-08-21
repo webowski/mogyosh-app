@@ -75,21 +75,27 @@ export const MarkdownInput = forwardRef<
 					onFocus={onFocus}
 					onKeyPress={(event) => {
 						const { key } = event.nativeEvent
-						console.log(event.nativeEvent.key)
+						console.log({ key })
+
 						if (key === 'Enter') {
-							console.log('Enter')
-							// ;(
-							// 	ref as React.RefObject<EnrichedMarkdownTextInputInstance>
-							// ).current?.setValue(blockText.trim())
-							event.preventDefault()
 							onEnterPress?.()
-							return false
-						} else if (key === 'Backspace' && currentTextRef.current === '') {
+						}
+
+						if (key === 'Backspace' && currentTextRef.current === '') {
 							onBackspaceOnEmpty?.()
 						}
 					}}
 					onChangeText={(text) => {
-						currentTextRef.current = text
+						if (text.endsWith('\n')) {
+							;(
+								ref as React.RefObject<EnrichedMarkdownTextInputInstance>
+							).current?.setValue(blockText.trim())
+						}
+					}}
+					onChangeMarkdown={(markdown) => {
+						onChangeMarkdown?.(
+							markdown.endsWith('\n') ? markdown.slice(0, -1) : markdown
+						)
 					}}
 					markdownStyle={
 						{
