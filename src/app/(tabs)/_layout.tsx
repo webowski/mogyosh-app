@@ -14,13 +14,17 @@ import { default as HeaderDay } from '@/features/Header/HeaderDay'
 import HeaderTask from '@/features/Header/HeaderTask'
 import NavPanel from '@/features/Navigation/NavPanel'
 import { TaskCreateSheet } from '@/features/TaskCreate/TaskCreateSheet'
+import { View } from 'react-native'
 
 export default function NavPanelLayout() {
 	const { theme } = useUnistyles()
 	const { t } = useTranslation()
 
 	return (
-		<>
+		<View
+			style={{ flex: 1 }}
+			onTouchStart={() => console.log('[TabsLayout] onTouchStart')}
+		>
 			<Drawer />
 			<Tabs
 				tabBar={(props) => <NavPanel {...props} />}
@@ -113,6 +117,6 @@ export default function NavPanelLayout() {
 
 			<BlockSettingsSheet />
 			<TaskCreateSheet />
-		</>
+		</View>
 	)
 }
