@@ -193,6 +193,7 @@ export default function Drawer() {
 			</GestureDetector>
 			<AnimatedPressable
 				style={[styles.backdrop, backdropAnimatedStyle]}
+				pointerEvents={isDrawerShown ? 'auto' : 'none'}
 				onPress={() => {
 					setIsDrawerShown(false)
 				}}
