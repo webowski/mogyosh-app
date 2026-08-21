@@ -1,9 +1,7 @@
 import type { Ref, RefObject } from 'react'
 import { useCallback } from 'react'
-import { Pressable as GesturePressable } from 'react-native-gesture-handler'
 import {
 	KeyboardAwareScrollView,
-	KeyboardController,
 	type KeyboardAwareScrollViewRef
 } from 'react-native-keyboard-controller'
 import { AnimatedScrollViewComponent } from 'react-native-keyboard-controller/lib/typescript/components/ScrollViewWithBottomPadding'
@@ -98,36 +96,34 @@ export function BlockDragSortContent({
 			style={staticStyles.ScrollBox}
 			overScrollMode='never'
 			bottomOffset={STYLE_VARS.editorToolbarHeight * 1.25}
+			keyboardDismissMode='on-drag'
+			keyboardShouldPersistTaps='handled'
 		>
-			<GesturePressable
-				style={staticStyles.ScrollBox__inner}
-				onPress={() => KeyboardController.dismiss()}
-				accessibilityRole={undefined}
-				android_disableSound
+			<Animated.View
+				ref={containerRef}
+				style={[staticStyles.ScrollBox__inner, { position: 'relative' }]}
 			>
-				<Animated.View ref={containerRef} style={{ position: 'relative' }}>
-					{blockTree.map((blockData) => (
-						<BlockNode
-							inputRefs={inputRefs}
-							key={blockData.stableKey ?? blockData.id}
-							data={blockData}
-							depth={0}
-							variant={blockData.type}
-							siblings={blockTree}
-							onAddAfter={onAddBlock}
-							onRemove={onRemoveBlock}
-							pendingFocusId={pendingFocusId}
-						/>
-					))}
-					<DragSortIndicator />
-				</Animated.View>
+				{blockTree.map((blockData) => (
+					<BlockNode
+						inputRefs={inputRefs}
+						key={blockData.stableKey ?? blockData.id}
+						data={blockData}
+						depth={0}
+						variant={blockData.type}
+						siblings={blockTree}
+						onAddAfter={onAddBlock}
+						onRemove={onRemoveBlock}
+						pendingFocusId={pendingFocusId}
+					/>
+				))}
+				<DragSortIndicator />
 				{/* <Pressable style={[styles.ButtonAdd]} onPress={() => onAddBlock()}>
 					<MaterialIcons name='add' size={28} color={theme.colors.minor} />
 				</Pressable> */}
 				<BlockDraftAdd
 					onAddBlock={(initialText) => onAddBlock(undefined, initialText)}
 				/>
-			</GesturePressable>
+			</Animated.View>
 		</KeyboardAwareScrollView>
 	)
 }
