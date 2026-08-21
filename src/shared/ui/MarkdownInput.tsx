@@ -1,5 +1,6 @@
 import { forwardRef, useEffect, useRef } from 'react'
 import {
+	NativeSyntheticEvent,
 	Platform,
 	type StyleProp,
 	type TextStyle,
@@ -7,6 +8,7 @@ import {
 } from 'react-native'
 import {
 	EnrichedMarkdownTextInput,
+	OnKeyPressEvent,
 	type EnrichedMarkdownTextInputInstance
 } from 'react-native-enriched-markdown'
 import Animated, { type AnimatedStyle } from 'react-native-reanimated'
@@ -43,18 +45,36 @@ export const MarkdownInput = forwardRef<
 		ref
 	) => {
 		const { theme } = useUnistyles()
-		const currentTextRef = useRef(blockText)
+		const markdownRef = useRef(blockText)
 
 		const handleTextChange = (text: string) => {
-			currentTextRef.current = text
+			// console.log({ text })
 			onChangeText?.(text)
 		}
 
 		const handleMarkdownChange = (markdown: string) => {
-			currentTextRef.current = markdown
-			onChangeMarkdown?.(
-				markdown.endsWith('\n') ? markdown.slice(0, -1) : markdown
-			)
+			// console.log({ markdown })
+			markdownRef.current = markdown
+
+			if (markdown.endsWith('\n')) {
+				markdownRef.current = markdown.trim()
+				;(
+					ref as React.RefObject<EnrichedMarkdownTextInputInstance>
+				).current?.setValue(markdownRef.current)
+			}
+			onChangeMarkdown?.(markdownRef.current)
+		}
+
+		const handleKeyPress = (event: NativeSyntheticEvent<OnKeyPressEvent>) => {
+			const { key } = event.nativeEvent
+
+			if (key === 'Enter') {
+				// onEnterPress?.()
+			}
+
+			if (key === 'Backspace' && markdownRef.current === '') {
+				onBackspaceOnEmpty?.()
+			}
 		}
 
 		if (Platform.OS === 'web') {
@@ -65,7 +85,6 @@ export const MarkdownInput = forwardRef<
 						blockText={blockText}
 						textStyle={textStyle}
 						onChangeText={handleTextChange}
-						onChangeMarkdown={handleMarkdownChange}
 						onEnterPress={onEnterPress}
 						onBackspaceOnEmpty={onBackspaceOnEmpty}
 						onFocus={onFocus}
@@ -86,25 +105,8 @@ export const MarkdownInput = forwardRef<
 					scrollEnabled={false}
 					multiline
 					onFocus={onFocus}
-					onKeyPress={(event) => {
-						const { key } = event.nativeEvent
-
-						if (key === 'Enter') {
-							onEnterPress?.()
-						}
-
-						if (key === 'Backspace' && currentTextRef.current === '') {
-							onBackspaceOnEmpty?.()
-						}
-					}}
-					onChangeText={(text) => {
-						if (text.endsWith('\n')) {
-							;(
-								ref as React.RefObject<EnrichedMarkdownTextInputInstance>
-							).current?.setValue(text.trim())
-						}
-						handleTextChange(text)
-					}}
+					onKeyPress={handleKeyPress}
+					onChangeText={handleTextChange}
 					onChangeMarkdown={handleMarkdownChange}
 					markdownStyle={
 						{
