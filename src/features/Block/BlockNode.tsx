@@ -56,6 +56,8 @@ export default function BlockNode({
 				<ExpandableBlock
 					data={data}
 					onExpandToggle={(expanded) => setIsChildShown(expanded)}
+					onAddAfter={() => onAddAfter?.(data.id)}
+					onRemove={() => onRemove?.(data.id)}
 				/>
 			)
 			break
@@ -64,7 +66,14 @@ export default function BlockNode({
 		case 'h2':
 		case 'h3':
 		case 'h4':
-			content = <HeadingBlock variant={variant} data={data} />
+			content = (
+				<HeadingBlock
+					variant={variant}
+					data={data}
+					onAddAfter={() => onAddAfter?.(data.id)}
+					onRemove={() => onRemove?.(data.id)}
+				/>
+			)
 			break
 
 		case 'expandable-h1':
@@ -76,6 +85,8 @@ export default function BlockNode({
 					variant={variant}
 					data={data}
 					onExpandToggle={(expanded) => setIsChildShown(expanded)}
+					onAddAfter={() => onAddAfter?.(data.id)}
+					onRemove={() => onRemove?.(data.id)}
 				/>
 			)
 			break
@@ -112,6 +123,8 @@ export default function BlockNode({
 				<TimerBlock
 					data={data}
 					// depth={depth}
+					onAddAfter={() => onAddAfter?.(data.id)}
+					onRemove={() => onRemove?.(data.id)}
 				/>
 			)
 			break
@@ -121,6 +134,8 @@ export default function BlockNode({
 				<StopwatchBlock
 					data={data}
 					// depth={depth}
+					onAddAfter={() => onAddAfter?.(data.id)}
+					onRemove={() => onRemove?.(data.id)}
 				/>
 			)
 			break
@@ -130,13 +145,21 @@ export default function BlockNode({
 				<CounterBlock
 					data={data}
 					// depth={depth}
+					onAddAfter={() => onAddAfter?.(data.id)}
+					onRemove={() => onRemove?.(data.id)}
 				/>
 			)
 			break
 
 		// case 'p':
 		default:
-			content = <ParagraphBlock data={data} />
+			content = (
+				<ParagraphBlock
+					data={data}
+					onAddAfter={() => onAddAfter?.(data.id)}
+					onRemove={() => onRemove?.(data.id)}
+				/>
+			)
 	}
 
 	return (
