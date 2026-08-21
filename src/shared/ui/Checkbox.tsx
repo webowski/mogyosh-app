@@ -47,6 +47,7 @@ export default function Checkbox({
 	)
 
 	const handlePress = () => {
+		console.log('[Checkbox] onPress')
 		triggerHapticLight()
 		onPress?.()
 	}
@@ -67,6 +68,8 @@ export default function Checkbox({
 	return (
 		<AnimatedPressable
 			onPress={handlePress}
+			onPressIn={() => console.log('[Checkbox] onPressIn')}
+			onPressOut={() => console.log('[Checkbox] onPressOut')}
 			style={[styles.checkbox, checkboxStyle, style]}
 			{...props}
 		>

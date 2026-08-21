@@ -4,6 +4,7 @@ import { Gesture } from 'react-native-gesture-handler'
 import { useAnimatedStyle, withTiming } from 'react-native-reanimated'
 import { scheduleOnRN } from 'react-native-worklets'
 
+import { log } from '@/shared/lib/development'
 import { DRAG_SORT_LONG_PRESS_MS } from './dragSort.constants'
 import type { DragSortId } from './dragSort.types'
 import {
@@ -53,8 +54,17 @@ export function useDragSortRow<TId extends DragSortId = DragSortId>(
 		() =>
 			Gesture.Pan()
 				.activateAfterLongPress(DRAG_SORT_LONG_PRESS_MS)
+				.onTouchesDown(() => {
+					'worklet'
+					scheduleOnRN(log, '[DragSort] onTouchesDown', id)
+				})
+				.onBegin(() => {
+					'worklet'
+					scheduleOnRN(log, '[DragSort] onBegin', id)
+				})
 				.onStart((e) => {
 					'worklet'
+					scheduleOnRN(log, '[DragSort] onStart (long press activated)', id)
 					state.active.value = true
 					state.draggedId.value = id
 					state.draggedDepth.value = depth
@@ -104,6 +114,7 @@ export function useDragSortRow<TId extends DragSortId = DragSortId>(
 				})
 				.onFinalize(() => {
 					'worklet'
+					scheduleOnRN(log, '[DragSort] onFinalize', id)
 					state.active.value = false
 					state.draggedId.value = null
 					state.dropIndex.value = -1

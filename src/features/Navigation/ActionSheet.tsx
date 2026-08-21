@@ -106,7 +106,14 @@ export default function ActionSheet({ children }: PropsWithChildren) {
 	return (
 		<>
 			{/* Backdrop */}
-			<Pressable style={styles.backdrop} onPress={dismiss} />
+			<Pressable
+				style={styles.backdrop}
+				onPress={() => {
+					console.log('[ActionSheet] backdrop onPress')
+					dismiss()
+				}}
+				onPressIn={() => console.log('[ActionSheet] backdrop onPressIn')}
+			/>
 
 			{/* Sheet */}
 			<GestureDetector gesture={dragGesture}>
