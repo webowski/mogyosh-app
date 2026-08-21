@@ -107,51 +107,56 @@ export default function RootLayout() {
 
 	return (
 		<Providers>
-			<StatusBar style={theme.statusBarColor} />
-
-			{Platform.OS === 'android' && (
-				<NavigationBar
-					style={rt.themeName === 'light' ? 'dark' : 'light'}
-					hidden={false}
-				/>
-			)}
-
-			<Stack
-				screenOptions={{
-					contentStyle: {
-						backgroundColor: theme.colors.surfaceDeep
-					}
-				}}
+			<View
+				style={{ flex: 1 }}
+				onTouchStart={() => console.log('[RootLayout] onTouchStart')}
 			>
-				<Stack.Screen
-					name='(tabs)'
-					options={{
-						headerShown: false
+				<StatusBar style={theme.statusBarColor} />
+
+				{Platform.OS === 'android' && (
+					<NavigationBar
+						style={rt.themeName === 'light' ? 'dark' : 'light'}
+						hidden={false}
+					/>
+				)}
+
+				<Stack
+					screenOptions={{
+						contentStyle: {
+							backgroundColor: theme.colors.surfaceDeep
+						}
 					}}
-				/>
-				<Stack.Screen
-					name='about'
-					options={{
-						title: t('screen.About'),
-						headerShown: true,
-						header: (props) => <Header {...props} />
-					}}
-				/>
-				<Stack.Screen
-					name='account'
-					options={{
-						title: t('screen.Account'),
-						headerShown: true,
-						header: (props) => <Header {...props} />
-					}}
-				/>
-				<Stack.Screen
-					name='settings'
-					options={{
-						headerShown: false
-					}}
-				/>
-			</Stack>
+				>
+					<Stack.Screen
+						name='(tabs)'
+						options={{
+							headerShown: false
+						}}
+					/>
+					<Stack.Screen
+						name='about'
+						options={{
+							title: t('screen.About'),
+							headerShown: true,
+							header: (props) => <Header {...props} />
+						}}
+					/>
+					<Stack.Screen
+						name='account'
+						options={{
+							title: t('screen.Account'),
+							headerShown: true,
+							header: (props) => <Header {...props} />
+						}}
+					/>
+					<Stack.Screen
+						name='settings'
+						options={{
+							headerShown: false
+						}}
+					/>
+				</Stack>
+			</View>
 		</Providers>
 	)
 }

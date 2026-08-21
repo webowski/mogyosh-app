@@ -89,7 +89,9 @@ export default function NavPanelLayout() {
 						title: t('screen.Task'),
 						href: null,
 						headerShown: true,
-						header: (props) => <HeaderTask {...props} />
+						header: (props) => <HeaderTask {...props} />,
+						animation: 'none',
+						freezeOnBlur: false
 					}}
 				/>
 				<Tabs.Screen

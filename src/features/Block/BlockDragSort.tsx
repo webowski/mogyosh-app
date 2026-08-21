@@ -1,10 +1,5 @@
-import type { Ref, RefObject } from 'react'
+import type { RefObject } from 'react'
 import { useCallback } from 'react'
-import {
-	KeyboardAwareScrollView,
-	type KeyboardAwareScrollViewRef
-} from 'react-native-keyboard-controller'
-import { AnimatedScrollViewComponent } from 'react-native-keyboard-controller/lib/typescript/components/ScrollViewWithBottomPadding'
 import Animated from 'react-native-reanimated'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
@@ -24,6 +19,7 @@ import {
 	type DragSortDropPayload
 } from '@/shared/modules/DragSort'
 import { staticStyles, STYLE_VARS } from '@/shared/styles/common'
+import { ScrollView } from 'react-native'
 import BlockDraftAdd from './BlockDraftAdd'
 
 type BlockDragSortLayerProps = {
@@ -86,18 +82,18 @@ export function BlockDragSortContent({
 	const containerRef = useDragSortContainerRef()
 
 	return (
-		<KeyboardAwareScrollView
-			ref={scrollAnimatedRef as unknown as Ref<KeyboardAwareScrollViewRef>}
-			ScrollViewComponent={
-				Animated.ScrollView as unknown as AnimatedScrollViewComponent
-			}
-			onScroll={scrollHandler}
-			scrollEventThrottle={16}
+		<ScrollView
+			// ref={scrollAnimatedRef as unknown as Ref<KeyboardAwareScrollViewRef>}
+			// ScrollViewComponent={
+			// 	Animated.ScrollView as unknown as AnimatedScrollViewComponent
+			// }
+			// onScroll={scrollHandler}
+			// scrollEventThrottle={16}
 			style={staticStyles.ScrollBox}
-			overScrollMode='never'
-			bottomOffset={STYLE_VARS.editorToolbarHeight * 1.25}
+			// overScrollMode='never'
+			// bottomOffset={STYLE_VARS.editorToolbarHeight * 1.25}
 			keyboardDismissMode='on-drag'
-			keyboardShouldPersistTaps='handled'
+			keyboardShouldPersistTaps='always'
 		>
 			<Animated.View
 				ref={containerRef}
@@ -127,7 +123,7 @@ export function BlockDragSortContent({
 					onAddBlock={(initialText) => onAddBlock(undefined, initialText)}
 				/>
 			</Animated.View>
-		</KeyboardAwareScrollView>
+		</ScrollView>
 	)
 }
 

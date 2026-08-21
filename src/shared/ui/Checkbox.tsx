@@ -67,9 +67,12 @@ export default function Checkbox({
 
 	return (
 		<AnimatedPressable
-			onPress={handlePress}
 			onPressIn={() => console.log('[Checkbox] onPressIn')}
 			onPressOut={() => console.log('[Checkbox] onPressOut')}
+			onPress={() => {
+				console.log('[Checkbox] onPress')
+				handlePress()
+			}}
 			style={[styles.checkbox, checkboxStyle, style]}
 			{...props}
 		>
