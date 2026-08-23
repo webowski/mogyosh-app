@@ -1,10 +1,7 @@
 import { View } from 'react-native'
-import Animated from 'react-native-reanimated'
 
 import type { BlockInputRefsMap, BlockProps } from '@/shared/domain/block'
 import Checkbox from '@/shared/ui/Checkbox'
-import { MarkdownInput } from '@/shared/ui/MarkdownInput'
-import { getBulletedMarker } from '../model/block.utils'
 import { useBlockLogic } from '../model/useBlockLogic'
 import { blockStyles } from '../style'
 
@@ -41,7 +38,7 @@ export default function BulletedBlock({
 
 	return (
 		<View style={blockStyles.Bulleted}>
-			<Animated.Text style={[blockStyles.Bulleted__marker, checkedStyle]}>
+			{/* <Animated.Text style={[blockStyles.Bulleted__marker, checkedStyle]}>
 				{getBulletedMarker(depth)}
 			</Animated.Text>
 			<MarkdownInput
@@ -55,7 +52,7 @@ export default function BulletedBlock({
 				onBackspaceOnEmpty={() => {
 					onRemove?.()
 				}}
-			/>
+			/> */}
 			{data.settings?.checkable && (
 				<Checkbox
 					style={blockStyles.Block__checkbox}
