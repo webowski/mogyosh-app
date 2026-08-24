@@ -53,7 +53,7 @@ export function useDragSortRow<TId extends DragSortId = DragSortId>(
 	const gesture = useMemo(
 		() =>
 			Gesture.Pan()
-				.enabled(false) // DIAGNOSTIC: disable drag
+				// .enabled(false) // DIAGNOSTIC: disable drag
 				.activateAfterLongPress(DRAG_SORT_LONG_PRESS_MS)
 				.onTouchesDown(() => {
 					'worklet'
