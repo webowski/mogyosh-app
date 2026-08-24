@@ -70,8 +70,8 @@ export default function Checkbox({
 			onPressIn={() => console.log('[Checkbox] onPressIn')}
 			onPressOut={() => console.log('[Checkbox] onPressOut')}
 			onPress={() => {
-				console.log('[Checkbox] onPress')
-				handlePress()
+				console.log('[DEBUG Checkbox onPress fired]', Date.now())
+				onPress?.()
 			}}
 			style={[styles.checkbox, checkboxStyle, style]}
 			{...props}

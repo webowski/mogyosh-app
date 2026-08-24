@@ -94,7 +94,14 @@ export function useBlockLogic({
 
 	useEffect(
 		() => {
-			setChecked(isBlockChecked(data, selectedDate))
+			const nextChecked = isBlockChecked(data, selectedDate)
+			console.log('[DEBUG resync effect]', {
+				blockId: data.id,
+				nextChecked,
+				statesRef: data.states,
+				time: Date.now()
+			})
+			setChecked(nextChecked)
 		},
 		// eslint-disable-next-line
 		[data.states, data.settings, selectedDate]
@@ -122,6 +129,12 @@ export function useBlockLogic({
 	const handlePressCheckbox = useCallback(
 		() => {
 			const newChecked = !checked
+			console.log('[DEBUG press]', {
+				blockId: data.id,
+				checkedBefore: checked,
+				newChecked,
+				time: Date.now()
+			})
 			setChecked(newChecked)
 
 			if (isJournaled) {
