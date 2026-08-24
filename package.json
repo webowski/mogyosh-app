@@ -82,7 +82,8 @@
   "allowScripts": {
     "@shopify/react-native-skia@2.6.2": true,
     "msgpackr-extract@3.0.4": true,
-    "unrs-resolver@1.12.2": true
+    "unrs-resolver@1.12.2": true,
+    "react-native-enriched-markdown@1.0.2": true
   },
   "jest": {
     "preset": "jest-expo",
