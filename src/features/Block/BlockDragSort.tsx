@@ -1,5 +1,12 @@
-import type { RefObject } from 'react'
+import type { Ref, RefObject } from 'react'
 import { useCallback } from 'react'
+import { Pressable as GesturePressable } from 'react-native-gesture-handler'
+import {
+	KeyboardAwareScrollView,
+	KeyboardAwareScrollViewRef,
+	KeyboardController
+} from 'react-native-keyboard-controller'
+import { AnimatedScrollViewComponent } from 'react-native-keyboard-controller/lib/typescript/components/ScrollViewWithBottomPadding'
 import Animated from 'react-native-reanimated'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
@@ -19,7 +26,6 @@ import {
 	type DragSortDropPayload
 } from '@/shared/modules/DragSort'
 import { staticStyles, STYLE_VARS } from '@/shared/styles/common'
-import { ScrollView } from 'react-native'
 import BlockDraftAdd from './BlockDraftAdd'
 
 type BlockDragSortLayerProps = {
@@ -82,45 +88,49 @@ export function BlockDragSortContent({
 	const containerRef = useDragSortContainerRef()
 
 	return (
-		<ScrollView
-			// ref={scrollAnimatedRef as unknown as Ref<KeyboardAwareScrollViewRef>}
-			// ScrollViewComponent={
-			// 	Animated.ScrollView as unknown as AnimatedScrollViewComponent
-			// }
-			// onScroll={scrollHandler}
-			// scrollEventThrottle={16}
+		<KeyboardAwareScrollView
+			ref={scrollAnimatedRef as unknown as Ref<KeyboardAwareScrollViewRef>}
+			ScrollViewComponent={
+				Animated.ScrollView as unknown as AnimatedScrollViewComponent
+			}
+			onScroll={scrollHandler}
+			scrollEventThrottle={16}
 			style={staticStyles.ScrollBox}
-			// overScrollMode='never'
-			// bottomOffset={STYLE_VARS.editorToolbarHeight * 1.25}
-			keyboardDismissMode='on-drag'
-			keyboardShouldPersistTaps='always'
+			overScrollMode='never'
+			bottomOffset={STYLE_VARS.editorToolbarHeight * 1.25}
+			// keyboardDismissMode='on-drag'
+			// keyboardShouldPersistTaps='always'
 		>
-			<Animated.View
-				ref={containerRef}
-				style={[staticStyles.ScrollBox__inner, { position: 'relative' }]}
+			<GesturePressable
+				style={staticStyles.ScrollBox__inner}
+				onPress={() => KeyboardController.dismiss()}
+				accessibilityRole={undefined}
+				android_disableSound
 			>
-				{blockTree.map((blockData) => (
-					<BlockNode
-						inputRefs={inputRefs}
-						key={blockData.stableKey ?? blockData.id}
-						data={blockData}
-						depth={0}
-						variant={blockData.type}
-						siblings={blockTree}
-						onAddAfter={onAddBlock}
-						onRemove={onRemoveBlock}
-						pendingFocusId={pendingFocusId}
-					/>
-				))}
-				<DragSortIndicator />
+				<Animated.View ref={containerRef} style={{ position: 'relative' }}>
+					{blockTree.map((blockData) => (
+						<BlockNode
+							inputRefs={inputRefs}
+							key={blockData.stableKey ?? blockData.id}
+							data={blockData}
+							depth={0}
+							variant={blockData.type}
+							siblings={blockTree}
+							onAddAfter={onAddBlock}
+							onRemove={onRemoveBlock}
+							pendingFocusId={pendingFocusId}
+						/>
+					))}
+					<DragSortIndicator />
+				</Animated.View>
 				{/* <Pressable style={[styles.ButtonAdd]} onPress={() => onAddBlock()}>
 					<MaterialIcons name='add' size={28} color={theme.colors.minor} />
 				</Pressable> */}
 				<BlockDraftAdd
 					onAddBlock={(initialText) => onAddBlock(undefined, initialText)}
 				/>
-			</Animated.View>
-		</ScrollView>
+			</GesturePressable>
+		</KeyboardAwareScrollView>
 	)
 }
 
