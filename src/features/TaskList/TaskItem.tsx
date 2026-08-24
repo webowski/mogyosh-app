@@ -1,9 +1,8 @@
-import { MenuView } from '@expo/ui/community/menu'
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons'
 import { useRouter } from 'expo-router'
 import { PropsWithChildren } from 'react'
 import { Text, View } from 'react-native'
-import { Gesture } from 'react-native-gesture-handler'
+import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import Animated, {
 	FadeOut,
 	LinearTransition,
@@ -186,9 +185,8 @@ export default function TaskItem({
 		<Animated.View
 			layout={LinearTransition.duration(250)}
 			exiting={FadeOut.duration(200)}
-			onTouchStart={goTaskScreen}
 		>
-			<MenuView
+			{/* <MenuView
 				onOpenMenu={handleOpenMenu}
 				shouldOpenOnLongPress={!isSortMode}
 				actions={[
@@ -200,23 +198,21 @@ export default function TaskItem({
 					}
 				]}
 				onPressAction={handleMenuPressAction}
-			>
-				<View style={styles.wrapper}>
-					{/* Complete background */}
-					<Animated.View
-						style={[styles.completeBackground, completeContainerStyle]}
-					>
-						<Text style={styles.completeBackground__label}>Done</Text>
-					</Animated.View>
+			> */}
+			<View style={styles.wrapper}>
+				{/* Complete background */}
+				<Animated.View
+					style={[styles.completeBackground, completeContainerStyle]}
+				>
+					<Text style={styles.completeBackground__label}>Done</Text>
+				</Animated.View>
 
-					{/* Delete background */}
-					<Animated.View
-						style={[styles.deleteBackground, deleteContainerStyle]}
-					>
-						<Text style={styles.deleteBackground__label}>Delete</Text>
-					</Animated.View>
+				{/* Delete background */}
+				<Animated.View style={[styles.deleteBackground, deleteContainerStyle]}>
+					<Text style={styles.deleteBackground__label}>Delete</Text>
+				</Animated.View>
 
-					{/* <GestureDetector gesture={composedGesture}> */}
+				<GestureDetector gesture={composedGesture}>
 					<Animated.View
 						style={[
 							styles.Card,
@@ -277,9 +273,9 @@ export default function TaskItem({
 							</View>
 						)}
 					</Animated.View>
-					{/* </GestureDetector> */}
-				</View>
-			</MenuView>
+				</GestureDetector>
+			</View>
+			{/* </MenuView> */}
 		</Animated.View>
 	)
 }
