@@ -1,6 +1,5 @@
 import { Tabs } from 'expo-router'
 import { useTranslation } from 'react-i18next'
-import { View } from 'react-native'
 import { useUnistyles } from 'react-native-unistyles'
 
 import {
@@ -21,7 +20,7 @@ export default function NavPanelLayout() {
 	const { t } = useTranslation()
 
 	return (
-		<View style={{ flex: 1 }}>
+		<>
 			<Drawer />
 
 			<Tabs
@@ -87,9 +86,7 @@ export default function NavPanelLayout() {
 						title: t('screen.Task'),
 						href: null,
 						headerShown: true,
-						header: (props) => <HeaderTask {...props} />,
-						animation: 'none',
-						freezeOnBlur: false
+						header: (props) => <HeaderTask {...props} />
 					}}
 				/>
 				<Tabs.Screen
@@ -108,6 +105,6 @@ export default function NavPanelLayout() {
 
 			<BlockSettingsSheet />
 			<TaskCreateSheet />
-		</View>
+		</>
 	)
 }
