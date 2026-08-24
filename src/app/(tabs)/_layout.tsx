@@ -1,12 +1,20 @@
 import { Tabs } from 'expo-router'
 import { useTranslation } from 'react-i18next'
+import { View } from 'react-native'
 import { useUnistyles } from 'react-native-unistyles'
 
+import {
+	BlockSettingsSheet,
+	CounterKeyboardAccessory,
+	EditorToolbar
+} from '@/features/Block'
+import Drawer from '@/features/Drawer/Drawer'
 import Header from '@/features/Header/Header'
 import HeaderCalendar from '@/features/Header/HeaderCalendar'
+import HeaderDay from '@/features/Header/HeaderDay'
 import HeaderTask from '@/features/Header/HeaderTask'
 import NavPanel from '@/features/Navigation/NavPanel'
-import { View } from 'react-native'
+import { TaskCreateSheet } from '@/features/TaskCreate/TaskCreateSheet'
 
 export default function NavPanelLayout() {
 	const { theme } = useUnistyles()
@@ -14,7 +22,8 @@ export default function NavPanelLayout() {
 
 	return (
 		<View style={{ flex: 1 }}>
-			{/* <Drawer /> */}
+			<Drawer />
+
 			<Tabs
 				tabBar={(props) => <NavPanel {...props} />}
 				screenOptions={{
@@ -32,8 +41,8 @@ export default function NavPanelLayout() {
 					options={{
 						title: t('screen.Today'),
 						href: null,
-						headerShown: true
-						// header: (props) => <HeaderDay {...props} />
+						headerShown: true,
+						header: (props) => <HeaderDay {...props} />
 					}}
 				/>
 				<Tabs.Screen
@@ -94,14 +103,11 @@ export default function NavPanelLayout() {
 				/>
 			</Tabs>
 
-			{/* TEMP DEBUG: disabled to test if keyboard-controller overlay windows
-			    are swallowing the first taps on task open
 			<EditorToolbar />
 			<CounterKeyboardAccessory />
-			*/}
 
-			{/* <BlockSettingsSheet /> */}
-			{/* <TaskCreateSheet /> */}
+			<BlockSettingsSheet />
+			<TaskCreateSheet />
 		</View>
 	)
 }
