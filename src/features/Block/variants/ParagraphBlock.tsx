@@ -2,6 +2,7 @@ import { View } from 'react-native'
 
 import type { BlockInputRefsMap, BlockProps } from '@/shared/domain/block'
 import Checkbox from '@/shared/ui/Checkbox'
+import { MarkdownInput } from '@/shared/ui/MarkdownInput'
 import { useBlockLogic } from '../model/useBlockLogic'
 import { blockStyles } from '../style'
 
@@ -36,7 +37,7 @@ export default function ParagraphBlock({
 
 	return (
 		<View style={blockStyles.Paragraph}>
-			{/* <MarkdownInput
+			<MarkdownInput
 				ref={inputRef}
 				blockText={data.text_content}
 				style={[{ flex: 1 }, checkedStyle]}
@@ -47,7 +48,7 @@ export default function ParagraphBlock({
 				onBackspaceOnEmpty={() => {
 					onRemove?.()
 				}}
-			/> */}
+			/>
 			{data.settings?.checkable && (
 				<Checkbox
 					style={blockStyles.Block__checkbox}

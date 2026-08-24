@@ -4,6 +4,7 @@ import type { EnrichedMarkdownTextInputInstance } from 'react-native-enriched-ma
 import { useShallow } from 'zustand/react/shallow'
 
 import {
+	BlockDragSortLayer,
 	buildBlockTree,
 	useBlocks,
 	useBlockStore,
@@ -11,7 +12,6 @@ import {
 	useRemoveBlock,
 	useSyncBlocks
 } from '@/features/Block'
-import { BlockDebugFlatList } from '@/features/Block/BlockDebugFlatList'
 import { useTaskById } from '@/features/TaskList'
 import type { BlockId, TaskId } from '@/shared/domain/ids'
 import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
@@ -125,13 +125,16 @@ export default function TaskScreen() {
 			</View>
 		)
 
-	return <BlockDebugFlatList blockTree={blockTree} />
-	// {/* <BlockDragSortLayer
-	// 	blockTree={blockTree}
-	// 	taskId={selectedTaskId as TaskId}
-	// 	inputRefs={inputRefs}
-	// 	pendingFocusId={pendingFocusId}
-	// 	onAddBlock={handleAddBlock}
-	// 	onRemoveBlock={handleRemove}
-	// /> #}
+	// return <BlockDebugFlatList blockTree={blockTree} />
+
+	return (
+		<BlockDragSortLayer
+			blockTree={blockTree}
+			taskId={selectedTaskId as TaskId}
+			inputRefs={inputRefs}
+			pendingFocusId={pendingFocusId}
+			onAddBlock={handleAddBlock}
+			onRemoveBlock={handleRemove}
+		/>
+	)
 }

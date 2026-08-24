@@ -124,3 +124,19 @@ export const staticStyles = {
 		gap: 4
 	}
 }
+
+export const debugStyles = StyleSheet.create((theme) => ({
+	Container: {
+		flex: 1,
+		padding: theme.spacing.md
+	},
+	Row: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		gap: theme.spacing.sm,
+		paddingVertical: 100
+	},
+	Row__text: {
+		color: theme.colors.major
+	}
+}))

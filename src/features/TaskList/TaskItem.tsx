@@ -3,7 +3,7 @@ import MaterialDesignIcons from '@react-native-vector-icons/material-design-icon
 import { useRouter } from 'expo-router'
 import { PropsWithChildren } from 'react'
 import { Text, View } from 'react-native'
-import { Gesture, GestureDetector } from 'react-native-gesture-handler'
+import { Gesture } from 'react-native-gesture-handler'
 import Animated, {
 	FadeOut,
 	LinearTransition,
@@ -186,6 +186,7 @@ export default function TaskItem({
 		<Animated.View
 			layout={LinearTransition.duration(250)}
 			exiting={FadeOut.duration(200)}
+			onTouchStart={goTaskScreen}
 		>
 			<MenuView
 				onOpenMenu={handleOpenMenu}
@@ -215,68 +216,68 @@ export default function TaskItem({
 						<Text style={styles.deleteBackground__label}>Delete</Text>
 					</Animated.View>
 
-					<GestureDetector gesture={composedGesture}>
-						<Animated.View
-							style={[
-								styles.Card,
-								cardAnimatedStyle
-								// cardBackgroundColorStyle,
-								// isCompleted && styles.card_completed
-							]}
-							// onLayout={(e) => {
-							// 	itemHeight.value = e.nativeEvent.layout.height
-							// }}
-						>
-							{isCompleted && (
-								<Animated.View
-									style={[
-										styles.Card__completedBackground,
-										completeContainerStyle
-									]}
+					{/* <GestureDetector gesture={composedGesture}> */}
+					<Animated.View
+						style={[
+							styles.Card,
+							cardAnimatedStyle
+							// cardBackgroundColorStyle,
+							// isCompleted && styles.card_completed
+						]}
+						// onLayout={(e) => {
+						// 	itemHeight.value = e.nativeEvent.layout.height
+						// }}
+					>
+						{isCompleted && (
+							<Animated.View
+								style={[
+									styles.Card__completedBackground,
+									completeContainerStyle
+								]}
+							/>
+						)}
+
+						{isByTimeBool && (
+							<Text style={styles.Card__time}>
+								{formatTime(
+									data.schedules?.[0]?.start_time as string,
+									hourFormat
+								)}
+							</Text>
+						)}
+
+						{isSortMode && (
+							<View style={{ position: 'absolute', left: -8 }}>
+								<MaterialDesignIcons
+									name='drag-vertical'
+									size={28}
+									style={{ flex: 0 }}
 								/>
-							)}
-
-							{isByTimeBool && (
-								<Text style={styles.Card__time}>
-									{formatTime(
-										data.schedules?.[0]?.start_time as string,
-										hourFormat
-									)}
-								</Text>
-							)}
-
-							{isSortMode && (
-								<View style={{ position: 'absolute', left: -8 }}>
-									<MaterialDesignIcons
-										name='drag-vertical'
-										size={28}
-										style={{ flex: 0 }}
-									/>
-								</View>
-							)}
-
-							<View style={styles.Card__columns}>
-								<View style={styles.Card__header}>
-									{data.category && (
-										<Text style={styles.Card__category}>
-											{makeCategoryPath(data.category.id, categoryMap)}
-										</Text>
-									)}
-									<Text style={styles.Card__title}>{data.title}</Text>
-								</View>
-								<View></View>
 							</View>
-							{children}
-							{totalProgressCount > 0 && (
-								<View style={styles.Card__dashboard}>
-									<CircleProgress
-										progress={progress}
-										value={`${completedProgressCount}/${totalProgressCount}`}
-									/>
-								</View>
-							)}
-						</Animated.View>
-					</GestureDetector>
+						)}
+
+						<View style={styles.Card__columns}>
+							<View style={styles.Card__header}>
+								{data.category && (
+									<Text style={styles.Card__category}>
+										{makeCategoryPath(data.category.id, categoryMap)}
+									</Text>
+								)}
+								<Text style={styles.Card__title}>{data.title}</Text>
+							</View>
+							<View></View>
+						</View>
+						{children}
+						{totalProgressCount > 0 && (
+							<View style={styles.Card__dashboard}>
+								<CircleProgress
+									progress={progress}
+									value={`${completedProgressCount}/${totalProgressCount}`}
+								/>
+							</View>
+						)}
+					</Animated.View>
+					{/* </GestureDetector> */}
 				</View>
 			</MenuView>
 		</Animated.View>

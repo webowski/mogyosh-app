@@ -20,6 +20,7 @@ export function BlockDebugFlatList({ blockTree }: BlockDebugFlatListProps) {
 
 	return (
 		<ScrollView style={styles.Container}>
+			{/* <DebugBlock /> */}
 			{blocks.map((block) => (
 				<DebugBlockRow key={block.id} data={block} />
 			))}
@@ -35,7 +36,9 @@ function DebugBlockRow({ data }: { data: BlockData }) {
 
 	return (
 		<View style={styles.Row}>
-			<Checkbox checked={checked} onPress={handlePressCheckbox} />
+			{data.settings?.checkable && (
+				<Checkbox checked={checked} onPress={handlePressCheckbox} />
+			)}
 			<Text style={styles.Row__text}>{data.text_content || '(пусто)'}</Text>
 		</View>
 	)

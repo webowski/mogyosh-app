@@ -2,14 +2,10 @@ import { Tabs } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { useUnistyles } from 'react-native-unistyles'
 
-import { BlockSettingsSheet } from '@/features/Block'
-import Drawer from '@/features/Drawer/Drawer'
 import Header from '@/features/Header/Header'
 import HeaderCalendar from '@/features/Header/HeaderCalendar'
-import { default as HeaderDay } from '@/features/Header/HeaderDay'
 import HeaderTask from '@/features/Header/HeaderTask'
 import NavPanel from '@/features/Navigation/NavPanel'
-import { TaskCreateSheet } from '@/features/TaskCreate/TaskCreateSheet'
 import { View } from 'react-native'
 
 export default function NavPanelLayout() {
@@ -18,6 +14,7 @@ export default function NavPanelLayout() {
 
 	return (
 		<View style={{ flex: 1 }}>
+			{/* <Drawer /> */}
 			<Tabs
 				tabBar={(props) => <NavPanel {...props} />}
 				screenOptions={{
@@ -35,8 +32,8 @@ export default function NavPanelLayout() {
 					options={{
 						title: t('screen.Today'),
 						href: null,
-						headerShown: true,
-						header: (props) => <HeaderDay {...props} />
+						headerShown: true
+						// header: (props) => <HeaderDay {...props} />
 					}}
 				/>
 				<Tabs.Screen
@@ -95,15 +92,6 @@ export default function NavPanelLayout() {
 						header: (props) => <HeaderTask {...props} />
 					}}
 				/>
-				{/* <Tabs.Screen
-					name='createTask'
-					options={{
-						title: t('screen.Create Task'),
-						href: null,
-						headerShown: true,
-						header: (props) => <Header {...props} />
-					}}
-				/> */}
 			</Tabs>
 
 			{/* TEMP DEBUG: disabled to test if keyboard-controller overlay windows
@@ -112,8 +100,8 @@ export default function NavPanelLayout() {
 			<CounterKeyboardAccessory />
 			*/}
 
-			<BlockSettingsSheet />
-			<TaskCreateSheet />
+			{/* <BlockSettingsSheet /> */}
+			{/* <TaskCreateSheet /> */}
 		</View>
 	)
 }
