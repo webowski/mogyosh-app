@@ -166,13 +166,7 @@ export default function BlockNode({
 		<View style={styles.indent(depth)}>
 			<GestureDetector gesture={gesture}>
 				<Animated.View style={dragRowStyle}>
-					<View
-						onLayout={onLayout}
-						style={blockStyles.Block}
-						onTouchStart={() =>
-							console.log('[BlockNode] onTouchStart', data.id, variant)
-						}
-					>
+					<View onLayout={onLayout} style={blockStyles.Block}>
 						{content}
 						{data.settings?.journaled && (
 							<View style={blockStyles.Block__journaled} />

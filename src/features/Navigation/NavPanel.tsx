@@ -117,10 +117,7 @@ export default function NavPanel({
 	}
 
 	return (
-		<View
-			style={styles.NavPanelWrap}
-			onTouchStart={() => console.log('[NavPanel] onTouchStart')}
-		>
+		<View style={styles.NavPanelWrap}>
 			<ActionSheet>
 				{/* AllTasks */}
 				{actionSheetRouteName === 'allTasks' ? (

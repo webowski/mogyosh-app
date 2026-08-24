@@ -107,10 +107,7 @@ export default function RootLayout() {
 
 	return (
 		<Providers>
-			<View
-				style={{ flex: 1 }}
-				onTouchStart={() => console.log('[RootLayout] onTouchStart')}
-			>
+			<View style={{ flex: 1 }}>
 				<StatusBar style={theme.statusBarColor} />
 
 				{Platform.OS === 'android' && (

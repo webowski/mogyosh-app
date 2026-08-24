@@ -98,9 +98,6 @@ export function BlockDragSortContent({
 			<Animated.View
 				ref={containerRef}
 				style={[staticStyles.ScrollBox__inner, { position: 'relative' }]}
-				onTouchStart={() =>
-					console.log('[BlockDragSort] container onTouchStart')
-				}
 			>
 				{blockTree.map((blockData) => (
 					<BlockNode

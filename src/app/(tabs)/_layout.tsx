@@ -17,11 +17,7 @@ export default function NavPanelLayout() {
 	const { t } = useTranslation()
 
 	return (
-		<View
-			style={{ flex: 1 }}
-			onTouchStart={() => console.log('[TabsLayout] onTouchStart')}
-		>
-			<Drawer />
+		<View style={{ flex: 1 }}>
 			<Tabs
 				tabBar={(props) => <NavPanel {...props} />}
 				screenOptions={{
