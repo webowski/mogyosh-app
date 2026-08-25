@@ -334,6 +334,7 @@ export default function EditorToolbar() {
 						style={{}}
 						bounces={false}
 						showsHorizontalScrollIndicator={false}
+						keyboardShouldPersistTaps='always'
 						contentContainerStyle={{
 							// paddingHorizontal: 8,
 							paddingHorizontal: STYLE_VARS.sidePadding,
