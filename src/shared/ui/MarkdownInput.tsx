@@ -23,7 +23,7 @@ interface MarkdownInputProps {
 	textStyle?: StyleProp<TextStyle>
 	onChangeText?: (text: string) => void
 	onChangeMarkdown?: (markdown: string) => void
-	onEnterPress?: () => void
+	onEnterPress?: (textAfterCursor?: string) => void
 	onBackspaceOnEmpty?: () => void
 	onFocus?: () => void
 	onBlur?: () => void
@@ -80,26 +80,31 @@ export const MarkdownInput = forwardRef<
 			onChangeText?.(text)
 		}
 
-		const triggerEnterPress = () => {
+		const triggerEnterPress = (textAfterCursor = '') => {
 			if (enterHandledRef.current) return
 			enterHandledRef.current = true
-			onEnterPress?.()
+			onEnterPress?.(textAfterCursor)
 			requestAnimationFrame(() => {
 				enterHandledRef.current = false
 			})
 		}
 
 		const handleMarkdownChange = (markdown: string) => {
-			// Enter on multiline input inserts trailing "\n".
-			// onKeyPress("Enter") is unreliable in enriched-markdown, so detect here.
-			if (markdown.endsWith('\n')) {
-				const cleanedMarkdown = markdown.replace(/\n+$/, '')
-				markdownRef.current = cleanedMarkdown
+			// Enter inserts "\n" at the caret. Split there so text after the caret
+			// becomes the content of the newly created block.
+			if (markdown.includes('\n')) {
+				const newlineIndex = markdown.indexOf('\n')
+				const textBeforeCursor = markdown.slice(0, newlineIndex)
+				const textAfterCursor = markdown
+					.slice(newlineIndex + 1)
+					.replace(/\n/g, '')
+
+				markdownRef.current = textBeforeCursor
 				;(
 					ref as React.RefObject<EnrichedMarkdownTextInputInstance>
-				).current?.setValue(cleanedMarkdown)
-				onChangeMarkdown?.(cleanedMarkdown)
-				triggerEnterPress()
+				).current?.setValue(textBeforeCursor)
+				onChangeMarkdown?.(textBeforeCursor)
+				triggerEnterPress(textAfterCursor)
 				return
 			}
 
@@ -183,7 +188,7 @@ interface WebDivInputProps {
 	textStyle?: StyleProp<TextStyle>
 	onChangeText?: (text: string) => void
 	onChangeMarkdown?: (markdown: string) => void
-	onEnterPress?: () => void
+	onEnterPress?: (textAfterCursor?: string) => void
 	onBackspaceOnEmpty?: () => void
 	onFocus?: () => void
 }
@@ -230,7 +235,28 @@ function WebDivInput({
 			onKeyDown={(event) => {
 				if (event.key === 'Enter') {
 					event.preventDefault()
-					onEnterPress?.()
+
+					const element = event.currentTarget as HTMLDivElement
+					const selection = window.getSelection()
+					if (!selection || selection.rangeCount === 0) {
+						onEnterPress?.('')
+						return
+					}
+
+					const range = selection.getRangeAt(0)
+					const preCaretRange = range.cloneRange()
+					preCaretRange.selectNodeContents(element)
+					preCaretRange.setEnd(range.startContainer, range.startOffset)
+					const caretOffset = preCaretRange.toString().length
+
+					const fullText = element.innerText.replace(/\n$/, '')
+					const textBeforeCursor = fullText.slice(0, caretOffset)
+					const textAfterCursor = fullText.slice(caretOffset)
+
+					element.innerText = textBeforeCursor
+					onChangeText?.(textBeforeCursor)
+					onChangeMarkdown?.(textBeforeCursor)
+					onEnterPress?.(textAfterCursor)
 				} else if (event.key === 'Backspace') {
 					const text = (event.currentTarget as HTMLDivElement).innerText
 					if (text === '' || text === '\n') {

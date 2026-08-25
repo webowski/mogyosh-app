@@ -137,7 +137,7 @@ export type BlockData = BlockEntity & {
 export type BlockProps = {
 	data: BlockData
 	onCheckToggle?: (checked: boolean) => void
-	onAddAfter?: () => void
+	onAddAfter?: (textAfterCursor?: string) => void
 	onRemove?: () => void
 	pendingFocusId?: React.RefObject<BlockId | null>
 }

@@ -29,7 +29,7 @@ interface BlockNodeProps {
 	variant: BlockType
 	siblings?: BlockData[]
 	inputRefs?: BlockInputRefsMap
-	onAddAfter?: (afterId: BlockId) => void
+	onAddAfter?: (afterId: BlockId, textAfterCursor?: string) => void
 	onRemove?: (id: BlockId) => void
 	pendingFocusId?: React.RefObject<BlockId | null>
 }
@@ -56,7 +56,9 @@ export default function BlockNode({
 				<ExpandableBlock
 					data={data}
 					onExpandToggle={(expanded) => setIsChildShown(expanded)}
-					onAddAfter={() => onAddAfter?.(data.id)}
+					onAddAfter={(textAfterCursor) =>
+						onAddAfter?.(data.id, textAfterCursor)
+					}
 					onRemove={() => onRemove?.(data.id)}
 				/>
 			)
@@ -70,7 +72,9 @@ export default function BlockNode({
 				<HeadingBlock
 					variant={variant}
 					data={data}
-					onAddAfter={() => onAddAfter?.(data.id)}
+					onAddAfter={(textAfterCursor) =>
+						onAddAfter?.(data.id, textAfterCursor)
+					}
 					onRemove={() => onRemove?.(data.id)}
 				/>
 			)
@@ -85,7 +89,9 @@ export default function BlockNode({
 					variant={variant}
 					data={data}
 					onExpandToggle={(expanded) => setIsChildShown(expanded)}
-					onAddAfter={() => onAddAfter?.(data.id)}
+					onAddAfter={(textAfterCursor) =>
+						onAddAfter?.(data.id, textAfterCursor)
+					}
 					onRemove={() => onRemove?.(data.id)}
 				/>
 			)
@@ -97,7 +103,9 @@ export default function BlockNode({
 					data={data}
 					depth={depth}
 					inputRefs={inputRefs}
-					onAddAfter={() => onAddAfter?.(data.id)}
+					onAddAfter={(textAfterCursor) =>
+						onAddAfter?.(data.id, textAfterCursor)
+					}
 					onRemove={() => onRemove?.(data.id)}
 					pendingFocusId={pendingFocusId}
 				/>
@@ -111,7 +119,9 @@ export default function BlockNode({
 					depth={depth}
 					orderIndex={getOrderedSiblingIndex(siblings ?? [data], data.id)}
 					inputRefs={inputRefs}
-					onAddAfter={() => onAddAfter?.(data.id)}
+					onAddAfter={(textAfterCursor) =>
+						onAddAfter?.(data.id, textAfterCursor)
+					}
 					onRemove={() => onRemove?.(data.id)}
 					pendingFocusId={pendingFocusId}
 				/>
@@ -123,7 +133,9 @@ export default function BlockNode({
 				<TimerBlock
 					data={data}
 					// depth={depth}
-					onAddAfter={() => onAddAfter?.(data.id)}
+					onAddAfter={(textAfterCursor) =>
+						onAddAfter?.(data.id, textAfterCursor)
+					}
 					onRemove={() => onRemove?.(data.id)}
 				/>
 			)
@@ -134,7 +146,9 @@ export default function BlockNode({
 				<StopwatchBlock
 					data={data}
 					// depth={depth}
-					onAddAfter={() => onAddAfter?.(data.id)}
+					onAddAfter={(textAfterCursor) =>
+						onAddAfter?.(data.id, textAfterCursor)
+					}
 					onRemove={() => onRemove?.(data.id)}
 				/>
 			)
@@ -145,7 +159,9 @@ export default function BlockNode({
 				<CounterBlock
 					data={data}
 					// depth={depth}
-					onAddAfter={() => onAddAfter?.(data.id)}
+					onAddAfter={(textAfterCursor) =>
+						onAddAfter?.(data.id, textAfterCursor)
+					}
 					onRemove={() => onRemove?.(data.id)}
 				/>
 			)
@@ -156,7 +172,9 @@ export default function BlockNode({
 			content = (
 				<ParagraphBlock
 					data={data}
-					onAddAfter={() => onAddAfter?.(data.id)}
+					onAddAfter={(textAfterCursor) =>
+						onAddAfter?.(data.id, textAfterCursor)
+					}
 					onRemove={() => onRemove?.(data.id)}
 				/>
 			)

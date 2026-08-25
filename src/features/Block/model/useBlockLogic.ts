@@ -68,10 +68,12 @@ export function useBlockLogic({
 	}
 
 	const inputRef = getOrCreateRef()
-
 	const updateDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+	const latestTextRef = useRef(data.text_content)
+
 	const handleChangeText = useCallback(
 		(value: string) => {
+			latestTextRef.current = value
 			if (updateDebounceRef.current) clearTimeout(updateDebounceRef.current)
 			updateDebounceRef.current = setTimeout(() => {
 				updateBlock.mutate({
@@ -198,22 +200,33 @@ export function useBlockLogic({
 		focusInputElement(ref)
 	}
 
-	const handleAddAfter = () => {
+	const handleAddAfter = (textAfterCursor = '') => {
+		if (updateDebounceRef.current) {
+			clearTimeout(updateDebounceRef.current)
+			updateDebounceRef.current = null
+		}
+
+		// Persist text before caret immediately (already set via onChangeMarkdown)
+		updateBlock.mutate({
+			id: data.id,
+			taskId: data.task_id,
+			patch: { text_content: latestTextRef.current }
+		})
+
 		if (onAddAfter) {
-			onAddAfter()
+			onAddAfter(textAfterCursor)
 			return
 		}
 
-		// Fallback: create directly if no onAddAfter provided (standalone usage)
 		createBlock.mutate({
-			text_content: '',
+			text_content: textAfterCursor,
 			task_id: data.task_id,
 			parent_id: data.parent_id ?? null,
-			type: blockType
+			type: blockType,
+			afterId: data.id
 		})
 		setTimeout(focusNewInput, 50)
 	}
-
 	useEffect(() => {
 		if (pendingFocusId?.current !== data.id) return
 
