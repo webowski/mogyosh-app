@@ -3,8 +3,7 @@ import { useCallback } from 'react'
 import { Pressable as GesturePressable } from 'react-native-gesture-handler'
 import {
 	KeyboardAwareScrollView,
-	KeyboardAwareScrollViewRef,
-	KeyboardController
+	KeyboardAwareScrollViewRef
 } from 'react-native-keyboard-controller'
 import { AnimatedScrollViewComponent } from 'react-native-keyboard-controller/lib/typescript/components/ScrollViewWithBottomPadding'
 import Animated from 'react-native-reanimated'
@@ -98,12 +97,17 @@ export function BlockDragSortContent({
 			style={staticStyles.ScrollBox}
 			overScrollMode='never'
 			bottomOffset={STYLE_VARS.editorToolbarHeight * 1.25}
+			keyboardShouldPersistTaps='handled'
 			// keyboardDismissMode='on-drag'
-			// keyboardShouldPersistTaps='always'
 		>
 			<GesturePressable
 				style={staticStyles.ScrollBox__inner}
-				onPress={() => KeyboardController.dismiss()}
+				// onPress={() => {
+				// 	// Dismiss only when the press is not handled by a child (TextInput etc.)
+				// 	if (KeyboardController.isVisible()) {
+				// 		KeyboardController.dismiss()
+				// 	}
+				// }}
 				accessibilityRole={undefined}
 				android_disableSound
 			>

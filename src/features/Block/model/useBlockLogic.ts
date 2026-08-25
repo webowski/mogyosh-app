@@ -179,8 +179,16 @@ export function useBlockLogic({
 		// blinks) without the soft keyboard actually showing — the second
 		// tap is what used to open it. setFocusTo('current') is a no-op if
 		// the keyboard is already visible, and forces it open otherwise.
+		// Defer until after the current touch ends so the native caret
+		// position from the tap is not overwritten.
 		if (Platform.OS !== 'web') {
-			KeyboardController.setFocusTo('current')
+			requestAnimationFrame(() => {
+				requestAnimationFrame(() => {
+					if (!KeyboardController.isVisible()) {
+						// KeyboardController.setFocusTo('current')
+					}
+				})
+			})
 		}
 	}
 

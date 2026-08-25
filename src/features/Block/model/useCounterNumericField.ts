@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import { Platform, type TextInput } from 'react-native'
-import { KeyboardController } from 'react-native-keyboard-controller'
 
 import type { BlockEntity } from '@/shared/domain/block'
 import { useBlurOnKeyboardHide } from '@/shared/lib/useBlurOnKeyboardHide'
@@ -86,7 +85,7 @@ export const useCounterNumericField = (
 		useCounterAccessoryStore.getState().activate(token)
 
 		if (Platform.OS !== 'web') {
-			KeyboardController.setFocusTo('current')
+			// KeyboardController.setFocusTo('current')
 		}
 	}
 
