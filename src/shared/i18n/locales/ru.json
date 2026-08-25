@@ -15,7 +15,11 @@
 		"Create Task": "Создать задачу",
 		"Language": "Язык",
 		"Theme": "Тема",
-		"Time format": "Формат времени"
+		"Time format": "Формат времени",
+		"day": {
+			"During the day": "В течение дня",
+			"By time": "По времени"
+		}
 	},
 	"Task": "Задача",
 	"Tasks": "Задачи",

@@ -1,5 +1,6 @@
 import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons'
 import { router } from 'expo-router'
+import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import { useUnistyles } from 'react-native-unistyles'
 
@@ -10,12 +11,13 @@ import ScrollBox from '@/shared/ui/ScrollBox'
 
 export default function AboutScreen() {
 	const { theme } = useUnistyles()
+	const { t } = useTranslation()
 
 	return (
 		<>
 			<ScrollBox scrollIndent>
 				<View>
-					<Text style={textStyles.heading5}>About</Text>
+					<Text style={textStyles.heading5}>{t('screen.About')}</Text>
 				</View>
 			</ScrollBox>
 
