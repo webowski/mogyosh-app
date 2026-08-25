@@ -8,7 +8,10 @@ export type TaskFilters = {
 	priority?: number
 }
 
+export type TaskSectionId = 'during_the_day' | 'by_time'
+
 export type TaskSection = {
+	id: TaskSectionId
 	title: string
 	data: TaskEntity[]
 }

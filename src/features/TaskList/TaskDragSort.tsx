@@ -49,7 +49,7 @@ export function TaskDragSortLayer({ tasks }: TaskDragSortLayerProps) {
 			{ queryKey: ['tasks-grouped'] },
 			(old) =>
 				old?.map((section) => {
-					if (section.title !== DURING_DAY_TITLE) return section
+					if (section.id !== 'during_the_day') return section
 					return {
 						...section,
 						data: section.data.map((task) => {

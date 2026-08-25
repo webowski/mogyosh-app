@@ -42,8 +42,8 @@ export const filterTasks = (
 
 /**
  * Categorize tasks into sections based on their schedules
- * - "During the day": tasks without start_time
- * - "By time": tasks with start_time
+ * - "during_the_day": tasks without start_time
+ * - "by_time": tasks with start_time
  */
 export const groupTasksByShedule = (tasks: TaskEntity[]): TaskSection[] => {
 	// Tasks with start_time go to "By time"
@@ -70,6 +70,7 @@ export const groupTasksByShedule = (tasks: TaskEntity[]): TaskSection[] => {
 
 	if (duringDayTasks.length > 0) {
 		sections.push({
+			id: 'during_the_day',
 			title: 'During the day',
 			data: duringDayTasks
 		})
@@ -77,6 +78,7 @@ export const groupTasksByShedule = (tasks: TaskEntity[]): TaskSection[] => {
 
 	if (byTimeTasks.length > 0) {
 		sections.push({
+			id: 'by_time',
 			title: 'By time',
 			data: byTimeTasks
 		})
@@ -84,7 +86,6 @@ export const groupTasksByShedule = (tasks: TaskEntity[]): TaskSection[] => {
 
 	return sections
 }
-
 /**
  * Filter tasks by date
  * Checks if task has schedules that match the given date

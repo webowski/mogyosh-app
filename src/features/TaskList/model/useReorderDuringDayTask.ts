@@ -5,8 +5,6 @@ import type { TaskEntity } from '@/shared/domain/task'
 import { taskAPI } from '../repository/task.api'
 import type { TaskSection } from './task.types'
 
-const DURING_DAY_TITLE = 'During the day'
-
 type ReorderDuringDayTaskVariables = {
 	id: TaskId
 	sortOrder: string
@@ -54,7 +52,7 @@ export const useReorderDuringDayTask = () => {
 				{ queryKey: ['tasks-grouped'] },
 				(old) =>
 					old?.map((section) =>
-						section.title === DURING_DAY_TITLE
+						section.id === 'during_the_day'
 							? {
 									...section,
 									data: reorderDuringDaySection(section.data, variables)

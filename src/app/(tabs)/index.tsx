@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { SectionList, Text, View } from 'react-native'
 
 import {
@@ -13,6 +14,7 @@ import { textStyles } from '@/shared/styles/text'
 import Skeleton from '@/shared/ui/Skeleton'
 
 export default function DayScreen() {
+	const { t } = useTranslation()
 	const { data, isLoading, error, refetch } = useTasksGrouped()
 	const { isLoading: catLoading, error: catError } = useCategories()
 	const isSortMode = useTaskListViewStore((store) => store.isSortMode)
@@ -36,7 +38,7 @@ export default function DayScreen() {
 
 	if (isSortMode) {
 		const duringDayTasks =
-			sections.find((section) => section.title === 'During the day')?.data ?? []
+			sections.find((section) => section.id === 'during_the_day')?.data ?? []
 
 		return (
 			<View
@@ -80,7 +82,7 @@ export default function DayScreen() {
 			renderItem={({ item }) => <TaskItem data={item} />}
 			renderSectionHeader={({ section: { title } }) => (
 				<View style={commonStyles.sectionHeader}>
-					<Text style={textStyles.heading5}>{title}</Text>
+					<Text style={textStyles.heading5}>{t(`screen.day.${title}`)}</Text>
 				</View>
 			)}
 		/>
