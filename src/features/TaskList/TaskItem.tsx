@@ -138,6 +138,25 @@ export default function TaskItem({
 			scheduleOnRN(goTaskScreen)
 		})
 
+	const handleOpenContextMenu = (positionX: number, positionY: number) => {
+		triggerHapticLight()
+		openContextMenu({ x: positionX, y: positionY }, [
+			{
+				title: isCompleted ? 'Отменить выполнение' : 'Выполнено',
+				onPress: toggleCompleteTask
+			},
+			{
+				title: 'Открыть',
+				onPress: goTaskScreen
+			},
+			{
+				title: 'Удалить',
+				onPress: deleteTask,
+				destructive: true
+			}
+		])
+	}
+
 	const longPressGesture = Gesture.LongPress()
 		.enabled(!isSortMode)
 		.minDuration(350)
@@ -183,25 +202,6 @@ export default function TaskItem({
 	// 	ios: 'trash',
 	// 	android: import('@expo/material-symbols/delete.xml')
 	// })
-
-	const handleOpenContextMenu = (positionX: number, positionY: number) => {
-		triggerHapticLight()
-		openContextMenu({ x: positionX, y: positionY }, [
-			{
-				title: isCompleted ? 'Отменить выполнение' : 'Выполнено',
-				onPress: toggleCompleteTask
-			},
-			{
-				title: 'Открыть',
-				onPress: goTaskScreen
-			},
-			{
-				title: 'Удалить',
-				onPress: deleteTask,
-				destructive: true
-			}
-		])
-	}
 
 	return (
 		<Animated.View
