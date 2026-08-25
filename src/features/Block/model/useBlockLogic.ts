@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Platform } from 'react-native'
 import type { EnrichedMarkdownTextInputInstance } from 'react-native-enriched-markdown'
+import { KeyboardController } from 'react-native-keyboard-controller'
 import {
 	useAnimatedStyle,
 	useSharedValue,
@@ -170,7 +171,18 @@ export function useBlockLogic({
 		]
 	)
 
-	const handleFocus = () => setFocusedBlockId(data.id)
+	const handleFocus = () => {
+		setFocusedBlockId(data.id)
+
+		// On Android, when the row is wrapped in a Pan gesture (drag-sort),
+		// the first tap can end up giving the input native focus (cursor
+		// blinks) without the soft keyboard actually showing — the second
+		// tap is what used to open it. setFocusTo('current') is a no-op if
+		// the keyboard is already visible, and forces it open otherwise.
+		if (Platform.OS !== 'web') {
+			KeyboardController.setFocusTo('current')
+		}
+	}
 
 	const focusNewInput = () => {
 		const ref = inputRef.current
