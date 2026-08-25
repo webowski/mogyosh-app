@@ -14,6 +14,8 @@ import {
 import Animated, { type AnimatedStyle } from 'react-native-reanimated'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
+import { useBlurOnKeyboardHide } from '../lib/useBlurOnKeyboardHide'
+
 interface MarkdownInputProps {
 	blockText: string
 	style?: StyleProp<AnimatedStyle<ViewStyle>>
@@ -46,6 +48,12 @@ export const MarkdownInput = forwardRef<
 	) => {
 		const { theme } = useUnistyles()
 		const markdownRef = useRef(blockText)
+
+		useBlurOnKeyboardHide(
+			ref as React.RefObject<
+				EnrichedMarkdownTextInputInstance | HTMLDivElement | null
+			>
+		)
 
 		const handleTextChange = (text: string) => {
 			// console.log({ text })
