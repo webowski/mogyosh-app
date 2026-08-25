@@ -299,14 +299,14 @@ export function TaskCreateForm({ onClose }: Props) {
 										setNewCategoryName('')
 									}}
 								>
-									Отмена
+									{t('buttons.Cancel')}
 								</Button>
 								<Button
 									style={{ flex: 1 }}
 									onPress={handleCreateCategory}
 									disabled={!newCategoryName.trim() || createCategory.isPending}
 								>
-									Создать
+									{t('buttons.Create')}
 								</Button>
 							</View>
 						</View>
@@ -332,7 +332,7 @@ export function TaskCreateForm({ onClose }: Props) {
 								}}
 								onPress={() => setIsCreatingCategory(true)}
 							>
-								+ Создать категорию
+								{'+ ' + t('buttons.Create category')}
 							</Button>
 						</>
 					)}

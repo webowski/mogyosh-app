@@ -1,5 +1,6 @@
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, Text, View } from 'react-native'
 import { EnrichedMarkdownTextInputInstance } from 'react-native-enriched-markdown'
 import { ScrollView } from 'react-native-gesture-handler'
@@ -61,6 +62,7 @@ const BLOCK_TYPE_OPTIONS: {
 
 export default function EditorToolbar() {
 	const { theme } = useUnistyles()
+	const { t } = useTranslation()
 
 	const activeItemId = useEditorToolbarStore((state) => state.activeItemId)
 
@@ -473,7 +475,9 @@ export default function EditorToolbar() {
 								size={20}
 								color={theme.colors.major}
 							/>
-							<Text style={styles.TypeMenu__label}>{option.label}</Text>
+							<Text style={styles.TypeMenu__label}>
+								{t(`blockTypes.${option.label}`)}
+							</Text>
 						</Pressable>
 					))}
 				</Animated.View>

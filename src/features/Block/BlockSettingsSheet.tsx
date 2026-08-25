@@ -1,5 +1,6 @@
 import { TrueSheet } from '@lodev09/react-native-true-sheet'
 import { useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Text } from 'react-native'
 import { useUnistyles } from 'react-native-unistyles'
 import { useShallow } from 'zustand/react/shallow'
@@ -15,6 +16,7 @@ import { useUpdateBlock } from './model/useUpdateBlock'
 
 export function BlockSettingsSheet() {
 	const { theme } = useUnistyles()
+	const { t } = useTranslation()
 
 	const sheetRef = useRef<TrueSheet>(null)
 
@@ -68,7 +70,7 @@ export function BlockSettingsSheet() {
 							paddingBottom: 8
 						}}
 					>
-						Настройки блока
+						{t('block.Block settings')}
 					</Text>
 					<BlockSettingsForm block={focusedBlock} onChange={handleChange} />
 				</>

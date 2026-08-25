@@ -56,7 +56,7 @@ export function BlockSettingsForm({ block, onChange }: BlockSettingsFormProps) {
 						size={20}
 						color={theme.colors.major}
 					/>
-					<Text style={styles.Form__labelText}>Чекбокс</Text>
+					<Text style={styles.Form__labelText}>{t('block.Checkbox')}</Text>
 				</View>
 				<Toggle
 					value={settings.checkable ?? false}
@@ -71,7 +71,9 @@ export function BlockSettingsForm({ block, onChange }: BlockSettingsFormProps) {
 						size={20}
 						color={theme.colors.major}
 					/>
-					<Text style={styles.Form__labelText}>Журналировать по дням</Text>
+					<Text style={styles.Form__labelText}>
+						{t('block.Journal by day')}
+					</Text>
 				</View>
 				<Toggle
 					value={settings.journaled ?? false}
@@ -86,7 +88,7 @@ export function BlockSettingsForm({ block, onChange }: BlockSettingsFormProps) {
 						size={20}
 						color={theme.colors.major}
 					/>
-					<Text style={styles.Form__labelText}>Показывать в статистике</Text>
+					<Text style={styles.Form__labelText}>{t('block.Show in stats')}</Text>
 				</View>
 				<Toggle
 					value={settings.in_stats ?? false}
@@ -96,7 +98,9 @@ export function BlockSettingsForm({ block, onChange }: BlockSettingsFormProps) {
 
 			{(block.type === 'timer' || block.type === 'stopwatch') && (
 				<View style={styles.Form__row}>
-					<Text style={styles.Form__labelText}>Длительность (сек)</Text>
+					<Text style={styles.Form__labelText}>
+						{t('block.Duration (sec)')}
+					</Text>
 					<TextInput
 						style={styles.Form__input}
 						keyboardType='numeric'
@@ -112,7 +116,7 @@ export function BlockSettingsForm({ block, onChange }: BlockSettingsFormProps) {
 
 			{block.type === 'timer' && (
 				<View style={styles.Form__row}>
-					<Text style={styles.Form__labelText}>Режим</Text>
+					<Text style={styles.Form__labelText}>{t('block.Mode')}</Text>
 					<View style={styles.Form__modeToggle}>
 						<Text
 							style={[
@@ -121,7 +125,7 @@ export function BlockSettingsForm({ block, onChange }: BlockSettingsFormProps) {
 							]}
 							onPress={() => onChange({ mode: 'increasing' })}
 						>
-							Вверх
+							{t('block.Up')}
 						</Text>
 						<Text
 							style={[
@@ -130,7 +134,7 @@ export function BlockSettingsForm({ block, onChange }: BlockSettingsFormProps) {
 							]}
 							onPress={() => onChange({ mode: 'decreasing' })}
 						>
-							Вниз
+							{t('block.Down')}
 						</Text>
 					</View>
 				</View>
@@ -139,7 +143,7 @@ export function BlockSettingsForm({ block, onChange }: BlockSettingsFormProps) {
 			{block.type === 'counter' && (
 				<>
 					<View style={styles.Form__row}>
-						<Text style={styles.Form__labelText}>Цель</Text>
+						<Text style={styles.Form__labelText}>{t('block.Goal')}</Text>
 						<TextInput
 							style={styles.Form__input}
 							keyboardType='numeric'
@@ -150,7 +154,7 @@ export function BlockSettingsForm({ block, onChange }: BlockSettingsFormProps) {
 						/>
 					</View>
 					<View style={styles.Form__row}>
-						<Text style={styles.Form__labelText}>Начальное значение</Text>
+						<Text style={styles.Form__labelText}>{t('block.Start value')}</Text>
 						<TextInput
 							style={styles.Form__input}
 							keyboardType='numeric'
@@ -161,7 +165,9 @@ export function BlockSettingsForm({ block, onChange }: BlockSettingsFormProps) {
 						/>
 					</View>
 					<View style={styles.Form__row}>
-						<Text style={styles.Form__labelText}>Текущее значение</Text>
+						<Text style={styles.Form__labelText}>
+							{t('block.Current value')}
+						</Text>
 						<TextInput
 							style={styles.Form__input}
 							keyboardType='numeric'
@@ -187,7 +193,7 @@ export function BlockSettingsForm({ block, onChange }: BlockSettingsFormProps) {
 						</MenuView>
 					</View>
 					<View style={styles.Form__row}>
-						<Text style={styles.Form__labelText}>Количество повторений</Text>
+						<Text style={styles.Form__labelText}>{t('block.Repetitions')}</Text>
 						<TextInput
 							style={styles.Form__input}
 							keyboardType='numeric'

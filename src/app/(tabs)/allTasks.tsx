@@ -31,11 +31,11 @@ import RadioButton from '@/shared/ui/RadioButton'
 
 type SortOption = 'alphabetical' | 'created_at' | 'updated_at'
 
-const SORT_OPTIONS: { value: SortOption; label: string }[] = [
-	{ value: 'alphabetical', label: 'По алфавиту' },
-	{ value: 'created_at', label: 'По дате создания' },
-	{ value: 'updated_at', label: 'По дате изменения' }
-]
+const SORT_OPTIONS = {
+	alphabetical: 'Alphabetically',
+	created_at: 'By creation date',
+	updated_at: 'By modification date'
+} satisfies Record<SortOption, string>
 
 export default function AllTasksScreen() {
 	const { theme } = useUnistyles()
@@ -253,7 +253,7 @@ export default function AllTasksScreen() {
 					<TextInput
 						value={searchQuery}
 						onChangeText={setSearchQuery}
-						placeholder='Поиск'
+						placeholder={t('placeholders.Search')}
 						placeholderTextColor={theme.colors.mutedTextStrong}
 						style={[formStyles.input, { paddingLeft: 40 }]}
 					/>
@@ -298,13 +298,13 @@ export default function AllTasksScreen() {
 					) : error ? (
 						<View style={commonStyles.SystemContentMessage}>
 							<Text style={commonStyles.SystemContentMessage__text}>
-								Ошибка загрузки.
+								{t('error.tasks_loading_error')}
 							</Text>
 						</View>
 					) : (
 						<View style={commonStyles.SystemContentMessage}>
 							<Text style={commonStyles.SystemContentMessage__text}>
-								Нет задач, соответствующих {'\n'} выбранным параметрам.
+								{t('error.no_filtered_tasks')}
 							</Text>
 						</View>
 					)
@@ -319,7 +319,7 @@ export default function AllTasksScreen() {
 					style={{ width: 'auto' }}
 					onPress={() => sortSheetRef.current?.present()}
 				>
-					{SORT_OPTIONS.find((option) => option.value === sortOption)?.label}
+					{t(`sort.${SORT_OPTIONS[sortOption]}`)}
 				</Button>
 
 				<Button
@@ -360,7 +360,7 @@ export default function AllTasksScreen() {
 									formStyles.input,
 									{ backgroundColor: theme.colors.surfaceDeep }
 								]}
-								placeholder='Название категории'
+								placeholder={t('screen.allTasks.Category name')}
 								placeholderTextColor={theme.colors.mutedTextStrong}
 								value={newCategoryName}
 								onChangeText={setNewCategoryName}
@@ -377,14 +377,14 @@ export default function AllTasksScreen() {
 										setNewCategoryName('')
 									}}
 								>
-									Отмена
+									{t('buttons.Cancel')}
 								</Button>
 								<Button
 									style={{ flex: 1 }}
 									onPress={handleCreateCategory}
 									disabled={!newCategoryName.trim() || createCategory.isPending}
 								>
-									Создать
+									{t('buttons.Create')}
 								</Button>
 							</View>
 						</View>
@@ -412,7 +412,7 @@ export default function AllTasksScreen() {
 										setEditCategoryName('')
 									}}
 								>
-									Отмена
+									{t('buttons.Cancel')}
 								</Button>
 								<Button
 									style={{ flex: 1 }}
@@ -421,7 +421,7 @@ export default function AllTasksScreen() {
 										!editCategoryName.trim() || updateCategory.isPending
 									}
 								>
-									Сохранить
+									{t('buttons.Create')}
 								</Button>
 							</View>
 						</View>
@@ -490,7 +490,7 @@ export default function AllTasksScreen() {
 								style={{ marginTop: theme.spacing.sm, alignSelf: 'flex-start' }}
 								onPress={() => setIsCreatingCategory(true)}
 							>
-								+ Создать категорию
+								{'+ ' + t('buttons.Create category')}
 							</Button>
 						</>
 					)}
@@ -505,12 +505,12 @@ export default function AllTasksScreen() {
 				grabberOptions={{ color: theme.colors.mutedTextStrong }}
 			>
 				<View style={{ padding: STYLE_VARS.sidePadding_xl, gap: 12 }}>
-					{SORT_OPTIONS.map((option) => (
+					{(Object.keys(SORT_OPTIONS) as SortOption[]).map((value) => (
 						<RadioButton
-							key={option.value}
-							title={option.label}
-							checked={sortOption === option.value}
-							onPress={() => handleSortChange(option.value)}
+							key={value}
+							title={t(`sort.${SORT_OPTIONS[value]}`)}
+							checked={sortOption === value}
+							onPress={() => handleSortChange(value)}
 						/>
 					))}
 				</View>

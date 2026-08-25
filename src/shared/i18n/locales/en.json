@@ -19,7 +19,23 @@
 		"day": {
 			"During the day": "During the day",
 			"By time": "By time"
+		},
+		"allTasks": {
+			"Category name": "Category name"
 		}
+	},
+	"buttons": {
+		"Create": "Create",
+		"Cancel": "Cancel",
+		"Create category": "Create category"
+	},
+	"sort": {
+		"Alphabetically": "Alphabetically",
+		"By creation date": "By creation date",
+		"By modification date": "By modification date"
+	},
+	"filters": {
+		"Categories": "Categories"
 	},
 	"Task": "Task",
 	"Tasks": "Tasks",
@@ -28,9 +44,6 @@
 	"Edit Task": "Edit Task",
 	"Delete Task": "Delete Task",
 	"Done": "Done",
-	"filters": {
-		"Categories": "Categories"
-	},
 	"All categories": "All categories",
 	"Uncategorized": "Uncategorized",
 	"date": {
@@ -61,6 +74,36 @@
 	"form": {
 		"title": "Title",
 		"units": "Units"
+	},
+	"placeholders": {
+		"Search": "Search"
+	},
+	"block": {
+		"Block settings": "Block settings",
+		"Checkbox": "Checkbox",
+		"Journal by day": "Journal by day",
+		"Show in stats": "Show in stats",
+		"Duration (sec)": "Duration (sec)",
+		"Mode": "Mode",
+		"Up": "Up",
+		"Down": "Down",
+		"Goal": "Goal",
+		"Start value": "Start value",
+		"Current value": "Current value",
+		"Repetitions": "Repetitions"
+	},
+	"blockTypes": {
+		"Paragraph": "Paragraph",
+		"Bulleted list": "Bulleted list",
+		"Numbered list": "Numbered list",
+		"Expandable": "Expandable",
+		"Expandable Heading 1": "Expandable Heading 1",
+		"Expandable Heading 2": "Expandable Heading 2",
+		"Expandable Heading 3": "Expandable Heading 3",
+		"Expandable Heading 4": "Expandable Heading 4",
+		"Timer": "Timer",
+		"Stopwatch": "Stopwatch",
+		"Counter": "Counter"
 	},
 	"units": {
 		"reps": "reps",
@@ -100,6 +143,8 @@
 			"title": "Something went wrong",
 			"description": "Try restarting the app"
 		},
-		"Retry": "Retry"
+		"Retry": "Retry",
+		"tasks_loading_error": "Loading error.",
+		"no_filtered_tasks": "There are no tasks matching the selected parameters."
 	}
 }

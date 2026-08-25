@@ -19,7 +19,23 @@
 		"day": {
 			"During the day": "В течение дня",
 			"By time": "По времени"
+		},
+		"allTasks": {
+			"Category name": "Название категории"
 		}
+	},
+	"buttons": {
+		"Create": "Создать",
+		"Cancel": "Отмена",
+		"Create category": "Создать категорию"
+	},
+	"sort": {
+		"Alphabetically": "По алфавиту",
+		"By creation date": "По дате создания",
+		"By modification date": "По дате изменения"
+	},
+	"filters": {
+		"Categories": "Категории"
 	},
 	"Task": "Задача",
 	"Tasks": "Задачи",
@@ -28,9 +44,6 @@
 	"Edit Task": "Редактировать задачу",
 	"Delete Task": "Удалить задачу",
 	"Done": "Готово",
-	"filters": {
-		"Categories": "Категории"
-	},
 	"All categories": "Все категории",
 	"Uncategorized": "Без категории",
 	"date": {
@@ -61,6 +74,36 @@
 	"form": {
 		"title": "Заголовок",
 		"units": "Единицы"
+	},
+	"placeholders": {
+		"Search": "Поиск"
+	},
+	"block": {
+		"Block settings": "Настройки блока",
+		"Checkbox": "Чекбокс",
+		"Journal by day": "Журналировать по дням",
+		"Show in stats": "Показывать в статистике",
+		"Duration (sec)": "Длительность (сек)",
+		"Mode": "Режим",
+		"Up": "Вверх",
+		"Down": "Вниз",
+		"Goal": "Цель",
+		"Start value": "Начальное значение",
+		"Current value": "Текущее значение",
+		"Repetitions": "Количество повторений"
+	},
+	"blockTypes": {
+		"Paragraph": "Параграф",
+		"Bulleted list": "Маркированный список",
+		"Numbered list": "Нумерованный список",
+		"Expandable": "Раскрываемый блок",
+		"Expandable Heading 1": "Раскрываемый заголовок 1",
+		"Expandable Heading 2": "Раскрываемый заголовок 2",
+		"Expandable Heading 3": "Раскрываемый заголовок 3",
+		"Expandable Heading 4": "Раскрываемый заголовок 4",
+		"Timer": "Таймер",
+		"Stopwatch": "Секундомер",
+		"Counter": "Счётчик"
 	},
 	"units": {
 		"reps": "пвт.",
@@ -100,6 +143,8 @@
 			"title": "Что-то пошло не так",
 			"description": "Попробуйте перезапустить приложение"
 		},
-		"Retry": "Повторить"
+		"Retry": "Повторить",
+		"tasks_loading_error": "Ошибка загрузки.",
+		"no_filtered_tasks": "Нет задач, соответствующих \n выбранным параметрам."
 	}
 }
