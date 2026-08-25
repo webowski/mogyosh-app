@@ -11,8 +11,8 @@ import ScrollBox from '@/shared/ui/ScrollBox'
 
 const languages = [
 	{ code: 'en' as const, name: 'English' },
-	{ code: 'es' as const, name: 'Español' },
-	{ code: 'ja' as const, name: '日本語' },
+	// { code: 'es' as const, name: 'Español' },
+	// { code: 'ja' as const, name: '日本語' },
 	{ code: 'ru' as const, name: 'Русский' }
 ]
 

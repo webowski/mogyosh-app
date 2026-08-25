@@ -7,10 +7,10 @@ export function getSystemLocale(): string {
 
 	if (tag.startsWith('ru')) {
 		return 'ru-RU'
-	} else if (tag.startsWith('es')) {
-		return 'es-ES'
-	} else if (tag.startsWith('ja')) {
-		return 'ja-JP'
+		// } else if (tag.startsWith('es')) {
+		// 	return 'es-ES'
+		// } else if (tag.startsWith('ja')) {
+		// 	return 'ja-JP'
 	} else {
 		return 'en-US'
 	}
