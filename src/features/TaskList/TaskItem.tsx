@@ -186,19 +186,6 @@ export default function TaskItem({
 			layout={LinearTransition.duration(250)}
 			exiting={FadeOut.duration(200)}
 		>
-			{/* <MenuView
-				onOpenMenu={handleOpenMenu}
-				shouldOpenOnLongPress={!isSortMode}
-				actions={[
-					{
-						id: 'delete',
-						title: 'Delete task',
-						image: undefined,
-						attributes: { destructive: true }
-					}
-				]}
-				onPressAction={handleMenuPressAction}
-			> */}
 			<View style={styles.wrapper}>
 				{/* Complete background */}
 				<Animated.View
@@ -275,7 +262,6 @@ export default function TaskItem({
 					</Animated.View>
 				</GestureDetector>
 			</View>
-			{/* </MenuView> */}
 		</Animated.View>
 	)
 }
