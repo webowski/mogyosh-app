@@ -27,8 +27,6 @@ import {
 	type DragSortFlatEntry
 } from '@/shared/modules/DragSort'
 
-const DURING_DAY_TITLE = 'During the day'
-
 type TaskDragSortLayerProps = {
 	tasks: TaskEntity[]
 }
