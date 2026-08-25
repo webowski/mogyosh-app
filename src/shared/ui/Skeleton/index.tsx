@@ -7,8 +7,8 @@ export default function Skeleton() {
 		<ContentLoader
 			speed={1}
 			width={380}
-			height={540}
-			viewBox='0 0 380 540'
+			height={840}
+			viewBox='0 0 380 840'
 			foregroundColor={theme.colors.surfaceDeep}
 			backgroundColor={theme.colors.mutedSubtlestText}
 		>
@@ -19,6 +19,13 @@ export default function Skeleton() {
 			<Rect x='0' y='282' rx='4' ry='4' width='380' height='80' />
 			<Rect x='0' y='366' rx='4' ry='4' width='380' height='80' />
 			<Rect x='0' y='450' rx='4' ry='4' width='380' height='80' />
+			<Rect x='0' y='534' rx='4' ry='4' width='380' height='80' />
+			<Rect x='0' y='618' rx='4' ry='4' width='380' height='80' />
+			<Rect x='0' y='702' rx='4' ry='4' width='380' height='80' />
+			<Rect x='0' y='786' rx='4' ry='4' width='380' height='80' />
+			<Rect x='0' y='870' rx='4' ry='4' width='380' height='80' />
+			<Rect x='0' y='954' rx='4' ry='4' width='380' height='80' />
+			<Rect x='0' y='1038' rx='4' ry='4' width='380' height='80' />
 		</ContentLoader>
 	)
 }
