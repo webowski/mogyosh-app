@@ -159,18 +159,19 @@ export default function TaskItem({
 
 	const longPressGesture = Gesture.LongPress()
 		.enabled(!isSortMode)
-		.minDuration(350)
+		.minDuration(500)
+		// .maxDistance(10)
 		.onStart((event) => {
+			'worklet'
 			scheduleOnRN(handleOpenContextMenu, event.absoluteX, event.absoluteY)
 		})
 
 	// Combine tap and pan — pan has priority and blocks tap
 	// Disabled entirely while sort mode is active: dragging is handled
 	// externally by TaskDragSort's own gesture, not by this component
-	const composedGesture = Gesture.Exclusive(
-		panGesture,
-		tapGesture,
-		longPressGesture
+	const composedGesture = Gesture.Race(
+		longPressGesture,
+		Gesture.Exclusive(panGesture, tapGesture)
 	)
 
 	const cardAnimatedStyle = useAnimatedStyle(() => ({
