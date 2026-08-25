@@ -1,3 +1,4 @@
+import ContextMenuOverlay from '@/shared/ui/ContextMenu/ContextMenuOverlay'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { PropsWithChildren } from 'react'
@@ -15,7 +16,10 @@ export function Providers({ children }: PropsWithChildren) {
 				<KeyboardProvider>
 					<SafeAreaProvider>
 						<ReducedMotionConfig mode={ReduceMotion.Never} />
-						<BottomSheetModalProvider>{children}</BottomSheetModalProvider>
+						<BottomSheetModalProvider>
+							{children}
+							<ContextMenuOverlay />
+						</BottomSheetModalProvider>
 					</SafeAreaProvider>
 				</KeyboardProvider>
 			</GestureHandlerRootView>

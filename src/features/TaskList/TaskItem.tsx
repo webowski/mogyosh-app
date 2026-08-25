@@ -24,6 +24,7 @@ import { useSettingsStore } from '@/services/settings/model/settingsStore'
 import type { TaskEntity } from '@/shared/domain/task'
 import { formatTime } from '@/shared/lib/time'
 import { useCalendarStore } from '@/shared/model/calendar.store'
+import { useContextMenuStore } from '@/shared/model/contextMenu.store'
 import { useTaskStore } from '@/shared/model/task.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 import CircleProgress from '@/shared/ui/CircleProgress'
@@ -58,6 +59,7 @@ export default function TaskItem({
 	const setSwipeRoute = useNavStore((store) => store.setSwipeRoute)
 	const hourFormat = useSettingsStore((store) => store.hourFormat)
 	const isSortMode = useTaskListViewStore((store) => store.isSortMode)
+	const openContextMenu = useContextMenuStore((store) => store.openContextMenu)
 	const { data: progressData } = useTaskProgress(data.id)
 	const deleteTaskMutation = useDeleteTask()
 	const updateTaskStateMutation = useUpdateTaskState()
@@ -136,10 +138,21 @@ export default function TaskItem({
 			scheduleOnRN(goTaskScreen)
 		})
 
+	const longPressGesture = Gesture.LongPress()
+		.enabled(!isSortMode)
+		.minDuration(350)
+		.onStart((event) => {
+			scheduleOnRN(handleOpenContextMenu, event.absoluteX, event.absoluteY)
+		})
+
 	// Combine tap and pan — pan has priority and blocks tap
 	// Disabled entirely while sort mode is active: dragging is handled
 	// externally by TaskDragSort's own gesture, not by this component
-	const composedGesture = Gesture.Exclusive(panGesture, tapGesture)
+	const composedGesture = Gesture.Exclusive(
+		panGesture,
+		tapGesture,
+		longPressGesture
+	)
 
 	const cardAnimatedStyle = useAnimatedStyle(() => ({
 		transform: [{ translateX: translateX.value }]
@@ -171,14 +184,23 @@ export default function TaskItem({
 	// 	android: import('@expo/material-symbols/delete.xml')
 	// })
 
-	const handleMenuPressAction = (event: { nativeEvent: { event: string } }) => {
-		if (event.nativeEvent.event === 'delete') {
-			deleteTask()
-		}
-	}
-
-	const handleOpenMenu = () => {
+	const handleOpenContextMenu = (positionX: number, positionY: number) => {
 		triggerHapticLight()
+		openContextMenu({ x: positionX, y: positionY }, [
+			{
+				title: isCompleted ? 'Отменить выполнение' : 'Выполнено',
+				onPress: toggleCompleteTask
+			},
+			{
+				title: 'Открыть',
+				onPress: goTaskScreen
+			},
+			{
+				title: 'Удалить',
+				onPress: deleteTask,
+				destructive: true
+			}
+		])
 	}
 
 	return (
