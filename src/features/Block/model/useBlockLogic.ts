@@ -214,15 +214,6 @@ export function useBlockLogic({
 		setTimeout(focusNewInput, 50)
 	}
 
-	// useEffect(() => {
-	// 	if (pendingFocusId?.current === data.id) {
-	// 		pendingFocusId.current = null
-	// 		const ref = inputRef.current
-	// 		if (!ref) return
-	// 		focusInputElement(ref)
-	// 	}
-	// }, [data.id, pendingFocusId, inputRef])
-
 	useEffect(() => {
 		if (pendingFocusId?.current !== data.id) return
 
