@@ -277,7 +277,7 @@ export function TaskCreateForm({ onClose }: Props) {
 									formStyles.input,
 									{ backgroundColor: theme.colors.surfaceDeep }
 								]}
-								placeholder='Название категории'
+								placeholder={t('placeholders.Category name')}
 								placeholderTextColor={theme.colors.minor}
 								value={newCategoryName}
 								onChangeText={setNewCategoryName}

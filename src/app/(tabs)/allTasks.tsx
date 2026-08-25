@@ -395,7 +395,7 @@ export default function AllTasksScreen() {
 									formStyles.input,
 									{ backgroundColor: theme.colors.surfaceDeep }
 								]}
-								placeholder='Название категории'
+								placeholder={t('placeholders.Category name')}
 								placeholderTextColor={theme.colors.mutedTextStrong}
 								value={editCategoryName}
 								onChangeText={setEditCategoryName}

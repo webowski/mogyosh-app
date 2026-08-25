@@ -76,7 +76,8 @@
 		"units": "Единицы"
 	},
 	"placeholders": {
-		"Search": "Поиск"
+		"Search": "Поиск",
+		"Category name": "Название категории"
 	},
 	"block": {
 		"Block settings": "Настройки блока",

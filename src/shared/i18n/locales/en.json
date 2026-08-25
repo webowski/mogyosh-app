@@ -76,7 +76,8 @@
 		"units": "Units"
 	},
 	"placeholders": {
-		"Search": "Search"
+		"Search": "Search",
+		"Category name": "Category name"
 	},
 	"block": {
 		"Block settings": "Block settings",
