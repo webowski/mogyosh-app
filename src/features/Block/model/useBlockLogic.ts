@@ -214,13 +214,34 @@ export function useBlockLogic({
 		setTimeout(focusNewInput, 50)
 	}
 
+	// useEffect(() => {
+	// 	if (pendingFocusId?.current === data.id) {
+	// 		pendingFocusId.current = null
+	// 		const ref = inputRef.current
+	// 		if (!ref) return
+	// 		focusInputElement(ref)
+	// 	}
+	// }, [data.id, pendingFocusId, inputRef])
+
 	useEffect(() => {
-		if (pendingFocusId?.current === data.id) {
-			pendingFocusId.current = null
-			const ref = inputRef.current
-			if (!ref) return
-			focusInputElement(ref)
+		if (pendingFocusId?.current !== data.id) return
+
+		pendingFocusId.current = null
+
+		const tryFocus = () => {
+			const currentRef = inputRef.current
+			if (!currentRef) return false
+			focusInputElement(currentRef)
+			return true
 		}
+
+		if (tryFocus()) return
+
+		const timeoutId = setTimeout(() => {
+			tryFocus()
+		}, 50)
+
+		return () => clearTimeout(timeoutId)
 	}, [data.id, pendingFocusId, inputRef])
 
 	return {

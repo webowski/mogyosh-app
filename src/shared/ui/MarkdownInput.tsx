@@ -49,6 +49,7 @@ export const MarkdownInput = forwardRef<
 	) => {
 		const { theme } = useUnistyles()
 		const markdownRef = useRef(blockText)
+		const enterHandledRef = useRef(false)
 
 		useBlurOnKeyboardHide(
 			ref as React.RefObject<
@@ -79,25 +80,39 @@ export const MarkdownInput = forwardRef<
 			onChangeText?.(text)
 		}
 
-		const handleMarkdownChange = (markdown: string) => {
-			// console.log({ markdown })
-			markdownRef.current = markdown
+		const triggerEnterPress = () => {
+			if (enterHandledRef.current) return
+			enterHandledRef.current = true
+			onEnterPress?.()
+			requestAnimationFrame(() => {
+				enterHandledRef.current = false
+			})
+		}
 
+		const handleMarkdownChange = (markdown: string) => {
+			// Enter on multiline input inserts trailing "\n".
+			// onKeyPress("Enter") is unreliable in enriched-markdown, so detect here.
 			if (markdown.endsWith('\n')) {
-				markdownRef.current = markdown.trim()
+				const cleanedMarkdown = markdown.replace(/\n+$/, '')
+				markdownRef.current = cleanedMarkdown
 				;(
 					ref as React.RefObject<EnrichedMarkdownTextInputInstance>
-				).current?.setValue(markdownRef.current)
+				).current?.setValue(cleanedMarkdown)
+				onChangeMarkdown?.(cleanedMarkdown)
+				triggerEnterPress()
+				return
 			}
-			onChangeMarkdown?.(markdownRef.current)
+
+			markdownRef.current = markdown
+			onChangeMarkdown?.(markdown)
 		}
 
 		const handleKeyPress = (event: NativeSyntheticEvent<OnKeyPressEvent>) => {
 			const { key } = event.nativeEvent
 
-			if (key === 'Enter') {
-				onEnterPress?.()
-			}
+			// if (key === 'Enter') {
+			// 	triggerEnterPress()
+			// }
 
 			if (key === 'Backspace' && markdownRef.current === '') {
 				onBackspaceOnEmpty?.()
