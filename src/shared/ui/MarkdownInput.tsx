@@ -14,6 +14,7 @@ import {
 import Animated, { type AnimatedStyle } from 'react-native-reanimated'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
+import { KeyboardController } from 'react-native-keyboard-controller'
 import { useBlurOnKeyboardHide } from '../lib/useBlurOnKeyboardHide'
 
 interface MarkdownInputProps {
@@ -54,6 +55,24 @@ export const MarkdownInput = forwardRef<
 				EnrichedMarkdownTextInputInstance | HTMLDivElement | null
 			>
 		)
+
+		const handleNativeFocus = () => {
+			onFocus?.()
+
+			// EnrichedMarkdownTextInput on Android: first tap often focuses
+			// (caret blinks, frequently at end) without opening the IME.
+			// Commands.focus → requestFocusProgrammatically() calls showSoftInput
+			// and keeps the current selection.
+			requestAnimationFrame(() => {
+				requestAnimationFrame(() => {
+					if (KeyboardController.isVisible()) return
+					const instance = (
+						ref as React.RefObject<EnrichedMarkdownTextInputInstance | null>
+					)?.current
+					instance?.focus()
+				})
+			})
+		}
 
 		const handleTextChange = (text: string) => {
 			// console.log({ text })
@@ -112,7 +131,7 @@ export const MarkdownInput = forwardRef<
 					placeholderTextColor={theme.colors.minor}
 					scrollEnabled={false}
 					multiline
-					onFocus={onFocus}
+					onFocus={handleNativeFocus}
 					onKeyPress={handleKeyPress}
 					onChangeText={handleTextChange}
 					onChangeMarkdown={handleMarkdownChange}
