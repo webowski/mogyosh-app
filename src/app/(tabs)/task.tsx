@@ -77,11 +77,15 @@ export default function TaskScreen() {
 		const optimisticId = `optimistic-${Date.now()}` as BlockId
 		pendingFocusId.current = optimisticId
 
+		const afterBlock = afterId
+			? blocks.find((block) => block.id === afterId)
+			: null
+
 		createBlock.mutate({
 			text_content: initialText ?? '',
 			task_id: selectedTaskId,
-			parent_id: null,
-			type: 'p',
+			parent_id: afterBlock?.parent_id ?? null,
+			type: afterBlock?.type ?? 'p',
 			optimisticId,
 			afterId: afterId ?? null
 		})
