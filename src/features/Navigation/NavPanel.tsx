@@ -1,7 +1,7 @@
+import { useNetworkState } from 'expo-network'
 import { BottomTabBarProps } from 'expo-router/js-tabs'
-import { Pressable, Text, View } from 'react-native'
-
 import { ParamListBase, TabNavigationState } from 'expo-router/react-navigation'
+import { Pressable, Text, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
@@ -47,6 +47,11 @@ export default function NavPanel({
 	const setIsActionSheetOpen = useNavStore(
 		(state) => state.setIsActionSheetOpen
 	)
+
+	const networkState = useNetworkState()
+	const isOffline =
+		networkState.isConnected === false ||
+		networkState.isInternetReachable === false
 
 	// Get selected date and swipe switch items from store
 	const selectedDate = useCalendarStore((state) => state.selectedDate)
@@ -175,13 +180,20 @@ export default function NavPanel({
 					icon={<SVGIconTarget width={36} height={36} />}
 				/>
 
-				<SwipeSwitch
-					currentRoute={currentRoute}
-					onIndexChange={handleSwipeSwitchChange}
-					onPress={handleSwipeSwitchPress}
-					isActive={isAnySwipeRouteActive(currentRoute, swipeSwitchItems)}
-					getSlideLabel={getSlideLabel}
-				/>
+				<View style={styles.SwipeSwitchColumn}>
+					<SwipeSwitch
+						currentRoute={currentRoute}
+						onIndexChange={handleSwipeSwitchChange}
+						onPress={handleSwipeSwitchPress}
+						isActive={isAnySwipeRouteActive(currentRoute, swipeSwitchItems)}
+						getSlideLabel={getSlideLabel}
+					/>
+					{isOffline && (
+						<View style={styles.OfflineBadge}>
+							<Text style={styles.OfflineBadge__text}>Offline</Text>
+						</View>
+					)}
+				</View>
 
 				<NavButton
 					onPress={() => {
@@ -230,6 +242,25 @@ const styles = StyleSheet.create((theme, rt) => ({
 		fontWeight: '500',
 		fontSize: 16,
 		color: theme.colors.major
+	},
+
+	SwipeSwitchColumn: {
+		alignItems: 'center',
+		justifyContent: 'center'
+	},
+	OfflineBadge: {
+		marginTop: 2,
+		paddingHorizontal: 8,
+		paddingVertical: 2,
+		borderRadius: STYLE_VARS.radius_sm,
+		backgroundColor: theme.colors.dangerFill
+	},
+	OfflineBadge__text: {
+		fontSize: 13,
+		fontWeight: '600',
+		lineHeight: 15,
+		color: theme.colors.danger,
+		letterSpacing: 0.1
 	}
 }))
 
