@@ -110,7 +110,7 @@ export const commonStyles = StyleSheet.create((theme, rt) => ({
 	},
 	SystemContentMessage__text: {
 		fontSize: 18 * rt.fontScale,
-		lineHeight: 18 * rt.fontScale * 1.4,
+		lineHeight: 18 * rt.fontScale * 1.3,
 		// color: theme.colors.mutedTextStrong,
 		color: STATIC_COLORS.white,
 		textAlign: 'center'
