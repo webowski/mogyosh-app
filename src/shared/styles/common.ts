@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles'
+import { STATIC_COLORS } from './themes'
 
 export const STYLE_VARS = {
 	sidePadding_2xs: 8,
@@ -95,18 +96,23 @@ export const commonStyles = StyleSheet.create((theme, rt) => ({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
-		padding: STYLE_VARS.sidePadding
+		padding: STYLE_VARS.sidePadding,
+		backgroundColor: theme.colors.primary
 	},
 	SystemContentMessage__heading: {
-		fontSize: 20 * rt.fontScale,
-		lineHeight: 20 * rt.fontScale * 1.45,
-		color: theme.colors.mutedTextStrong,
+		marginBottom: 2,
+		fontSize: 24 * rt.fontScale,
+		lineHeight: 24 * rt.fontScale * 1.45,
+		fontWeight: '600',
+		// color: theme.colors.mutedTextStrong,
+		color: STATIC_COLORS.white,
 		textAlign: 'center'
 	},
 	SystemContentMessage__text: {
-		fontSize: 16 * rt.fontScale,
-		lineHeight: 16 * rt.fontScale * 1.45,
-		color: theme.colors.mutedTextStrong,
+		fontSize: 18 * rt.fontScale,
+		lineHeight: 18 * rt.fontScale * 1.4,
+		// color: theme.colors.mutedTextStrong,
+		color: STATIC_COLORS.white,
 		textAlign: 'center'
 	}
 }))

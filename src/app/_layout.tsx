@@ -93,12 +93,12 @@ export default function RootLayout() {
 				<Text
 					style={[
 						commonStyles.SystemContentMessage__text,
-						{ marginBottom: 10 }
+						{ marginBottom: 26 }
 					]}
 				>
 					{t(`error.${authErrorKind}.description`)}
 				</Text>
-				<Button onPress={attemptLogin} variant='secondary' size='md'>
+				<Button onPress={attemptLogin} variant='default' size='lg'>
 					{t('error.Retry')}
 				</Button>
 			</View>
