@@ -22,7 +22,12 @@ export default function AccountScreen() {
 			</ScrollBox>
 
 			<ActionsPanel>
-				<Button round onPress={() => router.back()}>
+				<Button
+					round
+					widthMode='equilateral'
+					size='lg'
+					onPress={() => router.back()}
+				>
 					<MaterialDesignIcons
 						name='arrow-left'
 						size={28}

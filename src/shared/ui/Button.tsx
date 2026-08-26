@@ -173,14 +173,14 @@ const SIZE_CONFIGS: Record<Size, SizeConfig> = {
 		fontWeight: '600'
 	},
 	md: {
-		height: 42,
+		height: 44,
 		paddingHorizontal: 20,
 		borderRadius: 5,
 		fontSize: 15,
 		fontWeight: '600'
 	},
 	lg: {
-		height: 48,
+		height: 52,
 		paddingHorizontal: 32,
 		borderRadius: 10,
 		fontSize: 16,

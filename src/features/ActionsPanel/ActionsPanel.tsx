@@ -32,6 +32,6 @@ const styles = StyleSheet.create((theme, rt) => ({
 		left: 0,
 		right: 0,
 		// bottom: rt.insets.bottom === 0 ? 20 : rt.insets.bottom,
-		bottom: STYLE_VARS.sidePadding
+		bottom: STYLE_VARS.sidePadding + 10
 	}
 }))
