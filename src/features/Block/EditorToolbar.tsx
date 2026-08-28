@@ -9,6 +9,7 @@ import {
 	OverKeyboardView,
 	useKeyboardState
 } from 'react-native-keyboard-controller'
+import Animated from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 import { useShallow } from 'zustand/react/shallow'
@@ -18,7 +19,6 @@ import type { BlockId, TaskId } from '@/shared/domain/ids'
 import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 import { Button } from '@/shared/ui/Button'
-import Animated from 'react-native-reanimated'
 import { selectBlocks, useBlockStore } from './model/block.store'
 import { useBlockSettingsSheetStore } from './model/blockSettingsSheet.store'
 import { useCreateBlock } from './model/useCreateBlock'
