@@ -40,9 +40,11 @@ export type CommonBlockSettings = {
 	in_stats?: boolean
 }
 
+export type TimerDirection = 'increasing' | 'decreasing'
+
 export type TimerBlockSettings = CommonBlockSettings & {
 	duration?: number
-	mode?: 'increasing' | 'decreasing'
+	timerDirection?: TimerDirection
 }
 
 export type StopwatchBlockSettings = CommonBlockSettings & {

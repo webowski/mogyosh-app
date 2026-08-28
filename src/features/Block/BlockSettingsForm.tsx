@@ -121,18 +121,20 @@ export function BlockSettingsForm({ block, onChange }: BlockSettingsFormProps) {
 						<Text
 							style={[
 								styles.Form__modeOption,
-								settings.mode !== 'decreasing' && styles.Form__modeOption_active
+								settings.timerDirection !== 'decreasing' &&
+									styles.Form__modeOption_active
 							]}
-							onPress={() => onChange({ mode: 'increasing' })}
+							onPress={() => onChange({ timerDirection: 'increasing' })}
 						>
 							{t('block.Up')}
 						</Text>
 						<Text
 							style={[
 								styles.Form__modeOption,
-								settings.mode === 'decreasing' && styles.Form__modeOption_active
+								settings.timerDirection === 'decreasing' &&
+									styles.Form__modeOption_active
 							]}
-							onPress={() => onChange({ mode: 'decreasing' })}
+							onPress={() => onChange({ timerDirection: 'decreasing' })}
 						>
 							{t('block.Down')}
 						</Text>
