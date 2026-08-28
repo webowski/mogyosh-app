@@ -107,9 +107,13 @@ export default function TimerBlock({
 
 	const progress = durationMs > 0 ? elapsedMs / durationMs : 0
 	const durationString =
-		durationMs > 0
-			? formatTimerTime(timerDirection === 'decreasing' ? displayMs : elapsedMs)
-			: '--:--:--'
+		durationMs === 0
+			? '--:--:--'
+			: !entry
+				? formatTimerTime(durationMs)
+				: formatTimerTime(
+						timerDirection === 'decreasing' ? displayMs : elapsedMs
+					)
 
 	return (
 		<View style={blockStyles.Penoblok}>
