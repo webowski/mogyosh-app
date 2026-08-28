@@ -110,6 +110,7 @@ export const lightTheme = {
 
 		shadeToggleThumb: '0px 2px 4px rgba(0, 0, 0, 0.18)',
 		shadeButton: '0px 5px 10px rgba(26, 35, 126, 0.16)',
+		shadeToolbar: '0px 0px 10px rgba(0, 0, 0, 0.18)',
 		shadeButtonIndicator: '0 0px 0px 3px hsla(225, 74%, 40%, .09)',
 
 		gradient: [
