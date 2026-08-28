@@ -2,7 +2,8 @@ import {
 	forwardRef,
 	PropsWithChildren,
 	useEffect,
-	useImperativeHandle
+	useImperativeHandle,
+	useRef
 } from 'react'
 import { Text, View } from 'react-native'
 import Animated, {
@@ -54,23 +55,28 @@ const CircleProgress = forwardRef<CircleProgressRef, CircleProgressProps>(
 		const radius = (size - strokeWidth) / 2
 		const circumference = 2 * Math.PI * radius
 
-		const animatedProgress = useSharedValue(0)
+		const clampProgress = (value: number) => Math.min(Math.max(value, 0), 1)
+
+		const animatedProgress = useSharedValue(clampProgress(progress))
+		const previousProgressRef = useRef(clampProgress(progress))
 
 		useImperativeHandle(ref, () => ({
 			snapTo: (val: number) => {
-				animatedProgress.value = Math.min(Math.max(val, 0), 1)
+				const clamped = clampProgress(val)
+				previousProgressRef.current = clamped
+				animatedProgress.value = clamped
 			}
 		}))
 
 		useEffect(
 			() => {
-				animatedProgress.value = withTiming(
-					Math.min(Math.max(progress, 0), 1),
-					{
-						duration,
-						easing: Easing.linear
-					}
-				)
+				const clamped = clampProgress(progress)
+				if (clamped === previousProgressRef.current) return
+				previousProgressRef.current = clamped
+				animatedProgress.value = withTiming(clamped, {
+					duration,
+					easing: Easing.linear
+				})
 			},
 			// eslint-disable-next-line react-hooks/exhaustive-deps
 			[progress]

@@ -121,7 +121,15 @@ export default function TimerBlock({
 	const timerDirection = data.settings?.timerDirection ?? 'increasing'
 	const elapsedMs = durationMs > 0 ? durationMs - displayMs : 0
 
-	const progress = durationMs > 0 ? elapsedMs / durationMs : 0
+	const progress =
+		durationMs === 0
+			? 0
+			: !entry
+				? timerDirection === 'decreasing'
+					? 1
+					: 0
+				: elapsedMs / durationMs
+
 	const durationString =
 		durationMs === 0
 			? '--:--:--'
