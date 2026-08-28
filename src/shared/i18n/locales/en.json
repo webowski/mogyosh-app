@@ -147,5 +147,8 @@
 		"Retry": "Retry",
 		"tasks_loading_error": "Loading error.",
 		"no_filtered_tasks": "There are no tasks matching the selected parameters."
+	},
+	"system": {
+		"Offline": "Offline"
 	}
 }

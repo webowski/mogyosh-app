@@ -442,8 +442,7 @@ const styles = StyleSheet.create((theme) => ({
 	wrapper: {
 		alignItems: 'center',
 		position: 'relative',
-		gap: 8,
-		transform: [{ translateY: -16 }]
+		gap: 8
 	},
 	bgPolygon: {
 		position: 'absolute',

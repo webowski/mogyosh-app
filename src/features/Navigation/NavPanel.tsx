@@ -1,6 +1,8 @@
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons'
 import { useNetworkState } from 'expo-network'
 import { BottomTabBarProps } from 'expo-router/js-tabs'
 import { ParamListBase, TabNavigationState } from 'expo-router/react-navigation'
+import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
@@ -20,7 +22,6 @@ import {
 } from '@/features/TaskList'
 import { useCalendarStore } from '@/shared/model/calendar.store'
 import { STYLE_VARS } from '@/shared/styles/common'
-import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons'
 import ActionSheet from './ActionSheet'
 import { useNavStore } from './model/navStore'
 
@@ -42,6 +43,7 @@ export default function NavPanel({
 	// const { buildHref } = useLinkBuilder()
 	const insets = useSafeAreaInsets()
 	const { theme } = useUnistyles()
+	const { t } = useTranslation()
 
 	const setIsDrawerShown = useNavStore((state) => state.setIsDrawerShown)
 	const setIsActionSheetOpen = useNavStore(
@@ -188,11 +190,15 @@ export default function NavPanel({
 						isActive={isAnySwipeRouteActive(currentRoute, swipeSwitchItems)}
 						getSlideLabel={getSlideLabel}
 					/>
-					{isOffline && (
-						<View style={styles.OfflineBadge}>
-							<Text style={styles.OfflineBadge__text}>Offline</Text>
-						</View>
-					)}
+					<View style={styles.NavPanel__messages}>
+						{!isOffline && (
+							<View style={styles.OfflineBadge}>
+								<Text style={styles.OfflineBadge__text}>
+									{t('system.Offline')}
+								</Text>
+							</View>
+						)}
+					</View>
 				</View>
 
 				<NavButton
@@ -246,21 +252,32 @@ const styles = StyleSheet.create((theme, rt) => ({
 
 	SwipeSwitchColumn: {
 		alignItems: 'center',
-		justifyContent: 'center'
+		justifyContent: 'center',
+		gap: 7,
+		transform: [{ translateY: -5 }]
+	},
+	NavPanel__messages: {
+		height: 16
+		// position: 'absolute',
+		// top: '100%',
+		// left: 0,
+		// right: 0
 	},
 	OfflineBadge: {
-		marginTop: 2,
-		paddingHorizontal: 8,
-		paddingVertical: 2,
-		borderRadius: STYLE_VARS.radius_sm,
-		backgroundColor: theme.colors.dangerFill
+		// marginTop: 0
+		// paddingHorizontal: 8,
+		// paddingVertical: 2,
+		// borderRadius: STYLE_VARS.radius_sm,
+		// backgroundColor: theme.colors.dangerFill
 	},
 	OfflineBadge__text: {
 		fontSize: 13,
 		fontWeight: '600',
+		// textTransform: 'uppercase',
 		lineHeight: 15,
-		color: theme.colors.danger,
-		letterSpacing: 0.1
+		// color: theme.colors.danger,
+		color: theme.colors.mutedTextStrong,
+		letterSpacing: 0.2
 	}
 }))
 
