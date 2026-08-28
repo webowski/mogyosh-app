@@ -227,25 +227,55 @@ export function useBlockLogic({
 		})
 		setTimeout(focusNewInput, 50)
 	}
+
 	useEffect(() => {
 		if (pendingFocusId?.current !== data.id) return
 
-		pendingFocusId.current = null
+		let isCancelled = false
+		let attemptIndex = 0
+		const maxAttempts = 8
+		const retryDelaysMs = [0, 16, 32, 50, 80, 120, 200, 320]
 
 		const tryFocus = () => {
+			if (isCancelled) return
+			if (pendingFocusId?.current !== data.id) return
+
 			const currentRef = inputRef.current
-			if (!currentRef) return false
+			if (!currentRef) {
+				scheduleNextAttempt()
+				return
+			}
+
 			focusInputElement(currentRef)
-			return true
+			pendingFocusId.current = null
 		}
 
-		if (tryFocus()) return
+		const scheduleNextAttempt = () => {
+			if (isCancelled) return
+			if (attemptIndex >= maxAttempts) {
+				pendingFocusId.current = null
+				return
+			}
 
-		const timeoutId = setTimeout(() => {
-			tryFocus()
-		}, 50)
+			const delayMs = retryDelaysMs[attemptIndex] ?? 50
+			attemptIndex += 1
 
-		return () => clearTimeout(timeoutId)
+			if (delayMs === 0) {
+				tryFocus()
+				return
+			}
+
+			const timeoutId = setTimeout(tryFocus, delayMs)
+			timeoutIds.push(timeoutId)
+		}
+
+		const timeoutIds: ReturnType<typeof setTimeout>[] = []
+		scheduleNextAttempt()
+
+		return () => {
+			isCancelled = true
+			timeoutIds.forEach((timeoutId) => clearTimeout(timeoutId))
+		}
 	}, [data.id, pendingFocusId, inputRef])
 
 	return {
