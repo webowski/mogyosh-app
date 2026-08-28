@@ -191,7 +191,7 @@ export default function NavPanel({
 						getSlideLabel={getSlideLabel}
 					/>
 					<View style={styles.NavPanel__messages}>
-						{!isOffline && (
+						{isOffline && (
 							<View style={styles.OfflineBadge}>
 								<Text style={styles.OfflineBadge__text}>
 									{t('system.Offline')}
