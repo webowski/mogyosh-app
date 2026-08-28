@@ -105,13 +105,7 @@ export default function TimerBlock({
 	const timerDirection = data.settings?.timerDirection ?? 'increasing'
 	const elapsedMs = durationMs > 0 ? durationMs - displayMs : 0
 
-	const progress =
-		durationMs > 0
-			? timerDirection === 'decreasing'
-				? displayMs / durationMs
-				: elapsedMs / durationMs
-			: 0
-
+	const progress = durationMs > 0 ? elapsedMs / durationMs : 0
 	const durationString =
 		durationMs > 0
 			? formatTimerTime(timerDirection === 'decreasing' ? displayMs : elapsedMs)
@@ -137,7 +131,12 @@ export default function TimerBlock({
 			</View>
 			<View style={blockStyles.Timer__actions}>
 				<Pressable onPress={handleToggle} onLongPress={handleReset}>
-					<CircleProgress ref={circleRef} size={40} progress={progress}>
+					<CircleProgress
+						ref={circleRef}
+						size={40}
+						progress={progress}
+						decreasing={timerDirection === 'decreasing'}
+					>
 						{isRunning ? (
 							<MaterialDesignIcons
 								name='pause'
