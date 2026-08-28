@@ -1,8 +1,8 @@
 import type { BlockType } from '@/shared/domain/block'
-import { counterSettingsCodecV1 } from './counter.codec'
-import { defaultSettingsCodecV1 } from './default.codec'
-import { stopwatchSettingsCodecV1 } from './stopwatch.codec'
-import { timerSettingsCodecV1 } from './timer.codec'
+import { counterSettingsCodecV1 } from './counterSettings.codec'
+import { defaultSettingsCodecV1 } from './defaultSettings.codec'
+import { stopwatchSettingsCodecV1 } from './stopwatchSettings.codec'
+import { timerSettingsCodecV1 } from './timerSettings.codec'
 import type { BlockSettingsCodec } from './types'
 
 const DEFAULT_CODEC_TYPES: BlockType[] = [
