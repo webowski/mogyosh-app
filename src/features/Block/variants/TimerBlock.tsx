@@ -11,6 +11,7 @@ import CircleProgress, {
 } from '@/shared/ui/CircleProgress'
 import { MarkdownInput } from '@/shared/ui/MarkdownInput'
 import { useBlockLogic } from '../model/useBlockLogic'
+import { useUpdateBlock } from '../model/useUpdateBlock'
 import { blockStyles } from '../style'
 
 type TimerBlockProps = BlockProps & {
@@ -25,6 +26,8 @@ export default function TimerBlock({
 	onRemove,
 	pendingFocusId
 }: TimerBlockProps) {
+	const { theme } = useUnistyles()
+
 	const {
 		inputRef,
 		checked,
@@ -41,13 +44,12 @@ export default function TimerBlock({
 		pendingFocusId,
 		blockType: 'timer'
 	})
-
-	const { theme } = useUnistyles()
+	const { start, pause, reset, getRemaining, entries } = useTimerStore()
+	const updateBlock = useUpdateBlock()
 
 	const circleRef = useRef<CircleProgressRef>(null)
 
 	const durationMs = data.settings?.duration ?? 0
-	const { start, pause, reset, getRemaining, entries } = useTimerStore()
 
 	const entry = entries.get(data.id)
 	const isRunning = entry?.isRunning ?? false
@@ -102,6 +104,20 @@ export default function TimerBlock({
 		}
 	}
 
+	const handleToggleDirection = () => {
+		updateBlock.mutate({
+			id: data.id,
+			taskId: data.task_id,
+			patch: {
+				settings: {
+					...data.settings,
+					timerDirection:
+						timerDirection === 'decreasing' ? 'increasing' : 'decreasing'
+				}
+			}
+		})
+	}
+
 	const timerDirection = data.settings?.timerDirection ?? 'increasing'
 	const elapsedMs = durationMs > 0 ? durationMs - displayMs : 0
 
@@ -130,8 +146,9 @@ export default function TimerBlock({
 						onRemove?.()
 					}}
 				/>
-				{/* <Text style={styles.Timer__label}>{data.text_content}</Text> */}
-				<Text style={blockStyles.Timer__time}>{durationString}</Text>
+				<Pressable onPress={handleToggleDirection}>
+					<Text style={blockStyles.Timer__time}>{durationString}</Text>
+				</Pressable>
 			</View>
 			<View style={blockStyles.Timer__actions}>
 				<Pressable onPress={handleToggle} onLongPress={handleReset}>
