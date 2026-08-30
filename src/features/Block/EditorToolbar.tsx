@@ -265,6 +265,10 @@ export default function EditorToolbar() {
 			optimisticId,
 			afterId
 		})
+
+		requestAnimationFrame(() =>
+			requestAnimationFrame(() => focusBlock(optimisticId))
+		)
 	}
 
 	const handleSelectBlockType = (type: BlockType) => {
