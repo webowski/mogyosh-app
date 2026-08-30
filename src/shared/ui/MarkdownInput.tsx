@@ -14,7 +14,6 @@ import {
 import Animated, { type AnimatedStyle } from 'react-native-reanimated'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
-import { KeyboardController } from 'react-native-keyboard-controller'
 import {
 	markActiveInputInstance,
 	useBlurOnKeyboardHide
@@ -67,18 +66,20 @@ export const MarkdownInput = forwardRef<
 			)
 			onFocus?.()
 
-			// EnrichedMarkdownTextInput on Android: first tap often focuses
-			// (caret blinks, frequently at end) without opening the IME.
-			// Commands.focus → requestFocusProgrammatically() calls showSoftInput
-			// and keeps the current selection.
+			// EnrichedMarkdownTextInput on Android: focus can land on a block
+			// (caret visible) without the IME actually opening — either from the
+			// known first-tap quirk, or because switching focus directly from
+			// another block closes the keyboard natively before this block's
+			// focus is processed. Checking KeyboardController.isVisible() here is
+			// unreliable: it can report a stale "visible" state while the keyboard
+			// is mid-close from the previous block's blur, which was silently
+			// skipping the forced re-open. Always force focus deterministically
+			// instead of guessing from a possibly-stale visibility flag.
 			requestAnimationFrame(() => {
-				requestAnimationFrame(() => {
-					if (KeyboardController.isVisible()) return
-					const instance = (
-						ref as React.RefObject<EnrichedMarkdownTextInputInstance | null>
-					)?.current
-					instance?.focus()
-				})
+				const instance = (
+					ref as React.RefObject<EnrichedMarkdownTextInputInstance | null>
+				)?.current
+				instance?.focus()
 			})
 		}
 
