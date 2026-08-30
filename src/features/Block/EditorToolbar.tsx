@@ -16,6 +16,7 @@ import { useShallow } from 'zustand/react/shallow'
 
 import { BlockType } from '@/shared/domain/block'
 import type { BlockId, TaskId } from '@/shared/domain/ids'
+import { useBlurOnKeyboardHide } from '@/shared/lib/useBlurOnKeyboardHide'
 import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 import { Button } from '@/shared/ui/Button'
@@ -311,6 +312,11 @@ export default function EditorToolbar() {
 			})
 		}
 	}
+
+	useBlurOnKeyboardHide(
+		inputRefs,
+		() => useEditorToolbarStore.getState().focusedBlockId
+	)
 
 	return (
 		<>
