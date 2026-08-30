@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import { Platform, type TextInput } from 'react-native'
 
 import type { BlockEntity } from '@/shared/domain/block'
-import { useBlurOnKeyboardHide } from '@/shared/lib/useBlurOnKeyboardHide'
 import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
 import { useCounterAccessoryStore } from './counterAccessory.store'
 import { useUpdateBlock } from './useUpdateBlock'
@@ -17,7 +16,6 @@ export const useCounterNumericField = (
 	const updateBlock = useUpdateBlock()
 
 	const inputRef = useRef<TextInput>(null)
-	useBlurOnKeyboardHide(inputRef)
 
 	const blurTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 	const fieldTokenRef = useRef<symbol | null>(null)
