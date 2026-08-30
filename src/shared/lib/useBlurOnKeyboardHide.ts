@@ -1,13 +1,23 @@
 import type { RefObject } from 'react'
 import { useEffect } from 'react'
 import { Platform } from 'react-native'
-import {
-	KeyboardController,
-	KeyboardEvents
-} from 'react-native-keyboard-controller'
+import { KeyboardEvents } from 'react-native-keyboard-controller'
 
 interface BlurableInstance {
 	blur: () => void
+}
+
+// Tracks which native input instance most recently received focus, shared
+// across every MarkdownInput mounted in the editor. Only that instance is
+// allowed to blur itself when the keyboard hides. Without this guard, a
+// stale "keyboardDidHide" fired while focus is transferring from block A to
+// block B (a native transition artifact, not a real dismiss) would blur
+// EVERY mounted block — including B, right as it gains focus — which
+// cancels its focus and collapses the EditorToolbar.
+let activeInstance: BlurableInstance | null = null
+
+export function markActiveInputInstance(instance: BlurableInstance | null) {
+	activeInstance = instance
 }
 
 // Android does not blur the focused input when the keyboard is dismissed
@@ -22,18 +32,10 @@ export function useBlurOnKeyboardHide(
 		if (Platform.OS === 'web') return
 
 		const subscription = KeyboardEvents.addListener('keyboardDidHide', () => {
-			// Switching focus directly between two blocks can briefly fire
-			// "keyboardDidHide" as part of the native transition, right before
-			// the keyboard reopens for the newly focused block. Blurring
-			// unconditionally here would steal focus back and collapse the
-			// EditorToolbar. Wait a couple of frames and only blur if the
-			// keyboard is still actually hidden by then.
-			requestAnimationFrame(() => {
-				requestAnimationFrame(() => {
-					if (KeyboardController.isVisible()) return
-					ref?.current?.blur()
-				})
-			})
+			const instance = ref?.current
+			if (!instance || instance !== activeInstance) return
+			instance.blur()
+			activeInstance = null
 		})
 
 		return () => subscription.remove()

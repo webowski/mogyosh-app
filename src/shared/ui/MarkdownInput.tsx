@@ -15,7 +15,10 @@ import Animated, { type AnimatedStyle } from 'react-native-reanimated'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 import { KeyboardController } from 'react-native-keyboard-controller'
-import { useBlurOnKeyboardHide } from '../lib/useBlurOnKeyboardHide'
+import {
+	markActiveInputInstance,
+	useBlurOnKeyboardHide
+} from '../lib/useBlurOnKeyboardHide'
 
 interface MarkdownInputProps {
 	blockText: string
@@ -58,6 +61,10 @@ export const MarkdownInput = forwardRef<
 		)
 
 		const handleNativeFocus = () => {
+			markActiveInputInstance(
+				(ref as React.RefObject<EnrichedMarkdownTextInputInstance | null>)
+					?.current
+			)
 			onFocus?.()
 
 			// EnrichedMarkdownTextInput on Android: first tap often focuses
