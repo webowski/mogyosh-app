@@ -1,7 +1,10 @@
 import type { RefObject } from 'react'
 import { useEffect } from 'react'
 import { Platform } from 'react-native'
-import { KeyboardEvents } from 'react-native-keyboard-controller'
+import {
+	KeyboardController,
+	KeyboardEvents
+} from 'react-native-keyboard-controller'
 
 interface BlurableInstance {
 	blur: () => void
@@ -19,7 +22,18 @@ export function useBlurOnKeyboardHide(
 		if (Platform.OS === 'web') return
 
 		const subscription = KeyboardEvents.addListener('keyboardDidHide', () => {
-			ref?.current?.blur()
+			// Switching focus directly between two blocks can briefly fire
+			// "keyboardDidHide" as part of the native transition, right before
+			// the keyboard reopens for the newly focused block. Blurring
+			// unconditionally here would steal focus back and collapse the
+			// EditorToolbar. Wait a couple of frames and only blur if the
+			// keyboard is still actually hidden by then.
+			requestAnimationFrame(() => {
+				requestAnimationFrame(() => {
+					if (KeyboardController.isVisible()) return
+					ref?.current?.blur()
+				})
+			})
 		})
 
 		return () => subscription.remove()
