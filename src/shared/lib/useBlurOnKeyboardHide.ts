@@ -11,15 +11,20 @@ import type { BlockId } from '@/shared/domain/ids'
 // the currently focused block's native input whenever the keyboard hides
 // for real.
 //
-// Switching focus directly from block A to block B fires a genuine
-// "keyboardDidHide" for A immediately followed by a genuine
-// "keyboardDidShow" for B — the OS always sequences these in order, since
-// it is the same underlying IME session. So instead of guessing from a
-// possibly-stale visibility flag, we wait one runloop turn after a hide:
-// if "keyboardDidShow" arrives in that window, the hide was just the
-// native transition artifact of switching inputs and is ignored;
-// otherwise the keyboard was genuinely dismissed and the currently
-// focused block is blurred.
+// Switching focus directly from block A to block B also fires
+// "keyboardDidHide" for A as part of the native transition, immediately
+// followed by block B's own focus (which reopens the keyboard). Blurring
+// blindly on every hide event would end up blurring B right after it
+// gained focus, since the store's focusedBlockId already points at B by
+// the time the hide callback runs.
+//
+// To tell the two cases apart deterministically (no timing guesses),
+// capture which block was focused AT THE MOMENT the hide event fired and
+// re-check it on the next tick. If focus already moved to a different
+// block by then (a synchronous part of the same native transaction),
+// the hide was just that transition's artifact — skip it, that other
+// block owns its own state. Only if the SAME block is still focused do we
+// treat the hide as a genuine, standalone dismiss and blur it.
 //
 // Called ONCE for the whole editor (not per block) so there is a single
 // source of truth for "which block is currently focused" instead of each
@@ -33,38 +38,24 @@ export function useBlurOnKeyboardHide(
 
 		let pendingHideTimeoutId: ReturnType<typeof setTimeout> | null = null
 
-		const clearPendingHide = () => {
-			if (pendingHideTimeoutId) {
-				clearTimeout(pendingHideTimeoutId)
-				pendingHideTimeoutId = null
-			}
-		}
-
 		const hideSubscription = KeyboardEvents.addListener(
 			'keyboardDidHide',
 			() => {
-				clearPendingHide()
+				if (pendingHideTimeoutId) clearTimeout(pendingHideTimeoutId)
+
+				const focusedBlockIdAtHideTime = getFocusedBlockId()
 				pendingHideTimeoutId = setTimeout(() => {
 					pendingHideTimeoutId = null
-					const focusedBlockId = getFocusedBlockId()
-					if (!focusedBlockId) return
-					inputRefs.get(focusedBlockId)?.current?.blur()
+					if (!focusedBlockIdAtHideTime) return
+					if (getFocusedBlockId() !== focusedBlockIdAtHideTime) return
+					inputRefs.get(focusedBlockIdAtHideTime)?.current?.blur()
 				}, 0)
 			}
 		)
 
-		// A genuine reopen (focus moved to another block) cancels the
-		// pending blur, since the preceding hide was just a transition
-		// artifact.
-		const showSubscription = KeyboardEvents.addListener(
-			'keyboardDidShow',
-			clearPendingHide
-		)
-
 		return () => {
-			clearPendingHide()
+			if (pendingHideTimeoutId) clearTimeout(pendingHideTimeoutId)
 			hideSubscription.remove()
-			showSubscription.remove()
 		}
 	}, [inputRefs, getFocusedBlockId])
 }
