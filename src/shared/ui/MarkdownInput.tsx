@@ -15,6 +15,8 @@ import { KeyboardController } from 'react-native-keyboard-controller'
 import Animated, { type AnimatedStyle } from 'react-native-reanimated'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
+import { useBlurOnKeyboardHide } from '../lib/useBlurOnKeyboardHide'
+
 interface MarkdownInputProps {
 	blockText: string
 	style?: StyleProp<AnimatedStyle<ViewStyle>>
@@ -115,6 +117,12 @@ export const MarkdownInput = forwardRef<
 				onBackspaceOnEmpty?.()
 			}
 		}
+
+		useBlurOnKeyboardHide(
+			ref as React.RefObject<
+				EnrichedMarkdownTextInputInstance | HTMLDivElement | null
+			>
+		)
 
 		if (Platform.OS === 'web') {
 			return (

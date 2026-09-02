@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Platform, type TextInput } from 'react-native'
 
 import type { BlockEntity } from '@/shared/domain/block'
+import { useBlurOnKeyboardHide } from '@/shared/lib/useBlurOnKeyboardHide'
 import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
 import { useCounterAccessoryStore } from './counterAccessory.store'
 import { useUpdateBlock } from './useUpdateBlock'
@@ -22,6 +23,8 @@ export const useCounterNumericField = (
 
 	const [isFocused, setIsFocused] = useState(false)
 	const [text, setText] = useState(String(data.settings?.[settingsKey] ?? 0))
+
+	useBlurOnKeyboardHide(inputRef)
 
 	useEffect(
 		() => {
