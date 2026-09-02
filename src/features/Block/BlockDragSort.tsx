@@ -97,8 +97,8 @@ export function BlockDragSortContent({
 			style={staticStyles.ScrollBox}
 			overScrollMode='never'
 			bottomOffset={STYLE_VARS.editorToolbarHeight * 1.25}
-			keyboardShouldPersistTaps='handled'
-			// keyboardDismissMode='on-drag'
+			keyboardShouldPersistTaps='always'
+			keyboardDismissMode='none'
 		>
 			<GesturePressable
 				style={staticStyles.ScrollBox__inner}
