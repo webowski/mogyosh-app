@@ -51,6 +51,12 @@ export const MarkdownInput = forwardRef<
 		const markdownRef = useRef(blockText)
 		const enterHandledRef = useRef(false)
 
+		useBlurOnKeyboardHide(
+			ref as React.RefObject<
+				EnrichedMarkdownTextInputInstance | HTMLDivElement | null
+			>
+		)
+
 		const handleNativeFocus = () => {
 			onFocus?.()
 
@@ -117,12 +123,6 @@ export const MarkdownInput = forwardRef<
 				onBackspaceOnEmpty?.()
 			}
 		}
-
-		useBlurOnKeyboardHide(
-			ref as React.RefObject<
-				EnrichedMarkdownTextInputInstance | HTMLDivElement | null
-			>
-		)
 
 		if (Platform.OS === 'web') {
 			return (
