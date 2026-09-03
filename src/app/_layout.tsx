@@ -21,9 +21,9 @@ SplashScreen.setOptions({
 	fade: true
 })
 
-export const unstable_settings = {
-	anchor: '(tabs)'
-}
+// export const unstable_settings = {
+// 	anchor: '(tabs)'
+// }
 
 export default function RootLayout() {
 	const { theme, rt } = useUnistyles()
