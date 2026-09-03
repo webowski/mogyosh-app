@@ -23,12 +23,12 @@ export function useAuth() {
 		try {
 			const currentSession = await getSession()
 			console.log('SESSION', currentSession?.user?.email)
-			// временно, чтобы сбросить старую сессию:
-			if (currentSession) {
-				await signOut()
-				setSession(null)
-				return
-			}
+			// // временно, чтобы сбросить старую сессию:
+			// if (currentSession) {
+			// 	await signOut()
+			// 	setSession(null)
+			// 	return
+			// }
 			setSession(currentSession)
 		} catch (error) {
 			setErrorKind(getAuthErrorKind(error))
