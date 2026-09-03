@@ -35,97 +35,95 @@ export default function RootLayout() {
 
 	useEffect(() => {
 		updateRoutes(pathname)
-		// eslint-disable-next-line
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [pathname])
+
+	if (isLoading) {
+		return (
+			<View
+				onLayout={() => SplashScreen.hideAsync()}
+				style={{
+					flex: 1,
+					justifyContent: 'center',
+					alignItems: 'center',
+					backgroundColor: theme.colors.primary
+				}}
+			>
+				<ActivityIndicator color={STATIC_COLORS.white} size={32} />
+			</View>
+		)
+	}
+
+	// Network / unknown error while checking session (before we know auth state)
+	if (errorKind && !isAuthenticated) {
+		return (
+			<View
+				onLayout={() => SplashScreen.hideAsync()}
+				style={commonStyles.SystemContentMessage}
+			>
+				<Text style={commonStyles.SystemContentMessage__heading}>
+					{t(`error.${errorKind}.title`)}
+				</Text>
+				<Text
+					style={[
+						commonStyles.SystemContentMessage__text,
+						{ marginBottom: 26 }
+					]}
+				>
+					{t(`error.${errorKind}.description`)}
+				</Text>
+				<Button onPress={refreshSession} variant='default' size='lg'>
+					{t('error.Retry')}
+				</Button>
+			</View>
+		)
+	}
 
 	return (
 		<Providers>
-			{isLoading ? (
-				<View
-					onLayout={() => SplashScreen.hideAsync()}
-					style={{
-						flex: 1,
-						justifyContent: 'center',
-						alignItems: 'center',
-						backgroundColor: theme.colors.primary
-					}}
-				>
-					<ActivityIndicator color={STATIC_COLORS.white} size={32} />
-				</View>
-			) : !isAuthenticated ? (
-				<>
-					<StatusBar style={theme.statusBarColor} />
-					<Stack screenOptions={{ headerShown: false }}>
-						<Stack.Screen name='(auth)/login' />
-					</Stack>
-				</>
-			) : errorKind ? (
-				<View style={commonStyles.SystemContentMessage}>
-					<Text style={commonStyles.SystemContentMessage__heading}>
-						{t(`error.${errorKind}.title`)}
-					</Text>
-					<Text
-						style={[
-							commonStyles.SystemContentMessage__text,
-							{ marginBottom: 26 }
-						]}
-					>
-						{t(`error.${errorKind}.description`)}
-					</Text>
-					<Button onPress={refreshSession} variant='default' size='lg'>
-						{t('error.Retry')}
-					</Button>
-				</View>
-			) : (
-				// else
-				<>
-					<StatusBar style={theme.statusBarColor} />
+			<StatusBar style={theme.statusBarColor} />
 
-					{Platform.OS === 'android' && (
-						<NavigationBar
-							style={rt.themeName === 'light' ? 'dark' : 'light'}
-							hidden={false}
-						/>
-					)}
-
-					<Stack
-						screenOptions={{
-							contentStyle: {
-								backgroundColor: theme.colors.surfaceDeep
-							}
-						}}
-					>
-						<Stack.Screen
-							name='(tabs)'
-							options={{
-								headerShown: false
-							}}
-						/>
-						<Stack.Screen
-							name='about'
-							options={{
-								title: t('screen.About'),
-								headerShown: true,
-								header: (props) => <Header {...props} />
-							}}
-						/>
-						<Stack.Screen
-							name='account'
-							options={{
-								title: t('screen.Account'),
-								headerShown: true,
-								header: (props) => <Header {...props} />
-							}}
-						/>
-						<Stack.Screen
-							name='settings'
-							options={{
-								headerShown: false
-							}}
-						/>
-					</Stack>
-				</>
+			{Platform.OS === 'android' && (
+				<NavigationBar
+					style={rt.themeName === 'light' ? 'dark' : 'light'}
+					hidden={false}
+				/>
 			)}
+
+			<Stack
+				screenOptions={{
+					contentStyle: {
+						backgroundColor: theme.colors.surfaceDeep
+					}
+				}}
+			>
+				{/* Only for logged-in users */}
+				<Stack.Protected guard={isAuthenticated}>
+					<Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+					<Stack.Screen
+						name='about'
+						options={{
+							title: t('screen.About'),
+							headerShown: true,
+							header: (props) => <Header {...props} />
+						}}
+					/>
+					<Stack.Screen
+						name='account'
+						options={{
+							title: t('screen.Account'),
+							headerShown: true,
+							header: (props) => <Header {...props} />
+						}}
+					/>
+					<Stack.Screen name='settings' options={{ headerShown: false }} />
+				</Stack.Protected>
+
+				{/* Only for guests */}
+				<Stack.Protected guard={!isAuthenticated}>
+					<Stack.Screen name='(auth)/login' options={{ headerShown: false }} />
+				</Stack.Protected>
+			</Stack>
 		</Providers>
 	)
 }
