@@ -43,9 +43,11 @@ export function LoginScreen() {
 	if (magicLinkSent) {
 		return (
 			<View style={styles.Container}>
-				<Text style={textStyles.heading5}>{t('auth.Check your email')}</Text>
+				<Text style={textStyles.heading5}>
+					{t('screen.auth.Check your email')}
+				</Text>
 				<Text style={styles.Description}>
-					{t('auth.Magic link sent description')}
+					{t('screen.auth.Magic link sent description')}
 				</Text>
 				<Button
 					onPress={() => setMagicLinkSent(false)}
@@ -53,7 +55,7 @@ export function LoginScreen() {
 					size='lg'
 					widthMode='full'
 				>
-					{t('auth.Back')}
+					{t('screen.auth.Back')}
 				</Button>
 			</View>
 		)
@@ -61,14 +63,16 @@ export function LoginScreen() {
 
 	return (
 		<View style={styles.Container}>
-			<Text style={textStyles.heading5}>{t('auth.Sign in')}</Text>
-			<Text style={styles.Description}>{t('auth.Sign in description')}</Text>
+			<Text style={textStyles.heading5}>{t('screen.auth.Sign in')}</Text>
+			<Text style={styles.Description}>
+				{t('screen.auth.Sign in description')}
+			</Text>
 
 			<TextInput
 				style={styles.Input}
 				value={email}
 				onChangeText={setEmail}
-				placeholder={t('auth.Email placeholder')}
+				placeholder={t('screen.auth.Email placeholder')}
 				keyboardType='email-address'
 				autoCapitalize='none'
 				autoCorrect={false}
@@ -83,12 +87,12 @@ export function LoginScreen() {
 				loading={isSubmitting}
 				disabled={isSubmitting || !email.trim()}
 			>
-				{t('auth.Continue with email')}
+				{t('screen.auth.Continue with email')}
 			</Button>
 
 			<View style={styles.Divider}>
 				<View style={styles.Divider__line} />
-				<Text style={styles.Divider__text}>{t('auth.or')}</Text>
+				<Text style={styles.Divider__text}>{t('screen.auth.or')}</Text>
 				<View style={styles.Divider__line} />
 			</View>
 
@@ -100,7 +104,7 @@ export function LoginScreen() {
 				loading={isSubmitting}
 				disabled={isSubmitting}
 			>
-				{t('auth.Continue with Google')}
+				{t('screen.auth.Continue with Google')}
 			</Button>
 
 			{errorKind && (
