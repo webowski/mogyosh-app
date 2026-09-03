@@ -23,13 +23,36 @@ WebBrowser.maybeCompleteAuthSession()
 const redirectTo = makeRedirectUri()
 
 export async function createSessionFromUrl(url: string) {
+	console.log('AUTH CALLBACK URL:', url)
+
 	const { params, errorCode } = QueryParams.getQueryParams(url)
 
-	if (errorCode) throw new Error(errorCode)
+	if (errorCode) {
+		console.log('AUTH errorCode:', errorCode)
+		throw new Error(errorCode)
+	}
 
+	if (params.error) {
+		console.log('AUTH params.error:', params.error, params.error_description)
+		throw new Error(params.error_description || params.error || 'OAuth error')
+	}
+
+	// PKCE: ?code=...
+	if (params.code) {
+		const { data, error } = await supabaseClient.auth.exchangeCodeForSession(
+			params.code
+		)
+		if (error) throw error
+		return data.session
+	}
+
+	// Implicit: access_token + refresh_token
 	const { access_token, refresh_token } = params
 
-	if (!access_token) return null
+	if (!access_token) {
+		console.log('AUTH: no access_token and no code in callback')
+		return null
+	}
 
 	const { data, error } = await supabaseClient.auth.setSession({
 		access_token,
@@ -65,7 +88,9 @@ async function signInWithOAuthProvider(provider: Provider) {
 
 	const result = await WebBrowser.openAuthSessionAsync(data.url, redirectTo)
 
+	console.log('AUTH WebBrowser result type:', result.type)
 	if (result.type === 'success') {
+		console.log('AUTH success url:', result.url)
 		return createSessionFromUrl(result.url)
 	}
 
@@ -77,7 +102,6 @@ export async function signInWithGoogle() {
 }
 
 export async function signInWithYandex() {
-	// Custom provider identifier from Supabase Dashboard
 	return signInWithOAuthProvider('custom:yandex' as Provider)
 }
 
