@@ -12,6 +12,7 @@ import {
 } from '@/shared/api/auth'
 import { supabaseClient } from '@/shared/api/supabaseClient'
 import { getAuthErrorKind } from '@/shared/lib/getAuthErrorKind'
+import { Alert } from 'react-native'
 
 export function useAuth() {
 	const [session, setSession] = useState<Session | null>(null)
@@ -98,6 +99,11 @@ export function useAuth() {
 		try {
 			await signInWithYandex()
 		} catch (error) {
+			console.log('YANDEX AUTH ERROR:', error)
+			Alert.alert(
+				'Yandex auth error',
+				String(error instanceof Error ? error.message : error)
+			)
 			setErrorKind(getAuthErrorKind(error))
 			throw error
 		}
