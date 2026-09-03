@@ -26,6 +26,7 @@
 		"auth": {
 			"Sign in": "Sign in",
 			"Sign in description": "Sign in to sync your data across devices.",
+			"Log out": "Log out",
 			"Email placeholder": "Email",
 			"Continue with email": "Continue with email",
 			"Continue with Google": "Continue with Google",

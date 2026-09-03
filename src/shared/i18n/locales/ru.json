@@ -26,6 +26,7 @@
 		"auth": {
 			"Sign in": "Вход",
 			"Sign in description": "Войдите, чтобы синхронизировать данные между устройствами.",
+			"Log out": "Выйти из аккаунта",
 			"Email placeholder": "Email",
 			"Continue with email": "Продолжить с email",
 			"Continue with Google": "Продолжить с Google",
