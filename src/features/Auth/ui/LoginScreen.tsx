@@ -9,7 +9,8 @@ import { useAuth } from '../model/useAuth'
 
 export function LoginScreen() {
 	const { t } = useTranslation()
-	const { loginWithEmail, loginWithGoogle, errorKind } = useAuth()
+	const { loginWithEmail, loginWithGoogle, loginWithYandex, errorKind } =
+		useAuth()
 
 	const [email, setEmail] = useState('')
 	const [isSubmitting, setIsSubmitting] = useState(false)
@@ -33,6 +34,17 @@ export function LoginScreen() {
 		setIsSubmitting(true)
 		try {
 			await loginWithGoogle()
+		} catch {
+			// errorKind already set in hook
+		} finally {
+			setIsSubmitting(false)
+		}
+	}
+
+	const handleYandexLogin = async () => {
+		setIsSubmitting(true)
+		try {
+			await loginWithYandex()
 		} catch {
 			// errorKind already set in hook
 		} finally {
@@ -95,6 +107,17 @@ export function LoginScreen() {
 				<Text style={styles.Divider__text}>{t('screen.auth.or')}</Text>
 				<View style={styles.Divider__line} />
 			</View>
+
+			<Button
+				onPress={handleYandexLogin}
+				variant='secondary'
+				size='lg'
+				widthMode='full'
+				loading={isSubmitting}
+				disabled={isSubmitting}
+			>
+				{t('screen.auth.Continue with Yandex')}
+			</Button>
 
 			<Button
 				onPress={handleGoogleLogin}

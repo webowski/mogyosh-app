@@ -7,6 +7,7 @@ import {
 	getSession,
 	signInWithEmail,
 	signInWithGoogle,
+	signInWithYandex,
 	signOut
 } from '@/shared/api/auth'
 import { supabaseClient } from '@/shared/api/supabaseClient'
@@ -92,6 +93,16 @@ export function useAuth() {
 		}
 	}
 
+	const loginWithYandex = async () => {
+		setErrorKind(null)
+		try {
+			await signInWithYandex()
+		} catch (error) {
+			setErrorKind(getAuthErrorKind(error))
+			throw error
+		}
+	}
+
 	const logout = async () => {
 		await signOut()
 		setSession(null)
@@ -104,6 +115,7 @@ export function useAuth() {
 		errorKind,
 		loginWithEmail,
 		loginWithGoogle,
+		loginWithYandex,
 		logout,
 		refreshSession
 	}

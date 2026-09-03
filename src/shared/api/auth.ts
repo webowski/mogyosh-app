@@ -1,3 +1,4 @@
+import type { Provider } from '@supabase/supabase-js'
 import { makeRedirectUri } from 'expo-auth-session'
 import * as QueryParams from 'expo-auth-session/build/QueryParams'
 import * as WebBrowser from 'expo-web-browser'
@@ -20,8 +21,6 @@ import { supabaseClient } from './supabaseClient'
 WebBrowser.maybeCompleteAuthSession()
 
 const redirectTo = makeRedirectUri()
-// const redirectTo = makeRedirectUri({ scheme: 'mogyosh' })
-// console.log('redirectTo:', redirectTo)
 
 export async function createSessionFromUrl(url: string) {
 	const { params, errorCode } = QueryParams.getQueryParams(url)
@@ -52,9 +51,9 @@ export async function signInWithEmail(email: string) {
 	if (error) throw error
 }
 
-export async function signInWithGoogle() {
+async function signInWithOAuthProvider(provider: Provider) {
 	const { data, error } = await supabaseClient.auth.signInWithOAuth({
-		provider: 'google',
+		provider,
 		options: {
 			redirectTo,
 			skipBrowserRedirect: true
@@ -71,6 +70,15 @@ export async function signInWithGoogle() {
 	}
 
 	return null
+}
+
+export async function signInWithGoogle() {
+	return signInWithOAuthProvider('google')
+}
+
+export async function signInWithYandex() {
+	// Custom provider identifier from Supabase Dashboard
+	return signInWithOAuthProvider('custom:yandex' as Provider)
 }
 
 export async function signOut() {
