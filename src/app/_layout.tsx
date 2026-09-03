@@ -38,101 +38,94 @@ export default function RootLayout() {
 		// eslint-disable-next-line
 	}, [pathname])
 
-	if (isLoading) {
-		return (
-			<View
-				onLayout={() => SplashScreen.hideAsync()}
-				style={{
-					flex: 1,
-					justifyContent: 'center',
-					alignItems: 'center',
-					backgroundColor: theme.colors.primary
-				}}
-			>
-				<ActivityIndicator color={STATIC_COLORS.white} size={32} />
-			</View>
-		)
-	}
-
-	if (!isAuthenticated) {
-		return (
-			<>
-				<StatusBar style={theme.statusBarColor} />
-				<Stack screenOptions={{ headerShown: false }}>
-					<Stack.Screen name='(auth)/login' />
-				</Stack>
-			</>
-		)
-	}
-
-	if (errorKind) {
-		return (
-			<View style={commonStyles.SystemContentMessage}>
-				<Text style={commonStyles.SystemContentMessage__heading}>
-					{t(`error.${errorKind}.title`)}
-				</Text>
-				<Text
-					style={[
-						commonStyles.SystemContentMessage__text,
-						{ marginBottom: 26 }
-					]}
-				>
-					{t(`error.${errorKind}.description`)}
-				</Text>
-				<Button onPress={refreshSession} variant='default' size='lg'>
-					{t('error.Retry')}
-				</Button>
-			</View>
-		)
-	}
-
 	return (
 		<Providers>
-			<StatusBar style={theme.statusBarColor} />
+			{isLoading ? (
+				<View
+					onLayout={() => SplashScreen.hideAsync()}
+					style={{
+						flex: 1,
+						justifyContent: 'center',
+						alignItems: 'center',
+						backgroundColor: theme.colors.primary
+					}}
+				>
+					<ActivityIndicator color={STATIC_COLORS.white} size={32} />
+				</View>
+			) : !isAuthenticated ? (
+				<>
+					<StatusBar style={theme.statusBarColor} />
+					<Stack screenOptions={{ headerShown: false }}>
+						<Stack.Screen name='(auth)/login' />
+					</Stack>
+				</>
+			) : errorKind ? (
+				<View style={commonStyles.SystemContentMessage}>
+					<Text style={commonStyles.SystemContentMessage__heading}>
+						{t(`error.${errorKind}.title`)}
+					</Text>
+					<Text
+						style={[
+							commonStyles.SystemContentMessage__text,
+							{ marginBottom: 26 }
+						]}
+					>
+						{t(`error.${errorKind}.description`)}
+					</Text>
+					<Button onPress={refreshSession} variant='default' size='lg'>
+						{t('error.Retry')}
+					</Button>
+				</View>
+			) : (
+				// else
+				<>
+					<StatusBar style={theme.statusBarColor} />
 
-			{Platform.OS === 'android' && (
-				<NavigationBar
-					style={rt.themeName === 'light' ? 'dark' : 'light'}
-					hidden={false}
-				/>
+					{Platform.OS === 'android' && (
+						<NavigationBar
+							style={rt.themeName === 'light' ? 'dark' : 'light'}
+							hidden={false}
+						/>
+					)}
+
+					<Stack
+						screenOptions={{
+							contentStyle: {
+								backgroundColor: theme.colors.surfaceDeep
+							}
+						}}
+					>
+						<Stack.Screen
+							name='(tabs)'
+							options={{
+								headerShown: false
+							}}
+						/>
+						<Stack.Screen
+							name='about'
+							options={{
+								title: t('screen.About'),
+								headerShown: true,
+								header: (props) => <Header {...props} />
+							}}
+						/>
+						<Stack.Screen
+							name='account'
+							options={{
+								title: t('screen.Account'),
+								headerShown: true,
+								header: (props) => <Header {...props} />
+							}}
+						/>
+						<Stack.Screen
+							name='settings'
+							options={{
+								headerShown: false
+							}}
+						/>
+					</Stack>
+				</>
 			)}
-
-			<Stack
-				screenOptions={{
-					contentStyle: {
-						backgroundColor: theme.colors.surfaceDeep
-					}
-				}}
-			>
-				<Stack.Screen
-					name='(tabs)'
-					options={{
-						headerShown: false
-					}}
-				/>
-				<Stack.Screen
-					name='about'
-					options={{
-						title: t('screen.About'),
-						headerShown: true,
-						header: (props) => <Header {...props} />
-					}}
-				/>
-				<Stack.Screen
-					name='account'
-					options={{
-						title: t('screen.Account'),
-						headerShown: true,
-						header: (props) => <Header {...props} />
-					}}
-				/>
-				<Stack.Screen
-					name='settings'
-					options={{
-						headerShown: false
-					}}
-				/>
-			</Stack>
 		</Providers>
 	)
 }
