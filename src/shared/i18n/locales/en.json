@@ -22,6 +22,17 @@
 		},
 		"allTasks": {
 			"Category name": "Category name"
+		},
+		"auth": {
+			"Sign in": "Sign in",
+			"Sign in description": "Sign in to sync your data across devices.",
+			"Email placeholder": "Email",
+			"Continue with email": "Continue with email",
+			"Continue with Google": "Continue with Google",
+			"or": "or",
+			"Check your email": "Check your email",
+			"Magic link sent description": "We sent you a sign-in link. Open the email and tap the link.",
+			"Back": "Back"
 		}
 	},
 	"buttons": {

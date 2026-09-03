@@ -22,6 +22,17 @@
 		},
 		"allTasks": {
 			"Category name": "Название категории"
+		},
+		"auth": {
+			"Sign in": "Вход",
+			"Sign in description": "Войдите, чтобы синхронизировать данные между устройствами.",
+			"Email placeholder": "Email",
+			"Continue with email": "Продолжить с email",
+			"Continue with Google": "Продолжить с Google",
+			"or": "или",
+			"Check your email": "Проверьте почту",
+			"Magic link sent description": "Мы отправили ссылку для входа. Откройте письмо и нажмите на ссылку.",
+			"Back": "Назад"
 		}
 	},
 	"buttons": {
