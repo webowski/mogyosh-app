@@ -20,6 +20,8 @@ import { supabaseClient } from './supabaseClient'
 WebBrowser.maybeCompleteAuthSession()
 
 const redirectTo = makeRedirectUri()
+// const redirectTo = makeRedirectUri({ scheme: 'mogyosh' })
+// console.log('redirectTo:', redirectTo)
 
 export async function createSessionFromUrl(url: string) {
 	const { params, errorCode } = QueryParams.getQueryParams(url)
