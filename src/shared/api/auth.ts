@@ -3,6 +3,7 @@ import { makeRedirectUri } from 'expo-auth-session'
 import * as QueryParams from 'expo-auth-session/build/QueryParams'
 import * as WebBrowser from 'expo-web-browser'
 
+import { Alert } from 'react-native'
 import { supabaseClient } from './supabaseClient'
 
 // const testUserEmail = process.env.EXPO_PUBLIC_TEST_USER_EMAIL!
@@ -87,6 +88,8 @@ async function signInWithOAuthProvider(provider: Provider) {
 	if (!data.url) throw new Error('No OAuth URL returned')
 
 	const result = await WebBrowser.openAuthSessionAsync(data.url, redirectTo)
+
+	Alert.alert('Yandex result.type', result.type) // temp debug
 
 	console.log('AUTH WebBrowser result type:', result.type)
 	if (result.type === 'success') {

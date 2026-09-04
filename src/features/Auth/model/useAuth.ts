@@ -61,6 +61,10 @@ export function useAuth() {
 			try {
 				await createSessionFromUrl(url)
 			} catch (error) {
+				Alert.alert(
+					'Deep link auth error',
+					String(error instanceof Error ? error.message : error)
+				)
 				setErrorKind(getAuthErrorKind(error))
 			}
 		}
