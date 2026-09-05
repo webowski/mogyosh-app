@@ -1,14 +1,17 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, TextInput, View } from 'react-native'
-import { StyleSheet } from 'react-native-unistyles'
+import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
+import SVGIconGoogle from '@/shared/images/icons/google.svg'
+import SVGIconYandex from '@/shared/images/icons/yandex.svg'
 import { textStyles } from '@/shared/styles/text'
 import { Button } from '@/shared/ui/Button'
 import { useAuth } from '../model/useAuth'
 
 export function LoginScreen() {
 	const { t } = useTranslation()
+	const { theme } = useUnistyles()
 	const { loginWithEmail, loginWithGoogle, loginWithYandex, errorKind } =
 		useAuth()
 
@@ -99,7 +102,7 @@ export function LoginScreen() {
 				loading={isSubmitting}
 				disabled={isSubmitting || !email.trim()}
 			>
-				{t('screen.auth.Continue with email')}
+				{t('screen.auth.Login via email')}
 			</Button>
 
 			<View style={styles.Divider}>
@@ -115,8 +118,12 @@ export function LoginScreen() {
 				widthMode='full'
 				loading={isSubmitting}
 				disabled={isSubmitting}
+				style={{ gap: 10 }}
 			>
-				{t('screen.auth.Continue with Yandex')}
+				<SVGIconYandex width={28} height={28} style={{ opacity: 0.75 }} />
+				<Text style={{ fontWeight: '600', fontSize: 16 }}>
+					{t('screen.auth.Login via Yandex')}
+				</Text>
 			</Button>
 
 			<Button
@@ -126,8 +133,12 @@ export function LoginScreen() {
 				widthMode='full'
 				loading={isSubmitting}
 				disabled={isSubmitting}
+				style={{ gap: 10 }}
 			>
-				{t('screen.auth.Continue with Google')}
+				<SVGIconGoogle width={27} height={28} style={{ opacity: 0.75 }} />
+				<Text style={{ fontWeight: '600', fontSize: 16 }}>
+					{t('screen.auth.Login via Google')}
+				</Text>
 			</Button>
 
 			{errorKind && (
