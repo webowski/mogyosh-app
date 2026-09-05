@@ -120,7 +120,7 @@ export function LoginScreen() {
 				disabled={isSubmitting}
 				style={{ gap: 10 }}
 			>
-				<SVGIconYandex width={28} height={28} style={{ opacity: 0.75 }} />
+				<SVGIconYandex width={28} height={28} fill={theme.colors.major} />
 				<Text style={{ fontWeight: '600', fontSize: 16 }}>
 					{t('screen.auth.Login via Yandex')}
 				</Text>
@@ -135,7 +135,7 @@ export function LoginScreen() {
 				disabled={isSubmitting}
 				style={{ gap: 10 }}
 			>
-				<SVGIconGoogle width={27} height={28} style={{ opacity: 0.75 }} />
+				<SVGIconGoogle width={28} height={28} fill={theme.colors.major} />
 				<Text style={{ fontWeight: '600', fontSize: 16 }}>
 					{t('screen.auth.Login via Google')}
 				</Text>
