@@ -263,7 +263,12 @@ export default function TaskItem({
 						)}
 
 						<View style={styles.Card__columns}>
-							<View style={styles.Card__header}>
+							<View
+								style={[
+									styles.Card__header,
+									{ paddingTop: isByTimeBool ? 14 : 0 }
+								]}
+							>
 								{data.category && (
 									<Text style={styles.Card__category}>
 										{makeCategoryPath(data.category.id, categoryMap)}
@@ -271,17 +276,17 @@ export default function TaskItem({
 								)}
 								<Text style={styles.Card__title}>{data.title}</Text>
 							</View>
-							<View></View>
+							{/* <View></View> */}
+							{totalProgressCount > 0 && (
+								<View style={styles.Card__dashboard}>
+									<CircleProgress
+										progress={progress}
+										value={`${completedProgressCount}/${totalProgressCount}`}
+									/>
+								</View>
+							)}
 						</View>
 						{children}
-						{totalProgressCount > 0 && (
-							<View style={styles.Card__dashboard}>
-								<CircleProgress
-									progress={progress}
-									value={`${completedProgressCount}/${totalProgressCount}`}
-								/>
-							</View>
-						)}
 					</Animated.View>
 				</GestureDetector>
 			</View>
@@ -365,8 +370,8 @@ const styles = StyleSheet.create((theme, rt) => ({
 	Card__columns: {
 		flexDirection: 'row',
 		gap: 12,
-		// justifyContent: 'space-between'
-		justifyContent: 'flex-start'
+		justifyContent: 'space-between'
+		// justifyContent: 'flex-start'
 	},
 	Card__category: {
 		color: theme.colors.mutedTextStrong,
@@ -381,18 +386,18 @@ const styles = StyleSheet.create((theme, rt) => ({
 		// letterSpacing: (16 / 100) * -1
 	},
 	Card__time: {
-		fontSize: 13 * rt.fontScale,
+		fontSize: 12 * rt.fontScale,
 		fontWeight: '500' as const,
 		position: 'absolute',
 		top: 0,
-		right: 0,
+		left: 0,
 		color: theme.colors.minor,
-		backgroundColor: theme.colors.mutedSubtlerFill,
-		borderTopRightRadius: STYLE_VARS.radius_sm,
-		borderBottomLeftRadius: STYLE_VARS.radius_sm,
+		backgroundColor: theme.colors.mutedSubtlestFill,
+		borderTopLeftRadius: STYLE_VARS.radius_sm,
+		borderBottomRightRadius: STYLE_VARS.radius_sm,
 		paddingVertical: 2,
-		paddingRight: 12,
-		paddingLeft: 10
+		paddingRight: 10,
+		paddingLeft: 13
 	},
 
 	Card__dashboard: {
