@@ -35,6 +35,9 @@
 			"Check your email": "Check your email",
 			"Magic link sent description": "We sent you a sign-in link. Open the email and tap the link.",
 			"Back": "Back"
+		},
+		"account": {
+			"Your account": "Your account"
 		}
 	},
 	"buttons": {

@@ -24,7 +24,7 @@ export default function ScrollBox({
 					flexGrow: 1,
 					flexShrink: 0,
 					paddingHorizontal: STYLE_VARS.sidePadding,
-					paddingTop: STYLE_VARS.sidePadding,
+					paddingTop: STYLE_VARS.sidePadding + 4,
 					paddingBottom: STYLE_VARS.sidePadding + STYLE_VARS.navPanelUnderlap,
 					gap: 4
 				},

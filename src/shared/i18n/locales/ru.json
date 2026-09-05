@@ -35,6 +35,9 @@
 			"Check your email": "Проверьте почту",
 			"Magic link sent description": "Мы отправили ссылку для входа. Откройте письмо и нажмите на ссылку.",
 			"Back": "Назад"
+		},
+		"account": {
+			"Your account": "Ваш аккаунт"
 		}
 	},
 	"buttons": {

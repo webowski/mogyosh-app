@@ -30,11 +30,18 @@ export default function AccountScreen() {
 	return (
 		<>
 			<ScrollBox scrollIndent>
-				<View style={{ gap: 16 }}>
-					<Text style={textStyles.heading5}>{t('screen.Account')}</Text>
+				<View style={{ gap: 0 }}>
+					<Text style={[textStyles.heading5, { marginBottom: 2 }]}>
+						{t('screen.account.Your account')}:
+					</Text>
 
 					{session?.user?.email && (
-						<Text style={{ color: theme.colors.major }}>
+						<Text
+							style={[
+								textStyles.textLarge,
+								{ color: theme.colors.major, fontWeight: 600, marginBottom: 20 }
+							]}
+						>
 							{session.user.email}
 						</Text>
 					)}
@@ -42,7 +49,7 @@ export default function AccountScreen() {
 					<Button
 						onPress={handleLogout}
 						variant='secondary'
-						size='lg'
+						// size='lg'
 						widthMode='full'
 						loading={isLoggingOut}
 						disabled={isLoggingOut}
