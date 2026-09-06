@@ -38,6 +38,9 @@
 		},
 		"account": {
 			"Your account": "Your account"
+		},
+		"about": {
+			"App version": "App version"
 		}
 	},
 	"buttons": {

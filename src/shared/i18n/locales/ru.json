@@ -38,6 +38,9 @@
 		},
 		"account": {
 			"Your account": "Ваш аккаунт"
+		},
+		"about": {
+			"App version": "Версия приложения"
 		}
 	},
 	"buttons": {

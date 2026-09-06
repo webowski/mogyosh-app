@@ -31,6 +31,11 @@ export const textStyles = StyleSheet.create((theme, rt) => ({
 		color: theme.colors.mutedSubtleText
 	},
 
+	p: {
+		fontSize: rt.fontScale * 16,
+		lineHeight: rt.fontScale * 16 * 1.35
+	},
+
 	// text-align: center;
 	// letter-spacing: -0.01em;
 	// text-transform: uppercase;

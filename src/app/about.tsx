@@ -17,7 +17,10 @@ export default function AboutScreen() {
 		<>
 			<ScrollBox scrollIndent>
 				<View>
-					<Text style={textStyles.heading5}>{t('screen.About')}</Text>
+					<Text style={[textStyles.heading5, { marginBottom: 2 }]}>
+						{t('screen.about.App version')}
+					</Text>
+					<Text style={textStyles.p}>1.0.1</Text>
 				</View>
 			</ScrollBox>
 
