@@ -5,7 +5,8 @@ export const TEXT_VARS = {
 	h2: 24,
 	h3: 21,
 	h4: 18,
-	h5: 12
+	h5: 12,
+	sm: 14
 }
 
 export const textStyles = StyleSheet.create((theme, rt) => ({
@@ -28,12 +29,16 @@ export const textStyles = StyleSheet.create((theme, rt) => ({
 		fontSize: TEXT_VARS.h5,
 		lineHeight: TEXT_VARS.h5 * 1.2,
 		letterSpacing: TEXT_VARS.h5 * 0.01,
-		color: theme.colors.mutedSubtleText
+		color: theme.colors.mutedText
 	},
 
 	p: {
 		fontSize: rt.fontScale * 16,
 		lineHeight: rt.fontScale * 16 * 1.35
+	},
+
+	text_sm: {
+		fontSize: 14
 	},
 
 	// text-align: center;

@@ -40,7 +40,12 @@
 			"Your account": "Your account"
 		},
 		"about": {
-			"App version": "App version"
+			"App version": "App version",
+			"App name": "Mogyosh",
+			"Description": "An app for planning tasks, tracking progress, and organizing your day.",
+			"Developer": "Developer",
+			"Developer name": "okwebowski",
+			"Copyright": "© 2026 Mogyosh"
 		}
 	},
 	"buttons": {

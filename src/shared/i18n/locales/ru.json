@@ -40,7 +40,12 @@
 			"Your account": "Ваш аккаунт"
 		},
 		"about": {
-			"App version": "Версия приложения"
+			"App version": "Версия приложения",
+			"App name": "Могёшь",
+			"Description": "Приложение для планирования задач, отслеживания прогресса и организации дня.",
+			"Developer": "Разработчик",
+			"Developer name": "okwebowski",
+			"Copyright": "© 2026 Могёшь"
 		}
 	},
 	"buttons": {
