@@ -46,6 +46,20 @@
 			"Developer": "Developer",
 			"Developer name": "okwebowski",
 			"Copyright": "© 2026 Mogyosh"
+		},
+		"onboarding": {
+			"slide1": {
+				"title": "Slide 1",
+				"description": "description 1"
+			},
+			"slide2": {
+				"title": "Slide 2",
+				"description": "description 2"
+			},
+			"slide3": {
+				"title": "Slide 3",
+				"description": "description 3"
+			}
 		}
 	},
 	"buttons": {
