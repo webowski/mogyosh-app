@@ -31,7 +31,7 @@ export default function OnboardingScreen() {
 const styles = StyleSheet.create((theme) => ({
 	OnboardingScreen: {
 		flex: 1,
-		backgroundColor: theme.colors.primary
+		backgroundColor: theme.colors.surface
 	},
 	OnboardingScreen__button: {
 		marginHorizontal: theme.spacing.lg,
