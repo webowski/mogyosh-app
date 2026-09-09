@@ -75,6 +75,7 @@ function OnboardingPaginationDot({
 
 const styles = StyleSheet.create((theme) => ({
 	OnboardingPagination: {
+		marginVertical: theme.spacing.md,
 		flexDirection: 'row',
 		justifyContent: 'center',
 		gap: theme.spacing.xs
