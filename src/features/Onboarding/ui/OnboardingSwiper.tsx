@@ -29,6 +29,7 @@ export function OnboardingSwiper({ scrollOffset }: OnboardingSwiperProps) {
 			scrollEventThrottle={16}
 			snapToInterval={width}
 			decelerationRate='fast'
+			overScrollMode='never'
 		>
 			{ONBOARDING_SLIDES.map((slide) => (
 				<OnboardingSlide key={slide.id} slide={slide} />
