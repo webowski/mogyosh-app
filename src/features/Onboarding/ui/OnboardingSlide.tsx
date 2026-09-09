@@ -1,4 +1,4 @@
-import { Image, Text, View, useWindowDimensions } from 'react-native'
+import { Text, View, useWindowDimensions } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 import type { OnboardingSlideData } from '../onboarding.constants'
@@ -12,11 +12,11 @@ export function OnboardingSlide({ slide }: OnboardingSlideProps) {
 
 	return (
 		<View style={[styles.OnboardingSlide, { width }]}>
-			<Image
+			{/* <Image
 				source={slide.imageSource}
 				style={styles.OnboardingSlide__image}
 				resizeMode='contain'
-			/>
+			/> */}
 			<Text style={styles.OnboardingSlide__title}>{slide.titleKey}</Text>
 			<Text style={styles.OnboardingSlide__description}>
 				{slide.descriptionKey}
