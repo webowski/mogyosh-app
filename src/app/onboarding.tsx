@@ -7,7 +7,7 @@ import { OnboardingPagination } from '@/features/Onboarding/ui/OnboardingPaginat
 import { OnboardingSwiper } from '@/features/Onboarding/ui/OnboardingSwiper'
 import { STYLE_VARS } from '@/shared/styles/common'
 
-export function OnboardingScreen() {
+export default function OnboardingScreen() {
 	const scrollOffset = useSharedValue(0)
 	const setOnboardingCompleted = useOnboardingStore(
 		(state) => state.setOnboardingCompleted
