@@ -10,6 +10,7 @@ import { useUnistyles } from 'react-native-unistyles'
 import { useAuth } from '@/features/Auth/model/useAuth'
 import Header from '@/features/Header/Header'
 import { useNavStore } from '@/features/Navigation/model/navStore'
+import { useOnboardingStore } from '@/features/Onboarding/model/onboarding.store'
 import { Providers } from '@/features/Providers'
 import { commonStyles } from '@/shared/styles/common'
 import { STATIC_COLORS } from '@/shared/styles/themes'
@@ -29,6 +30,9 @@ export default function RootLayout() {
 	const { theme, rt } = useUnistyles()
 	const { t } = useTranslation()
 	const { isAuthenticated, isLoading, errorKind, refreshSession } = useAuth()
+	const hasSeenOnboarding = useOnboardingStore(
+		(state) => state.hasSeenOnboarding
+	)
 
 	const pathname = usePathname()
 	const updateRoutes = useNavStore((state) => state.updateRoutes)
@@ -97,8 +101,13 @@ export default function RootLayout() {
 					}
 				}}
 			>
+				{/* Onboarding: shown once, before everything else */}
+				<Stack.Protected guard={!hasSeenOnboarding}>
+					<Stack.Screen name='onboarding' options={{ headerShown: false }} />
+				</Stack.Protected>
+
 				{/* Only for logged-in users */}
-				<Stack.Protected guard={isAuthenticated}>
+				<Stack.Protected guard={hasSeenOnboarding && isAuthenticated}>
 					<Stack.Screen name='(tabs)' options={{ headerShown: false }} />
 					<Stack.Screen
 						name='about'
@@ -120,7 +129,7 @@ export default function RootLayout() {
 				</Stack.Protected>
 
 				{/* Only for guests */}
-				<Stack.Protected guard={!isAuthenticated}>
+				<Stack.Protected guard={hasSeenOnboarding && !isAuthenticated}>
 					<Stack.Screen name='(auth)/login' options={{ headerShown: false }} />
 				</Stack.Protected>
 			</Stack>

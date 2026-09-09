@@ -1,4 +1,3 @@
-import { router } from 'expo-router'
 import { Pressable, Text, View } from 'react-native'
 import { useSharedValue } from 'react-native-reanimated'
 import { StyleSheet } from 'react-native-unistyles'
@@ -16,7 +15,6 @@ export function OnboardingScreen() {
 
 	const handleFinish = () => {
 		setOnboardingCompleted()
-		router.replace('/auth')
 	}
 
 	return (
