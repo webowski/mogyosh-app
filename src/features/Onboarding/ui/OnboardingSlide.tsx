@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Text, View, useWindowDimensions } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
@@ -9,6 +10,7 @@ interface OnboardingSlideProps {
 
 export function OnboardingSlide({ slide }: OnboardingSlideProps) {
 	const { width } = useWindowDimensions()
+	const { t } = useTranslation()
 
 	return (
 		<View style={[styles.OnboardingSlide, { width }]}>
@@ -17,9 +19,11 @@ export function OnboardingSlide({ slide }: OnboardingSlideProps) {
 				style={styles.OnboardingSlide__image}
 				resizeMode='contain'
 			/> */}
-			<Text style={styles.OnboardingSlide__title}>{slide.titleKey}</Text>
+			<Text style={styles.OnboardingSlide__title}>
+				{t(`screen.${slide.titleKey}`)}
+			</Text>
 			<Text style={styles.OnboardingSlide__description}>
-				{slide.descriptionKey}
+				{t(`screen.${slide.descriptionKey}`)}
 			</Text>
 		</View>
 	)
