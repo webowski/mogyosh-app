@@ -36,6 +36,10 @@ export const textStyles = StyleSheet.create((theme, rt) => ({
 		fontSize: rt.fontScale * 16,
 		lineHeight: rt.fontScale * 16 * 1.35
 	},
+	p_lg: {
+		fontSize: rt.fontScale * 18,
+		lineHeight: rt.fontScale * 18 * 1.35
+	},
 
 	text_sm: {
 		fontSize: 14

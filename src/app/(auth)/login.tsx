@@ -78,10 +78,14 @@ export default function LoginScreen() {
 
 	return (
 		<View style={styles.Container}>
-			<Text style={textStyles.heading5}>{t('screen.auth.Sign in')}</Text>
-			<Text style={styles.Description}>
-				{t('screen.auth.Sign in description')}
-			</Text>
+			<View>
+				<Text style={[textStyles.heading5, { marginBottom: 8 }]}>
+					{t('screen.auth.Sign in')}
+				</Text>
+				<Text style={[textStyles.p, styles.Description]}>
+					{t('screen.auth.Sign in description')}
+				</Text>
+			</View>
 
 			<TextInput
 				style={styles.Input}
@@ -159,7 +163,7 @@ const styles = StyleSheet.create((theme) => ({
 		backgroundColor: theme.colors.surfaceDeep
 	},
 	Description: {
-		color: theme.colors.mutedText,
+		color: theme.colors.major,
 		marginBottom: 8
 	},
 	Input: {
