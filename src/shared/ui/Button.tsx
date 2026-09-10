@@ -58,6 +58,7 @@ interface VariantConfig {
 	text: TextStyle
 	rippleColor: string
 	noShadow?: boolean
+	boxShadow?: string
 }
 
 const getVariantConfigs = (
@@ -82,7 +83,8 @@ const getVariantConfigs = (
 				gradientColors: theme.colors.gradientSecondary,
 				background: { borderRadius },
 				text: { color: theme.colors.major },
-				rippleColor: theme.colors.ripple
+				rippleColor: theme.colors.ripple,
+				boxShadow: theme.colors.shadeButtonSecondary
 			}
 		],
 		[
@@ -303,6 +305,7 @@ export const Button: React.FC<ButtonProps> = ({
 				containerStyle,
 				disabled && styles.disabled,
 				variantConfig.noShadow && styles.noShadow,
+				variantConfig.boxShadow && { boxShadow: variantConfig.boxShadow },
 				variant === 'bare' && styles.Button_bare,
 				style
 			]}
