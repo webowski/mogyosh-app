@@ -91,7 +91,7 @@ export default function LoginScreen() {
 				style={styles.Input}
 				value={email}
 				onChangeText={setEmail}
-				placeholder={t('screen.auth.Email placeholder')}
+				placeholder={t('screen.auth.Email')}
 				keyboardType='email-address'
 				autoCapitalize='none'
 				autoCorrect={false}
