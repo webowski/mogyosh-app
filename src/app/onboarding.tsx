@@ -38,7 +38,9 @@ export default function OnboardingScreen() {
 			<OnboardingSwiper scrollOffset={scrollOffset} />
 			<OnboardingPagination scrollOffset={scrollOffset} />
 			<Pressable style={styles.OnboardingScreen__button} onPress={handleFinish}>
-				<Text style={styles.OnboardingScreen__buttonText}>Начать</Text>
+				<Text style={styles.OnboardingScreen__buttonText}>
+					{t('screen.onboarding.Start')}
+				</Text>
 			</Pressable>
 		</View>
 	)
