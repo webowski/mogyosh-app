@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { Button, Pressable, Text, View } from 'react-native'
+import { Pressable, Text, View } from 'react-native'
 import { useSharedValue } from 'react-native-reanimated'
 import { StyleSheet } from 'react-native-unistyles'
 
@@ -7,6 +7,7 @@ import { useOnboardingStore } from '@/features/Onboarding/model/onboarding.store
 import { OnboardingPagination } from '@/features/Onboarding/ui/OnboardingPagination'
 import { OnboardingSwiper } from '@/features/Onboarding/ui/OnboardingSwiper'
 import { STYLE_VARS } from '@/shared/styles/common'
+import { Button } from '@/shared/ui/Button'
 
 export default function OnboardingScreen() {
 	const { t } = useTranslation()
@@ -22,7 +23,7 @@ export default function OnboardingScreen() {
 	return (
 		<View style={styles.OnboardingScreen}>
 			<View style={{ alignItems: 'flex-end' }}>
-				<Button title={t('screen.onboarding.Skip')} />
+				<Button variant='bare'>{t('screen.onboarding.Skip')}</Button>
 			</View>
 			<OnboardingSwiper scrollOffset={scrollOffset} />
 			<OnboardingPagination scrollOffset={scrollOffset} />
