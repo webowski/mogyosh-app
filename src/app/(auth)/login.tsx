@@ -100,7 +100,6 @@ export default function LoginScreen() {
 			<Button
 				onPress={handleEmailLogin}
 				variant='default'
-				size='lg'
 				widthMode='full'
 				loading={isSubmitting}
 				disabled={isSubmitting || !email.trim()}
