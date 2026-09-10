@@ -69,7 +69,7 @@ export default function OnboardingScreen() {
 						{t('screen.onboarding.Start')}
 					</Button>
 				) : (
-					<Button variant='default' size='lg' onPress={handleNext}>
+					<Button variant='secondary' size='lg' onPress={handleNext}>
 						{t('screen.onboarding.Next')}
 					</Button>
 				)}
