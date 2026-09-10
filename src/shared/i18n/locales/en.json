@@ -50,6 +50,7 @@
 		"onboarding": {
 			"Skip": "Skip",
 			"Start": "Start",
+			"Next": "Next",
 			"slide1": {
 				"title": "Slide 1",
 				"description": "description 1"

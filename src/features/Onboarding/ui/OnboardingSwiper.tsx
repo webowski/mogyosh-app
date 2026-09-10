@@ -1,3 +1,4 @@
+import { forwardRef, useImperativeHandle, useRef } from 'react'
 import { useWindowDimensions } from 'react-native'
 import Animated, {
 	useAnimatedScrollHandler,
@@ -7,12 +8,26 @@ import Animated, {
 import { ONBOARDING_SLIDES } from '../onboarding.constants'
 import { OnboardingSlide } from './OnboardingSlide'
 
+export interface OnboardingSwiperRef {
+	scrollToIndex: (index: number) => void
+}
+
 interface OnboardingSwiperProps {
 	scrollOffset: SharedValue<number>
 }
 
-export function OnboardingSwiper({ scrollOffset }: OnboardingSwiperProps) {
+export const OnboardingSwiper = forwardRef<
+	OnboardingSwiperRef,
+	OnboardingSwiperProps
+>(({ scrollOffset }, ref) => {
 	const { width } = useWindowDimensions()
+	const scrollViewRef = useRef<Animated.ScrollView>(null)
+
+	useImperativeHandle(ref, () => ({
+		scrollToIndex: (index: number) => {
+			scrollViewRef.current?.scrollTo({ x: index * width, animated: true })
+		}
+	}))
 
 	const scrollHandler = useAnimatedScrollHandler({
 		onScroll: (event) => {
@@ -22,6 +37,7 @@ export function OnboardingSwiper({ scrollOffset }: OnboardingSwiperProps) {
 
 	return (
 		<Animated.ScrollView
+			ref={scrollViewRef}
 			horizontal
 			pagingEnabled
 			showsHorizontalScrollIndicator={false}
@@ -37,4 +53,6 @@ export function OnboardingSwiper({ scrollOffset }: OnboardingSwiperProps) {
 			))}
 		</Animated.ScrollView>
 	)
-}
+})
+
+OnboardingSwiper.displayName = 'OnboardingSwiper'

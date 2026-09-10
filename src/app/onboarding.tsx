@@ -1,11 +1,7 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, Text, useWindowDimensions, View } from 'react-native'
-import {
-	useAnimatedReaction,
-	useSharedValue,
-	withTiming
-} from 'react-native-reanimated'
+import { useWindowDimensions, View } from 'react-native'
+import { useAnimatedReaction, useSharedValue } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { StyleSheet } from 'react-native-unistyles'
 import { scheduleOnRN } from 'react-native-worklets'
@@ -13,7 +9,10 @@ import { scheduleOnRN } from 'react-native-worklets'
 import { useOnboardingStore } from '@/features/Onboarding/model/onboarding.store'
 import { ONBOARDING_SLIDES } from '@/features/Onboarding/onboarding.constants'
 import { OnboardingPagination } from '@/features/Onboarding/ui/OnboardingPagination'
-import { OnboardingSwiper } from '@/features/Onboarding/ui/OnboardingSwiper'
+import {
+	OnboardingSwiper,
+	type OnboardingSwiperRef
+} from '@/features/Onboarding/ui/OnboardingSwiper'
 import { STYLE_VARS } from '@/shared/styles/common'
 import { Button } from '@/shared/ui/Button'
 
@@ -38,10 +37,11 @@ export default function OnboardingScreen() {
 		}
 	)
 
+	const swiperRef = useRef<OnboardingSwiperRef>(null)
+
 	const handleNext = () => {
-		scrollOffset.value = withTiming(
-			(Math.round(scrollOffset.value / width) + 1) * width
-		)
+		const nextIndex = Math.round(scrollOffset.value / width) + 1
+		swiperRef.current?.scrollToIndex(nextIndex)
 	}
 
 	const handleFinish = () => {
@@ -61,18 +61,19 @@ export default function OnboardingScreen() {
 			<View style={styles.OnboardingScreen__topSection}>
 				<Button variant='bare'>{t('screen.onboarding.Skip')}</Button>
 			</View>
-			<OnboardingSwiper scrollOffset={scrollOffset} />
+			<OnboardingSwiper ref={swiperRef} scrollOffset={scrollOffset} />
 			<OnboardingPagination scrollOffset={scrollOffset} />
-			<Pressable
-				style={styles.OnboardingScreen__button}
-				onPress={isLastSlide ? handleFinish : handleNext}
-			>
-				<Text style={styles.OnboardingScreen__buttonText}>
-					{isLastSlide
-						? t('screen.onboarding.Start')
-						: t('screen.onboarding.Next')}
-				</Text>
-			</Pressable>
+			<View style={styles.OnboardingScreen__bottomSection}>
+				{isLastSlide ? (
+					<Button variant='default' size='lg' onPress={handleFinish}>
+						{t('screen.onboarding.Start')}
+					</Button>
+				) : (
+					<Button variant='default' size='lg' onPress={handleNext}>
+						{t('screen.onboarding.Next')}
+					</Button>
+				)}
+			</View>
 		</View>
 	)
 }
@@ -86,17 +87,8 @@ const styles = StyleSheet.create((theme) => ({
 		alignItems: 'flex-end',
 		marginHorizontal: theme.spacing.lg
 	},
-	OnboardingScreen__button: {
+	OnboardingScreen__bottomSection: {
 		marginHorizontal: theme.spacing.lg,
-		marginBottom: theme.spacing.md,
-		paddingVertical: theme.spacing.md,
-		borderRadius: STYLE_VARS.radius_sm,
-		backgroundColor: theme.colors.primary,
-		alignItems: 'center'
-	},
-	OnboardingScreen__buttonText: {
-		color: theme.colors.inverse,
-		fontSize: 16,
-		fontWeight: '700' as const
+		marginBottom: theme.spacing.md
 	}
 }))
