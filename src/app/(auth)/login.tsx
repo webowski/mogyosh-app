@@ -79,7 +79,7 @@ export default function LoginScreen() {
 	return (
 		<View style={styles.Container}>
 			<View>
-				<Text style={[textStyles.heading5, { marginBottom: 8 }]}>
+				<Text style={[textStyles.heading1, { marginBottom: 8 }]}>
 					{t('screen.auth.Sign in')}
 				</Text>
 				<Text style={[textStyles.p, styles.Description]}>
