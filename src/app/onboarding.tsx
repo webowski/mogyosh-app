@@ -1,10 +1,17 @@
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, Text, View } from 'react-native'
-import { useSharedValue } from 'react-native-reanimated'
+import { Pressable, Text, useWindowDimensions, View } from 'react-native'
+import {
+	useAnimatedReaction,
+	useSharedValue,
+	withTiming
+} from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { StyleSheet } from 'react-native-unistyles'
+import { scheduleOnRN } from 'react-native-worklets'
 
 import { useOnboardingStore } from '@/features/Onboarding/model/onboarding.store'
+import { ONBOARDING_SLIDES } from '@/features/Onboarding/onboarding.constants'
 import { OnboardingPagination } from '@/features/Onboarding/ui/OnboardingPagination'
 import { OnboardingSwiper } from '@/features/Onboarding/ui/OnboardingSwiper'
 import { STYLE_VARS } from '@/shared/styles/common'
@@ -17,6 +24,25 @@ export default function OnboardingScreen() {
 	const setOnboardingCompleted = useOnboardingStore(
 		(state) => state.setOnboardingCompleted
 	)
+
+	const { width } = useWindowDimensions()
+	const lastSlideIndex = ONBOARDING_SLIDES.length - 1
+	const [isLastSlide, setIsLastSlide] = useState(false)
+
+	useAnimatedReaction(
+		() => Math.round(scrollOffset.value / width),
+		(currentIndex, previousIndex) => {
+			if (currentIndex !== previousIndex) {
+				scheduleOnRN(setIsLastSlide, currentIndex >= lastSlideIndex)
+			}
+		}
+	)
+
+	const handleNext = () => {
+		scrollOffset.value = withTiming(
+			(Math.round(scrollOffset.value / width) + 1) * width
+		)
+	}
 
 	const handleFinish = () => {
 		setOnboardingCompleted()
@@ -37,9 +63,14 @@ export default function OnboardingScreen() {
 			</View>
 			<OnboardingSwiper scrollOffset={scrollOffset} />
 			<OnboardingPagination scrollOffset={scrollOffset} />
-			<Pressable style={styles.OnboardingScreen__button} onPress={handleFinish}>
+			<Pressable
+				style={styles.OnboardingScreen__button}
+				onPress={isLastSlide ? handleFinish : handleNext}
+			>
 				<Text style={styles.OnboardingScreen__buttonText}>
-					{t('screen.onboarding.Start')}
+					{isLastSlide
+						? t('screen.onboarding.Start')
+						: t('screen.onboarding.Next')}
 				</Text>
 			</Pressable>
 		</View>
