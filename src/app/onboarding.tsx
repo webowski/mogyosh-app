@@ -89,6 +89,6 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	OnboardingScreen__bottomSection: {
 		marginHorizontal: theme.spacing.lg,
-		marginBottom: theme.spacing.md
+		marginBottom: theme.spacing.lg
 	}
 }))
