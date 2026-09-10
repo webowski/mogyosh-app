@@ -6,6 +6,7 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 import { useAuth } from '@/features/Auth/model/useAuth'
 import SVGIconGoogle from '@/shared/images/icons/google.svg'
 import SVGIconYandex from '@/shared/images/icons/yandex.svg'
+import { STYLE_VARS } from '@/shared/styles/common'
 import { textStyles } from '@/shared/styles/text'
 import { Button } from '@/shared/ui/Button'
 
@@ -168,10 +169,10 @@ const styles = StyleSheet.create((theme) => ({
 	Input: {
 		borderWidth: 1,
 		borderColor: theme.colors.border,
-		borderRadius: 12,
+		borderRadius: STYLE_VARS.radius_lg,
 		paddingHorizontal: 16,
 		paddingVertical: 14,
-		fontSize: 16,
+		fontSize: 18,
 		color: theme.colors.major,
 		backgroundColor: theme.colors.surface
 	},
