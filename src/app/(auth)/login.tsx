@@ -100,6 +100,7 @@ export default function LoginScreen() {
 			<Button
 				onPress={handleEmailLogin}
 				variant='default'
+				size='lg'
 				widthMode='full'
 				loading={isSubmitting}
 				disabled={isSubmitting || !email.trim()}
@@ -123,7 +124,7 @@ export default function LoginScreen() {
 				style={{ gap: 10 }}
 			>
 				<SVGIconYandex width={28} height={28} fill={theme.colors.major} />
-				<Text style={{ fontWeight: '600', fontSize: 16 }}>
+				<Text style={{ fontWeight: '600', fontSize: 18 }}>
 					{t('screen.auth.Login via Yandex')}
 				</Text>
 			</Button>
@@ -138,7 +139,7 @@ export default function LoginScreen() {
 				style={{ gap: 10 }}
 			>
 				<SVGIconGoogle width={28} height={28} fill={theme.colors.major} />
-				<Text style={{ fontWeight: '600', fontSize: 16 }}>
+				<Text style={{ fontWeight: '600', fontSize: 18 }}>
 					{t('screen.auth.Login via Google')}
 				</Text>
 			</Button>

@@ -182,7 +182,7 @@ const SIZE_CONFIGS: Record<Size, SizeConfig> = {
 		height: 52,
 		paddingHorizontal: 32,
 		borderRadius: 10,
-		fontSize: 19,
+		fontSize: 18,
 		fontWeight: '600'
 	}
 }
