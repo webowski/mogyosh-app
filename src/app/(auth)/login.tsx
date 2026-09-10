@@ -67,7 +67,6 @@ export default function LoginScreen() {
 				<Button
 					onPress={() => setMagicLinkSent(false)}
 					variant='secondary'
-					size='lg'
 					widthMode='full'
 				>
 					{t('screen.auth.Back')}
