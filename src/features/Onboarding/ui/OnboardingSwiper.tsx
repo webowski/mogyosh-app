@@ -28,6 +28,7 @@ export function OnboardingSwiper({ scrollOffset }: OnboardingSwiperProps) {
 			onScroll={scrollHandler}
 			scrollEventThrottle={16}
 			snapToInterval={width}
+			disableIntervalMomentum
 			decelerationRate='fast'
 			overScrollMode='never'
 		>
