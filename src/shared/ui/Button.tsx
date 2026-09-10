@@ -54,6 +54,7 @@ const RIPPLE_SIZE = 120
 interface VariantConfig {
 	background: ViewStyle
 	useGradient?: boolean
+	gradientColors?: string[]
 	text: TextStyle
 	rippleColor: string
 	noShadow?: boolean
@@ -77,15 +78,11 @@ const getVariantConfigs = (
 		[
 			'secondary',
 			{
-				background: {
-					borderRadius,
-					backgroundColor: theme.colors.surface,
-					borderWidth: 1,
-					borderColor: theme.colors.primary
-				},
+				useGradient: true,
+				gradientColors: theme.colors.gradientSecondary,
+				background: { borderRadius },
 				text: { color: theme.colors.major },
-				rippleColor: theme.colors.ripple,
-				noShadow: true
+				rippleColor: theme.colors.ripple
 			}
 		],
 		[
@@ -313,7 +310,7 @@ export const Button: React.FC<ButtonProps> = ({
 			{/* Layer 1: background */}
 			{variantConfig.useGradient ? (
 				<LinearGradient
-					colors={theme.colors.gradient}
+					colors={variantConfig.gradientColors ?? theme.colors.gradient}
 					start={{ x: 0, y: 0 }}
 					end={{ x: 1, y: 1 }}
 					style={[StyleSheet.absoluteFill, { borderRadius }]}

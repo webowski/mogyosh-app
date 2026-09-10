@@ -117,6 +117,11 @@ export const lightTheme = {
 			'hsl(225, 100%, 75%)',
 			'hsl(225, 100%, 70%)',
 			'hsl(225, 60%, 55%)'
+		],
+		gradientSecondary: [
+			'hsl(225, 18%, 94%)',
+			'hsl(225, 15%, 90%)',
+			'hsl(225, 12%, 86%)'
 		]
 	},
 	spacing: {
@@ -213,6 +218,11 @@ export const darkTheme = {
 			'hsl(225, 100%, 68%)',
 			'hsl(225, 100%, 62%)',
 			'hsl(225, 90%, 52%)'
+		],
+		gradientSecondary: [
+			'hsl(220, 8%, 22%)',
+			'hsl(220, 7%, 18%)',
+			'hsl(220, 6%, 15%)'
 		]
 	},
 	fontSize: lightTheme.fontSize,
