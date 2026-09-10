@@ -176,14 +176,14 @@ const SIZE_CONFIGS: Record<Size, SizeConfig> = {
 		height: 44,
 		paddingHorizontal: 20,
 		borderRadius: 5,
-		fontSize: 15,
+		fontSize: 16,
 		fontWeight: '600'
 	},
 	lg: {
 		height: 52,
 		paddingHorizontal: 32,
 		borderRadius: 10,
-		fontSize: 16,
+		fontSize: 19,
 		fontWeight: '600'
 	}
 }
