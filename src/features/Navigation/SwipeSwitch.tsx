@@ -278,9 +278,18 @@ const SwipeSwitch: React.FC<SwipeSwitchProps> = ({
 			}
 
 			if (gestureAxis.value === 1) {
-				posX.value = colIndex.value * SLIDE_WIDTH - e.translationX
+				// Clamp so a single swipe can never move past one slide, no matter how long the drag is
+				const clampedTranslationX = Math.max(
+					-SLIDE_WIDTH,
+					Math.min(SLIDE_WIDTH, e.translationX)
+				)
+				posX.value = colIndex.value * SLIDE_WIDTH - clampedTranslationX
 			} else if (gestureAxis.value === 2) {
-				posY.value = rowIndex.value * SLIDE_HEIGHT - e.translationY
+				const clampedTranslationY = Math.max(
+					-SLIDE_HEIGHT,
+					Math.min(SLIDE_HEIGHT, e.translationY)
+				)
+				posY.value = rowIndex.value * SLIDE_HEIGHT - clampedTranslationY
 			}
 		})
 		.onEnd((e) => {
