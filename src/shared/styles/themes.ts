@@ -111,7 +111,7 @@ export const lightTheme = {
 		shadeToggleThumb: '0px 2px 4px rgba(0, 0, 0, 0.18)',
 
 		shadeButton: '0px 5px 10px rgba(26, 35, 126, 0.16)',
-		shadeButtonSecondary: '0px 4px 9px rgba(0, 0, 0, 0.08)',
+		shadeButtonSecondary: '0px 4px 9px rgba(0, 0, 0, 0.06)',
 
 		shadeToolbar: '0px 0px 10px rgba(0, 0, 0, 0.18)',
 		shadeButtonIndicator: '0 0px 0px 3px hsla(225, 74%, 40%, .09)',
@@ -122,9 +122,9 @@ export const lightTheme = {
 			'hsl(225, 60%, 55%)'
 		],
 		gradientSecondary: [
-			'hsl(225, 18%, 94%)',
-			'hsl(225, 15%, 90%)',
-			'hsl(225, 12%, 86%)'
+			'hsl(220, 20%, 94%)',
+			'hsl(222, 16%, 90%)',
+			'hsl(225, 14%, 84%)'
 		]
 	},
 	spacing: {
@@ -224,9 +224,9 @@ export const darkTheme = {
 			'hsl(225, 90%, 52%)'
 		],
 		gradientSecondary: [
-			'hsl(220, 8%, 22%)',
-			'hsl(220, 7%, 18%)',
-			'hsl(220, 6%, 15%)'
+			'hsl(220, 12%, 26%)',
+			'hsl(220, 10%, 20%)',
+			'hsl(220, 9%, 15%)'
 		]
 	},
 	fontSize: lightTheme.fontSize,
