@@ -54,7 +54,7 @@ const RIPPLE_SIZE = 120
 interface VariantConfig {
 	background: ViewStyle
 	useGradient?: boolean
-	gradientColors?: string[]
+	gradientColors?: [string, string, ...string[]]
 	text: TextStyle
 	rippleColor: string
 	noShadow?: boolean
