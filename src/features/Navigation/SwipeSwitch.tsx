@@ -44,6 +44,20 @@ function wrapToPeriod(value: number, period: number): number {
 	return mod > period / 2 ? mod - period : mod
 }
 
+/**
+ * Returns the point on the infinite axis nearest to `current` that is
+ * equivalent (mod `period`) to `target`. Used to settle back to a canonical
+ * index position without animating across accumulated drift.
+ */
+function nearestEquivalent(
+	current: number,
+	target: number,
+	period: number
+): number {
+	'worklet'
+	return current + wrapToPeriod(target - current, period)
+}
+
 // ─── SlideItem ────────────────────────────────────────────────────────────────
 
 interface SlideItemProps {
@@ -248,8 +262,14 @@ const SwipeSwitch: React.FC<SwipeSwitchProps> = ({
 
 				rowIndex.value = targetRow
 				colIndex.value = targetCol
-				posX.value = withTiming(targetCol * SLIDE_WIDTH, { duration: 200 })
-				posY.value = withTiming(targetRow * SLIDE_HEIGHT, { duration: 200 })
+				posX.value = withTiming(
+					nearestEquivalent(posX.value, targetCol * SLIDE_WIDTH, TOTAL_W),
+					{ duration: 200 }
+				)
+				posY.value = withTiming(
+					nearestEquivalent(posY.value, targetRow * SLIDE_HEIGHT, TOTAL_H),
+					{ duration: 200 }
+				)
 
 				onIndexChange?.(targetRow, targetCol)
 			}
@@ -319,9 +339,10 @@ const SwipeSwitch: React.FC<SwipeSwitchProps> = ({
 
 				colIndex.value = newCol
 				posX.value = withTiming(targetPosX, { duration: 200 })
-				posY.value = withTiming(rowIndex.value * SLIDE_HEIGHT, {
-					duration: 200
-				})
+				posY.value = withTiming(
+					nearestEquivalent(posY.value, rowIndex.value * SLIDE_HEIGHT, TOTAL_H),
+					{ duration: 200 }
+				)
 
 				// // // Call onIndexChange callback on JS thread
 				// if (onIndexChange) {
@@ -361,7 +382,10 @@ const SwipeSwitch: React.FC<SwipeSwitchProps> = ({
 
 				rowIndex.value = newRow
 				posY.value = withTiming(targetPosY, { duration: 200 })
-				posX.value = withTiming(colIndex.value * SLIDE_WIDTH, { duration: 200 })
+				posX.value = withTiming(
+					nearestEquivalent(posX.value, colIndex.value * SLIDE_WIDTH, TOTAL_W),
+					{ duration: 200 }
+				)
 
 				// // // Call onIndexChange callback on JS thread
 				// if (onIndexChange) {
@@ -375,10 +399,14 @@ const SwipeSwitch: React.FC<SwipeSwitchProps> = ({
 				}
 			} else {
 				// No axis locked — snap back
-				posX.value = withTiming(colIndex.value * SLIDE_WIDTH, { duration: 200 })
-				posY.value = withTiming(rowIndex.value * SLIDE_HEIGHT, {
-					duration: 200
-				})
+				posX.value = withTiming(
+					nearestEquivalent(posX.value, colIndex.value * SLIDE_WIDTH, TOTAL_W),
+					{ duration: 200 }
+				)
+				posY.value = withTiming(
+					nearestEquivalent(posY.value, rowIndex.value * SLIDE_HEIGHT, TOTAL_H),
+					{ duration: 200 }
+				)
 			}
 
 			gestureAxis.value = 0
