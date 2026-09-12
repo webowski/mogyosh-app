@@ -141,14 +141,15 @@ export function useBlockLogic({
 			setChecked(newChecked)
 
 			if (isJournaled) {
-				const isCounterUncheck = blockType === 'counter' && !newChecked
+				const shouldClearDay = blockType === 'counter' && !newChecked
+				// const shouldClearDay = !newChecked
 
 				updateBlockState.mutate({
 					blockId: data.id,
 					blockType,
 					taskId: data.task_id,
 					date: selectedDate,
-					state: isCounterUncheck ? null : buildCheckboxStatePayload(newChecked)
+					state: shouldClearDay ? null : buildCheckboxStatePayload(newChecked)
 				})
 			} else {
 				updateBlockPersistentState.mutate({
