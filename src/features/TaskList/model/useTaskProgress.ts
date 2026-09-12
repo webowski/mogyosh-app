@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { blockAPI } from '@/features/Block'
-import { isBlockChecked } from '@/features/BlockState/model/blockState.utils'
+import { isBlockCompleted } from '@/features/BlockState/model/blockState.utils'
 import { BlockEntity } from '@/shared/domain/block'
 import { TaskId } from '@/shared/domain/ids'
 import { useCalendarStore } from '@/shared/model/calendar.store'
@@ -48,7 +48,7 @@ export const calculateProgress = (blocks: BlockEntity[], date: Date) => {
 	}
 
 	const completedCount = blocks.filter((block) =>
-		isBlockChecked(block, date)
+		isBlockCompleted(block, date)
 	).length
 	const totalCount = blocks.length
 	const progress = completedCount / totalCount

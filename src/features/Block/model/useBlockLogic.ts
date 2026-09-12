@@ -8,7 +8,7 @@ import {
 	withTiming
 } from 'react-native-reanimated'
 
-import { isBlockChecked } from '@/features/BlockState/model/blockState.utils'
+import { isBlockCompleted } from '@/features/BlockState/model/blockState.utils'
 import type {
 	BlockInputRefsMap,
 	BlockProps,
@@ -93,11 +93,11 @@ export function useBlockLogic({
 
 	const isJournaled = data.settings?.journaled ?? false
 
-	const [checked, setChecked] = useState(isBlockChecked(data, selectedDate))
+	const [checked, setChecked] = useState(isBlockCompleted(data, selectedDate))
 
 	useEffect(
 		() => {
-			const nextChecked = isBlockChecked(data, selectedDate)
+			const nextChecked = isBlockCompleted(data, selectedDate)
 			// console.log('[DEBUG resync effect]', {
 			// 	blockId: data.id,
 			// 	nextChecked,

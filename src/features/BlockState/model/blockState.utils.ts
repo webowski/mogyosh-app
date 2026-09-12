@@ -58,7 +58,7 @@ export const isBlockCompletedOnDate = (
  * Non-journaled ("сквозной"): reads the single persistent row (month = NULL), ignores the date.
  * Journaled ("несквозной"): reads the per-day bit from the matching month's bitmap.
  */
-export const isBlockChecked = (
+export const isBlockCompleted = (
 	block: Pick<BlockEntity, 'type' | 'states' | 'settings'>,
 	date: Date
 ): boolean => {
