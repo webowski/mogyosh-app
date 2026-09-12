@@ -124,9 +124,9 @@ export const useBlockStore = create<BlockStore>()(
 
 						// Keep optimistic items not yet confirmed by server
 						const optimisticItems = current.filter(
-							(s) =>
-								s.id.toString().startsWith('optimistic-') &&
-								!merged.some((m) => m.id === s.id)
+							(item) =>
+								item.id.toString().startsWith('optimistic-') &&
+								!merged.some((mergedItem) => mergedItem.id === item.id)
 						)
 
 						return {
