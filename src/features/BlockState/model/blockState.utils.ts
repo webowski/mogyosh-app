@@ -5,6 +5,7 @@ import {
 	getBlockDayState
 } from '../repository/blockState.api'
 import { CounterState } from './codecs/counter.codec'
+import { TimerState } from './codecs/timer.codec'
 import { getMonthStart, parseByteaHex } from './dayLayout'
 
 /**
@@ -33,6 +34,15 @@ export const isBlockCompletedOnDate = (
 			date.getDate()
 		)
 		return state?.completed ?? false
+	}
+
+	if (block.type === 'timer') {
+		const state = getBlockDayState<TimerState>(
+			'timer',
+			monthBytes,
+			date.getDate()
+		)
+		return state !== null
 	}
 
 	const completed = getBlockDayState<boolean>(
@@ -64,6 +74,14 @@ export const isBlockChecked = (
 				persistentState.state
 			)
 			return state?.completed ?? false
+		}
+
+		if (block.type === 'timer') {
+			const state = decodeBlockStatePayload<TimerState>(
+				'timer',
+				persistentState.state
+			)
+			return state !== null
 		}
 
 		return (

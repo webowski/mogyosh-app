@@ -2,6 +2,7 @@ import { generateKeyBetween } from 'fractional-indexing'
 
 import {
 	deleteBlockDayState,
+	deleteBlockPersistentState,
 	setBlockDayState,
 	setBlockPersistentState
 } from '@/features/BlockState/repository/blockState.api'
@@ -186,10 +187,35 @@ const clearBlockDayState = async ({
 	return makeBlockObject(data)
 }
 
+type ClearBlockPersistentStateParams = {
+	blockId: BlockId
+}
+
+/**
+ * Clears a non-journaled block's persistent state entirely (month = NULL row
+ * payload -> empty), used when resetting a timer instead of leaving a stale
+ * duration value behind
+ */
+const clearBlockPersistentState = async ({
+	blockId
+}: ClearBlockPersistentStateParams): Promise<BlockEntity> => {
+	await deleteBlockPersistentState({ blockId })
+
+	const { data, error } = await supabaseClient
+		.from('blocks')
+		.select(SUBITEMS_SELECT)
+		.eq('id', blockId)
+		.single()
+
+	if (error) throw error
+	return makeBlockObject(data)
+}
+
 export const blockAPI = {
 	getBlocks,
 	setBlockCompleted,
 	clearBlockDayState,
+	clearBlockPersistentState,
 	createBlock,
 	deleteBlock,
 	setBlockPersistentCompleted,

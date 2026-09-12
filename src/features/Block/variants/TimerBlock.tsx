@@ -34,6 +34,8 @@ export default function TimerBlock({
 		checkedStyle,
 		handleChangeText,
 		handlePressCheckbox,
+		handleTimerFinish,
+		handleTimerReset,
 		handleFocus,
 		handleAddAfter
 	} = useBlockLogic({
@@ -68,7 +70,10 @@ export default function TimerBlock({
 					const remaining = getRemaining(data.id, durationMs)
 					setDisplayMs(remaining)
 					// Auto-stop when finished
-					if (remaining === 0) pause(data.id)
+					if (remaining === 0) {
+						pause(data.id)
+						handleTimerFinish()
+					}
 				}, 500)
 			} else {
 				if (intervalRef.current) clearInterval(intervalRef.current)
@@ -85,6 +90,7 @@ export default function TimerBlock({
 	const handleReset = () => {
 		circleRef.current?.snapTo(0)
 		reset(data.id, durationMs)
+		handleTimerReset()
 	}
 
 	const handleToggle = () => {

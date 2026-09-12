@@ -124,55 +124,69 @@ export function useBlockLogic({
 		})
 	}))
 
-	const buildCheckboxStatePayload = (checked: boolean): unknown =>
-		blockType === 'counter'
-			? { value: data.settings?.value ?? 0, completed: checked }
-			: checked
+	const buildCheckboxStatePayload = (checked: boolean): unknown => {
+		if (blockType === 'counter') {
+			return { value: data.settings?.value ?? 0, completed: checked }
+		}
+		if (blockType === 'timer') {
+			return { durationSeconds: (data.settings?.duration ?? 0) / 1000 }
+		}
+		return checked
+	}
 
-	const handlePressCheckbox = useCallback(
-		() => {
-			const newChecked = !checked
-			// console.log('[DEBUG press]', {
-			// 	blockId: data.id,
-			// 	checkedBefore: checked,
-			// 	newChecked,
-			// 	time: Date.now()
-			// })
+	const writeCheckedState = useCallback(
+		(newChecked: boolean) => {
 			setChecked(newChecked)
 
-			if (isJournaled) {
-				const shouldClearDay = blockType === 'counter' && !newChecked
-				// const shouldClearDay = !newChecked
+			const shouldClearState =
+				!newChecked && (blockType === 'counter' || blockType === 'timer')
 
+			if (isJournaled) {
 				updateBlockState.mutate({
 					blockId: data.id,
 					blockType,
 					taskId: data.task_id,
 					date: selectedDate,
-					state: shouldClearDay ? null : buildCheckboxStatePayload(newChecked)
+					state: shouldClearState ? null : buildCheckboxStatePayload(newChecked)
 				})
 			} else {
 				updateBlockPersistentState.mutate({
 					blockId: data.id,
 					taskId: data.task_id,
 					blockType,
-					state: buildCheckboxStatePayload(newChecked)
+					state: shouldClearState ? null : buildCheckboxStatePayload(newChecked)
 				})
 			}
-
-			onCheckToggle?.(newChecked)
 		},
 		// eslint-disable-next-line
 		[
-			checked,
 			isJournaled,
 			selectedDate,
 			data.id,
 			data.task_id,
 			data.settings?.value,
+			data.settings?.duration,
 			blockType
 		]
 	)
+
+	const handlePressCheckbox = useCallback(() => {
+		const newChecked = !checked
+		writeCheckedState(newChecked)
+		onCheckToggle?.(newChecked)
+	}, [checked, writeCheckedState, onCheckToggle])
+
+	const handleTimerFinish = useCallback(() => {
+		if (checked) return
+		writeCheckedState(true)
+		onCheckToggle?.(true)
+	}, [checked, writeCheckedState, onCheckToggle])
+
+	const handleTimerReset = useCallback(() => {
+		if (!checked) return
+		writeCheckedState(false)
+		onCheckToggle?.(false)
+	}, [checked, writeCheckedState, onCheckToggle])
 
 	const handleFocus = () => {
 		setFocusedBlockId(data.id)
@@ -285,6 +299,8 @@ export function useBlockLogic({
 		checkedStyle,
 		handleChangeText,
 		handlePressCheckbox,
+		handleTimerFinish,
+		handleTimerReset,
 		handleFocus,
 		handleAddAfter
 	}

@@ -124,3 +124,16 @@ export const deleteBlockDayState = async ({
 
 	if (error) throw error
 }
+
+export const deleteBlockPersistentState = async ({
+	blockId
+}: {
+	blockId: BlockId
+}): Promise<void> => {
+	const { error } = await supabaseClient.rpc('set_block_persistent_state', {
+		p_block_id: blockId,
+		p_state_payload_hex: ''
+	})
+
+	if (error) throw error
+}

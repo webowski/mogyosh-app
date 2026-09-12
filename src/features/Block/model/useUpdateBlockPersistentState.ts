@@ -11,7 +11,7 @@ type BlockPersistentStateMutationParams = {
 	blockId: BlockId
 	taskId: TaskId
 	blockType: BlockType
-	state: unknown
+	state: unknown | null
 }
 
 /**
@@ -29,11 +29,20 @@ const applyOptimisticPersistentState = (
 	const hasPersistentRow = existingStates.some((item) => item.month === null)
 
 	const codec = getLatestCodec(blockType)
-	const encodedState = codec.encode(state)
-	const persistentPayload = new Uint8Array(1 + encodedState.length)
-	persistentPayload[0] = codec.version
-	persistentPayload.set(encodedState, 1)
-	const persistentPayloadHex = bytesToHex(persistentPayload)
+	// const encodedState = codec.encode(state)
+	// const persistentPayload = new Uint8Array(1 + encodedState.length)
+	// persistentPayload[0] = codec.version
+	// persistentPayload.set(encodedState, 1)
+	const persistentPayloadHex =
+		state === null
+			? ''
+			: (() => {
+					const encodedState = codec.encode(state)
+					const persistentPayload = new Uint8Array(1 + encodedState.length)
+					persistentPayload[0] = codec.version
+					persistentPayload.set(encodedState, 1)
+					return bytesToHex(persistentPayload)
+				})()
 
 	if (hasPersistentRow) {
 		return existingStates.map((item) =>
@@ -65,6 +74,9 @@ export const useUpdateBlockPersistentState = () => {
 			blockType,
 			state
 		}: BlockPersistentStateMutationParams) => {
+			if (state === null) {
+				return await blockAPI.clearBlockPersistentState({ blockId })
+			}
 			return await blockAPI.setBlockPersistentCompleted({
 				blockId,
 				blockType,
