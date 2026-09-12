@@ -53,8 +53,16 @@ export default function AccountScreen() {
 						widthMode='full'
 						loading={isLoggingOut}
 						disabled={isLoggingOut}
+						style={{ gap: 10 }}
 					>
-						{t('screen.auth.Log out')}
+						<Text style={{ fontWeight: '600', fontSize: 18 }}>
+							{t('screen.auth.Log out')}
+						</Text>
+						<MaterialDesignIcons
+							name='logout'
+							size={26}
+							color={theme.colors.major}
+						/>
 					</Button>
 				</View>
 			</ScrollBox>
