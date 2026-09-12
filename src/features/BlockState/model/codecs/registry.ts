@@ -1,6 +1,6 @@
 import { BlockType } from '@/shared/domain/block'
-import { bulletedCodecV1 } from './bulleted.codec'
 import { counterCodecV1 } from './counter.codec'
+import { textCodecV1 } from './text.codec'
 import { timerCodecV1 } from './timer.codec'
 import type { BlockStateCodec } from './types'
 
@@ -12,7 +12,18 @@ const CODEC_REGISTRY = new Map<
 	BlockType,
 	Map<number, BlockStateCodec<unknown>>
 >([
-	['ul', new Map([[1, bulletedCodecV1 as BlockStateCodec<unknown>]])],
+	['p', new Map([[1, textCodecV1 as BlockStateCodec<unknown>]])],
+	['h1', new Map([[1, textCodecV1 as BlockStateCodec<unknown>]])],
+	['h2', new Map([[1, textCodecV1 as BlockStateCodec<unknown>]])],
+	['h3', new Map([[1, textCodecV1 as BlockStateCodec<unknown>]])],
+	['h4', new Map([[1, textCodecV1 as BlockStateCodec<unknown>]])],
+	['ul', new Map([[1, textCodecV1 as BlockStateCodec<unknown>]])],
+	['ol', new Map([[1, textCodecV1 as BlockStateCodec<unknown>]])],
+	['expandable', new Map([[1, textCodecV1 as BlockStateCodec<unknown>]])],
+	['expandable-h1', new Map([[1, textCodecV1 as BlockStateCodec<unknown>]])],
+	['expandable-h2', new Map([[1, textCodecV1 as BlockStateCodec<unknown>]])],
+	['expandable-h3', new Map([[1, textCodecV1 as BlockStateCodec<unknown>]])],
+	['expandable-h4', new Map([[1, textCodecV1 as BlockStateCodec<unknown>]])],
 	['counter', new Map([[1, counterCodecV1 as BlockStateCodec<unknown>]])],
 	['timer', new Map([[1, timerCodecV1 as BlockStateCodec<unknown>]])]
 ])
