@@ -27,9 +27,10 @@ const applyOptimisticDayState = (
 	const existingStates = states ?? []
 	const now = new Date().toISOString()
 	const monthStart = getMonthStart(date)
-	const existingMonthState = existingStates.find(
-		(item) => item.month === monthStart
-	)
+	const existingMonthState = existingStates.find((item) => {
+		if (item.month == null) return false
+		return String(item.month).slice(0, 10) === monthStart
+	})
 	const monthBytes = existingMonthState
 		? parseByteaHex(existingMonthState.state)
 		: new Uint8Array(0)
@@ -54,7 +55,7 @@ const applyOptimisticDayState = (
 
 	if (existingMonthState) {
 		return existingStates.map((item) =>
-			item.month === monthStart
+			item.month != null && String(item.month).slice(0, 10) === monthStart
 				? { ...item, state: updatedMonthStateHex, updated_at: now }
 				: item
 		)

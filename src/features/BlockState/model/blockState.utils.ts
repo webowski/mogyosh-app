@@ -18,9 +18,10 @@ export const isBlockCompletedOnDate = (
 	if (!states || states.length === 0) return false
 
 	const monthStart = getMonthStart(date)
-	const monthState = states.find(
-		(blockState) => blockState.month === monthStart
-	)
+	const monthState = states.find((blockState) => {
+		if (blockState.month == null) return false
+		return String(blockState.month).slice(0, 10) === monthStart
+	})
 	if (!monthState) return false
 
 	const monthBytes = parseByteaHex(monthState.state)
