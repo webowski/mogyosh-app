@@ -36,7 +36,7 @@ export function BlockSettingsForm({ block, onChange }: BlockSettingsFormProps) {
 		const categories = Array.from(new Set(UNITS.map((unit) => unit.category)))
 		return categories.map((category) => ({
 			id: category,
-			title: t(`units.category.${category}` as UnitCategory),
+			title: t(`units.category.${category}`),
 			subactions: UNITS.filter((unit) => unit.category === category).map(
 				(unit) => ({
 					id: unit.id,
