@@ -17,6 +17,22 @@ export const getStatValueFromDayState = (
 	)
 	if (decoded == null) return null
 
-	const value = decoded.value
+	const value = getStatFieldValue(blockType, decoded)
 	return typeof value === 'number' ? value : null
+}
+
+const getStatFieldValue = (
+	blockType: BlockType,
+	decoded: Record<string, unknown>
+): unknown => {
+	switch (blockType) {
+		case 'counter':
+			return decoded.value
+		case 'stopwatch':
+			return decoded.durationMs
+		case 'timer':
+			return decoded.durationSeconds
+		default:
+			return decoded.value
+	}
 }
