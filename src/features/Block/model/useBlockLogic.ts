@@ -131,7 +131,7 @@ export function useBlockLogic({
 		if (blockType === 'timer') {
 			return { durationSeconds: (data.settings?.duration ?? 0) / 1000 }
 		}
-		return checked
+		return { completed: checked }
 	}
 
 	const writeCheckedState = useCallback(
