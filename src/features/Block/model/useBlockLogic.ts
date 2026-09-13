@@ -170,6 +170,29 @@ export function useBlockLogic({
 		]
 	)
 
+	const writeBlockState = useCallback(
+		(state: unknown) => {
+			if (isJournaled) {
+				updateBlockState.mutate({
+					blockId: data.id,
+					blockType,
+					taskId: data.task_id,
+					date: selectedDate,
+					state
+				})
+			} else {
+				updateBlockPersistentState.mutate({
+					blockId: data.id,
+					taskId: data.task_id,
+					blockType,
+					state
+				})
+			}
+		},
+		// eslint-disable-next-line
+		[isJournaled, selectedDate, data.id, data.task_id, blockType]
+	)
+
 	const handlePressCheckbox = useCallback(() => {
 		const newChecked = !checked
 		writeCheckedState(newChecked)
@@ -297,6 +320,7 @@ export function useBlockLogic({
 		inputRef,
 		checked,
 		checkedStyle,
+		writeBlockState,
 		handleChangeText,
 		handlePressCheckbox,
 		handleTimerFinish,

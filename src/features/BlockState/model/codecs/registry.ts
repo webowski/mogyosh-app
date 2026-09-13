@@ -1,5 +1,6 @@
 import { BlockType } from '@/shared/domain/block'
 import { counterCodecV1 } from './counter.codec'
+import { stopwatchCodecV1 } from './stopwatch.codec'
 import { textCodecV1 } from './text.codec'
 import { timerCodecV1 } from './timer.codec'
 import type { BlockStateCodec } from './types'
@@ -25,7 +26,8 @@ const CODEC_REGISTRY = new Map<
 	['expandable-h3', new Map([[1, textCodecV1 as BlockStateCodec<unknown>]])],
 	['expandable-h4', new Map([[1, textCodecV1 as BlockStateCodec<unknown>]])],
 	['counter', new Map([[1, counterCodecV1 as BlockStateCodec<unknown>]])],
-	['timer', new Map([[1, timerCodecV1 as BlockStateCodec<unknown>]])]
+	['timer', new Map([[1, timerCodecV1 as BlockStateCodec<unknown>]])],
+	['stopwatch', new Map([[1, stopwatchCodecV1 as BlockStateCodec<unknown>]])]
 ])
 
 /** Always encode with the highest registered version for a block type */

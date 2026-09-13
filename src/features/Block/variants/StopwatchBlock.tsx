@@ -26,6 +26,7 @@ export default function StopwatchBlock({
 		inputRef,
 		checked,
 		checkedStyle,
+		writeBlockState,
 		handleChangeText,
 		handlePressCheckbox,
 		handleFocus,
@@ -71,6 +72,7 @@ export default function StopwatchBlock({
 	const handleToggle = () => {
 		if (isRunning) {
 			pause(data.id)
+			writeBlockState({ durationMs: getElapsed(data.id) })
 		} else {
 			start(data.id)
 		}
