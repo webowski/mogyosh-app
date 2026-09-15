@@ -40,7 +40,7 @@ export function BlockSettingsForm({ block, onChange }: BlockSettingsFormProps) {
 			subactions: UNITS.filter((unit) => unit.category === category).map(
 				(unit) => ({
 					id: unit.id,
-					title: `${t(unit.labelKey)} (${t(`units.system.${unit.system}`)})`,
+					title: t(`units.${unit.id}`),
 					state: (settings.units === unit.id ? 'on' : 'off') as 'on' | 'off'
 				})
 			)
