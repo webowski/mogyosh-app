@@ -1,13 +1,16 @@
 import { useTranslation } from 'react-i18next'
-import { Pressable, Text, TextInput, View } from 'react-native'
+import { Pressable, Text, View } from 'react-native'
 
 import { BlockInputRefsMap, BlockProps } from '@/shared/domain/block'
 import { findUnitById } from '@/shared/domain/units'
 import Checkbox from '@/shared/ui/Checkbox'
 import { MarkdownInput } from '@/shared/ui/MarkdownInput'
+import { useCounterValueSheetStore } from '../model/counterValueSheet.store'
 import { useBlockLogic } from '../model/useBlockLogic'
-import { useCounterNumericField } from '../model/useCounterNumericField'
 import { blockStyles } from '../style'
+
+const VALUE_PICKER_MAX = 500
+const COUNT_PICKER_MAX = 200
 
 type CounterBlockProps = BlockProps & {
 	// onExpandToggle: (expanded: boolean) => void
@@ -23,6 +26,7 @@ export default function CounterBlock({
 	pendingFocusId
 }: CounterBlockProps) {
 	const { t } = useTranslation()
+	const openCounterValueSheet = useCounterValueSheetStore((state) => state.open)
 
 	const {
 		inputRef,
@@ -41,8 +45,32 @@ export default function CounterBlock({
 		blockType: 'counter'
 	})
 
-	const valueField = useCounterNumericField(data, 'value')
-	const countField = useCounterNumericField(data, 'count')
+	const value = data.settings?.value ?? 0
+	const count = data.settings?.count ?? 0
+
+	const unitLabel = findUnitById(data.settings?.units)
+		? t(findUnitById(data.settings?.units)!.labelKey)
+		: ''
+
+	const handleOpenValuePicker = () => {
+		openCounterValueSheet({
+			blockId: data.id,
+			taskId: data.task_id,
+			field: 'value',
+			title: unitLabel || t('block.Current value'),
+			maxValue: VALUE_PICKER_MAX
+		})
+	}
+
+	const handleOpenCountPicker = () => {
+		openCounterValueSheet({
+			blockId: data.id,
+			taskId: data.task_id,
+			field: 'count',
+			title: t('units.reps'),
+			maxValue: COUNT_PICKER_MAX
+		})
+	}
 
 	return (
 		<View style={blockStyles.Penoblok}>
@@ -62,44 +90,16 @@ export default function CounterBlock({
 				<View style={blockStyles.CounterSet}>
 					<Pressable
 						style={blockStyles.Counter}
-						onPress={valueField.triggerFocus}
+						onPress={handleOpenValuePicker}
 					>
-						<TextInput
-							ref={valueField.inputRef}
-							style={[
-								blockStyles.Counter__value,
-								blockStyles.Counter__valueInput
-							]}
-							value={valueField.text}
-							keyboardType='number-pad'
-							onFocus={valueField.handleFocus}
-							selectTextOnFocus
-							onBlur={valueField.handleBlur}
-							onChangeText={valueField.handleChangeText}
-						/>
-						<Text style={blockStyles.Counter__units}>
-							{findUnitById(data.settings?.units)
-								? t(findUnitById(data.settings?.units)!.labelKey)
-								: ''}
-						</Text>
+						<Text style={blockStyles.Counter__value}>{value}</Text>
+						<Text style={blockStyles.Counter__units}>{unitLabel}</Text>
 					</Pressable>
 					<Pressable
 						style={blockStyles.Counter}
-						onPress={countField.triggerFocus}
+						onPress={handleOpenCountPicker}
 					>
-						<TextInput
-							ref={countField.inputRef}
-							style={[
-								blockStyles.Counter__value,
-								blockStyles.Counter__valueInput
-							]}
-							value={countField.text}
-							keyboardType='number-pad'
-							onFocus={countField.handleFocus}
-							selectTextOnFocus
-							onBlur={countField.handleBlur}
-							onChangeText={countField.handleChangeText}
-						/>
+						<Text style={blockStyles.Counter__value}>{count}</Text>
 						<Text style={blockStyles.Counter__units}>{t('units.reps')}</Text>
 					</Pressable>
 				</View>

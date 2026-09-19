@@ -5,6 +5,7 @@ import { useUnistyles } from 'react-native-unistyles'
 import {
 	BlockSettingsSheet,
 	CounterKeyboardAccessory,
+	CounterValueSheet,
 	EditorToolbar
 } from '@/features/Block'
 import Drawer from '@/features/Drawer/Drawer'
@@ -104,6 +105,7 @@ export default function NavPanelLayout() {
 			<CounterKeyboardAccessory />
 
 			<BlockSettingsSheet />
+			<CounterValueSheet />
 			<TaskCreateSheet />
 		</>
 	)
