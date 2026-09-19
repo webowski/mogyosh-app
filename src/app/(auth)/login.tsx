@@ -62,7 +62,7 @@ export default function LoginScreen() {
 				<Text style={textStyles.heading5}>
 					{t('screen.auth.Check your email')}
 				</Text>
-				<Text style={styles.Description}>
+				<Text style={[textStyles.p, styles.Description]}>
 					{t('screen.auth.Magic link sent description')}
 				</Text>
 				<Button
