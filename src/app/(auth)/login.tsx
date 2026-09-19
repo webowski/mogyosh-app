@@ -185,7 +185,7 @@ const styles = StyleSheet.create((theme) => ({
 	Divider__line: {
 		flex: 1,
 		height: 1,
-		backgroundColor: theme.colors.border
+		backgroundColor: theme.colors.borderSubtle
 	},
 	Divider__text: {
 		color: theme.colors.mutedText

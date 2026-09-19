@@ -89,8 +89,8 @@ export const lightTheme = {
 		surfaceClosest: 'hsl(0, 0%, 100%)',
 
 		border: 'hsl(225, 35%, 79%)',
-		borderSubtle: 'hsl(225, 35%, 92%)',
-		borderSubtler: 'hsl(225, 35%, 94%)',
+		borderSubtle: 'hsl(225, 35%, 90%)',
+		borderSubtler: 'hsl(225, 35%, 93%)',
 		borderSubtlest: 'hsl(225, 37%, 96%)',
 
 		// table
