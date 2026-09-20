@@ -42,7 +42,7 @@ export default function ExpandableBlock({
 		inputRefs,
 		onAddAfter,
 		pendingFocusId,
-		blockType: 'expandable'
+		blockType: 'e'
 	})
 	const { theme } = useUnistyles()
 	const rotationProgress = useSharedValue(1) // 1 = expanded (90deg), 0 = collapsed

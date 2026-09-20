@@ -13,11 +13,11 @@ const DEFAULT_CODEC_TYPES: BlockType[] = [
 	'h4',
 	'ul',
 	'ol',
-	'expandable',
-	'expandable-h1',
-	'expandable-h2',
-	'expandable-h3',
-	'expandable-h4',
+	'e',
+	'h1e',
+	'h2e',
+	'h3e',
+	'h4e',
 	'table',
 	'progress',
 	'image'
@@ -34,10 +34,7 @@ const CODEC_REGISTRY = new Map<
 				new Map([[1, defaultSettingsCodecV1 as BlockSettingsCodec<unknown>]])
 			] as const
 	),
-	[
-		'timer',
-		new Map([[1, timerSettingsCodecV1 as BlockSettingsCodec<unknown>]])
-	],
+	['t', new Map([[1, timerSettingsCodecV1 as BlockSettingsCodec<unknown>]])],
 	[
 		'stopwatch',
 		new Map([[1, stopwatchSettingsCodecV1 as BlockSettingsCodec<unknown>]])

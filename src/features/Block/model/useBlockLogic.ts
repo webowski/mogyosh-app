@@ -128,7 +128,7 @@ export function useBlockLogic({
 		if (blockType === 'counter') {
 			return { value: data.settings?.value ?? 0, completed: checked }
 		}
-		if (blockType === 'timer') {
+		if (blockType === 't') {
 			return { durationSeconds: (data.settings?.duration ?? 0) / 1000 }
 		}
 		return { completed: checked }
@@ -139,7 +139,7 @@ export function useBlockLogic({
 			setChecked(newChecked)
 
 			const shouldClearState =
-				!newChecked && (blockType === 'counter' || blockType === 'timer')
+				!newChecked && (blockType === 'counter' || blockType === 't')
 
 			if (isJournaled) {
 				updateBlockState.mutate({

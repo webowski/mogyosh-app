@@ -20,13 +20,13 @@ const CODEC_REGISTRY = new Map<
 	['h4', new Map([[1, textCodecV1 as BlockStateCodec<unknown>]])],
 	['ul', new Map([[1, textCodecV1 as BlockStateCodec<unknown>]])],
 	['ol', new Map([[1, textCodecV1 as BlockStateCodec<unknown>]])],
-	['expandable', new Map([[1, textCodecV1 as BlockStateCodec<unknown>]])],
-	['expandable-h1', new Map([[1, textCodecV1 as BlockStateCodec<unknown>]])],
-	['expandable-h2', new Map([[1, textCodecV1 as BlockStateCodec<unknown>]])],
-	['expandable-h3', new Map([[1, textCodecV1 as BlockStateCodec<unknown>]])],
-	['expandable-h4', new Map([[1, textCodecV1 as BlockStateCodec<unknown>]])],
+	['e', new Map([[1, textCodecV1 as BlockStateCodec<unknown>]])],
+	['h1e', new Map([[1, textCodecV1 as BlockStateCodec<unknown>]])],
+	['h2e', new Map([[1, textCodecV1 as BlockStateCodec<unknown>]])],
+	['h3e', new Map([[1, textCodecV1 as BlockStateCodec<unknown>]])],
+	['h4e', new Map([[1, textCodecV1 as BlockStateCodec<unknown>]])],
 	['counter', new Map([[1, counterCodecV1 as BlockStateCodec<unknown>]])],
-	['timer', new Map([[1, timerCodecV1 as BlockStateCodec<unknown>]])],
+	['t', new Map([[1, timerCodecV1 as BlockStateCodec<unknown>]])],
 	['stopwatch', new Map([[1, stopwatchCodecV1 as BlockStateCodec<unknown>]])]
 ])
 

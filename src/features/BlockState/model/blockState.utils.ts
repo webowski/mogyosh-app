@@ -37,12 +37,8 @@ export const isBlockCompletedOnDate = (
 		return state?.completed ?? false
 	}
 
-	if (block.type === 'timer') {
-		const state = getBlockDayState<TimerState>(
-			'timer',
-			monthBytes,
-			date.getDate()
-		)
+	if (block.type === 't') {
+		const state = getBlockDayState<TimerState>('t', monthBytes, date.getDate())
 		return state !== null
 	}
 
@@ -77,9 +73,9 @@ export const isBlockCompleted = (
 			return state?.completed ?? false
 		}
 
-		if (block.type === 'timer') {
+		if (block.type === 't') {
 			const state = decodeBlockStatePayload<TimerState>(
-				'timer',
+				't',
 				persistentState.state
 			)
 			return state !== null

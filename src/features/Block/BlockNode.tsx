@@ -51,7 +51,7 @@ export default function BlockNode({
 	let content
 
 	switch (variant) {
-		case 'expandable':
+		case 'e':
 			content = (
 				<ExpandableBlock
 					data={data}
@@ -84,10 +84,10 @@ export default function BlockNode({
 			)
 			break
 
-		case 'expandable-h1':
-		case 'expandable-h2':
-		case 'expandable-h3':
-		case 'expandable-h4':
+		case 'h1e':
+		case 'h2e':
+		case 'h3e':
+		case 'h4e':
 			content = (
 				<ExpandableHeadingBlock
 					variant={variant}
@@ -134,7 +134,7 @@ export default function BlockNode({
 			)
 			break
 
-		case 'timer':
+		case 't':
 			content = (
 				<TimerBlock
 					data={data}

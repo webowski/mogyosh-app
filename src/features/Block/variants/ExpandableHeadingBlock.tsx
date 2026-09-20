@@ -15,17 +15,13 @@ import { MarkdownInput } from '@/shared/ui/MarkdownInput'
 import { useBlockLogic } from '../model/useBlockLogic'
 import { blockStyles } from '../style'
 
-type ExpandableHeadingVariant =
-	| 'expandable-h1'
-	| 'expandable-h2'
-	| 'expandable-h3'
-	| 'expandable-h4'
+type ExpandableHeadingVariant = 'h1e' | 'h2e' | 'h3e' | 'h4e'
 
 const HEADING_SIZES: Record<ExpandableHeadingVariant, number> = {
-	'expandable-h1': TEXT_VARS['h1'],
-	'expandable-h2': TEXT_VARS['h2'],
-	'expandable-h3': TEXT_VARS['h3'],
-	'expandable-h4': TEXT_VARS['h4']
+	h1e: TEXT_VARS['h1'],
+	h2e: TEXT_VARS['h2'],
+	h3e: TEXT_VARS['h3'],
+	h4e: TEXT_VARS['h4']
 }
 
 type ExpandableHeadingBlockProps = BlockProps & {

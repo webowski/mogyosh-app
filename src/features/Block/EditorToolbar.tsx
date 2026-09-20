@@ -34,28 +34,28 @@ const BLOCK_TYPE_OPTIONS: {
 	{ type: 'p', icon: 'text', label: 'Paragraph' },
 	{ type: 'ul', icon: 'format-list-bulleted-square', label: 'Bulleted list' },
 	{ type: 'ol', icon: 'format-list-numbered', label: 'Numbered list' },
-	{ type: 'expandable', icon: 'arrow-expand-vertical', label: 'Expandable' },
+	{ type: 'e', icon: 'arrow-expand-vertical', label: 'Expandable' },
 	{
-		type: 'expandable-h1',
+		type: 'h1e',
 		icon: 'arrow-expand-vertical',
 		label: 'Expandable Heading 1'
 	},
 	{
-		type: 'expandable-h2',
+		type: 'h2e',
 		icon: 'arrow-expand-vertical',
 		label: 'Expandable Heading 2'
 	},
 	{
-		type: 'expandable-h3',
+		type: 'h3e',
 		icon: 'arrow-expand-vertical',
 		label: 'Expandable Heading 3'
 	},
 	{
-		type: 'expandable-h4',
+		type: 'h4e',
 		icon: 'arrow-expand-vertical',
 		label: 'Expandable Heading 4'
 	},
-	{ type: 'timer', icon: 'timer', label: 'Timer' },
+	{ type: 't', icon: 'timer', label: 'Timer' },
 	{ type: 'stopwatch', icon: 'timer', label: 'Stopwatch' },
 	{ type: 'counter', icon: 'counter', label: 'Counter' }
 ]

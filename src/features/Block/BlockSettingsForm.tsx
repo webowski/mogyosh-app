@@ -81,7 +81,7 @@ export function BlockSettingsForm({ block, onChange }: BlockSettingsFormProps) {
 				/>
 			</View>
 
-			{(block.type === 'timer' || block.type === 'stopwatch') && (
+			{(block.type === 't' || block.type === 'stopwatch') && (
 				<>
 					<View style={styles.Form__row}>
 						<View style={styles.Form__rowLabel}>
@@ -118,7 +118,7 @@ export function BlockSettingsForm({ block, onChange }: BlockSettingsFormProps) {
 				</>
 			)}
 
-			{block.type === 'timer' && (
+			{block.type === 't' && (
 				<View style={styles.Form__row}>
 					<Text style={styles.Form__labelText}>{t('block.Mode')}</Text>
 					<View style={styles.Form__modeToggle}>

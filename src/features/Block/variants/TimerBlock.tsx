@@ -44,7 +44,7 @@ export default function TimerBlock({
 		inputRefs,
 		onAddAfter,
 		pendingFocusId,
-		blockType: 'timer'
+		blockType: 't'
 	})
 	const { start, pause, reset, getRemaining, entries } = useTimerStore()
 	const updateBlock = useUpdateBlock()

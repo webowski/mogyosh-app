@@ -30,7 +30,7 @@ const getStatFieldValue = (
 			return decoded.value
 		case 'stopwatch':
 			return decoded.durationMs
-		case 'timer':
+		case 't':
 			return decoded.durationSeconds
 		default:
 			return decoded.value
