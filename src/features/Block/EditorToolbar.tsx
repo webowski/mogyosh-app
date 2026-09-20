@@ -56,7 +56,7 @@ const BLOCK_TYPE_OPTIONS: {
 		label: 'Expandable Heading 4'
 	},
 	{ type: 't', icon: 'timer', label: 'Timer' },
-	{ type: 'stopwatch', icon: 'timer', label: 'Stopwatch' },
+	{ type: 'sw', icon: 'timer', label: 'Stopwatch' },
 	{ type: 'counter', icon: 'counter', label: 'Counter' }
 ]
 

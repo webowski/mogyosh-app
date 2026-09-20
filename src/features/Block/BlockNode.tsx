@@ -149,7 +149,7 @@ export default function BlockNode({
 			)
 			break
 
-		case 'stopwatch':
+		case 'sw':
 			content = (
 				<StopwatchBlock
 					data={data}

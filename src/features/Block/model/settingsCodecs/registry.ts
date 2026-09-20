@@ -36,7 +36,7 @@ const CODEC_REGISTRY = new Map<
 	),
 	['t', new Map([[1, timerSettingsCodecV1 as BlockSettingsCodec<unknown>]])],
 	[
-		'stopwatch',
+		'sw',
 		new Map([[1, stopwatchSettingsCodecV1 as BlockSettingsCodec<unknown>]])
 	],
 	[

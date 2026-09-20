@@ -28,7 +28,7 @@ const getStatFieldValue = (
 	switch (blockType) {
 		case 'counter':
 			return decoded.value
-		case 'stopwatch':
+		case 'sw':
 			return decoded.durationMs
 		case 't':
 			return decoded.durationSeconds

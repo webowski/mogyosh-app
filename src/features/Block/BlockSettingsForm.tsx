@@ -81,7 +81,7 @@ export function BlockSettingsForm({ block, onChange }: BlockSettingsFormProps) {
 				/>
 			</View>
 
-			{(block.type === 't' || block.type === 'stopwatch') && (
+			{(block.type === 't' || block.type === 'sw') && (
 				<>
 					<View style={styles.Form__row}>
 						<View style={styles.Form__rowLabel}>

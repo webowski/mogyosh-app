@@ -37,7 +37,7 @@ export default function StopwatchBlock({
 		inputRefs,
 		onAddAfter,
 		pendingFocusId,
-		blockType: 'stopwatch'
+		blockType: 'sw'
 	})
 
 	const { theme } = useUnistyles()

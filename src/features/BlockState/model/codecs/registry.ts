@@ -27,7 +27,7 @@ const CODEC_REGISTRY = new Map<
 	['h4e', new Map([[1, textCodecV1 as BlockStateCodec<unknown>]])],
 	['counter', new Map([[1, counterCodecV1 as BlockStateCodec<unknown>]])],
 	['t', new Map([[1, timerCodecV1 as BlockStateCodec<unknown>]])],
-	['stopwatch', new Map([[1, stopwatchCodecV1 as BlockStateCodec<unknown>]])]
+	['sw', new Map([[1, stopwatchCodecV1 as BlockStateCodec<unknown>]])]
 ])
 
 /** Always encode with the highest registered version for a block type */

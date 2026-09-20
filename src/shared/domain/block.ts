@@ -19,7 +19,7 @@ export type BlockType =
 	| 'table'
 	| 'progress'
 	| 't'
-	| 'stopwatch'
+	| 'sw'
 	| 'counter'
 	| 'image'
 
