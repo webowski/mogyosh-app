@@ -6,7 +6,8 @@ import {
 	BlockSettingsSheet,
 	CounterKeyboardAccessory,
 	CounterValueSheet,
-	EditorToolbar
+	EditorToolbar,
+	UnitSheet
 } from '@/features/Block'
 import Drawer from '@/features/Drawer/Drawer'
 import Header from '@/features/Header/Header'
@@ -106,6 +107,7 @@ export default function NavPanelLayout() {
 
 			<BlockSettingsSheet />
 			<CounterValueSheet />
+			<UnitSheet />
 			<TaskCreateSheet />
 		</>
 	)

@@ -6,6 +6,7 @@ import { findUnitById } from '@/shared/domain/units'
 import Checkbox from '@/shared/ui/Checkbox'
 import { MarkdownInput } from '@/shared/ui/MarkdownInput'
 import { useCounterValueSheetStore } from '../model/counterValueSheet.store'
+import { useUnitSheetStore } from '../model/unitSheet.store'
 import { useBlockLogic } from '../model/useBlockLogic'
 import { blockStyles } from '../style'
 
@@ -27,6 +28,7 @@ export default function CounterBlock({
 }: CounterBlockProps) {
 	const { t } = useTranslation()
 	const openCounterValueSheet = useCounterValueSheetStore((state) => state.open)
+	const openUnitSheet = useUnitSheetStore((state) => state.open)
 
 	const {
 		inputRef,
@@ -50,14 +52,16 @@ export default function CounterBlock({
 
 	const unitLabel = findUnitById(data.settings?.units)
 		? t(findUnitById(data.settings?.units)!.labelKey)
-		: ''
+		: t('units.selectPlaceholder')
 
 	const handleOpenValuePicker = () => {
 		openCounterValueSheet({
 			blockId: data.id,
 			taskId: data.task_id,
 			field: 'value',
-			title: unitLabel || t('block.Current value'),
+			title: findUnitById(data.settings?.units)
+				? t(findUnitById(data.settings?.units)!.labelKey)
+				: t('block.Current value'),
 			maxValue: VALUE_PICKER_MAX
 		})
 	}
@@ -69,6 +73,13 @@ export default function CounterBlock({
 			field: 'count',
 			title: t('units.reps'),
 			maxValue: COUNT_PICKER_MAX
+		})
+	}
+
+	const handleOpenUnitSheet = () => {
+		openUnitSheet({
+			blockId: data.id,
+			taskId: data.task_id
 		})
 	}
 
@@ -88,13 +99,14 @@ export default function CounterBlock({
 					}}
 				/>
 				<View style={blockStyles.CounterSet}>
-					<Pressable
-						style={blockStyles.Counter}
-						onPress={handleOpenValuePicker}
-					>
-						<Text style={blockStyles.Counter__value}>{value}</Text>
-						<Text style={blockStyles.Counter__units}>{unitLabel}</Text>
-					</Pressable>
+					<View style={blockStyles.Counter}>
+						<Pressable onPress={handleOpenValuePicker}>
+							<Text style={blockStyles.Counter__value}>{value}</Text>
+						</Pressable>
+						<Pressable onPress={handleOpenUnitSheet}>
+							<Text style={blockStyles.Counter__units}>{unitLabel}</Text>
+						</Pressable>
+					</View>
 					<Pressable
 						style={blockStyles.Counter}
 						onPress={handleOpenCountPicker}
