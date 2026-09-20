@@ -125,7 +125,7 @@ export function useBlockLogic({
 	}))
 
 	const buildCheckboxStatePayload = (checked: boolean): unknown => {
-		if (blockType === 'counter') {
+		if (blockType === 'c') {
 			return { value: data.settings?.value ?? 0, completed: checked }
 		}
 		if (blockType === 't') {
@@ -139,7 +139,7 @@ export function useBlockLogic({
 			setChecked(newChecked)
 
 			const shouldClearState =
-				!newChecked && (blockType === 'counter' || blockType === 't')
+				!newChecked && (blockType === 'c' || blockType === 't')
 
 			if (isJournaled) {
 				updateBlockState.mutate({

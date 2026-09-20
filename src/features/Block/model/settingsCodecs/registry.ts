@@ -39,10 +39,7 @@ const CODEC_REGISTRY = new Map<
 		'sw',
 		new Map([[1, stopwatchSettingsCodecV1 as BlockSettingsCodec<unknown>]])
 	],
-	[
-		'counter',
-		new Map([[1, counterSettingsCodecV1 as BlockSettingsCodec<unknown>]])
-	]
+	['c', new Map([[1, counterSettingsCodecV1 as BlockSettingsCodec<unknown>]])]
 ])
 
 export const getLatestSettingsCodec = <TSettings>(

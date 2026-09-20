@@ -164,7 +164,7 @@ export default function BlockNode({
 			)
 			break
 
-		case 'counter':
+		case 'c':
 			content = (
 				<CounterBlock
 					data={data}

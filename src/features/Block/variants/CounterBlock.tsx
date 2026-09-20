@@ -44,7 +44,7 @@ export default function CounterBlock({
 		inputRefs,
 		onAddAfter,
 		pendingFocusId,
-		blockType: 'counter'
+		blockType: 'c'
 	})
 
 	const value = data.settings?.value ?? 0

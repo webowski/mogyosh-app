@@ -20,7 +20,7 @@ export type BlockType =
 	| 'progress'
 	| 't'
 	| 'sw'
-	| 'counter'
+	| 'c'
 	| 'image'
 
 export type BlockStatus = 'active' | 'archived'

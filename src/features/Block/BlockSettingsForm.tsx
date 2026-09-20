@@ -146,7 +146,7 @@ export function BlockSettingsForm({ block, onChange }: BlockSettingsFormProps) {
 				</View>
 			)}
 
-			{block.type === 'counter' && (
+			{block.type === 'c' && (
 				<>
 					<View style={styles.Form__row}>
 						<View style={styles.Form__rowLabel}>

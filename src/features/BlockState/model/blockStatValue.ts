@@ -26,7 +26,7 @@ const getStatFieldValue = (
 	decoded: Record<string, unknown>
 ): unknown => {
 	switch (blockType) {
-		case 'counter':
+		case 'c':
 			return decoded.value
 		case 'sw':
 			return decoded.durationMs

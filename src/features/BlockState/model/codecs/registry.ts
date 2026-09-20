@@ -25,7 +25,7 @@ const CODEC_REGISTRY = new Map<
 	['h2e', new Map([[1, textCodecV1 as BlockStateCodec<unknown>]])],
 	['h3e', new Map([[1, textCodecV1 as BlockStateCodec<unknown>]])],
 	['h4e', new Map([[1, textCodecV1 as BlockStateCodec<unknown>]])],
-	['counter', new Map([[1, counterCodecV1 as BlockStateCodec<unknown>]])],
+	['c', new Map([[1, counterCodecV1 as BlockStateCodec<unknown>]])],
 	['t', new Map([[1, timerCodecV1 as BlockStateCodec<unknown>]])],
 	['sw', new Map([[1, stopwatchCodecV1 as BlockStateCodec<unknown>]])]
 ])

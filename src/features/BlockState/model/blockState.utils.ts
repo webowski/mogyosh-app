@@ -28,9 +28,9 @@ export const isBlockCompletedOnDate = (
 
 	const monthBytes = parseByteaHex(monthState.state)
 
-	if (block.type === 'counter') {
+	if (block.type === 'c') {
 		const state = getBlockDayState<CounterState>(
-			'counter',
+			'c',
 			monthBytes,
 			date.getDate()
 		)
@@ -65,9 +65,9 @@ export const isBlockCompleted = (
 		const persistentState = block.states?.find((state) => state.month === null)
 		if (!persistentState) return false
 
-		if (block.type === 'counter') {
+		if (block.type === 'c') {
 			const state = decodeBlockStatePayload<CounterState>(
-				'counter',
+				'c',
 				persistentState.state
 			)
 			return state?.completed ?? false

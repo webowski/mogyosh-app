@@ -57,7 +57,7 @@ const BLOCK_TYPE_OPTIONS: {
 	},
 	{ type: 't', icon: 'timer', label: 'Timer' },
 	{ type: 'sw', icon: 'timer', label: 'Stopwatch' },
-	{ type: 'counter', icon: 'counter', label: 'Counter' }
+	{ type: 'c', icon: 'counter', label: 'Counter' }
 ]
 
 export default function EditorToolbar() {
