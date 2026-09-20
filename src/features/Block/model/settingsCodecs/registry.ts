@@ -19,7 +19,7 @@ const DEFAULT_CODEC_TYPES: BlockType[] = [
 	'h3e',
 	'h4e',
 	'table',
-	'progress',
+	'pr',
 	'image'
 ]
 

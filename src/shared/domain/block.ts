@@ -17,7 +17,7 @@ export type BlockType =
 	| 'h3e'
 	| 'h4e'
 	| 'table'
-	| 'progress'
+	| 'pr' // progress
 	| 't'
 	| 'sw'
 	| 'c'
