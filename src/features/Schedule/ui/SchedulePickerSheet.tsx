@@ -149,7 +149,11 @@ export const SchedulePickerSheet = forwardRef<SchedulePickerSheetRef, Props>(
 		}
 
 		return (
-			<TrueSheet ref={sheetRef} sizes={['auto']} cornerRadius={24}>
+			<TrueSheet
+				ref={sheetRef}
+				detents={['auto']}
+				cornerRadius={STYLE_VARS.radius_2xl}
+			>
 				<View style={styles.Content}>
 					<Text style={styles.Title}>Повтор</Text>
 
