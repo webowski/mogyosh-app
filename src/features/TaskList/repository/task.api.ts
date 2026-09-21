@@ -125,6 +125,8 @@ const getTasksByDate = async (date: string): Promise<TaskEntity[]> => {
 		.eq('type', 't')
 		.eq('lifecycle', 'a')
 		.is('parent_id', null)
+		// only tasks that have a schedule row
+		.not('schedules', 'is', null)
 		.order('created_at', { ascending: false })
 
 	if (error) throw error
