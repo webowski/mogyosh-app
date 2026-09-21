@@ -132,7 +132,9 @@ export const countTasksByDay = (
 export const isByTime = (task: TaskEntity, dateString: string): boolean => {
 	if (!task.schedule) return false
 	const times = getScheduleTimesForDate(task.schedule.schedule, dateString)
-	return times.some((slot) => typeof slot.time === 'string')
+	return times.some(
+		(slot) => typeof slot.time === 'string' && slot.time.length > 0
+	)
 }
 
 export const generateTaskSortOrder = (
