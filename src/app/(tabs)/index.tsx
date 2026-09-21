@@ -21,12 +21,14 @@ export default function DayScreen() {
 
 	const sections = useMemo(() => data ?? [], [data])
 
-	if (error || catError)
+	if (error || catError) {
+		console.log({ error, catError })
 		return (
 			<View style={commonStyles.mainArea}>
-				<Text>Ошибка загрузки</Text>
+				<Text>Ошибка загрузкиj</Text>
 			</View>
 		)
+	}
 
 	if (isLoading || catLoading) {
 		return (
