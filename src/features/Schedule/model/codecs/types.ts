@@ -1,7 +1,7 @@
-import type { SchedulePayload } from '@/shared/domain/task'
+import type { ScheduleData } from '@/shared/domain/task'
 
 export interface ScheduleCodec {
 	version: number
-	encode(payload: SchedulePayload): Uint8Array
-	decode(bytes: Uint8Array, version: number): SchedulePayload
+	encode(data: ScheduleData): Uint8Array
+	decode(bytes: Uint8Array, version: number): ScheduleData
 }

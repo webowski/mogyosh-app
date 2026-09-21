@@ -124,7 +124,8 @@ export type ScheduleRule =
 			endDate?: string
 	  }
 
-export type SchedulePayload = {
+/** Data stored in schedules.schedule (bytea) */
+export type ScheduleData = {
 	rule: ScheduleRule
 	/** Skipped dates (whole day). ISO "YYYY-MM-DD" */
 	exceptions: string[]
@@ -133,7 +134,7 @@ export type SchedulePayload = {
 export type ScheduleEntity = {
 	taskId: string
 	encoding: number
-	payload: SchedulePayload
+	schedule: ScheduleData
 	createdAt: string
 	updatedAt: string
 }

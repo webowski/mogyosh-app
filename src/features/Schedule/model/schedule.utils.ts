@@ -1,4 +1,4 @@
-import type { SchedulePayload } from '@/shared/domain/task'
+import type { ScheduleData } from '@/shared/domain/task'
 
 const toDateString = (date: Date): string => {
 	return date.toISOString().slice(0, 10)
@@ -19,15 +19,15 @@ const isWithinRange = (
  * Empty array = not scheduled that day (or fully excepted).
  */
 export const getScheduleTimesForDate = (
-	payload: SchedulePayload,
+	data: ScheduleData,
 	dateString: string
 ): { time: string | null; endTime?: string | null }[] => {
-	if (payload.exceptions.includes(dateString)) {
+	if (data.exceptions.includes(dateString)) {
 		return []
 	}
 
 	const date = new Date(dateString + 'T00:00:00')
-	const rule = payload.rule
+	const rule = data.rule
 
 	switch (rule.type) {
 		case 'once': {
@@ -97,32 +97,32 @@ export const getScheduleTimesForDate = (
 }
 
 export const isScheduledOnDate = (
-	payload: SchedulePayload,
+	data: ScheduleData,
 	dateString: string
 ): boolean => {
-	return getScheduleTimesForDate(payload, dateString).length > 0
+	return getScheduleTimesForDate(data, dateString).length > 0
 }
 
 export const addException = (
-	payload: SchedulePayload,
+	data: ScheduleData,
 	dateString: string
-): SchedulePayload => {
-	if (payload.exceptions.includes(dateString)) {
-		return payload
+): ScheduleData => {
+	if (data.exceptions.includes(dateString)) {
+		return data
 	}
 	return {
-		...payload,
-		exceptions: [...payload.exceptions, dateString].sort()
+		...data,
+		exceptions: [...data.exceptions, dateString].sort()
 	}
 }
 
 export const removeException = (
-	payload: SchedulePayload,
+	data: ScheduleData,
 	dateString: string
-): SchedulePayload => {
+): ScheduleData => {
 	return {
-		...payload,
-		exceptions: payload.exceptions.filter(
+		...data,
+		exceptions: data.exceptions.filter(
 			(exceptionDate) => exceptionDate !== dateString
 		)
 	}

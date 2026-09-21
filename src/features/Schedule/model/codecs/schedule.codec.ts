@@ -1,4 +1,4 @@
-import type { SchedulePayload } from '@/shared/domain/task'
+import type { ScheduleData } from '@/shared/domain/task'
 import { pack, unpack } from 'msgpackr'
 import type { ScheduleCodec } from './types'
 
@@ -10,12 +10,9 @@ import type { ScheduleCodec } from './types'
  */
 export const scheduleCodecV1: ScheduleCodec = {
 	version: 1,
-	encode: (payload) => pack([payload.rule, payload.exceptions]),
+	encode: (data) => pack([data.rule, data.exceptions]),
 	decode: (bytes) => {
-		const [rule, exceptions] = unpack(bytes) as [
-			SchedulePayload['rule'],
-			string[]
-		]
+		const [rule, exceptions] = unpack(bytes) as [ScheduleData['rule'], string[]]
 		return {
 			rule,
 			exceptions: exceptions ?? []
