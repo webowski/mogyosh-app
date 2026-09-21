@@ -1,13 +1,17 @@
+import { endOfDay, startOfDay } from 'date-fns'
+
 import { blockAPI } from '@/features/Block'
+import { isScheduledOnDate } from '@/features/Schedule/model/schedule.utils'
+import { scheduleAPI } from '@/features/Schedule/repository/schedule.api'
 import { supabaseClient } from '@/shared/api/supabaseClient'
 import { TaskId } from '@/shared/domain/ids'
-import {
+import type {
+	ScheduleData,
 	TaskCompleted,
 	TaskEntity,
 	TaskRow,
 	TaskState
 } from '@/shared/domain/task'
-import { endOfDay, startOfDay } from 'date-fns'
 import { getMonthStart } from '../model/task.bitmap'
 import { TaskFilters } from '../model/task.types'
 
@@ -19,16 +23,11 @@ const TASKS_SELECT = `
 		parent_id
 	),
 	schedules (
-		id,
-		type,
-		start_time,
-		end_time,
-		date,
-		weekday,
-		month_day,
-		month,
-		start_date,
-		end_date
+		task_id,
+		encoding,
+		schedule,
+		created_at,
+		updated_at
 	),
 	states (
 		task_id,
@@ -48,7 +47,10 @@ const makeTaskObject = (task: TaskRow): TaskEntity => ({
 	priority: task.priority,
 	category: task.categories,
 	parent_id: task.parent_id,
-	schedules: task.schedules,
+	schedule: scheduleAPI.decodeScheduleFromRow(
+		// supabase returns nested relation as object or array depending on cardinality
+		(task as any).schedules
+	),
 	sort_order: task.sort_order ?? null,
 	created_at: task.created_at,
 	updated_at: task.updated_at
@@ -113,52 +115,59 @@ const getAllTasks = async (): Promise<TaskEntity[]> => {
 }
 
 /**
- * Get tasks for a specific date
- * @param date - Date in ISO format (YYYY-MM-DD)
+ * Get tasks for a specific date.
+ * Loads tasks with schedules and filters on the client via codec expand.
  */
 const getTasksByDate = async (date: string): Promise<TaskEntity[]> => {
 	const { data, error } = await supabaseClient
 		.from('tasks')
 		.select(TASKS_SELECT)
 		.eq('type', 't')
-		.or(
-			`schedules.date.eq.${date},schedules.start_date.lte.${date}.and.schedules.end_date.gte.${date}`
-		)
+		.eq('lifecycle', 'a')
+		.is('parent_id', null)
 		.order('created_at', { ascending: false })
 
 	if (error) throw error
 
-	return (data ?? []).map(makeTaskObject)
+	const tasks = (data ?? []).map(makeTaskObject)
+
+	return tasks.filter((task) => {
+		if (!task.schedule) return false
+		return isScheduledOnDate(task.schedule.schedule, date)
+	})
 }
 
-/**
- * Get task count by day for a date range
- * @param startDate - Start date in ISO format (YYYY-MM-DD)
- * @param endDate - End date in ISO format (YYYY-MM-DD)
- */
 const getTasksCountByPeriod = async (
 	startDate: string,
 	endDate: string
 ): Promise<Record<string, number>> => {
 	const { data, error } = await supabaseClient
 		.from('tasks')
-		.select('schedules(date)')
+		.select(TASKS_SELECT)
 		.eq('type', 't')
-		.or(`schedules.date.gte.${startDate}.and.schedules.date.lte.${endDate}`)
+		.eq('lifecycle', 'a')
+		.is('parent_id', null)
 
 	if (error) throw error
 
-	// Count tasks by date
+	const tasks = (data ?? []).map(makeTaskObject)
 	const countByDate: Record<string, number> = {}
-	;(data ?? []).forEach((task) => {
-		if (task.schedules && Array.isArray(task.schedules)) {
-			task.schedules.forEach((schedule) => {
-				if (schedule.date) {
-					countByDate[schedule.date] = (countByDate[schedule.date] || 0) + 1
-				}
-			})
+
+	const cursor = new Date(startDate + 'T00:00:00')
+	const end = new Date(endDate + 'T00:00:00')
+
+	while (cursor <= end) {
+		const dateString = cursor.toISOString().slice(0, 10)
+
+		for (const task of tasks) {
+			if (!task.schedule) continue
+			if (isScheduledOnDate(task.schedule.schedule, dateString)) {
+				countByDate[dateString] = (countByDate[dateString] || 0) + 1
+			}
 		}
-	})
+
+		cursor.setDate(cursor.getDate() + 1)
+	}
 
 	return countByDate
 }
@@ -204,6 +213,7 @@ type CreateTaskPayload = {
 	title: string
 	parent_id?: string | null
 	category_id?: string | null
+	scheduleData?: ScheduleData | null
 }
 
 const createTask = async (payload: CreateTaskPayload): Promise<TaskEntity> => {
@@ -222,7 +232,17 @@ const createTask = async (payload: CreateTaskPayload): Promise<TaskEntity> => {
 		.single()
 
 	if (error) throw error
-	return data
+
+	if (payload.scheduleData) {
+		await scheduleAPI.upsertSchedule({
+			taskId: data.id,
+			data: payload.scheduleData
+		})
+	}
+
+	const task = await getTaskById(data.id)
+	if (!task) throw new Error('Task not found after create')
+	return task
 }
 
 type UpdateTaskStateParams = {
