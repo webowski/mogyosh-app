@@ -40,7 +40,6 @@ export const useCreateBlock = () => {
 			parent_id: payload.parent_id ?? null,
 			type: payload.type ?? 'p',
 			text_content: payload.text_content,
-			status: null,
 			settings: payload.settings ?? {},
 			priority: null,
 			sort_order,

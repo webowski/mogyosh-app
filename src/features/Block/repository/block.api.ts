@@ -34,7 +34,6 @@ const makeBlockObject = (blockRow: BlockRow): BlockEntity => ({
 	parent_id: blockRow.parent_id,
 	type: blockRow.type,
 	text_content: blockRow.text_content,
-	status: blockRow.status,
 	settings: decodeBlockSettingsFromHex(blockRow.type, blockRow.settings),
 	states: blockRow.block_states ?? [],
 	priority: blockRow.priority,

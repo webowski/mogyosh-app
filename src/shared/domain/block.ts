@@ -23,7 +23,6 @@ export type BlockType =
 	| 'c' // counter
 	| 'img' // image
 
-export type BlockStatus = 'active' | 'archived'
 export type BlockState = 'done' | 'active'
 
 export type BlockStateEntity = {
@@ -84,7 +83,6 @@ export type BlockEntity = {
 	parent_id?: BlockId | null
 	type: BlockType
 	text_content: string
-	status?: BlockStatus | null
 	settings: BlockSettings
 	priority?: number | null
 	sort_order: string | null
@@ -101,7 +99,6 @@ export type BlockRow = {
 	type: BlockType
 	text_content: string
 	settings: string // hex-encoded bytea, decoded via decodeBlockSettingsFromHex(type, settings)
-	status: BlockStatus
 	priority: number
 	sort_order: string | null
 	block_states: BlockMonthStateEntity[]
