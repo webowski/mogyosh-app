@@ -326,14 +326,14 @@ const setTaskDayCompleted = async ({
 }
 
 /**
- * Soft delete a task by ID (marks lifecycle as 'deleted', keeps all data intact)
+ * Soft delete a task by ID (marks lifecycle as 'd', keeps all data intact)
  * Cascades to child blocks so they also disappear from active views
  * @param taskId - Task ID to soft delete
  */
 const deleteTask = async (taskId: TaskId): Promise<void> => {
 	const { error: taskError } = await supabaseClient
 		.from('tasks')
-		.update({ lifecycle: 'deleted' })
+		.update({ lifecycle: 'd' })
 		.eq('id', taskId)
 
 	if (taskError) throw taskError
@@ -347,7 +347,7 @@ const deleteTask = async (taskId: TaskId): Promise<void> => {
 
 /**
  * Permanently delete a task by ID (hard delete with cascading)
- * Intended to be used for tasks already in the trash (lifecycle: 'deleted')
+ * Intended to be used for tasks already in the trash (lifecycle: 'd')
  * @param taskId - Task ID to delete permanently
  */
 const deleteTaskPermanently = async (taskId: TaskId): Promise<void> => {

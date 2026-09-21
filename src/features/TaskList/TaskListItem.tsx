@@ -25,7 +25,7 @@ export default function TaskListItem({ data }: TaskListItemProps) {
 	const deleteTaskPermanentlyMutation = useDeleteTaskPermanently()
 	const deleteTaskMutation = useDeleteTask()
 
-	const isDeleted = data.lifecycle === 'deleted'
+	const isDeleted = data.lifecycle === 'd'
 
 	const handlePress = () => {
 		setSelectedTaskId(data.id)

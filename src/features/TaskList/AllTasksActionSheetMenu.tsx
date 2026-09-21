@@ -17,7 +17,7 @@ export default function AllTasksActionSheetMenu({
 	)
 
 	const handlePressDeleted = () => {
-		setLifecycleFilter('deleted')
+		setLifecycleFilter('d')
 		onSelect()
 	}
 

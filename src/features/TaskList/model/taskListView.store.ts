@@ -11,7 +11,7 @@ interface TaskListViewStore {
 }
 
 export const useTaskListViewStore = create<TaskListViewStore>((set) => ({
-	lifecycleFilter: 'active',
+	lifecycleFilter: 'a',
 	setLifecycleFilter: (lifecycle) => set({ lifecycleFilter: lifecycle }),
 
 	isSortMode: false,

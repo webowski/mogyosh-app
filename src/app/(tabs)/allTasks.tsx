@@ -260,10 +260,10 @@ export default function AllTasksScreen() {
 				</View>
 			</View>
 
-			{lifecycleFilter === 'deleted' && (
+			{lifecycleFilter === 'd' && (
 				<View style={styles.DeletedBanner}>
 					<Text style={styles.DeletedBanner__title}>Удалённые задачи</Text>
-					<Pressable onPress={() => setLifecycleFilter('active')} hitSlop={8}>
+					<Pressable onPress={() => setLifecycleFilter('a')} hitSlop={8}>
 						<Text style={styles.DeletedBanner__back}>Назад</Text>
 					</Pressable>
 				</View>

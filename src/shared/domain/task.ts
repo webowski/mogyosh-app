@@ -23,7 +23,13 @@ export type CategoryEntity = {
 
 export type CategoryMap = Record<CategoryId, CategoryEntity | undefined>
 
-export type TaskLifecycle = 'active' | 'archived' | 'deleted'
+/**
+ * Жизненный цикл задачи:
+ * - 'a': active (активная)
+ * - 'ar': archived (архивная)
+ * - 'd': deleted (удаленная)
+ */
+export type TaskLifecycle = 'a' | 'ar' | 'd'
 
 export type TaskState = 'done' | 'active'
 export type TaskCompleted = boolean
