@@ -137,3 +137,20 @@ export const deleteBlockPersistentState = async ({
 
 	if (error) throw error
 }
+
+/**
+ * Deletes every block_states row for a block (all months + persistent).
+ * Used when the block type changes — codecs are type-specific, so old payloads become invalid.
+ */
+export const deleteAllBlockStates = async ({
+	blockId
+}: {
+	blockId: BlockId
+}): Promise<void> => {
+	const { error } = await supabaseClient
+		.from('block_states')
+		.delete()
+		.eq('block_id', blockId)
+
+	if (error) throw error
+}

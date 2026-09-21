@@ -1,7 +1,7 @@
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Pressable, Text, View } from 'react-native'
+import { Alert, Platform, Pressable, Text, View } from 'react-native'
 import { EnrichedMarkdownTextInputInstance } from 'react-native-enriched-markdown'
 import { ScrollView } from 'react-native-gesture-handler'
 import {
@@ -19,6 +19,7 @@ import type { BlockId, TaskId } from '@/shared/domain/ids'
 import { useEditorToolbarStore } from '@/shared/model/editorToolbar.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 import { Button } from '@/shared/ui/Button'
+import { deleteAllBlockStates } from '../BlockState/repository/blockState.api'
 import { selectBlocks, useBlockStore } from './model/block.store'
 import { useBlockSettingsSheetStore } from './model/blockSettingsSheet.store'
 import { useCreateBlock } from './model/useCreateBlock'
@@ -229,22 +230,59 @@ export default function EditorToolbar() {
 
 	const handleChangeBlockType = (type: BlockType) => {
 		if (!focusedBlock) return
+		if (focusedBlock.type === type) return
 
-		pushUndoAction({
-			type: 'update',
-			id: focusedBlock.id,
-			previousPatch: { type: focusedBlock.type }
-		})
+		const applyTypeChange = () => {
+			pushUndoAction({
+				type: 'update',
+				id: focusedBlock.id,
+				previousPatch: { type: focusedBlock.type }
+			})
 
-		updateBlock.mutate({
-			id: focusedBlock.id,
-			taskId: activeItemId as TaskId,
-			patch: { type }
-		})
+			// Optimistic: change type and clear local states
+			useBlockStore
+				.getState()
+				.updateBlock(focusedBlock.id, activeItemId as TaskId, {
+					type,
+					states: []
+				})
 
-		requestAnimationFrame(() =>
-			requestAnimationFrame(() => focusBlock(focusedBlock.id))
-		)
+			useBlockStore.getState().enqueueOperation({
+				type: 'update',
+				id: focusedBlock.id,
+				taskId: activeItemId as TaskId,
+				patch: { type }
+			})
+
+			// Server: remove all block_states for this block
+			void deleteAllBlockStates({ blockId: focusedBlock.id }).catch((error) => {
+				console.error('Failed to delete block states:', error)
+			})
+
+			requestAnimationFrame(() =>
+				requestAnimationFrame(() => focusBlock(focusedBlock.id))
+			)
+		}
+
+		const hasProgressStates = (focusedBlock.states?.length ?? 0) > 0
+
+		if (hasProgressStates) {
+			Alert.alert(
+				'Сменить тип блока?',
+				'При мене типа статистика прогресса по этому блоку будет удалена безвозвратно.',
+				[
+					{ text: 'Отмена', style: 'cancel' },
+					{
+						text: 'Сменить',
+						style: 'destructive',
+						onPress: applyTypeChange
+					}
+				]
+			)
+			return
+		}
+
+		applyTypeChange()
 	}
 
 	const handleAddBlockWithType = (type: BlockType) => {
