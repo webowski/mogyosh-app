@@ -29,6 +29,7 @@ import { useTaskStore } from '@/shared/model/task.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 import CircleProgress from '@/shared/ui/CircleProgress'
 import { triggerHapticLight } from '@/shared/ui/Haptic'
+import { getScheduleTimesForDate } from '../Schedule'
 import { useAddScheduleException } from '../Schedule/model/useAddScheduleException'
 import { useTaskListViewStore } from './model/taskListView.store'
 import { useDeleteTask } from './model/useDeleteTask'
@@ -65,8 +66,6 @@ export default function TaskItem({
 	const deleteTaskMutation = useDeleteTask()
 	const updateTaskStateMutation = useUpdateTaskState()
 
-	const isByTimeBool = isByTime(data)
-
 	// Shared values for swipe animation
 	const translateX = useSharedValue(0)
 	const itemHeight = useSharedValue(0)
@@ -80,12 +79,31 @@ export default function TaskItem({
 
 	const addScheduleException = useAddScheduleException()
 	const selectedDate = useCalendarStore((store) => store.selectedDate)
-	// если selectedDate — Date:
-	const dateString =
-		typeof selectedDate === 'string'
-			? selectedDate.slice(0, 10)
-			: selectedDate.toISOString().slice(0, 10)
+
+	const dateString = [
+		selectedDate.getFullYear(),
+		String(selectedDate.getMonth() + 1).padStart(2, '0'),
+		String(selectedDate.getDate()).padStart(2, '0')
+	].join('-')
+
+	const isByTimeBool = isByTime(data, dateString)
+
+	const scheduleTimesForDate = data.schedule
+		? getScheduleTimesForDate(data.schedule.schedule, dateString)
+		: []
+
+	const primaryTime =
+		scheduleTimesForDate.find((slot) => slot.time)?.time ?? null
+
 	const isCompleted = isTaskCompletedOnDate(data.states, selectedDate)
+
+	const skipThisDay = () => {
+		if (!data.schedule) return
+		addScheduleException.mutate({
+			taskId: data.id,
+			dateString
+		})
+	}
 
 	const toggleCompleteTask = () => {
 		updateTaskStateMutation.mutate({
@@ -147,21 +165,33 @@ export default function TaskItem({
 
 	const handleOpenContextMenu = (positionX: number, positionY: number) => {
 		triggerHapticLight()
-		openContextMenu({ x: positionX, y: positionY }, [
+
+		const menuItems = [
 			{
 				title: isCompleted ? 'Отменить выполнение' : 'Выполнено',
-				onPress: toggleCompleteTask
+				onPress: toggleCompleteTask,
+				destructive: false
 			},
 			{
 				title: 'Открыть',
 				onPress: goTaskScreen
-			},
-			{
-				title: 'Удалить',
-				onPress: deleteTask,
-				destructive: true
 			}
-		])
+		]
+
+		if (data.schedule) {
+			menuItems.push({
+				title: 'Пропустить этот день',
+				onPress: skipThisDay
+			})
+		}
+
+		menuItems.push({
+			title: 'Удалить',
+			onPress: deleteTask,
+			destructive: true
+		})
+
+		openContextMenu({ x: positionX, y: positionY }, menuItems)
 	}
 
 	const longPressGesture = Gesture.LongPress()
@@ -250,10 +280,10 @@ export default function TaskItem({
 							/>
 						)}
 
-						{isByTimeBool && (
+						{isByTimeBool && primaryTime && (
 							<Text style={styles.Card__time}>
 								{formatTime(
-									data.schedules?.[0]?.start_time as string,
+									primaryTime.length === 5 ? `${primaryTime}:00` : primaryTime,
 									hourFormat
 								)}
 							</Text>
