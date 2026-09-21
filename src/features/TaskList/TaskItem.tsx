@@ -29,6 +29,7 @@ import { useTaskStore } from '@/shared/model/task.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 import CircleProgress from '@/shared/ui/CircleProgress'
 import { triggerHapticLight } from '@/shared/ui/Haptic'
+import { useAddScheduleException } from '../Schedule/model/useAddScheduleException'
 import { useTaskListViewStore } from './model/taskListView.store'
 import { useDeleteTask } from './model/useDeleteTask'
 import { useTaskProgress } from './model/useTaskProgress'
@@ -77,7 +78,13 @@ export default function TaskItem({
 		onDelete?.(data.id)
 	}
 
+	const addScheduleException = useAddScheduleException()
 	const selectedDate = useCalendarStore((store) => store.selectedDate)
+	// если selectedDate — Date:
+	const dateString =
+		typeof selectedDate === 'string'
+			? selectedDate.slice(0, 10)
+			: selectedDate.toISOString().slice(0, 10)
 	const isCompleted = isTaskCompletedOnDate(data.states, selectedDate)
 
 	const toggleCompleteTask = () => {
