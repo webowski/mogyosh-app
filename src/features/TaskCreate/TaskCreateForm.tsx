@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { TrueSheet } from '@lodev09/react-native-true-sheet'
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons'
+import { useRouter } from 'expo-router'
 import { generateNKeysBetween } from 'fractional-indexing'
 import { t } from 'i18next'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -13,12 +14,18 @@ import { z } from 'zod'
 import { ActionsPanel } from '@/features/ActionsPanel/ActionsPanel'
 import { blockAPI } from '@/features/Block/repository/block.api'
 import { useNavStore } from '@/features/Navigation/model/navStore'
+import { formatScheduleLabel } from '@/features/Schedule/model/scheduleLabel'
+import {
+	SchedulePickerSheet,
+	type SchedulePickerSheetRef
+} from '@/features/Schedule/ui/SchedulePickerSheet'
 import {
 	useCategories,
 	useCreateCategory,
 	useCreateTask
 } from '@/features/TaskList'
 import type { BlockInsert } from '@/shared/domain/block'
+import type { ScheduleData } from '@/shared/domain/task'
 import { useTaskStore } from '@/shared/model/task.store'
 import { STYLE_VARS } from '@/shared/styles/common'
 import { formStyles } from '@/shared/styles/form'
@@ -26,7 +33,6 @@ import { textStyles } from '@/shared/styles/text'
 import { Button } from '@/shared/ui/Button'
 import RadioButton from '@/shared/ui/RadioButton'
 import Textarea from '@/shared/ui/Textarea'
-import { useRouter } from 'expo-router'
 
 const schema = z.object({
 	title: z.string().min(1, t('error.Enter the task title')).max(100)
@@ -47,6 +53,9 @@ export function TaskCreateForm({ onClose }: Props) {
 	const clearDraftTitle = useTaskStore((store) => store.clearDraftTitle)
 
 	const sheetRef = useRef<TrueSheet>(null)
+
+	const scheduleSheetRef = useRef<SchedulePickerSheetRef>(null)
+	const [scheduleData, setScheduleData] = useState<ScheduleData | null>(null)
 
 	const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
 		null
@@ -144,7 +153,8 @@ export function TaskCreateForm({ onClose }: Props) {
 	const onSubmit = async (data: TaskFormData) => {
 		const parentTask = await createTask.mutateAsync({
 			title: data.title,
-			category_id: selectedCategoryId
+			category_id: selectedCategoryId,
+			scheduleData: scheduleData ?? undefined
 		})
 
 		const filledBlocksChecklist = blocksChecklist.filter((checklistItem) =>
@@ -225,8 +235,13 @@ export function TaskCreateForm({ onClose }: Props) {
 					</View>
 					<View style={[formStyles.formRow]}>
 						<Text style={textStyles.label}>Повтор</Text>
-						<Button textStyle={{ fontWeight: 400 }} variant='chip' arrow>
-							Вт, Чт, Сб
+						<Button
+							textStyle={{ fontWeight: 400 }}
+							variant='chip'
+							arrow
+							onPress={() => scheduleSheetRef.current?.present(scheduleData)}
+						>
+							{formatScheduleLabel(scheduleData)}
 						</Button>
 					</View>
 					<View style={[formStyles.formRow, formStyles.formRow_last]}>
@@ -338,6 +353,11 @@ export function TaskCreateForm({ onClose }: Props) {
 					)}
 				</View>
 			</TrueSheet>
+
+			<SchedulePickerSheet
+				ref={scheduleSheetRef}
+				onConfirm={(data) => setScheduleData(data)}
+			/>
 		</>
 	)
 }
