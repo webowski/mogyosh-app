@@ -1,5 +1,6 @@
 import { generateKeyBetween } from 'fractional-indexing'
 
+import { getScheduleTimesForDate, isScheduledOnDate } from '@/features/Schedule'
 import type { CategoryId, TaskId } from '@/shared/domain/ids'
 import type {
 	CategoryMap,
@@ -41,30 +42,32 @@ export const filterTasks = (
 }
 
 /**
- * Categorize tasks into sections based on their schedules
- * - "during_the_day": tasks without start_time
- * - "by_time": tasks with start_time
+ * Categorize tasks into sections based on schedule times for a given date.
  */
-export const groupTasksByShedule = (tasks: TaskEntity[]): TaskSection[] => {
-	// Tasks with start_time go to "By time"
-	const byTimeTasks = tasks.filter((task) => {
-		return (
-			task.schedules &&
-			task.schedules.some((s) => {
-				return s.start_time !== null && s.start_time !== undefined
-			})
-		)
-	})
+export const groupTasksByShedule = (
+	tasks: TaskEntity[],
+	dateString: string
+): TaskSection[] => {
+	const byTimeTasks: TaskEntity[] = []
+	const duringDayTasks: TaskEntity[] = []
 
-	// Tasks without start_time go to "During the day"
-	const duringDayTasks = tasks.filter((task) => {
-		return (
-			!task.schedules ||
-			task.schedules.every((s) => {
-				return s.start_time === null || s.start_time === undefined
-			})
+	for (const task of tasks) {
+		if (!task.schedule) {
+			duringDayTasks.push(task)
+			continue
+		}
+
+		const times = getScheduleTimesForDate(task.schedule.schedule, dateString)
+		const hasTime = times.some(
+			(slot) => slot.time !== null && slot.time !== undefined
 		)
-	})
+
+		if (hasTime) {
+			byTimeTasks.push(task)
+		} else {
+			duringDayTasks.push(task)
+		}
+	}
 
 	const sections: TaskSection[] = []
 
@@ -86,29 +89,15 @@ export const groupTasksByShedule = (tasks: TaskEntity[]): TaskSection[] => {
 
 	return sections
 }
+
 /**
  * Filter tasks by date
  * Checks if task has schedules that match the given date
  */
 export const filterTasksByDate = (tasks: TaskEntity[], date: string) => {
 	return tasks.filter((task) => {
-		if (!task.schedules || task.schedules.length === 0) {
-			return false
-		}
-
-		return task.schedules.some((schedule) => {
-			// Check exact date match
-			if (schedule.date === date) {
-				return true
-			}
-
-			// Check if date is within start_date and end_date range
-			if (schedule.start_date && schedule.end_date) {
-				return date >= schedule.start_date && date <= schedule.end_date
-			}
-
-			return false
-		})
+		if (!task.schedule) return false
+		return isScheduledOnDate(task.schedule.schedule, date)
 	})
 }
 
@@ -121,26 +110,29 @@ export const countTasksByDay = (
 	endDate: string
 ) => {
 	const countByDate: Record<string, number> = {}
+	const cursor = new Date(startDate + 'T00:00:00')
+	const end = new Date(endDate + 'T00:00:00')
 
-	tasks.forEach((task) => {
-		if (task.schedules && Array.isArray(task.schedules)) {
-			task.schedules.forEach((schedule) => {
-				if (
-					schedule.date &&
-					schedule.date >= startDate &&
-					schedule.date <= endDate
-				) {
-					countByDate[schedule.date] = (countByDate[schedule.date] || 0) + 1
-				}
-			})
+	while (cursor <= end) {
+		const dateString = cursor.toISOString().slice(0, 10)
+
+		for (const task of tasks) {
+			if (!task.schedule) continue
+			if (isScheduledOnDate(task.schedule.schedule, dateString)) {
+				countByDate[dateString] = (countByDate[dateString] || 0) + 1
+			}
 		}
-	})
+
+		cursor.setDate(cursor.getDate() + 1)
+	}
 
 	return countByDate
 }
 
-export const isByTime = (task: TaskEntity): boolean => {
-	return typeof task.schedules?.[0]?.start_time === 'string'
+export const isByTime = (task: TaskEntity, dateString: string): boolean => {
+	if (!task.schedule) return false
+	const times = getScheduleTimesForDate(task.schedule.schedule, dateString)
+	return times.some((slot) => typeof slot.time === 'string')
 }
 
 export const generateTaskSortOrder = (
