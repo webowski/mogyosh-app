@@ -23,8 +23,6 @@ export type BlockType =
 	| 'c' // counter
 	| 'img' // image
 
-export type BlockState = 'done' | 'active'
-
 export type BlockStateEntity = {
 	id: BlockStateId
 	task_id: TaskId
