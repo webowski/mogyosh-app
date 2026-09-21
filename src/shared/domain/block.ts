@@ -11,17 +11,17 @@ export type BlockType =
 	| 'h4'
 	| 'ul'
 	| 'ol'
-	| 'e'
-	| 'h1e'
+	| 'e' // expandable
+	| 'h1e' // h1 expandable
 	| 'h2e'
 	| 'h3e'
 	| 'h4e'
-	| 'table'
+	| 'tbl' // table
 	| 'pr' // progress
-	| 't'
-	| 'sw'
-	| 'c'
-	| 'image'
+	| 't' // timer
+	| 'sw' // stopwatch
+	| 'c' // counter
+	| 'img' // image
 
 export type BlockStatus = 'active' | 'archived'
 export type BlockState = 'done' | 'active'

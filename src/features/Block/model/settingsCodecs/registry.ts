@@ -18,9 +18,9 @@ const DEFAULT_CODEC_TYPES: BlockType[] = [
 	'h2e',
 	'h3e',
 	'h4e',
-	'table',
+	'tbl',
 	'pr',
-	'image'
+	'img'
 ]
 
 const CODEC_REGISTRY = new Map<
