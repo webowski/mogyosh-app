@@ -25,7 +25,7 @@ export default function DayScreen() {
 		console.log({ error, catError })
 		return (
 			<View style={commonStyles.mainArea}>
-				<Text>Ошибка загрузкиj</Text>
+				<Text>Ошибка загрузки задач</Text>
 			</View>
 		)
 	}
