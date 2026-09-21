@@ -44,7 +44,9 @@ export type MonthStateEntity = {
 	updated_at: string
 }
 
-export type TaskType = 'task' | 'motivation'
+export type TaskType =
+	| 't' // task
+	| 'm' // motivatioin
 
 export type TaskEntity = {
 	id: TaskId
