@@ -150,7 +150,6 @@ const getStatsBlocks = async (taskId: TaskId): Promise<BlockEntity[]> => {
 	const { data, error } = await supabaseClient
 		.from('blocks')
 		.select(SUBITEMS_SELECT)
-		.eq('status', 'active')
 		.eq('task_id', taskId)
 
 	if (error) throw error
