@@ -1,20 +1,5 @@
 import { CategoryId, TaskId } from './ids'
 
-export type ScheduleType = 'once' | 'weekday' | 'daily' | 'weekly' | 'monthly'
-
-export type ScheduleEntity = {
-	id: string
-	type: ScheduleType
-	start_time?: string | null
-	end_time?: string | null
-	date?: string | null
-	weekday?: number | null
-	month_day?: number | null
-	month?: number | null
-	start_date?: string | null
-	end_date?: string | null
-}
-
 export type CategoryEntity = {
 	id: CategoryId
 	name: string
@@ -63,7 +48,7 @@ export type TaskEntity = {
 	priority?: number | null
 	category?: CategoryEntity | null
 	parent_id?: TaskId | null
-	schedules?: ScheduleEntity[]
+	schedule?: ScheduleEntity | null
 	sort_order?: string | null
 	created_at: string
 	updated_at?: string | null
@@ -78,8 +63,77 @@ export type TaskRow = {
 	categories: any
 	parent_id: string | null
 	states: MonthStateEntity[]
-	schedules: ScheduleEntity[]
+	schedule?: ScheduleEntity | null
 	sort_order?: string | null
 	created_at: string
 	updated_at: string
+}
+
+// --- Schedule ---
+
+/** Single time point. time = "HH:mm", endTime optional */
+export type TimeSlot = {
+	time: string
+	endTime?: string | null
+}
+
+export type ScheduleRule =
+	| {
+			type: 'once'
+			occurrences: {
+				date: string
+				time: string | null
+				endTime?: string | null
+			}[]
+	  }
+	| {
+			type: 'daily'
+			times: TimeSlot[]
+			startDate?: string
+			endDate?: string
+	  }
+	| {
+			type: 'weekly'
+			slots: {
+				weekday: number // 0=Sun … 6=Sat
+				time: string
+				endTime?: string | null
+			}[]
+			startDate?: string
+			endDate?: string
+	  }
+	| {
+			type: 'monthly'
+			occurrences: {
+				dayOfMonth: number
+				time: string | null
+				endTime?: string | null
+			}[]
+			startDate?: string
+			endDate?: string
+	  }
+	| {
+			type: 'yearly'
+			occurrences: {
+				month: number // 1–12
+				day: number
+				time: string | null
+				endTime?: string | null
+			}[]
+			startDate?: string
+			endDate?: string
+	  }
+
+export type SchedulePayload = {
+	rule: ScheduleRule
+	/** Skipped dates (whole day). ISO "YYYY-MM-DD" */
+	exceptions: string[]
+}
+
+export type ScheduleEntity = {
+	taskId: string
+	encoding: number
+	payload: SchedulePayload
+	createdAt: string
+	updatedAt: string
 }
