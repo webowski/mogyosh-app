@@ -37,8 +37,8 @@ export const SchedulePickerSheet = forwardRef<SchedulePickerSheetRef, Props>(
 		const [selectedWeekdays, setSelectedWeekdays] = useState<number[]>([
 			1, 3, 5
 		])
-		const [weeklyTime, setWeeklyTime] = useState('20:00')
-		const [dailyTimesText, setDailyTimesText] = useState('09:00, 19:00')
+		const [weeklyTime, setWeeklyTime] = useState('') // was '20:00'
+		const [dailyTimesText, setDailyTimesText] = useState('') // was '09:00, 19:00'
 		const [onceDate, setOnceDate] = useState('')
 		const [onceTime, setOnceTime] = useState('')
 
@@ -59,11 +59,15 @@ export const SchedulePickerSheet = forwardRef<SchedulePickerSheetRef, Props>(
 			if (rule.type === 'weekly') {
 				const weekdays = [...new Set(rule.slots.map((slot) => slot.weekday))]
 				setSelectedWeekdays(weekdays)
-				setWeeklyTime(rule.slots[0]?.time ?? '20:00')
+				const firstTime = rule.slots.find((slot) => slot.time)?.time ?? ''
+				setWeeklyTime(firstTime)
 			}
 
 			if (rule.type === 'daily') {
-				setDailyTimesText(rule.times.map((slot) => slot.time).join(', '))
+				const timesWithValue = rule.times
+					.map((slot) => slot.time)
+					.filter((time): time is string => Boolean(time))
+				setDailyTimesText(timesWithValue.join(', '))
 			}
 
 			if (rule.type === 'once' && rule.occurrences[0]) {
@@ -111,20 +115,19 @@ export const SchedulePickerSheet = forwardRef<SchedulePickerSheetRef, Props>(
 			let rule: ScheduleRule
 
 			if (ruleType === 'weekly') {
+				const normalizedTime = weeklyTime.trim()
 				rule = {
 					type: 'weekly',
 					slots: selectedWeekdays.map((weekday) => ({
 						weekday,
-						time: weeklyTime.trim() || '20:00'
+						time: normalizedTime.length > 0 ? normalizedTime : null
 					}))
 				}
 			} else if (ruleType === 'daily') {
 				const times = parseTimes(dailyTimesText)
 				rule = {
 					type: 'daily',
-					times: (times.length > 0 ? times : ['09:00']).map((time) => ({
-						time
-					}))
+					times: times.length > 0 ? times.map((time) => ({ time })) : [] // every day, no specific time — paired with utils change above
 				}
 			} else if (ruleType === 'once') {
 				rule = {
@@ -213,30 +216,33 @@ export const SchedulePickerSheet = forwardRef<SchedulePickerSheetRef, Props>(
 									)
 								})}
 							</View>
-							<Text style={styles.Section__label}>Время</Text>
+
+							<Text style={styles.Section__label}>Время (необязательно)</Text>
 							<TextInput
 								style={styles.TimeInput}
 								value={weeklyTime}
 								onChangeText={setWeeklyTime}
-								placeholder='20:00'
+								placeholder='Например 20:00'
 								placeholderTextColor={theme.colors.minor}
 								keyboardType='numbers-and-punctuation'
 							/>
 							<Text style={styles.Hint}>
-								Пока одно время на все выбранные дни. Разное время на день — в
-								следующей итерации.
+								Можно оставить пустым — задача будет только привязана к дням
+								недели.
 							</Text>
 						</View>
 					)}
 
 					{ruleType === 'daily' && (
 						<View style={styles.Section}>
-							<Text style={styles.Section__label}>Времена (через запятую)</Text>
+							<Text style={styles.Section__label}>
+								Время через запятую (необязательно)
+							</Text>
 							<TextInput
 								style={styles.TimeInput}
 								value={dailyTimesText}
 								onChangeText={setDailyTimesText}
-								placeholder='09:00, 19:00'
+								placeholder='Например: 09:00, 19:00'
 								placeholderTextColor={theme.colors.minor}
 							/>
 						</View>

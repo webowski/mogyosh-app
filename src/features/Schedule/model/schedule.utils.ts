@@ -48,6 +48,9 @@ export const getScheduleTimesForDate = (
 			if (!isWithinRange(dateString, rule.startDate, rule.endDate)) {
 				return []
 			}
+			if (rule.times.length === 0) {
+				return [{ time: null }]
+			}
 			return rule.times.map((slot) => ({
 				time: slot.time,
 				endTime: slot.endTime

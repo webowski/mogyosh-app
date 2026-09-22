@@ -25,9 +25,10 @@ export const formatScheduleLabel = (
 		}
 
 		case 'daily': {
-			if (rule.times.length === 0) return 'Ежедневно'
-			const timesLabel = rule.times.map((slot) => slot.time).join(', ')
-			return `Ежедневно ${timesLabel}`
+			const times = rule.times
+				.map((slot) => slot.time)
+				.filter((time): time is string => Boolean(time))
+			return times.length > 0 ? `Ежедневно ${times.join(', ')}` : 'Ежедневно'
 		}
 
 		case 'weekly': {
@@ -35,16 +36,14 @@ export const formatScheduleLabel = (
 			const byWeekday = new Map<number, string[]>()
 			for (const slot of rule.slots) {
 				const times = byWeekday.get(slot.weekday) ?? []
-				times.push(slot.time)
+				if (slot.time) times.push(slot.time)
 				byWeekday.set(slot.weekday, times)
 			}
 			const parts = [...byWeekday.entries()]
 				.sort(([weekdayA], [weekdayB]) => weekdayA - weekdayB)
 				.map(([weekday, times]) => {
 					const dayLabel = WEEKDAY_SHORT[weekday] ?? String(weekday)
-					return times.length === 1
-						? `${dayLabel} ${times[0]}`
-						: `${dayLabel} ${times.join(', ')}`
+					return times.length > 0 ? `${dayLabel} ${times.join(', ')}` : dayLabel
 				})
 			return parts.join(' · ')
 		}

@@ -73,7 +73,7 @@ export type TaskRow = {
 
 /** Single time point. time = "HH:mm", endTime optional */
 export type TimeSlot = {
-	time: string
+	time: string | null
 	endTime?: string | null
 }
 
@@ -88,7 +88,7 @@ export type ScheduleRule =
 	  }
 	| {
 			type: 'daily'
-			times: TimeSlot[]
+			times: TimeSlot[] // [] или [{ time: null }] = весь день без конкретного времени
 			startDate?: string
 			endDate?: string
 	  }
@@ -96,7 +96,7 @@ export type ScheduleRule =
 			type: 'weekly'
 			slots: {
 				weekday: number // 0=Sun … 6=Sat
-				time: string
+				time: string | null
 				endTime?: string | null
 			}[]
 			startDate?: string
