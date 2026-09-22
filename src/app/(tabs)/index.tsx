@@ -1,3 +1,4 @@
+import { format } from 'date-fns'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SectionList, Text, View } from 'react-native'
@@ -9,13 +10,18 @@ import {
 } from '@/features/TaskList'
 import { useCategories } from '@/features/TaskList/model/useCategories'
 import TaskItem from '@/features/TaskList/TaskItem'
+import { useCalendarStore } from '@/shared/model/calendar.store'
 import { commonStyles, STYLE_VARS } from '@/shared/styles/common'
 import { textStyles } from '@/shared/styles/text'
 import Skeleton from '@/shared/ui/Skeleton'
 
 export default function DayScreen() {
 	const { t } = useTranslation()
-	const { data, isLoading, error, refetch } = useTasksGrouped()
+
+	const selectedDate = useCalendarStore((store) => store.selectedDate)
+	const dateString = format(selectedDate, 'yyyy-MM-dd')
+	const { data, isLoading, error, refetch } = useTasksGrouped(dateString)
+
 	const { isLoading: catLoading, error: catError } = useCategories()
 	const isSortMode = useTaskListViewStore((store) => store.isSortMode)
 

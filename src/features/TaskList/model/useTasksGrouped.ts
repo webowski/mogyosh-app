@@ -5,14 +5,15 @@ import { TaskFilters } from './task.types'
 import { groupTasksByShedule } from './task.utils'
 
 /**
- * Get all tasks with optional filtering and categorization
+ * Tasks for a specific calendar day, grouped by schedule sections.
  */
-export const useTasksGrouped = (filters?: TaskFilters) => {
+export const useTasksGrouped = (dateString: string, filters?: TaskFilters) => {
 	return useQuery({
-		queryKey: ['tasks-grouped', filters],
+		queryKey: ['tasks-grouped', dateString, filters],
 		queryFn: async () => {
-			const tasks = await taskAPI.getTasks(filters)
-			return groupTasksByShedule(tasks)
-		}
+			const tasks = await taskAPI.getTasksByDate(dateString)
+			return groupTasksByShedule(tasks, dateString)
+		},
+		enabled: Boolean(dateString)
 	})
 }

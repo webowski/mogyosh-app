@@ -4,6 +4,11 @@ const toDateString = (date: Date): string => {
 	return date.toISOString().slice(0, 10)
 }
 
+const parseLocalDate = (dateString: string): Date => {
+	const [year, month, day] = dateString.split('-').map(Number)
+	return new Date(year, month - 1, day)
+}
+
 const isWithinRange = (
 	dateString: string,
 	startDate?: string,
@@ -26,7 +31,7 @@ export const getScheduleTimesForDate = (
 		return []
 	}
 
-	const date = new Date(dateString + 'T00:00:00')
+	const date = parseLocalDate(dateString)
 	const rule = data.rule
 
 	switch (rule.type) {
@@ -53,7 +58,7 @@ export const getScheduleTimesForDate = (
 			if (!isWithinRange(dateString, rule.startDate, rule.endDate)) {
 				return []
 			}
-			const weekday = date.getDay() // 0=Sun … 6=Sat
+			const weekday = date.getDay() // 0=Sun … 6=Sat, local, без UTC-сдвига
 			return rule.slots
 				.filter((slot) => slot.weekday === weekday)
 				.map((slot) => ({

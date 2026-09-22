@@ -1,4 +1,5 @@
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons'
+import { format } from 'date-fns'
 import { useRouter } from 'expo-router'
 import { PropsWithChildren } from 'react'
 import { Text, View } from 'react-native'
@@ -80,11 +81,7 @@ export default function TaskItem({
 	const addScheduleException = useAddScheduleException()
 	const selectedDate = useCalendarStore((store) => store.selectedDate)
 
-	const dateString = [
-		selectedDate.getFullYear(),
-		String(selectedDate.getMonth() + 1).padStart(2, '0'),
-		String(selectedDate.getDate()).padStart(2, '0')
-	].join('-')
+	const dateString = format(selectedDate, 'yyyy-MM-dd')
 
 	const isByTimeBool = isByTime(data, dateString)
 
