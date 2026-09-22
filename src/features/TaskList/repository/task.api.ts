@@ -228,7 +228,9 @@ const createTask = async (payload: CreateTaskPayload): Promise<TaskEntity> => {
 			title: payload.title,
 			user_id: userId,
 			parent_id: payload.parent_id ?? null,
-			category_id: payload.category_id ?? null
+			category_id: payload.category_id ?? null,
+			type: 't',
+			lifecycle: 'a'
 		})
 		.select()
 		.single()
