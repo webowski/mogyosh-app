@@ -24,6 +24,7 @@ import {
 	useCreateCategory,
 	useCreateTask
 } from '@/features/TaskList'
+import { formatNotificationLabel } from '@/services/Notifications/notifications.utils'
 import type { BlockInsert } from '@/shared/domain/block'
 import type { ScheduleData } from '@/shared/domain/task'
 import { useTaskStore } from '@/shared/model/task.store'
@@ -246,8 +247,13 @@ export function TaskCreateForm({ onClose }: Props) {
 					</View>
 					<View style={[formStyles.formRow, formStyles.formRow_last]}>
 						<Text style={textStyles.label}>Уведомление</Text>
-						<Button textStyle={{ fontWeight: 400 }} variant='chip' arrow>
-							за 1 час
+						<Button
+							textStyle={{ fontWeight: 400 }}
+							variant='chip'
+							arrow
+							onPress={() => scheduleSheetRef.current?.present(scheduleData)}
+						>
+							{formatNotificationLabel(scheduleData)}
 						</Button>
 					</View>
 				</View>
