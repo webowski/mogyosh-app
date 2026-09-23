@@ -227,12 +227,12 @@ export function TaskCreateForm({ onClose }: Props) {
 								: t('Uncategorized')}
 						</Button>
 					</View>
-					<View style={[formStyles.formRow]}>
+					{/* <View style={[formStyles.formRow]}>
 						<Text style={textStyles.label}>Метки</Text>
 						<Button textStyle={{ fontWeight: 400 }} variant='chip' arrow>
 							Без метки
 						</Button>
-					</View>
+					</View> */}
 					<View style={[formStyles.formRow]}>
 						<Text style={textStyles.label}>Повтор</Text>
 						<Button
