@@ -28,7 +28,7 @@ export default function DayScreen() {
 	const sections = useMemo(() => data ?? [], [data])
 
 	if (error || catError) {
-		console.log({ error, catError })
+		console.log('debug', { error: error, catError })
 		return (
 			<View style={commonStyles.mainArea}>
 				<Text>Ошибка загрузки задач</Text>
