@@ -11,12 +11,17 @@ import { STYLE_VARS } from '@/shared/styles/common'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import Animated, { FadeOut, LinearTransition } from 'react-native-reanimated'
 import { scheduleOnRN } from 'react-native-worklets'
+import { formatScheduleLabel } from '../Schedule/model/scheduleLabel'
 
 type TaskListItemProps = {
 	data: TaskEntity
+	onSchedulePress?: (task: TaskEntity) => void
 }
 
-export default function TaskListItem({ data }: TaskListItemProps) {
+export default function TaskListItem({
+	data,
+	onSchedulePress
+}: TaskListItemProps) {
 	const router = useRouter()
 	const { theme } = useUnistyles()
 
@@ -55,6 +60,11 @@ export default function TaskListItem({ data }: TaskListItemProps) {
 	}
 
 	const handleMenuPressAction = (event: { nativeEvent: { event: string } }) => {
+		if (event.nativeEvent.event === 'schedule') {
+			onSchedulePress?.(data)
+			return
+		}
+
 		if (event.nativeEvent.event === 'deletePermanently') {
 			handleDeletePermanently()
 		}
@@ -76,7 +86,7 @@ export default function TaskListItem({ data }: TaskListItemProps) {
 				>
 					{data.title}
 				</Text>
-				{data.priority !== null && data.priority !== undefined && (
+				{data.schedule && (
 					<Text
 						style={{
 							fontSize: 12,
@@ -84,7 +94,7 @@ export default function TaskListItem({ data }: TaskListItemProps) {
 							marginTop: 4
 						}}
 					>
-						Priority: {data.priority}
+						{formatScheduleLabel(data.schedule.schedule)}
 					</Text>
 				)}
 			</View>
@@ -100,6 +110,11 @@ export default function TaskListItem({ data }: TaskListItemProps) {
 				<MenuView
 					shouldOpenOnLongPress
 					actions={[
+						{
+							id: 'schedule',
+							title: 'Расписание',
+							image: undefined
+						},
 						{
 							id: 'delete',
 							title: 'Удалить',

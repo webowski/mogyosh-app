@@ -23,11 +23,22 @@ import {
 	useUpdateCategory
 } from '@/features/TaskList'
 import TaskListItem from '@/features/TaskList/TaskListItem'
-import type { CategoryEntity } from '@/shared/domain/task'
+import type {
+	CategoryEntity,
+	ScheduleData,
+	TaskEntity
+} from '@/shared/domain/task'
 import { commonStyles, STYLE_VARS } from '@/shared/styles/common'
 import { formStyles } from '@/shared/styles/form'
 import { Button } from '@/shared/ui/Button'
 import RadioButton from '@/shared/ui/RadioButton'
+
+import { useDeleteSchedule } from '@/features/Schedule/model/useDeleteSchedule'
+import { useUpsertSchedule } from '@/features/Schedule/model/useUpsertSchedule'
+import {
+	SchedulePickerSheet,
+	type SchedulePickerSheetRef
+} from '@/features/Schedule/ui/SchedulePickerSheet'
 
 type SortOption = 'alphabetical' | 'created_at' | 'updated_at'
 
@@ -127,6 +138,32 @@ export default function AllTasksScreen() {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[categories, i18n.language]
 	)
+
+	const scheduleSheetRef = useRef<SchedulePickerSheetRef>(null)
+	const scheduleTaskIdRef = useRef<string | null>(null)
+
+	const upsertSchedule = useUpsertSchedule()
+	const deleteSchedule = useDeleteSchedule()
+
+	const handleSchedulePress = (task: TaskEntity) => {
+		scheduleTaskIdRef.current = task.id
+		scheduleSheetRef.current?.present(task.schedule?.schedule ?? null)
+	}
+
+	const handleScheduleConfirm = (data: ScheduleData | null) => {
+		const taskId = scheduleTaskIdRef.current
+		if (!taskId) return
+
+		if (data === null) {
+			deleteSchedule.mutate(taskId)
+			return
+		}
+
+		upsertSchedule.mutate({
+			taskId,
+			data
+		})
+	}
 
 	const sortedTasks = useMemo(() => {
 		if (!tasks) return tasks
@@ -291,7 +328,9 @@ export default function AllTasksScreen() {
 				refreshing={false}
 				scrollEventThrottle={16}
 				showsVerticalScrollIndicator={false}
-				renderItem={({ item }) => <TaskListItem data={item} />}
+				renderItem={({ item }) => (
+					<TaskListItem data={item} onSchedulePress={handleSchedulePress} />
+				)}
 				ListEmptyComponent={
 					isLoading ? (
 						<ActivityIndicator />
@@ -515,6 +554,11 @@ export default function AllTasksScreen() {
 					))}
 				</View>
 			</TrueSheet>
+
+			<SchedulePickerSheet
+				ref={scheduleSheetRef}
+				onConfirm={handleScheduleConfirm}
+			/>
 		</>
 	)
 }
