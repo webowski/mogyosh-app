@@ -84,6 +84,13 @@
       ],
       "expo-font",
       "expo-image",
+      [
+        "expo-notifications",
+        {
+          "color": "#668cff",
+          "defaultChannel": "task-reminders"
+        }
+      ],
       "expo-web-browser",
       "expo-status-bar",
       "@react-native-vector-icons/material-design-icons"

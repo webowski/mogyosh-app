@@ -3,6 +3,10 @@ import { endOfDay, startOfDay } from 'date-fns'
 import { blockAPI } from '@/features/Block'
 import { isScheduledOnDate } from '@/features/Schedule/model/schedule.utils'
 import { scheduleAPI } from '@/features/Schedule/repository/schedule.api'
+import {
+	cancelTaskNotifications,
+	rescheduleTaskNotifications
+} from '@/services/Notifications'
 import { supabaseClient } from '@/shared/api/supabaseClient'
 import { TaskId } from '@/shared/domain/ids'
 import type {
@@ -242,6 +246,11 @@ const createTask = async (payload: CreateTaskPayload): Promise<TaskEntity> => {
 			taskId: data.id,
 			data: payload.scheduleData
 		})
+		await rescheduleTaskNotifications({
+			taskId: data.id,
+			title: payload.title,
+			scheduleData: payload.scheduleData
+		})
 	}
 
 	const task = await getTaskById(data.id)
@@ -355,6 +364,8 @@ const setTaskDayCompleted = async ({
  * @param taskId - Task ID to soft delete
  */
 const deleteTask = async (taskId: TaskId): Promise<void> => {
+	await cancelTaskNotifications(taskId)
+
 	const { error: taskError } = await supabaseClient
 		.from('tasks')
 		.update({ lifecycle: 'd' })
@@ -375,6 +386,8 @@ const deleteTask = async (taskId: TaskId): Promise<void> => {
  * @param taskId - Task ID to delete permanently
  */
 const deleteTaskPermanently = async (taskId: TaskId): Promise<void> => {
+	await cancelTaskNotifications(taskId)
+
 	// Delete task states first
 	const { error: statesError } = await supabaseClient
 		.from('states')
