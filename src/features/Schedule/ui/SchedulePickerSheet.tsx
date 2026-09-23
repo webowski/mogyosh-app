@@ -3,7 +3,11 @@ import { forwardRef, useImperativeHandle, useRef, useState } from 'react'
 import { Pressable, Text, TextInput, View } from 'react-native'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
-import type { ScheduleData, ScheduleRule } from '@/shared/domain/task'
+import type {
+	ScheduleData,
+	ScheduleNotification,
+	ScheduleRule
+} from '@/shared/domain/task'
 import { STYLE_VARS } from '@/shared/styles/common'
 import { Button } from '@/shared/ui/Button'
 
@@ -15,6 +19,15 @@ const WEEKDAYS = [
 	{ value: 5, label: 'Пт' },
 	{ value: 6, label: 'Сб' },
 	{ value: 0, label: 'Вс' }
+] as const
+
+const NOTIFICATION_OPTIONS = [
+	{ value: null, label: 'Нет' },
+	{ value: 5, label: 'За 5 мин' },
+	{ value: 15, label: 'За 15 мин' },
+	{ value: 30, label: 'За 30 мин' },
+	{ value: 60, label: 'За 1 час' },
+	{ value: 1440, label: 'За 1 день' }
 ] as const
 
 type RuleType = ScheduleRule['type']
@@ -41,6 +54,10 @@ export const SchedulePickerSheet = forwardRef<SchedulePickerSheetRef, Props>(
 		const [dailyTimesText, setDailyTimesText] = useState('') // was '09:00, 19:00'
 		const [onceDate, setOnceDate] = useState('')
 		const [onceTime, setOnceTime] = useState('')
+		const [notificationMinutesBefore, setNotificationMinutesBefore] = useState<
+			number | null
+		>(null)
+		const [notifyAtStart, setNotifyAtStart] = useState(false)
 
 		const resetFromData = (data?: ScheduleData | null) => {
 			if (!data) {
@@ -50,6 +67,8 @@ export const SchedulePickerSheet = forwardRef<SchedulePickerSheetRef, Props>(
 				setDailyTimesText('09:00, 19:00')
 				setOnceDate('')
 				setOnceTime('')
+				setNotificationMinutesBefore(null)
+				setNotifyAtStart(false)
 				return
 			}
 
@@ -74,6 +93,10 @@ export const SchedulePickerSheet = forwardRef<SchedulePickerSheetRef, Props>(
 				setOnceDate(rule.occurrences[0].date)
 				setOnceTime(rule.occurrences[0].time ?? '')
 			}
+
+			const notification = data.notification
+			setNotificationMinutesBefore(notification?.minutesBefore ?? null)
+			setNotifyAtStart(notification?.notifyAtStart ?? false)
 		}
 
 		useImperativeHandle(ref, () => ({
@@ -103,6 +126,19 @@ export const SchedulePickerSheet = forwardRef<SchedulePickerSheetRef, Props>(
 				.split(',')
 				.map((part) => part.trim())
 				.filter((part) => /^\d{1,2}:\d{2}$/.test(part))
+		}
+
+		const hasConcreteTime = (): boolean => {
+			if (ruleType === 'weekly') {
+				return weeklyTime.trim().length > 0
+			}
+			if (ruleType === 'daily') {
+				return parseTimes(dailyTimesText).length > 0
+			}
+			if (ruleType === 'once') {
+				return onceTime.trim().length > 0
+			}
+			return false
 		}
 
 		const handleConfirm = () => {
@@ -147,7 +183,22 @@ export const SchedulePickerSheet = forwardRef<SchedulePickerSheetRef, Props>(
 				}
 			}
 
-			onConfirm({ rule, exceptions: [] })
+			let notification: ScheduleNotification | null = null
+
+			if (hasConcreteTime()) {
+				const hasAdvance =
+					notificationMinutesBefore !== null && notificationMinutesBefore > 0
+				const hasAtStart = notifyAtStart
+
+				if (hasAdvance || hasAtStart) {
+					notification = {
+						minutesBefore: hasAdvance ? notificationMinutesBefore : null,
+						notifyAtStart: hasAtStart
+					}
+				}
+			}
+
+			onConfirm({ rule, exceptions: [], notification })
 			sheetRef.current?.dismiss()
 		}
 
@@ -269,6 +320,55 @@ export const SchedulePickerSheet = forwardRef<SchedulePickerSheetRef, Props>(
 						</View>
 					)}
 
+					{hasConcreteTime() && (
+						<View style={styles.Section}>
+							<Text style={styles.Section__label}>Уведомление</Text>
+							<View style={styles.TypeRow}>
+								{NOTIFICATION_OPTIONS.map((option) => {
+									const isSelected = notificationMinutesBefore === option.value
+									return (
+										<Pressable
+											key={String(option.value)}
+											style={[
+												styles.TypeChip,
+												isSelected && styles.TypeChip_active
+											]}
+											onPress={() => setNotificationMinutesBefore(option.value)}
+										>
+											<Text
+												style={[
+													styles.TypeChip__label,
+													isSelected && styles.TypeChip__label_active
+												]}
+											>
+												{option.label}
+											</Text>
+										</Pressable>
+									)
+								})}
+							</View>
+
+							<Pressable
+								style={styles.CheckboxRow}
+								onPress={() => setNotifyAtStart((current) => !current)}
+							>
+								<View
+									style={[
+										styles.Checkbox,
+										notifyAtStart && styles.Checkbox_checked
+									]}
+								>
+									{notifyAtStart && (
+										<Text style={styles.Checkbox__mark}>✓</Text>
+									)}
+								</View>
+								<Text style={styles.CheckboxRow__label}>
+									В момент начала задачи
+								</Text>
+							</Pressable>
+						</View>
+					)}
+
 					<View style={styles.Actions}>
 						<Button
 							variant='secondary'
@@ -366,5 +466,36 @@ const styles = StyleSheet.create((theme, rt) => ({
 		flexDirection: 'row',
 		gap: theme.spacing.sm,
 		marginTop: 8
+	},
+
+	CheckboxRow: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		gap: 10,
+		paddingVertical: 4
+	},
+	Checkbox: {
+		width: 22,
+		height: 22,
+		borderRadius: 6,
+		borderWidth: 1.5,
+		borderColor: theme.colors.minor,
+		alignItems: 'center',
+		justifyContent: 'center',
+		backgroundColor: theme.colors.surface
+	},
+	Checkbox_checked: {
+		backgroundColor: theme.colors.primary,
+		borderColor: theme.colors.primary
+	},
+	Checkbox__mark: {
+		color: '#fff',
+		fontSize: 14 * rt.fontScale,
+		fontWeight: '700',
+		lineHeight: 16 * rt.fontScale
+	},
+	CheckboxRow__label: {
+		fontSize: 14 * rt.fontScale,
+		color: theme.colors.major
 	}
 }))

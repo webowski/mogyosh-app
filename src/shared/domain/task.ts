@@ -124,11 +124,21 @@ export type ScheduleRule =
 			endDate?: string
 	  }
 
+/** Notification settings for timed schedule slots */
+export type ScheduleNotification = {
+	/** Minutes before start. null = no advance notification */
+	minutesBefore: number | null
+	/** Also notify at exact start time */
+	notifyAtStart: boolean
+}
+
 /** Data stored in schedules.schedule (bytea) */
 export type ScheduleData = {
 	rule: ScheduleRule
 	/** Skipped dates (whole day). ISO "YYYY-MM-DD" */
 	exceptions: string[]
+	/** Present only when rule has concrete time(s) */
+	notification?: ScheduleNotification | null
 }
 
 export type ScheduleEntity = {
