@@ -39,6 +39,7 @@ import {
 	SchedulePickerSheet,
 	type SchedulePickerSheetRef
 } from '@/features/Schedule/ui/SchedulePickerSheet'
+import { TimePickerSheet } from '@/features/Schedule/ui/TimePickerSheet'
 
 type SortOption = 'alphabetical' | 'created_at' | 'updated_at'
 
@@ -559,6 +560,7 @@ export default function AllTasksScreen() {
 				ref={scheduleSheetRef}
 				onConfirm={handleScheduleConfirm}
 			/>
+			<TimePickerSheet />
 		</>
 	)
 }

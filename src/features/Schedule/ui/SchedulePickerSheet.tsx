@@ -10,6 +10,7 @@ import type {
 } from '@/shared/domain/task'
 import { STYLE_VARS } from '@/shared/styles/common'
 import { Button } from '@/shared/ui/Button'
+import { useTimePickerSheetStore } from '../model/timePickerSheet.store'
 
 const WEEKDAYS = [
 	{ value: 1, label: 'Пн' },
@@ -30,6 +31,22 @@ const NOTIFICATION_OPTIONS = [
 	{ value: 1440, label: 'За 1 день' }
 ] as const
 
+const parseTimeString = (
+	timeString: string
+): { hours: number; minutes: number } => {
+	const match = timeString.trim().match(/^(\d{1,2}):(\d{2})$/)
+	if (!match) {
+		return { hours: 9, minutes: 0 }
+	}
+	const hours = Math.min(23, Math.max(0, Number(match[1])))
+	const minutes = Math.min(59, Math.max(0, Number(match[2])))
+	return { hours, minutes }
+}
+
+const formatTimeString = (hours: number, minutes: number): string => {
+	return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`
+}
+
 type RuleType = ScheduleRule['type']
 
 export type SchedulePickerSheetRef = {
@@ -45,6 +62,7 @@ export const SchedulePickerSheet = forwardRef<SchedulePickerSheetRef, Props>(
 	function SchedulePickerSheet({ onConfirm }, ref) {
 		const { theme } = useUnistyles()
 		const sheetRef = useRef<TrueSheet>(null)
+		const openTimePicker = useTimePickerSheetStore((state) => state.open)
 
 		const [ruleType, setRuleType] = useState<RuleType | 'none'>('none')
 		const [selectedWeekdays, setSelectedWeekdays] = useState<number[]>([
@@ -139,6 +157,44 @@ export const SchedulePickerSheet = forwardRef<SchedulePickerSheetRef, Props>(
 				return onceTime.trim().length > 0
 			}
 			return false
+		}
+
+		const openWeeklyTimePicker = () => {
+			const { hours, minutes } = parseTimeString(weeklyTime.trim() || '20:00')
+			openTimePicker({
+				hours,
+				minutes,
+				title: 'Время',
+				onChange: (nextHours, nextMinutes) => {
+					setWeeklyTime(formatTimeString(nextHours, nextMinutes))
+				}
+			})
+		}
+
+		const openDailyTimePicker = () => {
+			const firstParsed = parseTimes(dailyTimesText)[0]
+			const fallback = dailyTimesText.trim() || '09:00'
+			const { hours, minutes } = parseTimeString(firstParsed ?? fallback)
+			openTimePicker({
+				hours,
+				minutes,
+				title: 'Время',
+				onChange: (nextHours, nextMinutes) => {
+					setDailyTimesText(formatTimeString(nextHours, nextMinutes))
+				}
+			})
+		}
+
+		const openOnceTimePicker = () => {
+			const { hours, minutes } = parseTimeString(onceTime.trim() || '10:00')
+			openTimePicker({
+				hours,
+				minutes,
+				title: 'Время',
+				onChange: (nextHours, nextMinutes) => {
+					setOnceTime(formatTimeString(nextHours, nextMinutes))
+				}
+			})
 		}
 
 		const handleConfirm = () => {
@@ -269,14 +325,19 @@ export const SchedulePickerSheet = forwardRef<SchedulePickerSheetRef, Props>(
 							</View>
 
 							<Text style={styles.Section__label}>Время (необязательно)</Text>
-							<TextInput
-								style={styles.TimeInput}
-								value={weeklyTime}
-								onChangeText={setWeeklyTime}
-								placeholder='Например 20:00'
-								placeholderTextColor={theme.colors.minor}
-								keyboardType='numbers-and-punctuation'
-							/>
+							<Pressable
+								style={styles.TimeField}
+								onPress={openWeeklyTimePicker}
+							>
+								<Text
+									style={[
+										styles.TimeField__value,
+										!weeklyTime.trim() && styles.TimeField__placeholder
+									]}
+								>
+									{weeklyTime.trim() || 'Выбрать время'}
+								</Text>
+							</Pressable>
 							<Text style={styles.Hint}>
 								Можно оставить пустым — задача будет только привязана к дням
 								недели.
@@ -286,16 +347,17 @@ export const SchedulePickerSheet = forwardRef<SchedulePickerSheetRef, Props>(
 
 					{ruleType === 'daily' && (
 						<View style={styles.Section}>
-							<Text style={styles.Section__label}>
-								Время через запятую (необязательно)
-							</Text>
-							<TextInput
-								style={styles.TimeInput}
-								value={dailyTimesText}
-								onChangeText={setDailyTimesText}
-								placeholder='Например: 09:00, 19:00'
-								placeholderTextColor={theme.colors.minor}
-							/>
+							<Text style={styles.Section__label}>Время (необязательно)</Text>
+							<Pressable style={styles.TimeField} onPress={openDailyTimePicker}>
+								<Text
+									style={[
+										styles.TimeField__value,
+										!dailyTimesText.trim() && styles.TimeField__placeholder
+									]}
+								>
+									{dailyTimesText.trim() || 'Выбрать время'}
+								</Text>
+							</Pressable>
 						</View>
 					)}
 
@@ -310,13 +372,16 @@ export const SchedulePickerSheet = forwardRef<SchedulePickerSheetRef, Props>(
 								placeholderTextColor={theme.colors.minor}
 							/>
 							<Text style={styles.Section__label}>Время (необязательно)</Text>
-							<TextInput
-								style={styles.TimeInput}
-								value={onceTime}
-								onChangeText={setOnceTime}
-								placeholder='10:00'
-								placeholderTextColor={theme.colors.minor}
-							/>
+							<Pressable style={styles.TimeField} onPress={openOnceTimePicker}>
+								<Text
+									style={[
+										styles.TimeField__value,
+										!onceTime.trim() && styles.TimeField__placeholder
+									]}
+								>
+									{onceTime.trim() || 'Выбрать время'}
+								</Text>
+							</Pressable>
 						</View>
 					)}
 
@@ -457,6 +522,19 @@ const styles = StyleSheet.create((theme, rt) => ({
 		paddingVertical: 10,
 		fontSize: 16 * rt.fontScale,
 		color: theme.colors.major
+	},
+	TimeField: {
+		backgroundColor: theme.colors.surface,
+		borderRadius: STYLE_VARS.radius_sm,
+		paddingHorizontal: 12,
+		paddingVertical: 12
+	},
+	TimeField__value: {
+		fontSize: 16 * rt.fontScale,
+		color: theme.colors.major
+	},
+	TimeField__placeholder: {
+		color: theme.colors.minor
 	},
 	Hint: {
 		fontSize: 12 * rt.fontScale,
