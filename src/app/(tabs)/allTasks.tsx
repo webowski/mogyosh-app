@@ -142,12 +142,14 @@ export default function AllTasksScreen() {
 
 	const scheduleSheetRef = useRef<SchedulePickerSheetRef>(null)
 	const scheduleTaskIdRef = useRef<string | null>(null)
+	const scheduleTaskTitleRef = useRef<string>('')
 
 	const upsertSchedule = useUpsertSchedule()
 	const deleteSchedule = useDeleteSchedule()
 
 	const handleSchedulePress = (task: TaskEntity) => {
 		scheduleTaskIdRef.current = task.id
+		scheduleTaskTitleRef.current = task.title
 		scheduleSheetRef.current?.present(task.schedule?.schedule ?? null)
 	}
 
@@ -162,7 +164,8 @@ export default function AllTasksScreen() {
 
 		upsertSchedule.mutate({
 			taskId,
-			data
+			data,
+			title: scheduleTaskTitleRef.current
 		})
 	}
 
