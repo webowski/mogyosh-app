@@ -1,6 +1,6 @@
 import { TrueSheet } from '@lodev09/react-native-true-sheet'
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react'
-import { Pressable, Text, TextInput, View } from 'react-native'
+import { Pressable, Text, View } from 'react-native'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 import type {
@@ -10,6 +10,7 @@ import type {
 } from '@/shared/domain/task'
 import { STYLE_VARS } from '@/shared/styles/common'
 import { Button } from '@/shared/ui/Button'
+import { DatePicker } from '@quidone/react-native-wheel-picker'
 import { useTimePickerSheetStore } from '../model/timePickerSheet.store'
 
 const WEEKDAYS = [
@@ -47,6 +48,15 @@ const formatTimeString = (hours: number, minutes: number): string => {
 	return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`
 }
 
+const formatDateString = (date: Date): string => {
+	const year = date.getFullYear()
+	const month = String(date.getMonth() + 1).padStart(2, '0')
+	const day = String(date.getDate()).padStart(2, '0')
+	return `${year}-${month}-${day}`
+}
+
+const getDefaultOnceDate = (): string => formatDateString(new Date())
+
 type RuleType = ScheduleRule['type']
 
 export type SchedulePickerSheetRef = {
@@ -70,7 +80,7 @@ export const SchedulePickerSheet = forwardRef<SchedulePickerSheetRef, Props>(
 		])
 		const [weeklyTime, setWeeklyTime] = useState('') // was '20:00'
 		const [dailyTimesText, setDailyTimesText] = useState('') // was '09:00, 19:00'
-		const [onceDate, setOnceDate] = useState('')
+		const [onceDate, setOnceDate] = useState(getDefaultOnceDate)
 		const [onceTime, setOnceTime] = useState('')
 		const [notificationMinutesBefore, setNotificationMinutesBefore] = useState<
 			number | null
@@ -83,7 +93,7 @@ export const SchedulePickerSheet = forwardRef<SchedulePickerSheetRef, Props>(
 				setSelectedWeekdays([1, 3, 5])
 				setWeeklyTime('20:00')
 				setDailyTimesText('09:00, 19:00')
-				setOnceDate('')
+				setOnceDate(getDefaultOnceDate())
 				setOnceTime('')
 				setNotificationMinutesBefore(null)
 				setNotifyAtStart(false)
@@ -108,7 +118,7 @@ export const SchedulePickerSheet = forwardRef<SchedulePickerSheetRef, Props>(
 			}
 
 			if (rule.type === 'once' && rule.occurrences[0]) {
-				setOnceDate(rule.occurrences[0].date)
+				setOnceDate(rule.occurrences[0].date || getDefaultOnceDate())
 				setOnceTime(rule.occurrences[0].time ?? '')
 			}
 
@@ -363,13 +373,21 @@ export const SchedulePickerSheet = forwardRef<SchedulePickerSheetRef, Props>(
 
 					{ruleType === 'once' && (
 						<View style={styles.Section}>
-							<Text style={styles.Section__label}>Дата (YYYY-MM-DD)</Text>
-							<TextInput
-								style={styles.TimeInput}
-								value={onceDate}
-								onChangeText={setOnceDate}
-								placeholder='2026-04-01'
-								placeholderTextColor={theme.colors.minor}
+							<Text style={styles.Section__label}>Дата</Text>
+							<DatePicker
+								date={onceDate || getDefaultOnceDate()}
+								onDateChanged={({ date }) => setOnceDate(date)}
+								locale='ru'
+								itemHeight={40}
+								visibleItemCount={5}
+								enableScrollByTapOnItem={true}
+								itemTextStyle={{
+									fontSize: 18,
+									color: theme.colors.major
+								}}
+								overlayItemStyle={{
+									backgroundColor: theme.colors.surfaceClosest
+								}}
 							/>
 							<Text style={styles.Section__label}>Время (необязательно)</Text>
 							<Pressable style={styles.TimeField} onPress={openOnceTimePicker}>
@@ -384,7 +402,6 @@ export const SchedulePickerSheet = forwardRef<SchedulePickerSheetRef, Props>(
 							</Pressable>
 						</View>
 					)}
-
 					{hasConcreteTime() && (
 						<View style={styles.Section}>
 							<Text style={styles.Section__label}>Уведомление</Text>
