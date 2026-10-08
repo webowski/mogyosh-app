@@ -10,7 +10,7 @@ import type {
 } from '@/shared/domain/task'
 import { STYLE_VARS } from '@/shared/styles/common'
 import { Button } from '@/shared/ui/Button'
-import { DatePicker } from '@quidone/react-native-wheel-picker'
+import { useDatePickerSheetStore } from '../model/datePickerSheet.store'
 import { useTimePickerSheetStore } from '../model/timePickerSheet.store'
 
 const WEEKDAYS = [
@@ -73,6 +73,7 @@ export const SchedulePickerSheet = forwardRef<SchedulePickerSheetRef, Props>(
 		const { theme } = useUnistyles()
 		const sheetRef = useRef<TrueSheet>(null)
 		const openTimePicker = useTimePickerSheetStore((state) => state.open)
+		const openDatePicker = useDatePickerSheetStore((state) => state.open)
 
 		const [ruleType, setRuleType] = useState<RuleType | 'none'>('none')
 		const [selectedWeekdays, setSelectedWeekdays] = useState<number[]>([
@@ -191,6 +192,16 @@ export const SchedulePickerSheet = forwardRef<SchedulePickerSheetRef, Props>(
 				title: 'Время',
 				onChange: (nextHours, nextMinutes) => {
 					setDailyTimesText(formatTimeString(nextHours, nextMinutes))
+				}
+			})
+		}
+
+		const openOnceDatePicker = () => {
+			openDatePicker({
+				date: onceDate.trim() || getDefaultOnceDate(),
+				title: 'Дата',
+				onChange: (nextDate) => {
+					setOnceDate(nextDate)
 				}
 			})
 		}
@@ -374,21 +385,16 @@ export const SchedulePickerSheet = forwardRef<SchedulePickerSheetRef, Props>(
 					{ruleType === 'once' && (
 						<View style={styles.Section}>
 							<Text style={styles.Section__label}>Дата</Text>
-							<DatePicker
-								date={onceDate || getDefaultOnceDate()}
-								onDateChanged={({ date }) => setOnceDate(date)}
-								locale='ru'
-								itemHeight={40}
-								visibleItemCount={5}
-								enableScrollByTapOnItem={true}
-								itemTextStyle={{
-									fontSize: 18,
-									color: theme.colors.major
-								}}
-								overlayItemStyle={{
-									backgroundColor: theme.colors.surfaceClosest
-								}}
-							/>
+							<Pressable style={styles.TimeField} onPress={openOnceDatePicker}>
+								<Text
+									style={[
+										styles.TimeField__value,
+										!onceDate.trim() && styles.TimeField__placeholder
+									]}
+								>
+									{onceDate.trim() || 'Выбрать дату'}
+								</Text>
+							</Pressable>
 							<Text style={styles.Section__label}>Время (необязательно)</Text>
 							<Pressable style={styles.TimeField} onPress={openOnceTimePicker}>
 								<Text
@@ -402,6 +408,7 @@ export const SchedulePickerSheet = forwardRef<SchedulePickerSheetRef, Props>(
 							</Pressable>
 						</View>
 					)}
+
 					{hasConcreteTime() && (
 						<View style={styles.Section}>
 							<Text style={styles.Section__label}>Уведомление</Text>

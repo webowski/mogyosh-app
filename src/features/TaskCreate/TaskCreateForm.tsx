@@ -15,6 +15,7 @@ import { ActionsPanel } from '@/features/ActionsPanel/ActionsPanel'
 import { blockAPI } from '@/features/Block/repository/block.api'
 import { useNavStore } from '@/features/Navigation/model/navStore'
 import { formatScheduleLabel } from '@/features/Schedule/model/scheduleLabel'
+import { DatePickerSheet } from '@/features/Schedule/ui/DatePickerSheet'
 import {
 	SchedulePickerSheet,
 	type SchedulePickerSheetRef
@@ -366,6 +367,7 @@ export function TaskCreateForm({ onClose }: Props) {
 				onConfirm={(data) => setScheduleData(data)}
 			/>
 			<TimePickerSheet />
+			<DatePickerSheet />
 		</>
 	)
 }
