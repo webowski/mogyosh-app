@@ -56,8 +56,24 @@ export function useAuth() {
 
 	// Deep link (magic link / OAuth callback)
 	useEffect(() => {
+		const isAuthCallbackUrl = (url: string) => {
+			// Ignore expo-development-client and similar launch URLs
+			if (url.includes('expo-development-client')) {
+				return false
+			}
+			// Only process URLs that look like OAuth / magic-link callbacks
+			return (
+				url.includes('access_token=') ||
+				url.includes('refresh_token=') ||
+				url.includes('code=') ||
+				url.includes('error=')
+			)
+		}
+
 		const handleUrl = async (url: string | null) => {
 			if (!url) return
+			if (!isAuthCallbackUrl(url)) return
+
 			try {
 				await createSessionFromUrl(url)
 			} catch (error) {

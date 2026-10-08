@@ -26,6 +26,11 @@ const redirectTo = makeRedirectUri()
 export async function createSessionFromUrl(url: string) {
 	console.log('AUTH CALLBACK URL:', url)
 
+	// Ignore non-auth launch URLs (e.g. expo-development-client)
+	if (url.includes('expo-development-client')) {
+		return null
+	}
+
 	const { params, errorCode } = QueryParams.getQueryParams(url)
 
 	if (errorCode) {
