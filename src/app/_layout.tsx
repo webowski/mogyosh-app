@@ -42,29 +42,17 @@ export default function RootLayout() {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [pathname])
 
-	if (isLoading) {
-		return (
-			<View
-				onLayout={() => SplashScreen.hideAsync()}
-				style={{
-					flex: 1,
-					justifyContent: 'center',
-					alignItems: 'center',
-					backgroundColor: theme.colors.primary
-				}}
-			>
-				<ActivityIndicator color={STATIC_COLORS.white} size={32} />
-			</View>
-		)
-	}
+	// Hide splash only after auth check is done
+	useEffect(() => {
+		if (!isLoading) {
+			SplashScreen.hideAsync()
+		}
+	}, [isLoading])
 
 	// Network / unknown error while checking session (before we know auth state)
-	if (errorKind && !isAuthenticated) {
+	if (errorKind && !isAuthenticated && !isLoading) {
 		return (
-			<View
-				onLayout={() => SplashScreen.hideAsync()}
-				style={commonStyles.SystemContentMessage}
-			>
+			<View style={commonStyles.SystemContentMessage}>
 				<Text style={commonStyles.SystemContentMessage__heading}>
 					{t(`error.${errorKind}.title`)}
 				</Text>
@@ -94,6 +82,7 @@ export default function RootLayout() {
 				/>
 			)}
 
+			{/* Always render Stack — required by Expo Router on first render */}
 			<Stack
 				screenOptions={{
 					contentStyle: {
@@ -102,12 +91,14 @@ export default function RootLayout() {
 				}}
 			>
 				{/* Onboarding: shown once, before everything else */}
-				<Stack.Protected guard={!hasSeenOnboarding}>
+				<Stack.Protected guard={!isLoading && !hasSeenOnboarding}>
 					<Stack.Screen name='onboarding' options={{ headerShown: false }} />
 				</Stack.Protected>
 
 				{/* Only for logged-in users */}
-				<Stack.Protected guard={hasSeenOnboarding && isAuthenticated}>
+				<Stack.Protected
+					guard={!isLoading && hasSeenOnboarding && isAuthenticated}
+				>
 					<Stack.Screen name='(tabs)' options={{ headerShown: false }} />
 					<Stack.Screen
 						name='about'
@@ -129,10 +120,31 @@ export default function RootLayout() {
 				</Stack.Protected>
 
 				{/* Only for guests */}
-				<Stack.Protected guard={hasSeenOnboarding && !isAuthenticated}>
+				<Stack.Protected
+					guard={!isLoading && hasSeenOnboarding && !isAuthenticated}
+				>
 					<Stack.Screen name='(auth)/login' options={{ headerShown: false }} />
 				</Stack.Protected>
 			</Stack>
+
+			{/* Optional overlay while auth is loading (splash already covers this) */}
+			{isLoading && (
+				<View
+					pointerEvents='none'
+					style={{
+						position: 'absolute',
+						top: 0,
+						left: 0,
+						right: 0,
+						bottom: 0,
+						justifyContent: 'center',
+						alignItems: 'center',
+						backgroundColor: theme.colors.primary
+					}}
+				>
+					<ActivityIndicator color={STATIC_COLORS.white} size={32} />
+				</View>
+			)}
 		</Providers>
 	)
 }
