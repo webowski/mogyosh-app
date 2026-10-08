@@ -15,6 +15,8 @@ import HeaderCalendar from '@/features/Header/HeaderCalendar'
 import HeaderDay from '@/features/Header/HeaderDay'
 import HeaderTask from '@/features/Header/HeaderTask'
 import NavPanel from '@/features/Navigation/NavPanel'
+import { DatePickerSheet } from '@/features/Schedule/ui/DatePickerSheet'
+import { TimePickerSheet } from '@/features/Schedule/ui/TimePickerSheet'
 import { TaskCreateSheet } from '@/features/TaskCreate/TaskCreateSheet'
 
 export default function NavPanelLayout() {
@@ -109,6 +111,8 @@ export default function NavPanelLayout() {
 			<CounterValueSheet />
 			<UnitSheet />
 			<TaskCreateSheet />
+			<TimePickerSheet />
+			<DatePickerSheet />
 		</>
 	)
 }

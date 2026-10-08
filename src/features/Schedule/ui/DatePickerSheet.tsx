@@ -1,7 +1,7 @@
 import { TrueSheet } from '@lodev09/react-native-true-sheet'
 import { DatePicker } from '@quidone/react-native-wheel-picker'
 import { useEffect, useRef, useState } from 'react'
-import { Text } from 'react-native'
+import { Text, View } from 'react-native'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 import { STYLE_VARS } from '@/shared/styles/common'
@@ -27,10 +27,18 @@ export function DatePickerSheet() {
 	const [date, setDate] = useState(getDefaultDate())
 
 	useEffect(() => {
-		if (isOpen && payload) {
-			setDate(payload.date || getDefaultDate())
-			sheetRef.current?.present()
+		if (!isOpen || !payload) {
+			return
 		}
+
+		setDate(payload.date || getDefaultDate())
+
+		// present после commit, иначе при стеке sheet иногда не открывается
+		const frameId = requestAnimationFrame(() => {
+			sheetRef.current?.present()
+		})
+
+		return () => cancelAnimationFrame(frameId)
 	}, [isOpen, payload])
 
 	const handleDateChanged = ({ date: nextDate }: { date: string }) => {
@@ -41,32 +49,33 @@ export function DatePickerSheet() {
 	return (
 		<TrueSheet
 			ref={sheetRef}
+			name='date-picker-sheet'
 			detents={['auto']}
 			cornerRadius={STYLE_VARS.radius_2xl}
 			backgroundColor={theme.colors.surfaceDeep}
 			grabberOptions={{ color: theme.colors.minor }}
 			onDidDismiss={close}
 		>
-			{payload && (
-				<>
-					<Text style={styles.DatePickerSheet__title}>{payload.title}</Text>
-					<DatePicker
-						date={date}
-						onDateChanged={handleDateChanged}
-						locale='ru'
-						itemHeight={40}
-						visibleItemCount={5}
-						enableScrollByTapOnItem={true}
-						itemTextStyle={{
-							fontSize: 18,
-							color: theme.colors.major
-						}}
-						overlayItemStyle={{
-							backgroundColor: theme.colors.surfaceClosest
-						}}
-					/>
-				</>
-			)}
+			<Text style={styles.DatePickerSheet__title}>
+				{payload?.title ?? 'Дата'}
+			</Text>
+			<View style={styles.DatePickerSheet__content}>
+				<DatePicker
+					date={date}
+					onDateChanged={handleDateChanged}
+					locale='ru'
+					itemHeight={40}
+					visibleItemCount={5}
+					enableScrollByTapOnItem={true}
+					itemTextStyle={{
+						fontSize: 18,
+						color: theme.colors.major
+					}}
+					overlayItemStyle={{
+						backgroundColor: theme.colors.surfaceClosest
+					}}
+				/>
+			</View>
 		</TrueSheet>
 	)
 }
@@ -80,5 +89,9 @@ const styles = StyleSheet.create((theme, rt) => ({
 		paddingHorizontal: STYLE_VARS.sidePadding,
 		paddingTop: 4,
 		paddingBottom: 8
+	},
+	DatePickerSheet__content: {
+		paddingBottom: 8,
+		minHeight: 40 * 5
 	}
 }))

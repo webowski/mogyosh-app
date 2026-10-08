@@ -15,12 +15,10 @@ import { ActionsPanel } from '@/features/ActionsPanel/ActionsPanel'
 import { blockAPI } from '@/features/Block/repository/block.api'
 import { useNavStore } from '@/features/Navigation/model/navStore'
 import { formatScheduleLabel } from '@/features/Schedule/model/scheduleLabel'
-import { DatePickerSheet } from '@/features/Schedule/ui/DatePickerSheet'
 import {
 	SchedulePickerSheet,
 	type SchedulePickerSheetRef
 } from '@/features/Schedule/ui/SchedulePickerSheet'
-import { TimePickerSheet } from '@/features/Schedule/ui/TimePickerSheet'
 import {
 	useCategories,
 	useCreateCategory,
@@ -366,8 +364,6 @@ export function TaskCreateForm({ onClose }: Props) {
 				ref={scheduleSheetRef}
 				onConfirm={(data) => setScheduleData(data)}
 			/>
-			<TimePickerSheet />
-			<DatePickerSheet />
 		</>
 	)
 }
