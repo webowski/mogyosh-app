@@ -64,7 +64,6 @@ export function TimePickerSheet() {
 				color: theme.colors.minor
 			}}
 			onDidDismiss={close}
-			// draggable={false}
 		>
 			{payload && (
 				<>
