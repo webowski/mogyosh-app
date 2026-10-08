@@ -56,8 +56,15 @@ export function TimePickerSheet() {
 			detents={['auto']}
 			cornerRadius={STYLE_VARS.radius_2xl}
 			backgroundColor={theme.colors.surfaceDeep}
-			grabberOptions={{ color: theme.colors.minor }}
+			grabber
+			grabberOptions={{
+				width: 48,
+				height: 6,
+				topMargin: 10,
+				color: theme.colors.minor
+			}}
 			onDidDismiss={close}
+			// draggable={false}
 		>
 			{payload && (
 				<>
