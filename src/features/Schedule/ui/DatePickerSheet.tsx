@@ -5,6 +5,8 @@ import { Text, View } from 'react-native'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 import { STYLE_VARS } from '@/shared/styles/common'
+import { Button } from '@/shared/ui/Button'
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons'
 import { useDatePickerSheetStore } from '../model/datePickerSheet.store'
 
 const formatDateString = (date: Date): string => {
@@ -54,6 +56,7 @@ export function DatePickerSheet() {
 			cornerRadius={STYLE_VARS.radius_2xl}
 			backgroundColor={theme.colors.surfaceDeep}
 			grabberOptions={{ color: theme.colors.minor }}
+			draggable={false}
 			onDidDismiss={close}
 		>
 			<Text style={styles.DatePickerSheet__title}>
@@ -76,6 +79,21 @@ export function DatePickerSheet() {
 					}}
 				/>
 			</View>
+
+			<View style={styles.TimePickerSheet__footer}>
+				<Button
+					round
+					widthMode='equilateral'
+					size='lg'
+					onPress={() => sheetRef.current?.dismiss()}
+				>
+					<MaterialDesignIcons
+						name='check-bold'
+						size={24}
+						color={theme.colors.buttonText}
+					/>
+				</Button>
+			</View>
 		</TrueSheet>
 	)
 }
@@ -87,11 +105,21 @@ const styles = StyleSheet.create((theme, rt) => ({
 		color: theme.colors.major,
 		textAlign: 'center',
 		paddingHorizontal: STYLE_VARS.sidePadding,
-		paddingTop: 4,
+		paddingTop: STYLE_VARS.sidePadding,
 		paddingBottom: 8
 	},
 	DatePickerSheet__content: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'center',
 		paddingBottom: 8,
 		minHeight: 40 * 5
+	},
+
+	TimePickerSheet__footer: {
+		paddingHorizontal: STYLE_VARS.sidePadding,
+		paddingBottom: STYLE_VARS.sidePadding,
+		alignItems: 'center',
+		gap: 16
 	}
 }))
