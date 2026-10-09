@@ -284,6 +284,13 @@ export const SchedulePickerSheet = forwardRef<SchedulePickerSheetRef, Props>(
 				ref={sheetRef}
 				detents={['auto']}
 				cornerRadius={STYLE_VARS.radius_2xl}
+				grabber
+				grabberOptions={{
+					// width: 48,
+					// height: 6,
+					// topMargin: 10,
+					color: theme.colors.minor
+				}}
 			>
 				<View style={styles.Content}>
 					<Text style={styles.Title}>Повтор</Text>
