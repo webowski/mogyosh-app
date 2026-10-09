@@ -181,6 +181,10 @@
 			"title": "Login failed",
 			"description": "Check your login details and try again."
 		},
+		"rateLimit": {
+			"title": "Too many attempts",
+			"description": "Email sending limit exceeded. Please try again later."
+		},
 		"unknown": {
 			"title": "Something went wrong",
 			"description": "Try restarting the app."

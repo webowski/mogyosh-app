@@ -1,15 +1,13 @@
-export type AuthErrorKind = 'network' | 'credentials' | 'unknown'
+export type AuthErrorKind = 'network' | 'credentials' | 'rateLimit' | 'unknown'
 
 // export const getAuthErrorKind = (error: unknown): AuthErrorKind => {
 // 	if (isAuthRetryableFetchError(error)) return 'network'
 // 	if (isAuthApiError(error)) return 'credentials'
-
+//
 // 	return 'unknown'
 // }
 
-export function getAuthErrorKind(
-	error: unknown
-): 'network' | 'credentials' | 'unknown' {
+export function getAuthErrorKind(error: unknown): AuthErrorKind {
 	console.log('AUTH ERROR RAW:', error)
 
 	if (error instanceof Error) {
@@ -22,6 +20,13 @@ export function getAuthErrorKind(
 			message.includes('failed to fetch')
 		) {
 			return 'network'
+		}
+
+		if (
+			message.includes('rate limit') ||
+			message.includes('email rate limit exceeded')
+		) {
+			return 'rateLimit'
 		}
 
 		if (

@@ -11,15 +11,16 @@ import {
 	signOut
 } from '@/shared/api/auth'
 import { supabaseClient } from '@/shared/api/supabaseClient'
-import { getAuthErrorKind } from '@/shared/lib/getAuthErrorKind'
+import {
+	type AuthErrorKind,
+	getAuthErrorKind
+} from '@/shared/lib/getAuthErrorKind'
 import { Alert } from 'react-native'
 
 export function useAuth() {
 	const [session, setSession] = useState<Session | null>(null)
 	const [isLoading, setIsLoading] = useState(true)
-	const [errorKind, setErrorKind] = useState<
-		'network' | 'credentials' | 'unknown' | null
-	>(null)
+	const [errorKind, setErrorKind] = useState<AuthErrorKind | null>(null)
 
 	const refreshSession = useCallback(async () => {
 		try {
