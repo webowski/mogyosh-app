@@ -1,15 +1,13 @@
 import { TrueSheet } from '@lodev09/react-native-true-sheet'
-import WheelPicker, {
-	withVirtualized
-} from '@quidone/react-native-wheel-picker'
+import WheelPicker from '@quidone/react-native-wheel-picker'
 import { useEffect, useRef, useState } from 'react'
 import { Text, View } from 'react-native'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 import { STYLE_VARS } from '@/shared/styles/common'
+import { Button } from '@/shared/ui/Button'
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons'
 import { useTimePickerSheetStore } from '../model/timePickerSheet.store'
-
-const VirtualizedWheelPicker = withVirtualized(WheelPicker)
 
 const HOURS_DATA = Array.from({ length: 24 }, (_, index) => ({
 	value: index,
@@ -56,20 +54,23 @@ export function TimePickerSheet() {
 			detents={['auto']}
 			cornerRadius={STYLE_VARS.radius_2xl}
 			backgroundColor={theme.colors.surfaceDeep}
-			grabber
-			grabberOptions={{
-				width: 48,
-				height: 6,
-				topMargin: 10,
-				color: theme.colors.minor
-			}}
+			grabberOptions={{ color: theme.colors.minor }}
+			draggable={false}
 			onDidDismiss={close}
+			// header={<Text style={styles.TimePickerSheet__title}>payload.title</Text>}
+			// footer={
+			// 	<View>
+			// 		<Pressable onPress={() => sheetRef.current?.dismiss()}>
+			// 			<Text>Закрыть</Text>
+			// 		</Pressable>
+			// 	</View>
+			// }
 		>
 			{payload && (
 				<>
 					<Text style={styles.TimePickerSheet__title}>{payload.title}</Text>
 					<View style={styles.TimePickerSheet__row}>
-						<VirtualizedWheelPicker
+						<WheelPicker
 							data={HOURS_DATA}
 							value={hours}
 							onValueChanged={handleHoursChanged}
@@ -86,7 +87,7 @@ export function TimePickerSheet() {
 							}}
 						/>
 						<Text style={styles.TimePickerSheet__separator}>:</Text>
-						<VirtualizedWheelPicker
+						<WheelPicker
 							data={MINUTES_DATA}
 							value={minutes}
 							onValueChanged={handleMinutesChanged}
@@ -103,6 +104,21 @@ export function TimePickerSheet() {
 							}}
 						/>
 					</View>
+
+					<View style={styles.TimePickerSheet__footer}>
+						<Button
+							round
+							widthMode='equilateral'
+							size='lg'
+							onPress={() => sheetRef.current?.dismiss()}
+						>
+							<MaterialDesignIcons
+								name='check-bold'
+								size={24}
+								color={theme.colors.buttonText}
+							/>
+						</Button>
+					</View>
 				</>
 			)}
 		</TrueSheet>
@@ -116,7 +132,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		color: theme.colors.major,
 		textAlign: 'center',
 		paddingHorizontal: STYLE_VARS.sidePadding,
-		paddingTop: 4,
+		paddingTop: STYLE_VARS.sidePadding,
 		paddingBottom: 8
 	},
 	TimePickerSheet__row: {
@@ -130,5 +146,12 @@ const styles = StyleSheet.create((theme, rt) => ({
 		fontSize: 24 * rt.fontScale,
 		fontWeight: '600',
 		color: theme.colors.major
+	},
+
+	TimePickerSheet__footer: {
+		paddingHorizontal: STYLE_VARS.sidePadding,
+		paddingBottom: STYLE_VARS.sidePadding,
+		alignItems: 'center',
+		gap: 16
 	}
 }))
