@@ -183,7 +183,7 @@
 		},
 		"rateLimit": {
 			"title": "Too many attempts",
-			"description": "Email sending limit exceeded. Please try again later."
+			"description": "Login attempts limit exceeded. Please try again later."
 		},
 		"unknown": {
 			"title": "Something went wrong",
