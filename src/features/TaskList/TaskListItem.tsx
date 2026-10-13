@@ -1,16 +1,17 @@
-import { MenuView } from '@expo/ui/community/menu'
 import { useRouter } from 'expo-router'
 import { Alert, Text, View } from 'react-native'
+import { Gesture, GestureDetector } from 'react-native-gesture-handler'
+import Animated, { FadeOut, LinearTransition } from 'react-native-reanimated'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
+import { scheduleOnRN } from 'react-native-worklets'
 
 import { useNavStore } from '@/features/Navigation/model/navStore'
 import { useDeleteTask, useDeleteTaskPermanently } from '@/features/TaskList'
 import { TaskEntity } from '@/shared/domain/task'
+import { useContextMenuStore } from '@/shared/model/contextMenu.store'
 import { useTaskStore } from '@/shared/model/task.store'
 import { STYLE_VARS } from '@/shared/styles/common'
-import { Gesture, GestureDetector } from 'react-native-gesture-handler'
-import Animated, { FadeOut, LinearTransition } from 'react-native-reanimated'
-import { scheduleOnRN } from 'react-native-worklets'
+import { triggerHapticLight } from '@/shared/ui/Haptic'
 import { formatScheduleLabel } from '../Schedule/model/scheduleLabel'
 
 type TaskListItemProps = {
@@ -27,6 +28,7 @@ export default function TaskListItem({
 
 	const setSelectedTaskId = useTaskStore((store) => store.setSelectedTaskId)
 	const setSwipeRoute = useNavStore((store) => store.setSwipeRoute)
+	const openContextMenu = useContextMenuStore((store) => store.openContextMenu)
 	const deleteTaskPermanentlyMutation = useDeleteTaskPermanently()
 	const deleteTaskMutation = useDeleteTask()
 
@@ -37,10 +39,6 @@ export default function TaskListItem({
 		setSwipeRoute('task')
 		router.push('/task')
 	}
-
-	const tapGesture = Gesture.Tap().onEnd(() => {
-		scheduleOnRN(handlePress)
-	})
 
 	const handleDeletePermanently = () => {
 		Alert.alert(
@@ -59,102 +57,83 @@ export default function TaskListItem({
 		)
 	}
 
-	const handleMenuPressAction = (event: { nativeEvent: { event: string } }) => {
-		if (event.nativeEvent.event === 'schedule') {
-			onSchedulePress?.(data)
+	const handleOpenContextMenu = (positionX: number, positionY: number) => {
+		triggerHapticLight()
+
+		if (isDeleted) {
+			const menuItems = [
+				{
+					title: 'Удалить навсегда',
+					onPress: handleDeletePermanently,
+					destructive: true
+				}
+			]
+
+			openContextMenu({ x: positionX, y: positionY }, menuItems)
 			return
 		}
 
-		if (event.nativeEvent.event === 'deletePermanently') {
-			handleDeletePermanently()
-		}
+		const menuItems = [
+			{
+				title: 'Расписание',
+				onPress: () => {
+					onSchedulePress?.(data)
+				}
+			},
+			{
+				title: 'Удалить',
+				onPress: () => {
+					deleteTaskMutation.mutate(data.id)
+				},
+				destructive: true
+			}
+		]
 
-		if (event.nativeEvent.event === 'delete') {
-			deleteTaskMutation.mutate(data.id)
-		}
+		openContextMenu({ x: positionX, y: positionY }, menuItems)
 	}
 
-	const content = (
-		<GestureDetector gesture={tapGesture}>
-			<View style={styles.taskListItem}>
-				<Text
-					style={{
-						fontSize: 15,
-						fontWeight: '500',
-						color: theme.colors.major
-					}}
-				>
-					{data.title}
-				</Text>
-				{data.schedule && (
-					<Text
-						style={{
-							fontSize: 12,
-							color: theme.colors.mutedTextStrong,
-							marginTop: 4
-						}}
-					>
-						{formatScheduleLabel(data.schedule.schedule)}
-					</Text>
-				)}
-			</View>
-		</GestureDetector>
-	)
+	const tapGesture = Gesture.Tap().onEnd(() => {
+		scheduleOnRN(handlePress)
+	})
 
-	if (!isDeleted) {
-		return (
-			<Animated.View
-				layout={LinearTransition.duration(250)}
-				exiting={FadeOut.duration(200)}
-			>
-				<MenuView
-					shouldOpenOnLongPress
-					actions={[
-						{
-							id: 'schedule',
-							title: 'Расписание',
-							image: undefined
-						},
-						{
-							id: 'delete',
-							title: 'Удалить',
-							image: undefined,
-							attributes: { destructive: true }
-						}
-					]}
-					onPressAction={handleMenuPressAction}
-				>
-					{content}
-				</MenuView>
-			</Animated.View>
-		)
-	}
+	const longPressGesture = Gesture.LongPress()
+		.minDuration(500)
+		.onStart((event) => {
+			'worklet'
+			scheduleOnRN(handleOpenContextMenu, event.absoluteX, event.absoluteY)
+		})
+
+	const composedGesture = Gesture.Race(longPressGesture, tapGesture)
 
 	return (
 		<Animated.View
 			layout={LinearTransition.duration(250)}
 			exiting={FadeOut.duration(200)}
 		>
-			<MenuView
-				shouldOpenOnLongPress
-				actions={[
-					{
-						id: 'deletePermanently',
-						title: 'Удалить навсегда',
-						image: undefined,
-						attributes: { destructive: true }
-					},
-					{
-						id: 'restore',
-						title: 'Восстановить',
-						image: undefined,
-						attributes: { destructive: false }
-					}
-				]}
-				onPressAction={handleMenuPressAction}
-			>
-				{content}
-			</MenuView>
+			<GestureDetector gesture={composedGesture}>
+				<View style={styles.taskListItem}>
+					<Text
+						style={{
+							fontSize: 15,
+							fontWeight: '500',
+							color: theme.colors.major
+						}}
+					>
+						{data.title}
+					</Text>
+					{data.schedule && (
+						<Text
+							style={{
+								fontSize: 12,
+								color: theme.colors.mutedTextStrong,
+								marginTop: 4
+							}}
+						>
+							{formatScheduleLabel(data.schedule.schedule)}
+						</Text>
+					)}
+				</View>
+			</GestureDetector>
 		</Animated.View>
 	)
 }
