@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import { AppState, Platform } from 'react-native'
 import { createMMKV } from 'react-native-mmkv'
 
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL!
@@ -49,3 +50,28 @@ export const supabaseClient = createClient(supabaseUrl, supabaseAnonKey, {
 		fetch: fetchWithTimeout
 	}
 })
+
+// Tells Supabase Auth to continuously refresh the session automatically
+// if the app is in the foreground. When the app goes to background, stop
+// the timer to save battery. On resume, proactively refresh if token expired.
+if (Platform.OS !== 'web') {
+	AppState.addEventListener('change', (nextAppState) => {
+		if (nextAppState === 'active') {
+			const currentSession = supabaseClient.auth.currentSession
+			const isExpired =
+				currentSession?.expires_at != null &&
+				currentSession.expires_at * 1000 < Date.now()
+
+			if (isExpired) {
+				// Proactive refresh before any API calls use the dead token
+				void supabaseClient.auth.refreshSession().catch((error) => {
+					console.warn('Proactive session refresh on resume failed:', error)
+				})
+			}
+
+			supabaseClient.auth.startAutoRefresh()
+		} else {
+			supabaseClient.auth.stopAutoRefresh()
+		}
+	})
+}

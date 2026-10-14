@@ -24,15 +24,19 @@ export function useAuth() {
 
 	const refreshSession = useCallback(async () => {
 		try {
-			const currentSession = await getSession()
-			console.log('SESSION', currentSession?.user?.email)
-			// // временно, чтобы сбросить старую сессию:
-			// if (currentSession) {
-			// 	await signOut()
-			// 	setSession(null)
-			// 	return
-			// }
-			setSession(currentSession)
+			const { data, error } = await supabaseClient.auth.refreshSession()
+			if (error) {
+				// Fallback: try to read existing session from storage
+				const currentSession = await getSession()
+				console.log('SESSION', currentSession?.user?.email)
+				setSession(currentSession)
+				if (!currentSession) {
+					setErrorKind(getAuthErrorKind(error))
+				}
+				return
+			}
+			console.log('SESSION', data.session?.user?.email)
+			setSession(data.session)
 		} catch (error) {
 			setErrorKind(getAuthErrorKind(error))
 		} finally {
