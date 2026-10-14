@@ -56,7 +56,7 @@ export const supabaseClient = createClient(supabaseUrl, supabaseAnonKey, {
 // the timer to save battery. On resume, proactively refresh so API calls
 // do not use an expired JWT.
 if (Platform.OS !== 'web') {
-	AppState.addEventListener('change', (nextAppState) => {
+	const handleAppStateChange = (nextAppState: string) => {
 		if (nextAppState === 'active') {
 			void supabaseClient.auth.refreshSession().catch((error) => {
 				console.warn('Proactive session refresh on resume failed:', error)
@@ -65,5 +65,10 @@ if (Platform.OS !== 'web') {
 		} else {
 			supabaseClient.auth.stopAutoRefresh()
 		}
-	})
+	}
+
+	// Start immediately — app is already active on first load
+	handleAppStateChange('active')
+
+	AppState.addEventListener('change', handleAppStateChange)
 }
