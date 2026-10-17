@@ -9,9 +9,9 @@ export function getNodeColors(type: NodeType) {
 
 	return {
 		root: {
-			bg: colors.mutedSubtlestFill,
+			bg: colors.major,
 			text: STATIC_COLORS.white,
-			border: colors.primary
+			border: colors.major
 		},
 		category: {
 			bg: colors.primary,
