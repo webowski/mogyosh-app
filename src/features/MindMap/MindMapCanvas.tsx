@@ -55,10 +55,11 @@ export function MindMapCanvas({
 				const lineX = n.x
 				const y1 = n.y
 
-				// Находим крайнюю точку среди непосредственных детей
-				let extremeY = n.y < 0 ? Infinity : -Infinity
+				// Direction from actual children positions, not from parent side of root
+				const childrenGoUp = n.children[0].y < n.y
+				let extremeY = childrenGoUp ? Infinity : -Infinity
 				for (const child of n.children) {
-					if (n.y < 0) {
+					if (childrenGoUp) {
 						extremeY = Math.min(extremeY, child.y)
 					} else {
 						extremeY = Math.max(extremeY, child.y)
