@@ -14,6 +14,7 @@ export const useCreateTask = () => {
 			queryClient.invalidateQueries({ queryKey: ['tasks-by-date'] })
 			queryClient.invalidateQueries({ queryKey: ['tasks-count-period'] })
 			queryClient.invalidateQueries({ queryKey: ['tasks-count-day'] })
+			queryClient.invalidateQueries({ queryKey: ['tasks-by-category'] })
 		}
 	})
 }
