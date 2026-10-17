@@ -16,6 +16,11 @@
 		"Language": "Language",
 		"Theme": "Theme",
 		"Time format": "Time format",
+		"scheme": {
+			"label": {
+				"All Tasks": "All Tasks"
+			}
+		},
 		"day": {
 			"During the day": "During the day",
 			"By time": "By time"

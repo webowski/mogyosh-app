@@ -6,6 +6,7 @@ import { MindMapNode } from '@/features/MindMap/model/types'
 import { useNavStore } from '@/features/Navigation/model/navStore'
 import { useTasksByCategory } from '@/features/TaskList'
 import { TaskCategoryGroupEntity } from '@/features/TaskList/model/task.types'
+import { useLangStore } from '@/shared/model/lang.store'
 import { useTaskStore } from '@/shared/model/task.store'
 
 function mapCategoryGroupToMindMapNode(
@@ -40,10 +41,11 @@ function mapCategoryGroupToMindMapNode(
 
 function buildMindMapData(groups: TaskCategoryGroupEntity[]): MindMapNode {
 	const children = groups.map(mapCategoryGroupToMindMapNode)
+	const { t } = useLangStore.getState()
 
 	return {
 		id: 'root',
-		label: 'Categories',
+		label: t('screen.scheme.label.All Tasks'),
 		type: 'root',
 		children: children.length > 0 ? children : undefined
 	}

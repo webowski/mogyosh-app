@@ -16,6 +16,11 @@
 		"Language": "Язык",
 		"Theme": "Тема",
 		"Time format": "Формат времени",
+		"scheme": {
+			"label": {
+				"All Tasks": "Все задачи"
+			}
+		},
 		"day": {
 			"During the day": "В течение дня",
 			"By time": "По времени"
