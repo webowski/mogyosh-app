@@ -93,7 +93,9 @@ export function computeLayout(
 	}
 
 	resolveBranchCollisions(rootNode)
-	alignChildrenDirectionToBranchPosition(rootNode)
+	fixInconsistentBranchDirections(rootNode)
+	// Second pass: mirroring may introduce new overlaps in the upper half
+	resolveBranchCollisions(rootNode)
 
 	return rootNode
 }
@@ -285,29 +287,30 @@ function resolveBranchCollisions(root: LayoutNode) {
 }
 
 /**
- * After collisions, a branch may cross the horizontal axis while its children
- * still extend in the original direction. Flip the vertical stack so that:
- * - tasks go up only when the category is above the root (line goes up / up-sideways)
- * - tasks go down when the category is at or below the root
+ * Bad case: category ended below the root (line goes down / sideways-down)
+ * while its children still extend upward.
+ *
+ * Fix: mirror the whole branch over the horizontal axis so the category line
+ * goes up / sideways-up, and tasks automatically end up stacked downward.
  */
-function alignChildrenDirectionToBranchPosition(root: LayoutNode) {
+function fixInconsistentBranchDirections(root: LayoutNode) {
 	for (const branch of root.children) {
 		if (branch.children.length === 0) continue
 
-		const shouldGoUp = branch.y < 0
+		const categoryIsBelowOrOn = branch.y >= 0
 		const childrenGoUp = branch.children[0].y < branch.y
 
-		if (childrenGoUp !== shouldGoUp) {
-			reflectSubtreeY(branch, branch.y)
+		if (categoryIsBelowOrOn && childrenGoUp) {
+			mirrorBranchOverHorizontalAxis(branch)
 		}
 	}
 }
 
-/** Reflect every descendant of node around pivotY (node itself is not moved). */
-function reflectSubtreeY(node: LayoutNode, pivotY: number) {
+/** Mirror node and all descendants over the X axis (y → -y). */
+function mirrorBranchOverHorizontalAxis(node: LayoutNode) {
+	node.y = -node.y
 	for (const child of node.children) {
-		child.y = 2 * pivotY - child.y
-		reflectSubtreeY(child, pivotY)
+		mirrorBranchOverHorizontalAxis(child)
 	}
 }
 
