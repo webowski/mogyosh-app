@@ -93,6 +93,7 @@ export function computeLayout(
 	}
 
 	resolveBranchCollisions(rootNode)
+	alignChildrenDirectionToBranchPosition(rootNode)
 
 	return rootNode
 }
@@ -280,6 +281,33 @@ function resolveBranchCollisions(root: LayoutNode) {
 		}
 
 		if (!hasCollision) break
+	}
+}
+
+/**
+ * After collisions, a branch may cross the horizontal axis while its children
+ * still extend in the original direction. Flip the vertical stack so that:
+ * - tasks go up only when the category is above the root (line goes up / up-sideways)
+ * - tasks go down when the category is at or below the root
+ */
+function alignChildrenDirectionToBranchPosition(root: LayoutNode) {
+	for (const branch of root.children) {
+		if (branch.children.length === 0) continue
+
+		const shouldGoUp = branch.y < 0
+		const childrenGoUp = branch.children[0].y < branch.y
+
+		if (childrenGoUp !== shouldGoUp) {
+			reflectSubtreeY(branch, branch.y)
+		}
+	}
+}
+
+/** Reflect every descendant of node around pivotY (node itself is not moved). */
+function reflectSubtreeY(node: LayoutNode, pivotY: number) {
+	for (const child of node.children) {
+		child.y = 2 * pivotY - child.y
+		reflectSubtreeY(child, pivotY)
 	}
 }
 
