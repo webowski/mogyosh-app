@@ -1,11 +1,13 @@
 import type { LayoutNode, MindMapNode } from './types'
 
 export const NODE_HEIGHT = 36
-const LEVEL_DISTANCE = 120
+const MIN_LEVEL_DISTANCE = 140
 const VERTICAL_GAP = 16
 const CATEGORY_TASK_GAP = 44
 const HORIZONTAL_PADDING = 24
 const MIN_NODE_WIDTH = 110
+const MIN_COLUMN_GAP = 28
+const COLLISION_ITERATIONS = 12
 export const FONT_SIZE = 15
 
 export function getDefaultMeasureWidth() {
@@ -35,6 +37,37 @@ function buildLayoutNode(
 	}
 }
 
+/** Total vertical space occupied by a node and its vertically stacked children */
+function getSubtreeHeight(node: MindMapNode): number {
+	if (!node.children || node.children.length === 0) {
+		return NODE_HEIGHT
+	}
+
+	let childrenHeight = 0
+	for (let index = 0; index < node.children.length; index++) {
+		childrenHeight += getSubtreeHeight(node.children[index])
+		if (index < node.children.length - 1) {
+			childrenHeight += VERTICAL_GAP
+		}
+	}
+
+	return NODE_HEIGHT + CATEGORY_TASK_GAP + childrenHeight
+}
+
+/** Max label width in the subtree (for horizontal gap estimation) */
+function getSubtreeMaxWidth(
+	node: MindMapNode,
+	measureWidth: (label: string) => number
+): number {
+	let maxWidth = measureWidth(node.label)
+	if (node.children) {
+		for (const child of node.children) {
+			maxWidth = Math.max(maxWidth, getSubtreeMaxWidth(child, measureWidth))
+		}
+	}
+	return maxWidth
+}
+
 export function computeLayout(
 	root: MindMapNode,
 	measureWidth?: (label: string) => number
@@ -45,24 +78,63 @@ export function computeLayout(
 	if (!root.children || root.children.length === 0) return rootNode
 
 	const childCount = root.children.length
-	const angleStep = (Math.PI * 2) / childCount
-	let currentAngle = -Math.PI
 
-	for (const child of root.children) {
-		const midAngle = currentAngle + angleStep / 2
-		currentAngle += angleStep
+	const subtreeHeights = root.children.map((child) => getSubtreeHeight(child))
+	const subtreeMaxWidths = root.children.map((child) =>
+		getSubtreeMaxWidth(child, measure)
+	)
+
+	// Weight sectors by subtree height so larger branches get more angular space
+	const weights = subtreeHeights.map((height) => Math.max(height, NODE_HEIGHT))
+	const totalWeight = weights.reduce((sum, weight) => sum + weight, 0)
+
+	const sectorAngles = weights.map(
+		(weight) => (weight / totalWeight) * Math.PI * 2
+	)
+
+	// Dynamic radius: ensure adjacent columns have enough horizontal separation
+	let levelDistance = MIN_LEVEL_DISTANCE
+	for (let index = 0; index < childCount; index++) {
+		const nextIndex = (index + 1) % childCount
+		const angleBetweenMids =
+			sectorAngles[index] / 2 + sectorAngles[nextIndex] / 2
+		const neededGap =
+			subtreeMaxWidths[index] / 2 +
+			subtreeMaxWidths[nextIndex] / 2 +
+			MIN_COLUMN_GAP
+
+		const sinHalf = Math.sin(angleBetweenMids / 2)
+		if (sinHalf > 0.05) {
+			const neededRadius = neededGap / (2 * sinHalf)
+			levelDistance = Math.max(levelDistance, neededRadius)
+		}
+	}
+
+	// Extra room when there are many large vertical stacks
+	const maxSubtreeHeight = Math.max(...subtreeHeights)
+	levelDistance = Math.max(
+		levelDistance,
+		MIN_LEVEL_DISTANCE + maxSubtreeHeight * 0.15
+	)
+
+	let currentAngle = -Math.PI
+	for (let index = 0; index < childCount; index++) {
+		const midAngle = currentAngle + sectorAngles[index] / 2
+		currentAngle += sectorAngles[index]
 
 		const childNode = placeRadialNode(
-			child,
+			root.children[index],
 			0,
 			0,
-			LEVEL_DISTANCE,
+			levelDistance,
 			midAngle,
 			root.id,
 			measure
 		)
 		rootNode.children.push(childNode)
 	}
+
+	resolveBranchCollisions(rootNode)
 
 	return rootNode
 }
@@ -147,6 +219,92 @@ function placeVerticalChildren(
 
 		return layoutNode
 	})
+}
+
+interface BranchBounds {
+	minX: number
+	maxX: number
+	minY: number
+	maxY: number
+}
+
+function getBranchBounds(node: LayoutNode): BranchBounds {
+	const nodes = flattenLayout(node)
+	let minX = Infinity
+	let maxX = -Infinity
+	let minY = Infinity
+	let maxY = -Infinity
+
+	for (const item of nodes) {
+		minX = Math.min(minX, item.x - item.width / 2)
+		maxX = Math.max(maxX, item.x + item.width / 2)
+		minY = Math.min(minY, item.y - NODE_HEIGHT / 2)
+		maxY = Math.max(maxY, item.y + NODE_HEIGHT / 2)
+	}
+
+	return { minX, maxX, minY, maxY }
+}
+
+function boundsOverlap(a: BranchBounds, b: BranchBounds, gap: number): boolean {
+	return (
+		a.minX < b.maxX + gap &&
+		a.maxX + gap > b.minX &&
+		a.minY < b.maxY + gap &&
+		a.maxY + gap > b.minY
+	)
+}
+
+function translateBranch(node: LayoutNode, deltaX: number, deltaY: number) {
+	node.x += deltaX
+	node.y += deltaY
+	for (const child of node.children) {
+		translateBranch(child, deltaX, deltaY)
+	}
+}
+
+/**
+ * Push overlapping top-level branches radially outward until their
+ * bounding boxes no longer collide (with MIN_COLUMN_GAP padding).
+ */
+function resolveBranchCollisions(root: LayoutNode) {
+	const branches = root.children
+	if (branches.length < 2) return
+
+	for (let iteration = 0; iteration < COLLISION_ITERATIONS; iteration++) {
+		let hasCollision = false
+
+		for (let index = 0; index < branches.length; index++) {
+			for (
+				let otherIndex = index + 1;
+				otherIndex < branches.length;
+				otherIndex++
+			) {
+				const branchA = branches[index]
+				const branchB = branches[otherIndex]
+				const boundsA = getBranchBounds(branchA)
+				const boundsB = getBranchBounds(branchB)
+
+				if (!boundsOverlap(boundsA, boundsB, MIN_COLUMN_GAP)) continue
+
+				hasCollision = true
+
+				// Push both branches away from the origin along their current direction
+				const lengthA = Math.hypot(branchA.x, branchA.y) || 1
+				const lengthB = Math.hypot(branchB.x, branchB.y) || 1
+
+				const pushAmount = 20
+				const dirAX = branchA.x / lengthA
+				const dirAY = branchA.y / lengthA
+				const dirBX = branchB.x / lengthB
+				const dirBY = branchB.y / lengthB
+
+				translateBranch(branchA, dirAX * pushAmount, dirAY * pushAmount)
+				translateBranch(branchB, dirBX * pushAmount, dirBY * pushAmount)
+			}
+		}
+
+		if (!hasCollision) break
+	}
 }
 
 export function flattenLayout(root: LayoutNode): LayoutNode[] {
