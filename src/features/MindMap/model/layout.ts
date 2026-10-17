@@ -1,13 +1,14 @@
 import type { LayoutNode, MindMapNode } from './types'
 
 export const NODE_HEIGHT = 36
-const MIN_LEVEL_DISTANCE = 140
+const LEVEL_DISTANCE = 120
 const VERTICAL_GAP = 16
 const CATEGORY_TASK_GAP = 44
 const HORIZONTAL_PADDING = 24
 const MIN_NODE_WIDTH = 110
-const MIN_COLUMN_GAP = 28
-const COLLISION_ITERATIONS = 12
+const MIN_COLUMN_GAP = 24
+const COLLISION_ITERATIONS = 20
+const MAX_PUSH_PER_STEP = 16
 export const FONT_SIZE = 15
 
 export function getDefaultMeasureWidth() {
@@ -54,20 +55,6 @@ function getSubtreeHeight(node: MindMapNode): number {
 	return NODE_HEIGHT + CATEGORY_TASK_GAP + childrenHeight
 }
 
-/** Max label width in the subtree (for horizontal gap estimation) */
-function getSubtreeMaxWidth(
-	node: MindMapNode,
-	measureWidth: (label: string) => number
-): number {
-	let maxWidth = measureWidth(node.label)
-	if (node.children) {
-		for (const child of node.children) {
-			maxWidth = Math.max(maxWidth, getSubtreeMaxWidth(child, measureWidth))
-		}
-	}
-	return maxWidth
-}
-
 export function computeLayout(
 	root: MindMapNode,
 	measureWidth?: (label: string) => number
@@ -79,42 +66,13 @@ export function computeLayout(
 
 	const childCount = root.children.length
 
-	const subtreeHeights = root.children.map((child) => getSubtreeHeight(child))
-	const subtreeMaxWidths = root.children.map((child) =>
-		getSubtreeMaxWidth(child, measure)
-	)
-
 	// Weight sectors by subtree height so larger branches get more angular space
-	const weights = subtreeHeights.map((height) => Math.max(height, NODE_HEIGHT))
+	const weights = root.children.map((child) =>
+		Math.max(getSubtreeHeight(child), NODE_HEIGHT)
+	)
 	const totalWeight = weights.reduce((sum, weight) => sum + weight, 0)
-
 	const sectorAngles = weights.map(
 		(weight) => (weight / totalWeight) * Math.PI * 2
-	)
-
-	// Dynamic radius: ensure adjacent columns have enough horizontal separation
-	let levelDistance = MIN_LEVEL_DISTANCE
-	for (let index = 0; index < childCount; index++) {
-		const nextIndex = (index + 1) % childCount
-		const angleBetweenMids =
-			sectorAngles[index] / 2 + sectorAngles[nextIndex] / 2
-		const neededGap =
-			subtreeMaxWidths[index] / 2 +
-			subtreeMaxWidths[nextIndex] / 2 +
-			MIN_COLUMN_GAP
-
-		const sinHalf = Math.sin(angleBetweenMids / 2)
-		if (sinHalf > 0.05) {
-			const neededRadius = neededGap / (2 * sinHalf)
-			levelDistance = Math.max(levelDistance, neededRadius)
-		}
-	}
-
-	// Extra room when there are many large vertical stacks
-	const maxSubtreeHeight = Math.max(...subtreeHeights)
-	levelDistance = Math.max(
-		levelDistance,
-		MIN_LEVEL_DISTANCE + maxSubtreeHeight * 0.15
 	)
 
 	let currentAngle = -Math.PI
@@ -126,7 +84,7 @@ export function computeLayout(
 			root.children[index],
 			0,
 			0,
-			levelDistance,
+			LEVEL_DISTANCE,
 			midAngle,
 			root.id,
 			measure
@@ -263,8 +221,8 @@ function translateBranch(node: LayoutNode, deltaX: number, deltaY: number) {
 }
 
 /**
- * Push overlapping top-level branches radially outward until their
- * bounding boxes no longer collide (with MIN_COLUMN_GAP padding).
+ * Push only overlapping top-level branches apart by the actual penetration depth.
+ * Branches that do not collide stay at LEVEL_DISTANCE.
  */
 function resolveBranchCollisions(root: LayoutNode) {
 	const branches = root.children
@@ -284,22 +242,40 @@ function resolveBranchCollisions(root: LayoutNode) {
 				const boundsA = getBranchBounds(branchA)
 				const boundsB = getBranchBounds(branchB)
 
-				if (!boundsOverlap(boundsA, boundsB, MIN_COLUMN_GAP)) continue
+				const overlapX =
+					Math.min(boundsA.maxX, boundsB.maxX) -
+					Math.max(boundsA.minX, boundsB.minX) +
+					MIN_COLUMN_GAP
+				const overlapY =
+					Math.min(boundsA.maxY, boundsB.maxY) -
+					Math.max(boundsA.minY, boundsB.minY) +
+					MIN_COLUMN_GAP
+
+				if (overlapX <= 0 || overlapY <= 0) continue
 
 				hasCollision = true
 
-				// Push both branches away from the origin along their current direction
-				const lengthA = Math.hypot(branchA.x, branchA.y) || 1
-				const lengthB = Math.hypot(branchB.x, branchB.y) || 1
+				// Separate along the axis of least penetration
+				const centerAX = (boundsA.minX + boundsA.maxX) / 2
+				const centerAY = (boundsA.minY + boundsA.maxY) / 2
+				const centerBX = (boundsB.minX + boundsB.maxX) / 2
+				const centerBY = (boundsB.minY + boundsB.maxY) / 2
 
-				const pushAmount = 20
-				const dirAX = branchA.x / lengthA
-				const dirAY = branchA.y / lengthA
-				const dirBX = branchB.x / lengthB
-				const dirBY = branchB.y / lengthB
+				let deltaX = 0
+				let deltaY = 0
 
-				translateBranch(branchA, dirAX * pushAmount, dirAY * pushAmount)
-				translateBranch(branchB, dirBX * pushAmount, dirBY * pushAmount)
+				if (overlapX < overlapY) {
+					const direction = centerAX <= centerBX ? -1 : 1
+					const push = Math.min(overlapX / 2, MAX_PUSH_PER_STEP)
+					deltaX = direction * push
+				} else {
+					const direction = centerAY <= centerBY ? -1 : 1
+					const push = Math.min(overlapY / 2, MAX_PUSH_PER_STEP)
+					deltaY = direction * push
+				}
+
+				translateBranch(branchA, deltaX, deltaY)
+				translateBranch(branchB, -deltaX, -deltaY)
 			}
 		}
 
