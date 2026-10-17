@@ -6,7 +6,7 @@ import {
 	Text,
 	vec
 } from '@shopify/react-native-skia'
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import { SharedValue, useDerivedValue } from 'react-native-reanimated'
 
 import { flattenLayout, FONT_SIZE, NODE_HEIGHT } from './model/layout'
@@ -33,7 +33,7 @@ export function MindMapCanvas({
 	translateY,
 	scale
 }: MindMapCanvasProps) {
-	const font = useCanvasFont()
+	const { font, fontBold } = useCanvasFont()
 	const nodes = useMemo(() => flattenLayout(root), [root])
 
 	const { radialEdges, verticalLines } = useMemo(() => {
@@ -73,7 +73,8 @@ export function MindMapCanvas({
 
 	const nodesWithText = useMemo((): LayoutNodeWithText[] => {
 		return nodes.map((node) => {
-			const tw = font ? font.getTextWidth(node.label) : 0
+			const nodeFont = node.type === 'root' ? fontBold : font
+			const tw = nodeFont ? nodeFont.getTextWidth(node.label) : 0
 			return {
 				...node,
 				textWidth: tw,
@@ -81,7 +82,7 @@ export function MindMapCanvas({
 				textY: node.y + FONT_SIZE / 2 - 1
 			}
 		})
-	}, [nodes, font])
+	}, [nodes, font, fontBold])
 
 	const cx = useMemo(() => width / 2, [width])
 	const cy = useMemo(() => height / 2, [height])
@@ -147,7 +148,7 @@ export function MindMapCanvas({
 									x={node.textX}
 									y={node.textY}
 									text={node.label}
-									font={font}
+									font={node.type === 'root' ? (fontBold ?? font) : font}
 									color={colors.text}
 								/>
 							)}
