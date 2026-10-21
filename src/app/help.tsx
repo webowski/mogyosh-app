@@ -9,6 +9,55 @@ import { textStyles } from '@/shared/styles/text'
 import { Button } from '@/shared/ui/Button'
 import ScrollBox from '@/shared/ui/ScrollBox'
 
+type HelpSectionProps = {
+	title: string
+	children: React.ReactNode
+}
+
+function HelpSection({ title, children }: HelpSectionProps) {
+	return (
+		<View>
+			<Text style={[textStyles.heading5, { marginBottom: 6 }]}>{title}</Text>
+			{children}
+		</View>
+	)
+}
+
+type HelpParagraphProps = {
+	children: React.ReactNode
+}
+
+function HelpParagraph({ children }: HelpParagraphProps) {
+	const { theme } = useUnistyles()
+
+	return (
+		<Text
+			style={[textStyles.p, { color: theme.colors.major, marginBottom: 8 }]}
+		>
+			{children}
+		</Text>
+	)
+}
+
+type HelpSubheadingProps = {
+	children: React.ReactNode
+}
+
+function HelpSubheading({ children }: HelpSubheadingProps) {
+	const { theme } = useUnistyles()
+
+	return (
+		<Text
+			style={[
+				textStyles.label,
+				{ color: theme.colors.major, marginTop: 8, marginBottom: 4 }
+			]}
+		>
+			{children}
+		</Text>
+	)
+}
+
 export default function HelpScreen() {
 	const { theme } = useUnistyles()
 	const { t } = useTranslation()
@@ -17,12 +66,53 @@ export default function HelpScreen() {
 		<>
 			<ScrollBox scrollIndent>
 				<View style={{ gap: 22 }}>
-					<View>
-						<Text style={[textStyles.heading5, { marginBottom: 2 }]}>
-							{t('screen.help.Navigation')}
-						</Text>
-						<Text style={textStyles.p}>...</Text>
-					</View>
+					{/* Controls */}
+					<HelpSection title={t('screen.help.Controls')}>
+						<HelpSubheading>
+							{t('screen.help.SwipeSwitch title')}
+						</HelpSubheading>
+						<HelpParagraph>
+							{t('screen.help.SwipeSwitch description')}
+						</HelpParagraph>
+						<HelpParagraph>{t('screen.help.SwipeSwitch dots')}</HelpParagraph>
+						<HelpParagraph>
+							{t('screen.help.SwipeSwitch columns')}
+						</HelpParagraph>
+					</HelpSection>
+
+					{/* Main actions */}
+					<HelpSection title={t('screen.help.Main actions')}>
+						<HelpSubheading>
+							{t('screen.help.Add category title')}
+						</HelpSubheading>
+						<HelpParagraph>
+							{t('screen.help.Add category description')}
+						</HelpParagraph>
+
+						<HelpSubheading>{t('screen.help.Add task title')}</HelpSubheading>
+						<HelpParagraph>
+							{t('screen.help.Add task description')}
+						</HelpParagraph>
+
+						<HelpSubheading>{t('screen.help.Add block title')}</HelpSubheading>
+						<HelpParagraph>
+							{t('screen.help.Add block description')}
+						</HelpParagraph>
+
+						<HelpSubheading>
+							{t('screen.help.Block types title')}
+						</HelpSubheading>
+						<HelpParagraph>
+							{t('screen.help.Block types description')}
+						</HelpParagraph>
+
+						<HelpSubheading>
+							{t('screen.help.Block journal title')}
+						</HelpSubheading>
+						<HelpParagraph>
+							{t('screen.help.Block journal description')}
+						</HelpParagraph>
+					</HelpSection>
 				</View>
 			</ScrollBox>
 
