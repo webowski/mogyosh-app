@@ -109,6 +109,14 @@ export default function RootLayout() {
 						}}
 					/>
 					<Stack.Screen
+						name='help'
+						options={{
+							title: t('screen.Help'),
+							headerShown: true,
+							header: (props) => <Header {...props} />
+						}}
+					/>
+					<Stack.Screen
 						name='account'
 						options={{
 							title: t('screen.Account'),

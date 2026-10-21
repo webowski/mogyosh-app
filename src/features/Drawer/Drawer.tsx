@@ -160,6 +160,20 @@ export default function Drawer() {
 							<Pressable
 								style={styles.menuItem}
 								onPress={() => {
+									router.push('/help')
+									setTimeout(() => setIsDrawerShown(false), 200)
+								}}
+							>
+								<MaterialDesignIcons
+									name='help-circle-outline'
+									size={26}
+									color={theme.colors.mutedTextStrong}
+								/>
+								<Text style={styles.menuItemText}>{t('screen.Help')}</Text>
+							</Pressable>
+							<Pressable
+								style={styles.menuItem}
+								onPress={() => {
 									router.push('/account')
 									setTimeout(() => setIsDrawerShown(false), 200)
 								}}
