@@ -32,7 +32,7 @@ export default function HelpScreen() {
 		<>
 			<ScrollBox scrollIndent>
 				<View style={{ gap: 0 }}>
-					<AccordionItem title={t('screen.help.SwipeSwitch title')} defaultOpen>
+					<AccordionItem title={t('screen.help.SwipeSwitch title')}>
 						<HelpParagraph>
 							{t('screen.help.SwipeSwitch description')}
 						</HelpParagraph>
