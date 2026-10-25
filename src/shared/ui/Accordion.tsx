@@ -49,7 +49,7 @@ export function AccordionItem({
 				<Text style={styles.AccordionItem__title}>{title}</Text>
 				<MaterialDesignIcons
 					name={isOpen ? 'chevron-up' : 'chevron-down'}
-					size={22}
+					size={30}
 					color={theme.colors.mutedTextStrong}
 				/>
 			</Pressable>
