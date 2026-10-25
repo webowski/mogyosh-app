@@ -55,7 +55,7 @@
 		},
 		"help": {
 			"Controls": "Controls",
-			"SwipeSwitch title": "SwipeSwitch",
+			"SwipeSwitch title": "Main screen switcher",
 			"SwipeSwitch description": "The bottom navigation panel has a SwipeSwitch. Swipe left, right, up, or down to switch between screens. Tapping the active item opens an extra menu.",
 			"SwipeSwitch dots": "A 2×3 grid of dots shows the current position. The active dot matches the selected screen.",
 			"SwipeSwitch columns": "Columns (top to bottom):\n• All Tasks / Scheme\n• Day / Calendar (month)\n• Task / Progress",
