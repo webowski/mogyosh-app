@@ -5,11 +5,13 @@ import { useUnistyles } from 'react-native-unistyles'
 
 type ScrollBoxProps = React.ComponentProps<typeof ScrollView> & {
 	scrollIndent?: boolean
+	sidePadding?: number
 }
 
 export default function ScrollBox({
 	children,
 	scrollIndent = false,
+	sidePadding = STYLE_VARS.sidePadding,
 	...props
 }: ScrollBoxProps) {
 	const { rt } = useUnistyles()
@@ -23,7 +25,7 @@ export default function ScrollBox({
 				{
 					flexGrow: 1,
 					flexShrink: 0,
-					paddingHorizontal: STYLE_VARS.sidePadding,
+					paddingHorizontal: sidePadding,
 					paddingTop: STYLE_VARS.sidePadding + 4,
 					paddingBottom: STYLE_VARS.sidePadding + STYLE_VARS.navPanelUnderlap,
 					gap: 4
