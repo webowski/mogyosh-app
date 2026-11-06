@@ -6,6 +6,7 @@ import { useUnistyles } from 'react-native-unistyles'
 
 import { ActionsPanel } from '@/features/ActionsPanel/ActionsPanel'
 import NavDiagram from '@/shared/images/nav-diagram.svg'
+import { STYLE_VARS } from '@/shared/styles/common'
 import { textStyles } from '@/shared/styles/text'
 import { AccordionItem } from '@/shared/ui/Accordion'
 import { Button } from '@/shared/ui/Button'
@@ -38,7 +39,7 @@ export default function HelpScreen() {
 
 	return (
 		<>
-			<ScrollBox scrollIndent>
+			<ScrollBox scrollIndent sidePadding={STYLE_VARS.sidePadding * 2}>
 				<View style={{ gap: 0 }}>
 					<AccordionItem title={t('screen.help.SwipeSwitch title')}>
 						<View style={{ alignItems: 'center', marginBottom: 4 }}>
