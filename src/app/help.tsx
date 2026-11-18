@@ -5,7 +5,7 @@ import { Text, useWindowDimensions, View } from 'react-native'
 import { useUnistyles } from 'react-native-unistyles'
 
 import { ActionsPanel } from '@/features/ActionsPanel/ActionsPanel'
-import NavDiagram from '@/shared/images/nav-diagram.svg'
+import SVGNavDiagram from '@/shared/images/nav-diagram.svg'
 import { STYLE_VARS } from '@/shared/styles/common'
 import { textStyles } from '@/shared/styles/text'
 import { AccordionItem } from '@/shared/ui/Accordion'
@@ -43,7 +43,7 @@ export default function HelpScreen() {
 				<View style={{ gap: 0 }}>
 					<AccordionItem title={t('screen.help.SwipeSwitch title')}>
 						<View style={{ alignItems: 'center', marginBottom: 4 }}>
-							<NavDiagram width={diagramWidth} height={diagramHeight} />
+							<SVGNavDiagram width={diagramWidth} height={diagramHeight} />
 						</View>
 
 						<HelpParagraph>
