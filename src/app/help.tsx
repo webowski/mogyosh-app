@@ -1,32 +1,18 @@
 import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons'
 import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
-import { Text, useWindowDimensions, View } from 'react-native'
+import { useWindowDimensions, View } from 'react-native'
 import { useUnistyles } from 'react-native-unistyles'
 
 import { ActionsPanel } from '@/features/ActionsPanel/ActionsPanel'
 import SVGNavDiagram from '@/shared/images/nav-diagram.svg'
 import { STYLE_VARS } from '@/shared/styles/common'
-import { textStyles } from '@/shared/styles/text'
 import { AccordionItem } from '@/shared/ui/Accordion'
 import { Button } from '@/shared/ui/Button'
+import Paragraph from '@/shared/ui/Paragraph'
 import ScrollBox from '@/shared/ui/ScrollBox'
 
 const NAV_DIAGRAM_ASPECT_RATIO = 360 / 135
-
-type HelpParagraphProps = {
-	children: React.ReactNode
-}
-
-function HelpParagraph({ children }: HelpParagraphProps) {
-	const { theme } = useUnistyles()
-
-	return (
-		<Text style={[textStyles.p, { color: theme.colors.major }]}>
-			{children}
-		</Text>
-	)
-}
 
 export default function HelpScreen() {
 	const { theme } = useUnistyles()
@@ -46,40 +32,28 @@ export default function HelpScreen() {
 							<SVGNavDiagram width={diagramWidth} height={diagramHeight} />
 						</View>
 
-						<HelpParagraph>
-							{t('screen.help.SwipeSwitch description')}
-						</HelpParagraph>
-						<HelpParagraph>{t('screen.help.Nav diagram legend')}</HelpParagraph>
+						<Paragraph>{t('screen.help.SwipeSwitch description')}</Paragraph>
+						<Paragraph>{t('screen.help.Nav diagram legend')}</Paragraph>
 					</AccordionItem>
 
 					<AccordionItem title={t('screen.help.Add category title')}>
-						<HelpParagraph>
-							{t('screen.help.Add category description')}
-						</HelpParagraph>
+						<Paragraph>{t('screen.help.Add category description')}</Paragraph>
 					</AccordionItem>
 
 					<AccordionItem title={t('screen.help.Add task title')}>
-						<HelpParagraph>
-							{t('screen.help.Add task description')}
-						</HelpParagraph>
+						<Paragraph>{t('screen.help.Add task description')}</Paragraph>
 					</AccordionItem>
 
 					<AccordionItem title={t('screen.help.Add block title')}>
-						<HelpParagraph>
-							{t('screen.help.Add block description')}
-						</HelpParagraph>
+						<Paragraph>{t('screen.help.Add block description')}</Paragraph>
 					</AccordionItem>
 
 					<AccordionItem title={t('screen.help.Block types title')}>
-						<HelpParagraph>
-							{t('screen.help.Block types description')}
-						</HelpParagraph>
+						<Paragraph>{t('screen.help.Block types description')}</Paragraph>
 					</AccordionItem>
 
 					<AccordionItem title={t('screen.help.Block journal title')}>
-						<HelpParagraph>
-							{t('screen.help.Block journal description')}
-						</HelpParagraph>
+						<Paragraph>{t('screen.help.Block journal description')}</Paragraph>
 					</AccordionItem>
 				</View>
 			</ScrollBox>
