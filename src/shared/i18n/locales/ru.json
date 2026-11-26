@@ -57,7 +57,7 @@
 	"buttons": {
 		"Create": "Создать",
 		"Cancel": "Отмена",
-		"Create category": "Создать категорию"
+		"Add a category": "Добавить категорию"
 	},
 	"sort": {
 		"Alphabetically": "По алфавиту",

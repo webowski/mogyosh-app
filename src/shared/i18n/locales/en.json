@@ -74,7 +74,7 @@
 	"buttons": {
 		"Create": "Create",
 		"Cancel": "Cancel",
-		"Create category": "Create category"
+		"Add a category": "Add a category"
 	},
 	"sort": {
 		"Alphabetically": "Alphabetically",

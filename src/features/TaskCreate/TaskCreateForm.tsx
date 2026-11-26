@@ -353,7 +353,7 @@ export function TaskCreateForm({ onClose }: Props) {
 								}}
 								onPress={() => setIsCreatingCategory(true)}
 							>
-								{'+ ' + t('buttons.Create category')}
+								{'+ ' + t('buttons.Add a category')}
 							</Button>
 						</>
 					)}
