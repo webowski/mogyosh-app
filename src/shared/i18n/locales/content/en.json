@@ -2,21 +2,21 @@
 	"help": {
 		"Navigation title": "Navigation",
 		"Navigation description": "1–6. Swipe switcher for the main app screens.\nIt contains a 2×3 grid of dots that shows the current position. The active dot matches the selected screen.",
-		"Navigation diagram legend": "1. All tasks\n2. Scheme of tasks\n3. Selected day\n4. Calendar\n5. Selected Task\n6. Progress\n\n7. Menu with settings, user profile and additional app information\n8. Motivation page\n9. Add task",
+		"Navigation diagram legend": "1. All tasks\n2. Scheme of tasks\n3. Selected day\n4. Calendar\n5. Selected task\n6. Progress — shows stats for blocks configured to appear in statistics\n\n7. Menu with settings, user profile, and additional app information\n8. Motivation page\n9. Add task",
 
 		"Add task title": "Adding a task",
-		"Add task description": "You can add a task on the All Tasks screen inside a category or on the selected day screen. A task has a title, a block scheme, and completion state by day.",
+		"Add task description": "The task creation interface opens by tapping the \"+\" icon on the right side of the navigation bar",
 
 		"Add category title": "Adding a category",
-		"Add category description": "On the All Tasks screen, create a category to group tasks. Categories help structure the list and find tasks faster.",
+		"Add category description": "You can add a category in two ways:\n\n1. While creating a task, when choosing a category, tap the \"Add category\" button\n\n2. On the \"All tasks\" screen, with the \"Categories\" filter selected, tap the \"Add category\" button",
 
 		"Add block title": "Adding a block",
-		"Add block description": "Open a task and add a block via the editor toolbar. Blocks form the task content: text, lists, timers, counters, and other elements.",
+		"Add block description": "Open a task and tap an empty area of the task. The block editor panel will open. In this panel you can choose the block type (text, lists, timers, counters, etc.) and other options.",
 
 		"Block types title": "Block types",
-		"Block types description": "• Paragraph — plain text\n• Bulleted and numbered lists\n• Expandable block and expandable headings 1–4\n• Timer — countdown or count-up\n• Stopwatch — time measurement\n• Counter — numeric value with units and a goal",
+		"Block types description": "• Paragraph — plain text\n• Headings\n• Bulleted and numbered lists\n• Expandable block and expandable headings 1–4\n• Timer\n• Stopwatch\n• Counter — numeric value with units and a goal",
 
 		"Block settings title": "Task block settings",
-		"Block settings description": "In block settings you can enable “Journal by day”. Then the block state (e.g. a checked checkbox or counter value) is stored per day. “Show in stats” includes the block on the progress screen."
+		"Block settings description": "In block settings you can enable “Journal by day”. Then the block state (for example, a checked checkbox or a counter value) is stored separately for each day. The “Show in stats” option includes the block on the task Progress screen."
 	}
 }
