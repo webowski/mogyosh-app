@@ -52,8 +52,8 @@ export default function HelpScreen() {
 						<Paragraph>{t('help.Block types description')}</Paragraph>
 					</AccordionItem>
 
-					<AccordionItem title={t('help.Block journal title')}>
-						<Paragraph>{t('help.Block journal description')}</Paragraph>
+					<AccordionItem title={t('help.Block settings title')}>
+						<Paragraph>{t('help.Block settings description')}</Paragraph>
 					</AccordionItem>
 				</View>
 			</ScrollBox>
