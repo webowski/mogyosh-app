@@ -125,6 +125,10 @@
 	},
 	"blockTypes": {
 		"Paragraph": "Параграф",
+		"Heading 1": "Заголовок 1",
+		"Heading 2": "Заголовок 2",
+		"Heading 3": "Заголовок 3",
+		"Heading 4": "Заголовок 4",
 		"Bulleted list": "Маркированный список",
 		"Numbered list": "Нумерованный список",
 		"Expandable": "Раскрываемый блок",

@@ -33,6 +33,27 @@ const BLOCK_TYPE_OPTIONS: {
 	label: string
 }[] = [
 	{ type: 'p', icon: 'text', label: 'Paragraph' },
+
+	{
+		type: 'h1',
+		icon: 'format-header-1',
+		label: 'Heading 1'
+	},
+	{
+		type: 'h2',
+		icon: 'format-header-2',
+		label: 'Heading 2'
+	},
+	{
+		type: 'h3',
+		icon: 'format-header-3',
+		label: 'Heading 3'
+	},
+	{
+		type: 'h4',
+		icon: 'format-header-4',
+		label: 'Heading 4'
+	},
 	{ type: 'ul', icon: 'format-list-bulleted-square', label: 'Bulleted list' },
 	{ type: 'ol', icon: 'format-list-numbered', label: 'Numbered list' },
 	{ type: 'e', icon: 'arrow-expand-vertical', label: 'Expandable' },
@@ -57,7 +78,7 @@ const BLOCK_TYPE_OPTIONS: {
 		label: 'Expandable Heading 4'
 	},
 	{ type: 't', icon: 'timer', label: 'Timer' },
-	{ type: 'sw', icon: 'timer', label: 'Stopwatch' },
+	{ type: 'sw', icon: 'timer-stop', label: 'Stopwatch' },
 	{ type: 'c', icon: 'counter', label: 'Counter' }
 ]
 
