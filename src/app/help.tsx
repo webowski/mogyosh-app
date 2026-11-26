@@ -27,13 +27,13 @@ export default function HelpScreen() {
 		<>
 			<ScrollBox scrollIndent sidePadding={STYLE_VARS.sidePadding * 2}>
 				<View style={{ gap: 0 }}>
-					<AccordionItem title={t('help.SwipeSwitch title')}>
+					<AccordionItem title={t('help.Navigation title')}>
 						<View style={{ alignItems: 'center', marginBottom: 4 }}>
 							<SVGNavDiagram width={diagramWidth} height={diagramHeight} />
 						</View>
 
-						<Paragraph>{t('help.SwipeSwitch description')}</Paragraph>
-						<Paragraph>{t('help.Nav diagram legend')}</Paragraph>
+						<Paragraph>{t('help.Navigation description')}</Paragraph>
+						<Paragraph>{t('help.Navigation diagram legend')}</Paragraph>
 					</AccordionItem>
 
 					<AccordionItem title={t('help.Add category title')}>

@@ -1,9 +1,8 @@
 {
 	"help": {
-		"Controls": "Controls",
-		"SwipeSwitch title": "Main screen switcher",
-		"SwipeSwitch description": "Bottom navigation panel. Swipe the switch left, right, up, or down to change the screen.",
-		"Nav diagram legend": "1–3 — SwipeSwitch columns (top to bottom):\n• 1. All Tasks / Scheme\n• 2. Day / Calendar\n• 3. Task / Progress\n\n4 — menu (Drawer)\n5 — SwipeSwitch\n6 — add",
+		"Navigation title": "Navigation",
+		"Navigation description": "1–6. Swipe switcher for the main app screens.\n\nIt contains a 2×3 grid of dots that shows the current position. The active dot matches the selected screen.",
+		"Navigation diagram legend": "1. All tasks\n2. Task scheme\n3. Selected day\n4. Calendar\n5. Selected Task\n6. Progress\n\n7. Menu with settings, user profile and additional app information\n8. Motivation page\n9. Add task",
 		"SwipeSwitch dots": "A 2×3 grid of dots shows the current position. The active dot matches the selected screen.",
 		"Main actions": "Main actions",
 		"Add category title": "Adding a category",
