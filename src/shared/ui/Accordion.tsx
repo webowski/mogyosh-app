@@ -76,7 +76,7 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	AccordionItem__title: {
 		flex: 1,
-		fontSize: 16,
+		fontSize: 22,
 		fontWeight: '600',
 		color: theme.colors.major
 	},
