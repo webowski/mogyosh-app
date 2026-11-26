@@ -16,7 +16,7 @@ const NAV_DIAGRAM_ASPECT_RATIO = 360 / 135
 
 export default function HelpScreen() {
 	const { theme } = useUnistyles()
-	const { t } = useTranslation()
+	const { t } = useTranslation('content')
 	const { width: windowWidth } = useWindowDimensions()
 
 	// Horizontal padding of ScrollBox is sidePadding on both sides
@@ -27,33 +27,33 @@ export default function HelpScreen() {
 		<>
 			<ScrollBox scrollIndent sidePadding={STYLE_VARS.sidePadding * 2}>
 				<View style={{ gap: 0 }}>
-					<AccordionItem title={t('screen.help.SwipeSwitch title')}>
+					<AccordionItem title={t('help.SwipeSwitch title')}>
 						<View style={{ alignItems: 'center', marginBottom: 4 }}>
 							<SVGNavDiagram width={diagramWidth} height={diagramHeight} />
 						</View>
 
-						<Paragraph>{t('screen.help.SwipeSwitch description')}</Paragraph>
-						<Paragraph>{t('screen.help.Nav diagram legend')}</Paragraph>
+						<Paragraph>{t('help.SwipeSwitch description')}</Paragraph>
+						<Paragraph>{t('help.Nav diagram legend')}</Paragraph>
 					</AccordionItem>
 
-					<AccordionItem title={t('screen.help.Add category title')}>
-						<Paragraph>{t('screen.help.Add category description')}</Paragraph>
+					<AccordionItem title={t('help.Add category title')}>
+						<Paragraph>{t('help.Add category description')}</Paragraph>
 					</AccordionItem>
 
-					<AccordionItem title={t('screen.help.Add task title')}>
-						<Paragraph>{t('screen.help.Add task description')}</Paragraph>
+					<AccordionItem title={t('help.Add task title')}>
+						<Paragraph>{t('help.Add task description')}</Paragraph>
 					</AccordionItem>
 
-					<AccordionItem title={t('screen.help.Add block title')}>
-						<Paragraph>{t('screen.help.Add block description')}</Paragraph>
+					<AccordionItem title={t('help.Add block title')}>
+						<Paragraph>{t('help.Add block description')}</Paragraph>
 					</AccordionItem>
 
-					<AccordionItem title={t('screen.help.Block types title')}>
-						<Paragraph>{t('screen.help.Block types description')}</Paragraph>
+					<AccordionItem title={t('help.Block types title')}>
+						<Paragraph>{t('help.Block types description')}</Paragraph>
 					</AccordionItem>
 
-					<AccordionItem title={t('screen.help.Block journal title')}>
-						<Paragraph>{t('screen.help.Block journal description')}</Paragraph>
+					<AccordionItem title={t('help.Block journal title')}>
+						<Paragraph>{t('help.Block journal description')}</Paragraph>
 					</AccordionItem>
 				</View>
 			</ScrollBox>

@@ -53,24 +53,6 @@
 			"Developer name": "okwebowski",
 			"Copyright": "© 2026 Mogyosh"
 		},
-		"help": {
-			"Controls": "Controls",
-			"SwipeSwitch title": "Main screen switcher",
-			"SwipeSwitch description": "Bottom navigation panel. Swipe the switch left, right, up, or down to change the screen.",
-			"Nav diagram legend": "1–3 — SwipeSwitch columns (top to bottom):\n• 1. All Tasks / Scheme\n• 2. Day / Calendar\n• 3. Task / Progress\n\n4 — menu (Drawer)\n5 — SwipeSwitch\n6 — add",
-			"SwipeSwitch dots": "A 2×3 grid of dots shows the current position. The active dot matches the selected screen.",
-			"Main actions": "Main actions",
-			"Add category title": "Adding a category",
-			"Add category description": "On the All Tasks screen, create a category to group tasks. Categories help structure the list and find tasks faster.",
-			"Add task title": "Adding a task",
-			"Add task description": "You can add a task on the All Tasks screen inside a category or on the selected day screen. A task has a title, a block scheme, and completion state by day.",
-			"Add block title": "Adding a block",
-			"Add block description": "Open a task and add a block via the editor toolbar. Blocks form the task content: text, lists, timers, counters, and other elements.",
-			"Block types title": "Block types",
-			"Block types description": "• Paragraph — plain text\n• Bulleted and numbered lists\n• Expandable block and expandable headings 1–4\n• Timer — countdown or count-up\n• Stopwatch — time measurement\n• Counter — numeric value with units and a goal",
-			"Block journal title": "Block journaling",
-			"Block journal description": "In block settings you can enable “Journal by day”. Then the block state (e.g. a checked checkbox or counter value) is stored per day. “Show in stats” includes the block on the progress screen."
-		},
 		"onboarding": {
 			"Skip": "Skip",
 			"Start": "Start",
